@@ -52,7 +52,7 @@ const mediaOrderConfig = [
     fileName: 'lloyd_suicide.png',
     alt: '???',
     caption: '???',
-    visible: false
+    visible: true
   },
   {
     fileName: 'found_atm_magicant.png',
@@ -62,6 +62,12 @@ const mediaOrderConfig = [
   },
   {
     fileName: 'oh_my_full_name.png',
+    alt: '???',
+    caption: '???',
+    visible: true
+  },
+  {
+    fileName: 'pippi.png',
     alt: '???',
     caption: '???',
     visible: true
