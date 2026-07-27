@@ -194,7 +194,7 @@ import { useRouter } from 'vue-router'
 import ToasterNotification from '../reusables/notification_toaster.vue'
 
 import nintenBoppinIcon from '@/assets/img/characters/Ninten_Boppin.gif'
-import ninten67Icon from '@/assets/img/characters/Ninten_67.gif'
+import ninten67Icon     from '@/assets/img/funny/Ninten_67.gif'
 
 const router = useRouter()
 
