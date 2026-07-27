@@ -62,8 +62,6 @@ import imgAnaClay from '@/assets/img/characters/clay_ana.png'
 import imgTeddyPortrait from '@/assets/img/characters/teddy_head_sprite.png'
 import imgTeddyClay from '@/assets/img/characters/clay_teddy.png'
 
-import svgTriangle from '@/assets/svg/triangle-right-12-filled.svg'
-
 const props = defineProps({
   viewType: { 
     type: String, 
@@ -83,8 +81,6 @@ const computedTransition = computed(() => {
   const mode = props.transitionType;
   return mode === 'immediate' ? 'immediate' : 'fade';
 });
-
-const triangleUrl = computed(() => `url(${svgTriangle})`)
 
 const characters = computed(() => [
   {
@@ -194,10 +190,10 @@ onMounted(() => {
   top                 : calc(50% - 15px);
   width               : 30px; 
   height              : 30px;
-  background-color    : var(--color-place-holder-green); 
+  background-color    : var(--color-primary); 
 
-  -webkit-mask-image  : v-bind(triangleUrl);
-  mask-image          : v-bind(triangleUrl);
+  -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
+  mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');
   -webkit-mask-size   : contain;
   mask-size           : contain;
   -webkit-mask-repeat : no-repeat;
