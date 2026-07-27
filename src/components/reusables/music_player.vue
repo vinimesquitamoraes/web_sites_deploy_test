@@ -1168,6 +1168,7 @@ onUnmounted(() => {
   overflow-y            : auto;
   font                  : var(--font-p);
   font-size             : var(--font-p-size);
+  padding-bottom        : 10px;
 }
 
 .track-item {
@@ -1228,7 +1229,7 @@ onUnmounted(() => {
   background            : var(--color-bg-main);
   color                 : var(--color-text-main);
   border                : 2px solid #000000;
-  box-shadow            : 0 3px 0 #000000;
+
   padding               : 6px 12px;
   border-radius         : 6px;
   cursor                : pointer;
