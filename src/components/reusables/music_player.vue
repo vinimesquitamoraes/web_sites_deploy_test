@@ -1,189 +1,191 @@
 <template>
-  <div 
-    class="music-player-wrapper" 
-    :class="{ 'is-open': isOpen }"
-    :style="{ 
-      bottom: playerBottom + 'px',
-      left: (isCentered || footerBehavior === 'center') ? '50%' : '16px',
-      right: 'auto',
-      transform: (isCentered || footerBehavior === 'center') ? 'translateX(-50%)' : 'none',
-      opacity: isHidden ? 0 : 1,
-      visibility: isHidden ? 'hidden' : 'visible'
-    }"
-  >
-    <div class="hidden-player">
-      <div id="youtube-player"></div>
-    </div>
+  <div class="music-player-container">
+    <div 
+      class="music-player-wrapper" 
+      :class="{ 'is-open': isOpen, 'is-ready': isReady }"
+      :style="{ 
+        bottom: playerBottom + 'px',
+        left: (isCentered || footerBehavior === 'center') ? '50%' : '16px',
+        right: 'auto',
+        transform: (isCentered || footerBehavior === 'center') ? 'translateX(-50%)' : 'none',
+        opacity: isHidden ? 0 : undefined,
+        visibility: isHidden ? 'hidden' : 'visible'
+      }"
+    >
+      <div class="hidden-player">
+        <div id="youtube-player"></div>
+      </div>
 
-    <div class="player-outer-layout">
-      <div class="player-card">
+      <div class="player-outer-layout">
+        <div class="player-card" :class="{ 'is-collapsed-height': !isOpen }">
   
-        <div class="player-control-bar">
-          <button class="expand-toggle-btn" @click="toggleOpen" :aria-label="isOpen ? 'Collapse Player' : 'Expand Player'">
-            <span class="expand-icon-span" :class="{ 'is-expanded': isOpen }"></span>
+          <div class="player-control-bar">
+            <button class="expand-toggle-btn" @click="toggleOpen" :aria-label="isOpen ? 'Collapse Player' : 'Expand Player'">
+              <span class="expand-icon-span" :class="{ 'is-expanded': isOpen }"></span>
+            </button>
+
+            <div class="top-buttons-bar">
+              <button class="top-mech-btn" @click="prevTrack" title="Rewind" aria-label="Rewind">
+                <span class="control-icon-span prev-svg"></span>
+              </button>
+
+              <button class="top-mech-btn play-mech-btn" :class="{ 'is-playing': isPlaying }" @click="togglePlay" :title="isPlaying ? 'Pause' : 'Play'" :aria-label="isPlaying ? 'Pause' : 'Play'">
+                <span v-if="!isPlaying" class="control-icon-span play-svg"></span>
+                <span v-else class="control-icon-span pause-svg"></span>
+              </button>
+
+              <button class="top-mech-btn" @click="stopPlayer" title="Stop" aria-label="Stop">
+                <span class="control-icon-span stop-svg"></span>
+              </button>
+
+              <button class="top-mech-btn" @click="nextTrack" title="Load / Next" aria-label="Load / Next">
+                <span class="control-icon-span next-svg"></span>
+              </button>
+
+              <button class="top-mech-btn rec-mech-btn" @click="handleRecClick" :class="{ active: isRecording }" title="Record" aria-label="Record">
+                <span class="control-icon-span rec-svg"></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="player-collapsible-content">
+            <div class="music-player walkman-device">
+              <div class="walkman-chassis">
+                <div class="walkman-top-panel">
+                  <div class="model-badge">
+                    <span class="brand-name">WALKMAN</span>
+                  </div>
+                </div>
+
+                <div class="walkman-control-board">
+                  <div class="lcd-panel">
+                    <div class="lcd-screen-inner">
+                      <div class="lcd-top-row">
+                        <span class="lcd-status-tag">{{ isPlaying ? 'PLAY' : 'STOP' }}</span>
+                        <span class="lcd-track-num">TRK {{ currentTrackIndex + 1 }}</span>
+                        <span class="lcd-time-display">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        :max="duration || 0" 
+                        step="0.1"
+                        :value="currentTime" 
+                        @input="onSeek"
+                        class="lcd-progress-slider"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cassette-door" :class="{ spinning: isPlaying }">
+                  <div class="cassette-shell">
+                    <div class="cassette-label-header">
+                      <span class="label-brand">ENCORE MIXTAPE</span>
+                      <span class="label-type">VOL.II</span>
+                    </div>
+
+                    <div class="cassette-window">
+                      <div class="reel left-reel">
+                        <div class="reel-hub"></div>
+                      </div>
+                   
+                      <div class="reel right-reel">
+                        <div class="reel-hub"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="playlist-container">
+              <div class="playlist-header">
+                <h3 class="playlist-title">Track List</h3>
+              </div>
+
+              <div class="playlist-content">
+                <div class="playlist-body-area">
+                  <div v-if="isLoadingTracks" class="loading-state">
+                    Loading...
+                  </div>
+
+                  <ul class="track-list" v-else>
+                    <li 
+                      v-for="(track, index) in paginatedTracks" 
+                      :key="track.id"
+                      class="track-item"
+                      :class="{ active: currentTrackIndex === getGlobalIndex(index) }"
+                      @click="playTrack(index)"
+                    >
+                      <span class="track-number">{{ getGlobalIndex(index) + 1 }}</span>
+                      <span class="track-name">{{ track.title }}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="pagination-controls" :style="{ opacity: (!isLoadingTracks && totalPages > 1) ? 1 : 0, pointerEvents: (!isLoadingTracks && totalPages > 1) ? 'auto' : 'none' }">
+                  <button class="page-btn" :disabled="currentPage === 1" @click="currentPage--">PREV</button>
+                  <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+                  <button class="page-btn" :disabled="currentPage === totalPages" @click="currentPage++">NEXT</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="external-side-volume" :class="`layout-${volumeLayout}`">
+          <div class="volume-control-container">
+            <span class="control-label">VOL</span>
+            
+            <div v-if="volumeLayout === 'wheel'" class="thumbwheel" @wheel.prevent="onWheelVolume">
+              <div class="wheel-ridges"></div>
+            </div>
+
+            <div v-else-if="volumeLayout === 'bar'" class="vertical-slider-track">
+              <input 
+                type="range" 
+                min="0" 
+                max="100" 
+                step="1"
+                :value="volume" 
+                @input="onVolumeChange"
+                class="vertical-range-input"
+                :style="{ '--volume-percent': volume + '%' }"
+              />
+            </div>
+
+            <div class="mobile-slider-track">
+              <input 
+                type="range" 
+                min="0" 
+                max="100" 
+                step="1"
+                :value="volume" 
+                @input="onVolumeChange"
+                class="mobile-range-input"
+                :style="{ '--volume-percent': volume + '%' }"
+              />
+            </div>
+          </div>
+
+          <button class="mute-btn" @click="toggleMute" :class="{ active: isMuted }" :title="isMuted ? 'Unmute' : 'Mute'" :aria-label="isMuted ? 'Unmute' : 'Mute'">
+            {{ isMuted ? 'OFF' : 'MUT' }}
           </button>
-
-          <div class="top-buttons-bar">
-            <button class="top-mech-btn" @click="prevTrack" title="Rewind" aria-label="Rewind">
-              <span class="control-icon-span prev-svg"></span>
-            </button>
-
-            <button class="top-mech-btn play-mech-btn" :class="{ 'is-playing': isPlaying }" @click="togglePlay" :title="isPlaying ? 'Pause' : 'Play'" :aria-label="isPlaying ? 'Pause' : 'Play'">
-              <span v-if="!isPlaying" class="control-icon-span play-svg"></span>
-              <span v-else class="control-icon-span pause-svg"></span>
-            </button>
-
-            <button class="top-mech-btn" @click="stopPlayer" title="Stop" aria-label="Stop">
-              <span class="control-icon-span stop-svg"></span>
-            </button>
-
-            <button class="top-mech-btn" @click="nextTrack" title="Load / Next" aria-label="Load / Next">
-              <span class="control-icon-span next-svg"></span>
-            </button>
-
-            <button class="top-mech-btn rec-mech-btn" @click="handleRecClick" :class="{ active: isRecording }" title="Record" aria-label="Record">
-              <span class="control-icon-span rec-svg"></span>
-            </button>
-          </div>
         </div>
-
-        <div class="player-collapsible-content">
-          <div class="music-player walkman-device">
-            <div class="walkman-chassis">
-              <div class="walkman-top-panel">
-                <div class="model-badge">
-                  <span class="brand-name">WALKMAN</span>
-                </div>
-              </div>
-
-              <div class="walkman-control-board">
-                <div class="lcd-panel">
-                  <div class="lcd-screen-inner">
-                    <div class="lcd-top-row">
-                      <span class="lcd-status-tag">{{ isPlaying ? 'PLAY' : 'STOP' }}</span>
-                      <span class="lcd-track-num">TRK {{ currentTrackIndex + 1 }}</span>
-                      <span class="lcd-time-display">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
-                    </div>
-                    <input 
-                      type="range" 
-                      min="0" 
-                      :max="duration || 0" 
-                      step="0.1"
-                      :value="currentTime" 
-                      @input="onSeek"
-                      class="lcd-progress-slider"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="cassette-door" :class="{ spinning: isPlaying }">
-                <div class="cassette-shell">
-                  <div class="cassette-label-header">
-                    <span class="label-brand">ENCORE MIXTAPE</span>
-                    <span class="label-type">VOL.II</span>
-                  </div>
-
-                  <div class="cassette-window">
-                    <div class="reel left-reel">
-                      <div class="reel-hub"></div>
-                    </div>
-                 
-                    <div class="reel right-reel">
-                      <div class="reel-hub"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="playlist-container">
-            <div class="playlist-header">
-              <h3 class="playlist-title">Track List</h3>
-            </div>
-
-            <div class="playlist-content">
-              <div class="playlist-body-area">
-                <div v-if="isLoadingTracks" class="loading-state">
-                  Loading...
-                </div>
-
-                <ul class="track-list" v-else>
-                  <li 
-                    v-for="(track, index) in paginatedTracks" 
-                    :key="track.id"
-                    class="track-item"
-                    :class="{ active: currentTrackIndex === getGlobalIndex(index) }"
-                    @click="playTrack(index)"
-                  >
-                    <span class="track-number">{{ getGlobalIndex(index) + 1 }}</span>
-                    <span class="track-name">{{ track.title }}</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="pagination-controls" :style="{ opacity: (!isLoadingTracks && totalPages > 1) ? 1 : 0, pointerEvents: (!isLoadingTracks && totalPages > 1) ? 'auto' : 'none' }">
-                <button class="page-btn" :disabled="currentPage === 1" @click="currentPage--">PREV</button>
-                <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-                <button class="page-btn" :disabled="currentPage === totalPages" @click="currentPage++">NEXT</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="external-side-volume" :class="`layout-${volumeLayout}`">
-        <div class="volume-control-container">
-          <span class="control-label">VOL</span>
-          
-          <div v-if="volumeLayout === 'wheel'" class="thumbwheel" @wheel.prevent="onWheelVolume">
-            <div class="wheel-ridges"></div>
-          </div>
-
-          <div v-else-if="volumeLayout === 'bar'" class="vertical-slider-track">
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              step="1"
-              :value="volume" 
-              @input="onVolumeChange"
-              class="vertical-range-input"
-              :style="{ '--volume-percent': volume + '%' }"
-            />
-          </div>
-
-          <div class="mobile-slider-track">
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              step="1"
-              :value="volume" 
-              @input="onVolumeChange"
-              class="mobile-range-input"
-              :style="{ '--volume-percent': volume + '%' }"
-            />
-          </div>
-        </div>
-
-        <button class="mute-btn" @click="toggleMute" :class="{ active: isMuted }" :title="isMuted ? 'Unmute' : 'Mute'" :aria-label="isMuted ? 'Unmute' : 'Mute'">
-          {{ isMuted ? 'OFF' : 'MUT' }}
-        </button>
       </div>
     </div>
-  </div>
 
-  <ToasterNotification 
-    v-model   ="showToast"
-    :message  ="toastMessage"
-    :icon     ="toastIcon"
-    type      ="info"
-    position  ="top-left"
-    :duration ="4000"
-    @close    ="handleToastClose"
-  />
+    <ToasterNotification 
+      v-model   ="showToast"
+      :message  ="toastMessage"
+      :icon     ="toastIcon"
+      type      ="info"
+      position  ="top-left"
+      :duration ="4000"
+      @close    ="handleToastClose"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -233,6 +235,7 @@ const isLoadingTracks   = ref(true)
 const playerBottom      = ref(16)
 const isCentered        = ref(false)
 const isHidden          = ref(false)
+const isReady           = ref(false)
 
 const showToast         = ref(false)
 const toastMessage      = ref('')
@@ -249,6 +252,7 @@ const handle_footer_overlap = () => {
     playerBottom.value = 16
     isCentered.value = false
     isHidden.value = false
+    isReady.value = true
     return
   }
 
@@ -277,6 +281,7 @@ const handle_footer_overlap = () => {
         break
     }
   }
+  isReady.value = true
 }
 
 const toggleOpen = () => {
@@ -572,6 +577,17 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+@keyframes playerEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .music-player-wrapper {
   position              : fixed;
   bottom                : 16px;
@@ -580,20 +596,17 @@ onUnmounted(() => {
   flex-direction        : column;
   width                 : auto;
   box-sizing            : border-box;
-  pointer-events        : auto;
-  transition            : bottom 0.1s ease-out, left 0.1s ease-out, transform 0.1s ease-out, opacity 0.1s ease-out, visibility 0.1s ease-out;
-  animation             : slideFromBehind 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events        : none;
+  opacity               : 0;
+  visibility            : hidden;
+  transition            : bottom 0.2s ease-out, left 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
-@keyframes slideFromBehind {
-  0% {
-    opacity             : 0;
-    transform           : translateY(60px) scale(0.9);
-  }
-  100% {
-    opacity             : 1;
-    transform           : translateY(0) scale(1);
-  }
+.music-player-wrapper.is-ready {
+  pointer-events        : auto;
+  visibility            : visible;
+  /* damn animation speed here, AHHHHHHHHHHHHHHHHHHHHHHHHHHHH */
+  animation             : playerEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .player-outer-layout {
@@ -613,6 +626,11 @@ onUnmounted(() => {
   width                 : 360px;
   max-width             : calc(100vw - 32px);
   box-sizing            : border-box;
+  transition            : height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.player-card.is-collapsed-height {
+  height                : 88px !important; 
 }
 
 .player-control-bar {
@@ -649,7 +667,7 @@ onUnmounted(() => {
   mask-repeat           : no-repeat;
   -webkit-mask-position : center;
   mask-position         : center;
-  transition            : transform 0.2s ease, background-color 0.15s;
+  transition            : transform 0.3s ease, background-color 0.15s;
 }
 
 .expand-icon-span.is-expanded {
@@ -668,15 +686,13 @@ onUnmounted(() => {
   opacity               : 0;
   overflow              : hidden;
   padding               : 0 12px;
-  visibility            : hidden;
-  transition            : max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+  transition            : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, padding 0.55s ease;
   pointer-events        : none;
 }
 
 .music-player-wrapper.is-open .player-collapsible-content {
   max-height            : 600px;
   opacity               : 1;
-  visibility            : visible;
   padding               : 0 12px 12px 12px;
   pointer-events        : auto;
 }
@@ -1261,6 +1277,10 @@ onUnmounted(() => {
     max-width           : none;
   }
 
+  .player-card.is-collapsed-height {
+    height              : auto !important; 
+  }
+
   .external-side-volume {
     width               : 100%;
     height              : auto !important;
@@ -1312,7 +1332,7 @@ onUnmounted(() => {
     width               : 14px;
     height              : 14px;
     border-radius       : 3px;
-    background          : var(--color-accent);
+    background            : var(--color-accent);
     border                : 2px solid #000000;
     box-shadow          : 0px 1px 0px #000000;
   }
@@ -1322,7 +1342,7 @@ onUnmounted(() => {
     height              : 14px;
     border-radius       : 3px;
     background          : var(--color-accent);
-    border                : 2px solid #000000;
+    border              : 2px solid #000000;
     box-shadow          : 0px 1px 0px #000000;
   }
 

@@ -19,7 +19,7 @@
     <MusicPlayer 
       playlistId="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
       footerBehavior="stay" 
-      volumeLayout="wheel"
+      volumeLayout="bar"
     />
     <div class="godot_foot_note">
       <ContentSection  
