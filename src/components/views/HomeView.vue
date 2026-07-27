@@ -38,7 +38,7 @@ const screenshots = computed(() => Object.values(homeImages))
     <Features />
     
     <CastList 
-      view-type="tab" 
+      view-type="list" 
       transition-type="fade" 
     />
   </div>

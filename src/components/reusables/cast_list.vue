@@ -51,16 +51,16 @@ import { useI18n } from '@/composables/useI18n'
 import CharacterCard from './character_card.vue'
 
 import imgNintenPortrait from '@/assets/img/characters/ninten_head_sprite.png'
-import imgNintenClay from '@/assets/img/characters/clay_ninten.png'
+import imgNintenClay from '@/assets/img/characters/ninten.png'
 
 import imgLloydPortrait from '@/assets/img/characters/lloyd_head_sprite.png'
-import imgLloydClay from '@/assets/img/characters/clay_lloyd.png'
+import imgLloydClay from '@/assets/img/characters/lloyd.png'
 
 import imgAnaPortrait from '@/assets/img/characters/ana_head_sprite.png'
-import imgAnaClay from '@/assets/img/characters/clay_ana.png'
+import imgAnaClay from '@/assets/img/characters/ana.png'
 
 import imgTeddyPortrait from '@/assets/img/characters/teddy_head_sprite.png'
-import imgTeddyClay from '@/assets/img/characters/clay_teddy.png'
+import imgTeddyClay from '@/assets/img/characters/teddy.png'
 
 const props = defineProps({
   viewType: { 

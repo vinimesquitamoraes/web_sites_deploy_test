@@ -4,74 +4,90 @@ import MediaGallery from '@/components/reusables/mansory_gallery.vue'
 import MediaModal   from '@/components/reusables/media_modal.vue'
 
 
-import imgDogten       from '@/assets/img/funny/dogten.jpg'
-import gifNinten67     from '@/assets/img/characters/Ninten_67.gif'
-import imgBreakingBad  from '@/assets/img/funny/breaking_bad.png'
-import imgNintenDough  from '@/assets/img/funny/ninten_Dough.png'
-import imgImage59      from '@/assets/img/funny/image-59.png'
-import imgImage64      from '@/assets/img/funny/image-64.png'
-import imgImage        from '@/assets/img/funny/image.png'
+const funnyModules = import.meta.glob('@/assets/img/funny/*.{png,jpg,jpeg,svg,webp,gif,mp4}', {
+  eager: true,
+  import: 'default'
+})
 
-import videoItoi          from '@/assets/img/funny/itoi.mp4'
-import videoWhatsappPippi from '@/assets/img/funny/whatsapp pippi.mp4'
-
-const sampleMediaItems = ref([
+const mediaOrderConfig = [
   {
-    type: 'image',
-    src: imgDogten,
+    fileName: 'dogten.jpg',
     alt: '???',
-    caption: '???'
+    caption: '???',
+    visible: true
   },
   {
-    type: 'image',
-    src: gifNinten67,
+    fileName: 'ninten_67.gif', 
     alt: 'Ninten doing 67',
-    caption: '67'
+    caption: '67',
+    visible: true
   },
   {
+    fileName: 'itoi.mp4',
     type: 'video',
-    src: videoItoi,
-    alt: '???',
-    caption: '???'
+    alt: 'Itoi video',
+    caption: 'Shigesato Itoi',
+    visible: true
   },
   {
+    fileName: 'whatsapp pippi.mp4',
     type: 'video',
-    src: videoWhatsappPippi,
-    alt: '???',
-    caption: '???'
+    alt: 'Whatsapp Pippi',
+    caption: 'Pippi',
+    visible: true
   },
   {
-    type: 'image',
-    src: imgBreakingBad,
-    alt: 'Ninten doing 67',
-    caption: ''
+    fileName: 'squirrel.png',
+    alt: 'Squirrel',
+    caption: '',
+    visible: true
   },
   {
-    type: 'image',
-    src: imgNintenDough,
-    alt: '???',
-    caption: '???'
+    fileName: 'ninten_Dough.png',
+    alt: 'Ninten Dough',
+    caption: 'Dough',
+    visible: true
   },
   {
-    type: 'image',
-    src: imgImage59,
+    fileName: 'lloyd_suicide.png',
     alt: '???',
-    caption: '???'
+    caption: '???',
+    visible: false
   },
   {
-    type: 'image',
-    src: imgImage64,
+    fileName: 'found_atm_magicant.png',
     alt: '???',
-    caption: '???'
+    caption: '???',
+    visible: true
   },
   {
-    type: 'image',
-    src: imgImage,
+    fileName: 'oh_my_full_name.png',
     alt: '???',
-    caption: '???'
-  },
-])
+    caption: '???',
+    visible: true
+  }
+]
+const sampleMediaItems = ref(
+  mediaOrderConfig
+    .map(config => {
 
+      const matchedPath = Object.keys(funnyModules).find(path => path.endsWith('/' + config.fileName))
+      
+      if (!matchedPath) return null 
+
+      const src = funnyModules[matchedPath]
+      const isVideo = config.fileName.endsWith('.mp4')
+
+      return {
+        type: config.type || (isVideo ? 'video' : 'image'),
+        src: src,
+        alt: config.alt || '???',
+        caption: config.caption || '???',
+        visible: config.visible !== undefined ? config.visible : true
+      }
+    })
+    .filter(item => item !== null && item.visible) 
+)
 const isModalOpen = ref(false)
 const currentIndex = ref(0)
 
