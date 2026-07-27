@@ -16,7 +16,7 @@
     </div>
 
     <div class="player-outer-layout">
-      <div class="player-card" :class="{ 'is-collapsed-height': !isOpen }">
+      <div class="player-card">
   
         <div class="player-control-bar">
           <button class="expand-toggle-btn" @click="toggleOpen" :aria-label="isOpen ? 'Collapse Player' : 'Expand Player'">
@@ -582,6 +582,18 @@ onUnmounted(() => {
   box-sizing            : border-box;
   pointer-events        : auto;
   transition            : bottom 0.1s ease-out, left 0.1s ease-out, transform 0.1s ease-out, opacity 0.1s ease-out, visibility 0.1s ease-out;
+  animation             : slideFromBehind 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideFromBehind {
+  0% {
+    opacity             : 0;
+    transform           : translateY(60px) scale(0.9);
+  }
+  100% {
+    opacity             : 1;
+    transform           : translateY(0) scale(1);
+  }
 }
 
 .player-outer-layout {
@@ -601,11 +613,6 @@ onUnmounted(() => {
   width                 : 360px;
   max-width             : calc(100vw - 32px);
   box-sizing            : border-box;
-  transition            : height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.player-card.is-collapsed-height {
-  height                : 88px !important; 
 }
 
 .player-control-bar {
@@ -661,13 +668,15 @@ onUnmounted(() => {
   opacity               : 0;
   overflow              : hidden;
   padding               : 0 12px;
-  transition            : max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.35s ease;
+  visibility            : hidden;
+  transition            : max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
   pointer-events        : none;
 }
 
 .music-player-wrapper.is-open .player-collapsible-content {
   max-height            : 600px;
   opacity               : 1;
+  visibility            : visible;
   padding               : 0 12px 12px 12px;
   pointer-events        : auto;
 }
@@ -784,7 +793,6 @@ onUnmounted(() => {
   box-shadow            : 0px 1px 0px #000000;
 }
 
-/* Styled Retro Mobile Slider Container */
 .mobile-slider-track {
   display               : none;
 }
@@ -1253,10 +1261,6 @@ onUnmounted(() => {
     max-width           : none;
   }
 
-  .player-card.is-collapsed-height {
-    height              : auto !important; 
-  }
-
   .external-side-volume {
     width               : 100%;
     height              : auto !important;
@@ -1309,7 +1313,7 @@ onUnmounted(() => {
     height              : 14px;
     border-radius       : 3px;
     background          : var(--color-accent);
-    border              : 2px solid #000000;
+    border                : 2px solid #000000;
     box-shadow          : 0px 1px 0px #000000;
   }
 
@@ -1318,7 +1322,7 @@ onUnmounted(() => {
     height              : 14px;
     border-radius       : 3px;
     background          : var(--color-accent);
-    border              : 2px solid #000000;
+    border                : 2px solid #000000;
     box-shadow          : 0px 1px 0px #000000;
   }
 

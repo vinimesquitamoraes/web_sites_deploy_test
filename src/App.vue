@@ -14,12 +14,7 @@
       </router-view>
     </div>
 
-    <MusicPlayer 
-      playlistId        ="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
-      footerBehavior    ="stay" 
-      volumeLayout      = "wheel"
-    />
-
+  
     <BackToTop 
       footerBehavior="stay" 
     />
@@ -37,7 +32,6 @@
   import AppHeader      from '@/components/reusables/app_header.vue'
   import AppFooter      from '@/components/reusables/app_footer.vue'
   import BackToTop      from '@/components/reusables/back_to_top_button.vue'
-  import MusicPlayer    from '@/components/reusables/music_player.vue'
   
   const { loadTranslations, isLoaded } = useI18n()
 

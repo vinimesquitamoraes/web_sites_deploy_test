@@ -1,6 +1,7 @@
 <template>
   <div class="about-page-container">
     <div class="main-content">
+   
       <ContentSection 
         v-for="(section, index) in infoSections" 
         :key="index"
@@ -12,7 +13,14 @@
         :redBorder="section.redBorder ?? true"
         :imageOpenable="section.imageOpenable ?? true"
       />
+
+  
     </div>
+    <MusicPlayer 
+      playlistId="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
+      footerBehavior="stay" 
+      volumeLayout="wheel"
+    />
     <div class="godot_foot_note">
       <ContentSection  
         heading=""
@@ -21,6 +29,7 @@
       />
       <SocialMediaButton platform="github" variant="black" hoverVariant="colored" />
     </div>
+   
   </div>
 </template>
 
@@ -29,6 +38,9 @@ import { computed } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
 import ContentSection     from '@/components/reusables/content_section.vue'
 import SocialMediaButton  from '@/components/reusables/social_media_button.vue'
+import MusicPlayer        from '@/components/reusables/music_player.vue'
+
+
 import imgSc1 from '@/assets/img/screenshots/sc1.png'
 import imgSc2 from '@/assets/img/screenshots/sc2.png'
 import imgSc3 from '@/assets/img/screenshots/sc3.png'

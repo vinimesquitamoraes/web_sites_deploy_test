@@ -32,7 +32,7 @@ const screenshots = computed(() => Object.values(homeImages))
     
     <GaleryCarrousel 
       :image-modules="homeImages" 
-      :interval-time="3000"
+      :interval-time="10000"
     />
     
     <Features />
