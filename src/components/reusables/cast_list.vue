@@ -26,6 +26,8 @@
             :name="characters[activeIndex].name"
             :description="characters[activeIndex].description"
             :image="characters[activeIndex].image"
+            :imageShape="characters[activeIndex].imageShape || 'circle'"
+            :imageBgColor="characters[activeIndex].imageBgColor || 'transparent'"
             :isReversed="activeIndex % 2 !== 0" 
           />
         </Transition>
@@ -35,11 +37,14 @@
     <div v-else class="cast-grid">
       <CharacterCard 
         v-for="(character, index) in characters" 
-        :key="character.name"
-        :name="character.name"
-        :description="character.description"
-        :image="character.image"
-        :isReversed="index % 2 !== 0" 
+        :key          ="character.name"
+        :name         ="character.name"
+        :description  ="character.description"
+        :image        = "character.image"
+        :imageShape   ="character.imageShape || 'circle'"
+        :imageBgColor ="character.imageBgColor || 'transparent'"
+        :isReversed   ="index % 2 !== 0" 
+        :imageScale   ="character.imageScale || 1.0"
       />
     </div>
   </section>
@@ -51,16 +56,18 @@ import { useI18n } from '@/composables/useI18n'
 import CharacterCard from './character_card.vue'
 
 import imgNintenPortrait from '@/assets/img/characters/ninten_head_sprite.png'
-import imgNintenClay from '@/assets/img/characters/ninten.png'
+import imgNinten from '@/assets/img/characters/ninten.png'
 
 import imgLloydPortrait from '@/assets/img/characters/lloyd_head_sprite.png'
-import imgLloydClay from '@/assets/img/characters/lloyd.png'
+import imgLloyd from '@/assets/img/characters/lloyd.png'
 
 import imgAnaPortrait from '@/assets/img/characters/ana_head_sprite.png'
-import imgAnaClay from '@/assets/img/characters/ana.png'
+import imgAna from '@/assets/img/characters/ana.png'
 
 import imgTeddyPortrait from '@/assets/img/characters/teddy_head_sprite.png'
-import imgTeddyClay from '@/assets/img/characters/teddy.png'
+import imgTeddy from '@/assets/img/characters/teddy.png'
+
+import svgTriangle from '@/assets/svg/triangle-right-12-filled.svg'
 
 const props = defineProps({
   viewType: { 
@@ -82,30 +89,43 @@ const computedTransition = computed(() => {
   return mode === 'immediate' ? 'immediate' : 'fade';
 });
 
+const triangleUrl = computed(() => `url(${svgTriangle})`)
+
 const characters = computed(() => [
   {
     name        : t('SITE_HOME_NINTEN_TITLE'),
     description : t('SITE_HOME_NINTEN_1'),
     portrait    : imgNintenPortrait,
-    image       : imgNintenClay
+    image       : imgNinten,
+    imageShape  : 'circle',
+    imageBgColor: 'var(--color-default-background)',
+    imageScale  : "0.8",
   },
   {
     name        : t('SITE_HOME_LLOYD_TITLE'),
     description : t('SITE_HOME_LLOYD_1'),
     portrait    : imgLloydPortrait,
-    image       : imgLloydClay
+    image       : imgLloyd,
+    imageShape  : 'circle',
+    imageBgColor: 'var(--color-default-background)',
+    imageScale  : "0.8",
   },
   {
     name        : t('SITE_HOME_ANA_TITLE'),
     description : t('SITE_HOME_ANA_1'),
     portrait    : imgAnaPortrait,
-    image       : imgAnaClay
+    image       : imgAna,
+    imageShape  : 'circle',
+    imageBgColor: 'var(--color-default-background)',
+    imageScale  : "0.8",
   },
   {
     name        : t('SITE_HOME_TEDDY_TITLE'),
     description : t('SITE_HOME_TEDDY_1'),
     portrait    : imgTeddyPortrait,
-    image       : imgTeddyClay
+    image       : imgTeddy,
+    imageShape  : 'circle',
+    imageBgColor: 'var(--color-default-background)'
   }
 ]);
 
@@ -190,10 +210,10 @@ onMounted(() => {
   top                 : calc(50% - 15px);
   width               : 30px; 
   height              : 30px;
-  background-color    : var(--color-primary); 
+  background-color    : var(--color-place-holder-green); 
 
-  -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
-  mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');
+  -webkit-mask-image  : v-bind(triangleUrl);
+  mask-image          : v-bind(triangleUrl);
   -webkit-mask-size   : contain;
   mask-size           : contain;
   -webkit-mask-repeat : no-repeat;

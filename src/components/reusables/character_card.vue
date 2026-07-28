@@ -6,9 +6,27 @@
       'is-vertical': orientation === 'vertical' 
     }"
   >
-    <div class="image-wrapper">
-      <img :src="image" :alt="name" class="character-image" />
+    <div 
+      class="image-wrapper"
+      :class="imageShapeClass"
+      :style="{ 
+        backgroundColor: imageBgColor, 
+        width: imageSize, 
+        height: imageSize,
+        minWidth: imageSize,
+        minHeight: imageSize,
+        maxWidth: imageSize,
+        maxHeight: imageSize
+      }"
+    >
+      <img 
+        :src="image" 
+        :alt="name" 
+        class="character-image" 
+        :style="{ transform: `scale(${imageScale})` }"
+      />
     </div>
+
     <div class="character-info">
       <h3>{{ name }}</h3>
       <div class="separator-line"></div>
@@ -18,12 +36,22 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   name        : { type: String, required: true },
   description : { type: String, required: true },
   image       : { type: String, required: true },
   isReversed  : { type: Boolean, default: false },
-  orientation : { type: String, default: 'horizontal', validator: (val) => ['horizontal', 'vertical'].includes(val) }
+  orientation : { type: String, default: 'horizontal', validator: (val) => ['horizontal', 'vertical'].includes(val) },
+  imageShape  : { type: String, default: 'circle', validator: (val) => ['circle', 'square'].includes(val) },
+  imageBgColor: { type: String, default: 'transparent' },
+  imageSize   : { type: String, default: '340px' },
+  imageScale  : { type: [Number, String], default: 1 }
+});
+
+const imageShapeClass = computed(() => {
+  return `shape-${props.imageShape}`;
 });
 </script>
 
@@ -52,25 +80,34 @@ defineProps({
 }
 
 .image-wrapper {
-  flex           : 1;
+  flex           : 0 0 auto;
   display        : flex;
   justify-content: center;
   align-items    : center;
-  height         : 100%;
-  min-height     : 300px;
+  overflow       : hidden; 
+}
+
+.image-wrapper.shape-circle {
+  aspect-ratio   : 1 / 1;
+  border-radius  : 50%;
+  margin         : 0 auto;
+}
+
+.image-wrapper.shape-square {
+  aspect-ratio   : 1 / 1;
+  border-radius  : 20px;
+  margin         : 0 auto;
 }
 
 .character-image {
   width          : 100%;
   height         : 100%;
-  max-height     : 350px;
-  object-fit     : contain;
+  object-fit     : contain; /* Changed from cover to contain to prevent cropping */
   display        : block;
 }
 
 .character-card.is-vertical .image-wrapper {
-  width          : 100%;
-  min-height     : auto;
+  margin-bottom  : 10px;
 }
 
 .character-info {
@@ -88,7 +125,7 @@ defineProps({
 .character-info h3 {
   color          : var(--color-default-text-color);
   font-size      : var(--font-h3-size);
-  font-family    : sans-serif;
+  font-family    : var(--font-h3-family, sans-serif);
   font-weight    : 600;
   margin         : 0;
   text-align     : center;
@@ -105,7 +142,7 @@ defineProps({
 .character-info p {
   color          : var(--color-default-text-color);
   font-size      : var(--font-p-size);
-  font-family    : var(--font-body);
+  font-family    : var(--font-body-family, var(--font-body));
   margin         : 0;
   line-height    : 1.5;
   text-align     : left;
@@ -120,11 +157,12 @@ defineProps({
   }
 
   .image-wrapper {
-    min-height     : 200px;
-  }
-
-  .character-image {
-    max-height     : 250px;
+    width          : 240px !important;
+    height         : 240px !important;
+    min-width      : 240px !important;
+    min-height     : 240px !important;
+    max-width      : 240px !important;
+    max-height     : 240px !important;
   }
 
   .character-info {

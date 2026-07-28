@@ -72,9 +72,9 @@
   --font-h2-size              : 32px;
   --font-h3-size              : 28px;
   --font-h4-size              : 24px;
+  --font-p-size               : 20px;
   --font-body-size            : 16px;
   --font-button-size          : 16px;
-  --font-p-size               : 20px;
   --font-dropdown-size        : 20px;
 
   --font-mobile-navbar        : 'Motherish', sans-serif;
@@ -87,7 +87,7 @@
   --font-mobile-p             : 'Motherish', sans-serif;
   
   --font-mobile-navbar-size   : 60px;
-  --font-mobile-h1-size       : 40px;
+  --font-mobile-h1-size       : 60px;
   --font-mobile-h2-size       : 25px;
   --font-mobile-h3-size       : 20px;
   --font-mobile-h4-size       : 18px;
