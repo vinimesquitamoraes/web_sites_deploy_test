@@ -1,34 +1,14 @@
 <template>
-  <div class="credits-container">
-    <div class="credits-body">
-      <div 
-        v-for="(group, index) in filteredCreditsData" 
-        :key="index" 
-        class="credits-group"
-      >
-        <h3 class="credits-role">{{ t(group.roleKey) }}</h3>
-        <ul class="credits-names-list">
-          <li 
-            v-for="(person, nameIndex) in group.names" 
-            :key="nameIndex" 
-            class="credits-name"
-          >
-            <a v-if="person.link" :href="person.link" target="_blank" rel="noopener" class="credit-link">
-              {{ person.name }}
-            </a>
-            <span v-else>
-              {{ person.name }}
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <CreditsComponent 
+    :credits="formattedCredits" 
+    :linksMap="linksMap" 
+  />
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from '@/composables/useI18n'
+import CreditsComponent from '@/components/reusables/credits.vue'
 
 import rolesCSVText from '@/assets/csv/credits_roles.csv?raw'
 import linksCSVText from '@/assets/csv/credits_links.csv?raw'
@@ -41,9 +21,6 @@ const props = defineProps({
     default: 'all'
   }
 })
-
-const rawRolesData = ref([])
-const linksMap = ref({})
 
 const parseCSV = (text) => {
   const lines = []
@@ -68,7 +45,9 @@ const parseCSV = (text) => {
     } else {
       if (current === '"') {
         inQuotes = true
-      } else if (current === ',') {
+      } else if (current === ';') { 
+        row.push('')
+      } else if (current === ',') { 
         row.push('')
       } else if (current === '\r' || current === '\n') {
         if (current === '\r' && next === '\n') {
@@ -100,8 +79,23 @@ const parseCSV = (text) => {
   })
 }
 
-const filteredCreditsData = computed(() => {
-  return rawRolesData.value.map(row => {
+const linksMap = computed(() => {
+  const map = {}
+  const rawLinks = parseCSV(linksCSVText)
+  rawLinks.forEach(item => {
+    const nameKey = item['Name'] || item['name'] || ''
+    const linkVal = item['External Link'] || item['link'] || item['External_Link'] || ''
+    if (nameKey) {
+      map[nameKey.trim().toLowerCase()] = linkVal.trim()
+    }
+  })
+  return map
+})
+
+const formattedCredits = computed(() => {
+  const rawRoles = parseCSV(rolesCSVText)
+  
+  const groups = rawRoles.map(row => {
     const roleKey = row['key'] || row['Translation Key'] || row['Role']
     let rawNames = ''
     
@@ -113,117 +107,25 @@ const filteredCreditsData = computed(() => {
 
     const namesList = rawNames ? rawNames.split(';').map(n => n.trim()) : []
     
-    const processedNames = namesList.map(name => ({
-      name: name,
-      link: linksMap.value[name] || null
-    }))
+    const processedNames = namesList.map(name => {
+      const matchKey = name.toLowerCase()
+      return {
+        name: name,
+        link: linksMap.value[matchKey] || null
+      }
+    })
 
     return {
-      roleKey: roleKey,
+      subtitle: t(roleKey),
       names: processedNames
     }
   }).filter(group => group.names.length > 0)
-})
 
-onMounted(() => {
-  try {
-    rawRolesData.value = parseCSV(rolesCSVText)
-    const rawLinks = parseCSV(linksCSVText)
-
-    const map = {}
-    rawLinks.forEach(item => {
-      if (item['Name'] && item['External Link']) {
-        map[item['Name']] = item['External Link']
-      }
-    })
-    linksMap.value = map
-
-  } catch (error) {
-    console.error('Failed to parse CSV:', error)
-  }
+  return [
+    {
+      title: '',
+      groups: groups
+    }
+  ]
 })
 </script>
-
-<style scoped>
-.credits-container {
-  width             : 100%;
-  max-width         : 1240px;
-  margin-bottom     : 50px;
-  padding           : 10px;
-  box-sizing        : border-box;
-  display           : flex;
-  flex-direction    : column;
-  align-items       : center;
-}
-
-.credits-body {
-  width             : 100%;
-  max-width         : 600px;
-  display           : flex;
-  flex-direction    : column;
-  align-self        : center;
-  gap               : 2.5rem;
-}
-
-.credits-group {
-  width             : 100%;
-  display           : flex;
-  flex-direction    : column;
-  align-items       : flex-start;
-}
-
-.credits-role {
-  margin            : 0 0 0.5rem 0;
-  color             : var(--color-credits-role);
-  font-family       : var(--font-h3);
-  font-size         : var(--font-h4-size);
-  text-transform    : uppercase;
-  letter-spacing    : 1px;
-}
-
-.credits-names-list {
-  width             : 100%;
-  margin            : 0;
-  padding           : 0;
-  list-style        : none;
-  display           : grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap               : 0.25rem 2rem;
-}
-
-.credits-name {
-  margin            : 0;
-  color             : var(--color-credits-name);
-  font-family       : var(--font-body), sans-serif;
-  font-size         : var(--font-p-size);
-  white-space       : nowrap;
-  overflow          : hidden;
-  text-overflow     : ellipsis;
-}
-
-.credit-link {
-  color             : #ffffff;
-  text-decoration   : none;
-  transition        : color 0.2s;
-}
-
-.credit-link:hover {
-  color             : var(--color-hover);
-  text-decoration   : underline;
-}
-
-@media (max-width: 768px) {
-  .credits-role {
-    font-size       : var(--font-mobile-h4-size);
-  }
-  .credits-name {
-    font-size       : var(--font-mobile-p-size);
-  }
-}
-
-@media (max-width: 480px) {
-  .credits-names-list {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
