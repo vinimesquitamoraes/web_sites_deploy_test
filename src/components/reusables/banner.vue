@@ -3,8 +3,8 @@
     <div class="hero-image-wrapper">
       <div 
         class="hero-bg-image"
-        :class="(isScrollable === true || isScrollable === 'true') && scrollDirection !== 'none' ? `scroll-${scrollDirection}` : ''"
-        :style="{ backgroundImage: `url(${imageSrc})` }"
+        :class="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
+        :style="{ backgroundImage: `url(${activeImageSrc})` }"
         :aria-label="imageAlt"
         role="img"
       ></div>
@@ -13,16 +13,18 @@
 
     <div class="hero-content center">
       <slot>
-        <div class="hero-logo-wrapper">
+        <div class="hero-logo-wrapper" v-if="showLogo">
           <img :src="logoSrc" alt="Game Logo" class="hero-logo-image" />
         </div>
 
         <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
         
         <CustomButton 
-          :text="t('SITE_NAV_DOWNLOAD')"
+          v-if="showCtaButton"
+          :text="ctaText || t('SITE_NAV_DOWNLOAD')"
           fontSize="var(--font-h2-size)"
-          to="/download"
+          :to="ctaLink"
+          @click="$emit('cta-click')"
         />
       </slot>
     </div>
@@ -30,6 +32,7 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
 import CustomButton from './custom_button.vue'
 import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
@@ -39,11 +42,11 @@ const { t } = useI18n()
 
 const logoSrc = img_gameLogo
 
-defineProps({
+const props = defineProps({
   imageSrc: {
     type    : String,
     required: false,
-    default : img_defaultBanner
+    default : ''
   },
   imageAlt: {
     type    : String,
@@ -65,7 +68,100 @@ defineProps({
     required: false,
     default : 'horizontal',
     validator: (value) => ['none', 'horizontal', 'vertical', 'both'].includes(value)
+  },
+  sessionKey: {
+    type    : String,
+    required: false,
+    default : ''
+  },
+  alternativeImages: {
+    type    : Array,
+    required: false,
+    default : () => []
+  },
+  alternativeScrollDirection: {
+    type    : String,
+    required: false,
+    default : 'both'
+  },
+  showLogo: {
+    type    : Boolean,
+    required: false,
+    default : true
+  },
+  showCtaButton: {
+    type    : Boolean,
+    required: false,
+    default : true
+  },
+  ctaText: {
+    type    : String,
+    required: false,
+    default : ''
+  },
+  ctaLink: {
+    type    : String,
+    required: false,
+    default : '/download'
   }
+})
+
+const getRandomAlternative = () => {
+  if (props.alternativeImages.length > 0) {
+    const randomIndex = Math.floor(Math.random() * props.alternativeImages.length)
+    return props.alternativeImages[randomIndex]
+  }
+  return undefined
+}
+
+const isSessionActive = ref(
+  props.sessionKey ? sessionStorage.getItem(props.sessionKey) === 'true' : false
+)
+
+const randomAlternativeImage = ref(getRandomAlternative())
+
+const checkSessionState = () => {
+  if (!props.sessionKey) return
+  const latestValue = sessionStorage.getItem(props.sessionKey) === 'true'
+  if (latestValue !== isSessionActive.value) {
+    isSessionActive.value = latestValue
+    if (latestValue && props.alternativeImages.length > 0) {
+      randomAlternativeImage.value = getRandomAlternative()
+    }
+  }
+}
+
+let intervalId = null
+
+onMounted(() => {
+  if (props.sessionKey) {
+    intervalId = setInterval(checkSessionState, 500)
+  }
+})
+
+onUnmounted(() => {
+  if (intervalId) clearInterval(intervalId)
+})
+
+const activeImageSrc = computed(() => {
+  if (isSessionActive.value && randomAlternativeImage.value) {
+    return randomAlternativeImage.value
+  }
+  return props.imageSrc || img_defaultBanner
+})
+
+const isScrollableActive = computed(() => {
+  if (isSessionActive.value) {
+    return true
+  }
+  return props.isScrollable
+})
+
+const activeScrollDirection = computed(() => {
+  if (isSessionActive.value) {
+    return props.alternativeScrollDirection
+  }
+  return props.scrollDirection
 })
 
 defineEmits(['cta-click'])

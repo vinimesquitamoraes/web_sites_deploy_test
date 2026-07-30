@@ -1,13 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import MediaGallery from '@/components/reusables/mansory_gallery.vue'
-import MediaModal   from '@/components/reusables/media_modal.vue'
 
+import Banner          from '@/components/reusables/banner.vue'
+import MediaGallery    from '@/components/reusables/mansory_gallery.vue'
+import MediaModal      from '@/components/reusables/media_modal.vue'
+import CustomButton    from '@/components/reusables/custom_button.vue'
+import OptionsModal    from '@/components/reusables/options_modal.vue'
 
 const funnyModules = import.meta.glob('@/assets/img/funny/*.{png,jpg,jpeg,svg,webp,gif,mp4}', {
   eager: true,
   import: 'default'
 })
+
+const mapRenderImagesGlob = import.meta.glob('@/assets/img/map_renders/*.{png,jpg,jpeg,svg,webp,gif}', { 
+  eager: true, 
+  import: 'default' 
+})
+const mapRenderImagesArray = Object.values(mapRenderImagesGlob)
 
 const mediaOrderConfig = [
   {
@@ -73,6 +82,11 @@ const mediaOrderConfig = [
     visible: true
   }
 ]
+
+const modalOptions = [
+  { key: "replace_banner_for_map_renders", label: 'Use Map Renders as Banner' }
+]
+
 const sampleMediaItems = ref(
   mediaOrderConfig
     .map(config => {
@@ -92,21 +106,22 @@ const sampleMediaItems = ref(
         visible: config.visible !== undefined ? config.visible : true
       }
     })
-    .filter(item => item !== null && item.visible) 
+    .filter(item => item !== null && item.visible)
 )
-const isModalOpen = ref(false)
+const isOptionsModalOpen = ref(false)
+const isMediaModalOpen = ref(false)
 const currentIndex = ref(0)
 
 const openModal = (item) => {
   const index = sampleMediaItems.value.findIndex(m => m.src === item.src)
   if (index !== -1) {
     currentIndex.value = index
-    isModalOpen.value = true
+    isMediaModalOpen.value = true
   }
 }
 
 const closeModal = () => {
-  isModalOpen.value = false
+  isMediaModalOpen.value = false
 }
 
 const nextMedia = () => {
@@ -117,24 +132,59 @@ const prevMedia = () => {
   currentIndex.value = (currentIndex.value - 1 + sampleMediaItems.value.length) % sampleMediaItems.value.length
 }
 
+const handleModalChange = ({ key, value }) => {
+  if (key === 'unlocked_dogten') {
+    sessionStorage.setItem('unlocked_dogten', value ? 'true' : 'false')
+  }
+}
+
 onMounted(() => {
-  sessionStorage.setItem('unlocked_dogten', 'false')
+  if (sessionStorage.getItem('unlocked_dogten') === null) {
+    sessionStorage.setItem('unlocked_dogten', 'false')
+  }
 })
 </script>
 
 <template>
-  <div class="galery-container">
-
-    <MediaGallery :items="sampleMediaItems" @select="openModal" />
-
-    <MediaModal 
-      :isOpen="isModalOpen" 
-      :mediaItem="sampleMediaItems[currentIndex]" 
-      :showNav="sampleMediaItems.length > 1"
-      @close="closeModal"
-      @next="nextMedia"
-      @prev="prevMedia"
+  <div class="main-content">
+    <Banner
+      sessionKey                  ="replace_banner_for_map_renders"
+      :alternativeImages          ="mapRenderImagesArray"
+      alternativeScrollDirection  ="both"
+      subtitle                    =""
+      :showLogo                   ="false"
+      :showCtaButton              ="false"
     />
+
+    <div class="galery-container">
+      <div class="button-wrapper">
+        <CustomButton 
+          text        ="Super Secret Options"
+          bgColor     ="#222"
+          hoverBgColor="#444"
+          textColor   ="#fff"
+          @click      ="isOptionsModalOpen = true"
+        />
+      </div>
+
+      <OptionsModal 
+        v-model="isOptionsModalOpen"
+        title="Preferences"
+        :options="modalOptions"
+        @change="handleModalChange"
+      />
+
+      <MediaGallery :items="sampleMediaItems" @select="openModal" />
+
+      <MediaModal 
+        :isOpen="isMediaModalOpen" 
+        :mediaItem="sampleMediaItems[currentIndex]" 
+        :showNav="sampleMediaItems.length > 1"
+        @close="closeModal"
+        @next="nextMedia"
+        @prev="prevMedia"
+      />
+    </div>
   </div>
 </template>
 
@@ -146,5 +196,13 @@ onMounted(() => {
   display               : flex;
   flex-direction        : column;
   gap                   : 12px;
+}
+
+.button-wrapper {
+  display               : flex;
+  justify-content       : center;
+  margin-bottom         : 20px;
+  position              : relative;
+  z-index               : 9999;
 }
 </style>
