@@ -1,18 +1,18 @@
 <template>
   <section class="hero-banner">
-    
     <div class="hero-image-wrapper">
-      <img 
-        :src="imageSrc" 
-        :alt="imageAlt" 
+      <div 
         class="hero-bg-image"
-      />
+        :class="(isScrollable === true || isScrollable === 'true') && scrollDirection !== 'none' ? `scroll-${scrollDirection}` : ''"
+        :style="{ backgroundImage: `url(${imageSrc})` }"
+        :aria-label="imageAlt"
+        role="img"
+      ></div>
       <div class="hero-overlay"></div>
     </div>
 
     <div class="hero-content center">
       <slot>
-  
         <div class="hero-logo-wrapper">
           <img :src="logoSrc" alt="Game Logo" class="hero-logo-image" />
         </div>
@@ -21,7 +21,7 @@
         
         <CustomButton 
           :text="t('SITE_NAV_DOWNLOAD')"
-          fontSize = "var(--font-h2-size)"
+          fontSize="var(--font-h2-size)"
           to="/download"
         />
       </slot>
@@ -54,6 +54,17 @@ defineProps({
     type    : String,
     required: false,
     default : '[Default Banner Text]'
+  },
+  isScrollable: {
+    type    : [Boolean, String],
+    required: false,
+    default : false
+  },
+  scrollDirection: {
+    type    : String,
+    required: false,
+    default : 'horizontal',
+    validator: (value) => ['none', 'horizontal', 'vertical', 'both'].includes(value)
   }
 })
 
@@ -87,8 +98,57 @@ defineEmits(['cta-click'])
 .hero-bg-image {
   width               : 100%;
   height              : 100%;
-  object-fit          : cover;
-  object-position     : center;
+  background-size     : cover;
+  background-position : center;
+  background-repeat   : no-repeat;
+}
+
+.scroll-horizontal {
+  background-size     : auto 100%;
+  background-position : 0 center;
+  background-repeat   : repeat-x; 
+  animation           : scroll-horizontal 30s linear infinite;
+}
+
+.scroll-vertical {
+  background-size     : 100% auto;
+  background-position : center 0;
+  background-repeat   : repeat-y; 
+  animation           : scroll-vertical 30s linear infinite;
+}
+
+.scroll-both {
+  background-size     : auto;
+  background-position : 0 0;
+  background-repeat   : repeat; 
+  animation           : scroll-both 30s linear infinite;
+}
+
+@keyframes scroll-horizontal {
+  0% {
+    background-position: 0 center;
+  }
+  100% {
+    background-position: -2000px center; 
+  }
+}
+
+@keyframes scroll-vertical {
+  0% {
+    background-position: center 0;
+  }
+  100% {
+    background-position: center -2000px; 
+  }
+}
+
+@keyframes scroll-both {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -2000px -2000px; 
+  }
 }
 
 .hero-overlay {

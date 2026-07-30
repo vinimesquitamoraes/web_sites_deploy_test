@@ -52,20 +52,20 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useI18n } from '@/composables/useI18n'
-import CharacterCard from './character_card.vue'
+import { useI18n }    from '@/composables/useI18n'
+import CharacterCard  from './character_card.vue'
 
-import imgNintenPortrait from '@/assets/img/characters/ninten_head_sprite.png'
-import imgNinten from '@/assets/img/characters/ninten.png'
+import imgNintenPortrait  from '@/assets/img/characters/ninten_head_sprite.png'
+import imgNinten          from '@/assets/img/characters/ninten.png'
 
-import imgLloydPortrait from '@/assets/img/characters/lloyd_head_sprite.png'
-import imgLloyd from '@/assets/img/characters/lloyd.png'
+import imgLloydPortrait   from '@/assets/img/characters/lloyd_head_sprite.png'
+import imgLloyd           from '@/assets/img/characters/lloyd.png'
 
-import imgAnaPortrait from '@/assets/img/characters/ana_head_sprite.png'
-import imgAna from '@/assets/img/characters/ana.png'
+import imgAnaPortrait     from '@/assets/img/characters/ana_head_sprite.png'
+import imgAna             from '@/assets/img/characters/ana.png'
 
-import imgTeddyPortrait from '@/assets/img/characters/teddy_head_sprite.png'
-import imgTeddy from '@/assets/img/characters/teddy.png'
+import imgTeddyPortrait   from '@/assets/img/characters/teddy_head_sprite.png'
+import imgTeddy           from '@/assets/img/characters/teddy.png'
 
 import svgTriangle from '@/assets/svg/triangle-right-12-filled.svg'
 

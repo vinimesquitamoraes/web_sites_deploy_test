@@ -482,6 +482,8 @@ const handleRecClick = () => {
     toastIcon.value     = ninten67Icon
     
     sessionStorage.setItem('unlocked_dogten', 'true')
+    sessionStorage.setItem('replace_banner_for_map_renders', 'true')
+
     setTimeout(() => {
       router.push('/dogten')
     }, 1500)
