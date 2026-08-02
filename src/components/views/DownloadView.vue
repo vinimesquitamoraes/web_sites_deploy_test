@@ -29,9 +29,11 @@
         />
     </div>
 
+    
     <div class="page-character-container">
-      <img :src="img_lloydDad" alt="Lloyd Dad" class="page-character" />
+        <img :src="img_lloydDad" alt="Lloyd Dad" class="page-character" />
     </div>
+    <Requirements />
 
   </div>
 </template>
@@ -39,13 +41,16 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from '@/composables/useI18n'
-import ContentSection from '@/components/reusables/content_section.vue'
-import PlatformButton from '@/components/reusables/so_buttons.vue'
-import CustomButton   from '@/components/reusables/custom_button.vue'
-import img_lloydDad from '@/assets/img/characters/Lloyd_Dad.png'
-import iconItchio from '@/assets/svg/itchio.svg'
+import ContentSection   from '@/components/reusables/content_section.vue'
+import PlatformButton   from '@/components/reusables/so_buttons.vue'
+import CustomButton     from '@/components/reusables/custom_button.vue'
+import Requirements     from '@/components/reusables/requeriments.vue'
+import img_lloydDad     from '@/assets/img/characters/Lloyd_Dad.png'
+import iconItchio       from '@/assets/svg/itchio.svg'
 
 const { t } = useI18n()
+
+
 </script>
 
 <style scoped>

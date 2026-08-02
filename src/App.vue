@@ -106,10 +106,12 @@
 
   --music-player-shadow       : 13px 13px 0px #000000;
 
-  --color-music-player-playbt-paused          :#e74c3c; 
-  --color-music-player-playbt-paused-pressed  :#c0392b;
-  --color-music-player-playbt-playing         :#e68a00;
-  --color-music-player-playbt-playing-pressed :#e74c3c;
+  --color-music-player-playbt-paused                 :#e74c3c; 
+  --color-music-player-playbt-paused-pressed         :#c0392b;
+  --color-music-player-playbt-playing                :#e68a00;
+  --color-music-player-playbt-playing-pressed        :#e74c3c;
+  --color-music-player-pagination-btn-shadow         : 3px 3px 0px #000000;
+  --color-music-player-pagination-btn-active-shadow  : 3px 3px 0px #000000;
 
   --color-bg-main             : #272526;
   --color-bg-dark             : #000000;
@@ -141,16 +143,25 @@
   --toaster-error-bg          : #f5b7b1;
   --toaster-error-border      : #c0392b;
 
-  --color-credits-role        : #e67e22;
-  --color-credits-name        : #ffffff;
-
+  
   --color-custom-button-text       :#000000;
   --color-custom-button-text-hover :#FFFFFF;
   --color-custom-button-hover      : #E50012;
   --color-custom-button-background : #FFFFFF;
-
+  
   --color-modal-arrow             : #ffffff;  
   --color-modal-arrow-hover       : #E50012;
+  
+  --color-credits-background  : #000000;
+  --color-credits-role        : #e67e22;
+  --color-credits-name        : #ffffff;
+
+  --color-requiriments-key-background    : #E50012;
+  --color-requiriments-value-background  : #000000;
+  --color-requiriments-shadow            : 13px 13px 0px #000000;
+  --color-requiriments-border            : #000000;
+  --color-keys-border-color              : #000000;  
+  --color-values-border-color            : #E50012;    
 }
 
 body {

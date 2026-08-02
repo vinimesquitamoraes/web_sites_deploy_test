@@ -1150,7 +1150,7 @@ onUnmounted(() => {
   gap                   : 6px;
   height                : 215px;
   justify-content       : space-between;
-  overflow              : hidden;
+  overflow              : show;
   box-sizing            : border-box;
 }
 
@@ -1245,12 +1245,14 @@ onUnmounted(() => {
   height                : 30px;
   box-sizing            : border-box;
   transition            : opacity 0.2s ease;
+  overflow              : visible;
 }
 
 .page-btn {
   background            : var(--color-bg-main);
   color                 : var(--color-text-main);
   border                : 2px solid #000000;
+  box-shadow            : var( --color-music-player-pagination-btn-shadow);
   padding               : 6px 12px;
   border-radius         : 6px;
   cursor                : pointer;
@@ -1261,13 +1263,14 @@ onUnmounted(() => {
 }
 
 .page-btn:active:not(:disabled) {
-  transform             : translateY(2px);
-  box-shadow            : 0 1px 0 #000000;
+  transform             : translateY(3px) translateX(3px);
+  box-shadow            : none;
 }
 
 .page-btn:disabled {
   opacity               : 0.3;
   cursor                : not-allowed;
+  transform             : translateY(3px) translateX(3px);
   box-shadow            : none;
 }
 

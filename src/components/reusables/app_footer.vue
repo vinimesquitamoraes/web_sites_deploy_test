@@ -36,6 +36,10 @@ const { t } = useI18n()
         <p class="footer-disclaimer">
           {{ t('SITE_FOOTER_DISCLAIMER') }}
         </p>
+        <p class="footer-framework">
+          {{ t('SITE_FOOTER_FRAMEWORK') }}
+          <a href="https://vuejs.org" target="_blank" rel="noopener noreferrer">Vue</a>
+        </p>
       </div>
 
     </div>
@@ -144,9 +148,9 @@ const { t } = useI18n()
   width             : 100%;
   display           : flex;
   justify-content   : flex-start;
-  align-items       : flex-start;
+  align-items       : center;
   flex-direction    : column;
-  gap               : 50px;
+  gap               : 10px
 }
 
 .footer-divider {
@@ -157,12 +161,30 @@ const { t } = useI18n()
 
 .footer-disclaimer {
   width             : 100%;
-  color             : #FFFFFF;
-  font-size         : 18px;
+  color             : var(--color-default-text-color);
+  font-size         : var(--font-p-size);
   font-family       : var(--font-p);
   line-height       : 28px;
   margin            : 0;
   opacity           : 0.9;
+}
+
+.footer-framework {
+  width             : 100%;
+  color             : var(--color-default-text-color);
+  font-family       : var(--font-p);
+  font-size         : var(--font-p-size);
+  justify-content   : stretch;
+  text-align        : center;
+}
+.footer-framework a {
+  color             : #42b883; 
+  text-decoration   : none;
+  transition        : color 0.3s ease;
+}
+
+.footer-framework a:hover {
+  color             :var(--color-hover);
 }
 
 @media (max-width: 1024px) {

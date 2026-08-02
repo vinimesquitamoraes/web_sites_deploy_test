@@ -25,9 +25,9 @@ const { t } = useI18n()
 const currentAct = ref('all')
 
 const availableActs = ref([
-  { id: 'all', label: 'All' },
-  { id: '1', label: 'Act 1' },
-  { id: '2', label: 'Act 2' },
+  { id: 'all' , label: 'All' },
+  { id: '1'   , label: 'Act 1' },
+  { id: '2'   , label: 'Act 2' },
 ])
 </script>
 
@@ -38,8 +38,8 @@ const availableActs = ref([
   display           : flex;
   flex-direction    : column;
   align-items       : center;
-  background-color  : #1a1a1a;
-  padding           : 3rem 1rem 0 1rem;
+  background-color  : var(--color-credits-background);
+  padding           : 3rem ;
 }
 
 .credits-header-wrapper {

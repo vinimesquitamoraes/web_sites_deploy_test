@@ -45,6 +45,7 @@ import imgSc1 from '@/assets/img/screenshots/sc1.png'
 import imgSc2 from '@/assets/img/screenshots/sc2.png'
 import imgSc3 from '@/assets/img/screenshots/sc3.png'
 import imgSc4 from '@/assets/img/screenshots/sc4.png'
+
 import imgGodotLogo from '@/assets/img/logos/goto_logo_large_color_light.png'
 
 const { t } = useI18n()
@@ -90,6 +91,8 @@ const infoSections = computed(() => [
     imageOpenable: false
   }
 ])
+
+
 </script>
 
 <style scoped>
