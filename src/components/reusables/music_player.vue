@@ -17,7 +17,7 @@
       </div>
 
       <div class="player-outer-layout">
-        <div class="player-card" :class="{ 'is-collapsed-height': !isOpen }">
+        <div class="player-card">
   
           <div class="player-control-bar">
             <button class="expand-toggle-btn" @click="toggleOpen" :aria-label="isOpen ? 'Collapse Player' : 'Expand Player'">
@@ -55,6 +55,9 @@
                   <div class="model-badge">
                     <span class="brand-name">WALKMAN</span>
                   </div>
+                  <button v-if="hasSpecialTapeAccess" class="tape-toggle-btn" @click="toggleTapeStyle">
+                    {{ showImageTape ? 'DEFAULT' : 'SPECIAL' }}
+                  </button>
                 </div>
 
                 <div class="walkman-control-board">
@@ -79,7 +82,10 @@
                 </div>
 
                 <div class="cassette-door" :class="{ spinning: isPlaying }">
-                  <div class="cassette-shell">
+                  <div v-if="showImageTape && hasSpecialTapeAccess" class="custom-image-tape-container">
+                    <img :src="ferris_special_tape" alt="Custom Cassette" class="custom-cassette-img" />
+                  </div>
+                  <div v-else class="cassette-shell">
                     <div class="cassette-label-header">
                       <span class="label-brand">ENCORE MIXTAPE</span>
                       <span class="label-type">VOL.II</span>
@@ -177,13 +183,13 @@
     </div>
 
     <ToasterNotification 
-      v-model   ="showToast"
-      :message  ="toastMessage"
-      :icon     ="toastIcon"
-      type      ="info"
-      position  ="top-left"
-      :duration ="4000"
-      @close    ="handleToastClose"
+      v-model="showToast"
+      :message="toastMessage"
+      :icon="toastIcon"
+      type="info"
+      position="top-left"
+      :duration="4000"
+      @close="handleToastClose"
     />
   </div>
 </template>
@@ -193,8 +199,9 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import ToasterNotification from '../reusables/notification_toaster.vue'
 
-import nintenBoppinIcon from '@/assets/img/characters/Ninten_Boppin.gif'
-import ninten67Icon     from '@/assets/img/funny/Ninten_67.gif'
+import nintenBoppinIcon     from '@/assets/img/characters/Ninten_Boppin.gif'
+import ninten67Icon         from '@/assets/img/funny/Ninten_67.gif'
+import ferris_special_tape  from '@/assets/img/funny/ferris_special_mixtape.png'
 
 const router = useRouter()
 
@@ -231,6 +238,9 @@ const isMuted           = ref(false)
 const tracks            = ref([])
 const currentPage       = ref(1)
 const isLoadingTracks   = ref(true)
+const showImageTape     = ref(false)
+
+const hasSpecialTapeAccess = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
 
 const playerBottom      = ref(16)
 const isCentered        = ref(false)
@@ -245,6 +255,10 @@ const toastIcon         = ref(nintenBoppinIcon)
 let player              = null
 let progressInterval    = null
 let lastVolume          = 80
+
+const toggleTapeStyle = () => {
+  showImageTape.value = !showImageTape.value
+}
 
 const handle_footer_overlap = () => {
   const footerEl = document.querySelector('.footer-container')
@@ -482,7 +496,7 @@ const handleRecClick = () => {
     toastIcon.value     = ninten67Icon
     
     sessionStorage.setItem('unlocked_dogten', 'true')
-    sessionStorage.setItem('replace_banner_for_map_renders', 'true')
+    hasSpecialTapeAccess.value = true
 
     setTimeout(() => {
       router.push('/dogten')
@@ -638,11 +652,12 @@ onUnmounted(() => {
   width                 : 360px;
   max-width             : 100%;
   box-sizing            : border-box;
-  transition            : height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height            : 88px;
+  transition            : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.player-card.is-collapsed-height {
-  height                : 88px !important; 
+.music-player-wrapper.is-open .player-card {
+  max-height            : 800px;
 }
 
 .player-control-bar {
@@ -654,6 +669,7 @@ onUnmounted(() => {
   gap                   : 4px;
   z-index               : 2;
   box-sizing            : border-box;
+  flex-shrink           : 0;
 }
 
 .expand-toggle-btn {
@@ -694,18 +710,16 @@ onUnmounted(() => {
   display               : flex;
   flex-direction        : column;
   gap                   : 12px;
-  max-height            : 0;
   opacity               : 0;
   overflow              : hidden;
   padding               : 0 12px;
-  transition            : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, padding 0.55s ease;
   pointer-events        : none;
   box-sizing            : border-box;
   width                 : 100%;
+  transition            : opacity 0.3s ease, padding 0.4s ease;
 }
 
 .music-player-wrapper.is-open .player-collapsible-content {
-  max-height            : 600px;
   opacity               : 1;
   padding               : 0 12px 12px 12px;
   pointer-events        : auto;
@@ -985,14 +999,14 @@ onUnmounted(() => {
 
 .walkman-top-panel {
   display               : flex;
-  justify-content       : center;
+  justify-content       : space-between;
   align-items           : center;
 }
 
 .model-badge {
   display               : flex;
   flex-direction        : column;
-  align-items           : center;
+  align-items           : flex-start;
 }
 
 .brand-name {
@@ -1001,6 +1015,24 @@ onUnmounted(() => {
   letter-spacing        : 2px;
   color                 : var(--color-accent-light);
   font                  : var(--font-h1);
+}
+
+.tape-toggle-btn {
+  background            : var(--color-surface);
+  border                : 2px solid #000000;
+  border-radius         : 4px;
+  font-size             : 0.55rem;
+  font-weight           : 700;
+  padding               : 2px 6px;
+  cursor                : pointer;
+  color                 : var(--color-text-main);
+  box-shadow            : 0 2px 0 #000000;
+  transition            : transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.tape-toggle-btn:active {
+  transform             : translateY(2px);
+  box-shadow            : none;
 }
 
 .cassette-door {
@@ -1012,6 +1044,25 @@ onUnmounted(() => {
   display               : flex;
   justify-content       : center;
   align-items           : center;
+  height                : 80px;
+  box-sizing            : border-box;
+  overflow              : hidden;
+}
+
+.custom-image-tape-container {
+  width                 : 100%;
+  height                : 100%;
+  display               : flex;
+  justify-content       : center;
+  align-items           : center;
+  position              : relative;
+}
+
+.custom-cassette-img {
+  width                 : 100%;
+  height                : 100%;
+  object-fit            : cover;
+  display               : block;
 }
 
 .cassette-shell {
@@ -1124,6 +1175,7 @@ onUnmounted(() => {
   border-radius         : 12px;
   box-sizing            : border-box;
   width                 : 100%;
+  overflow              : visible;
 }
 
 .playlist-header {
@@ -1149,9 +1201,11 @@ onUnmounted(() => {
   flex-direction        : column;
   gap                   : 6px;
   height                : 215px;
+  max-height            : 215px;
   justify-content       : space-between;
-  overflow              : show;
+  overflow              : hidden;
   box-sizing            : border-box;
+  overflow              : visible;
 }
 
 .playlist-body-area {
@@ -1303,10 +1357,6 @@ onUnmounted(() => {
     max-width           : 100%;
   }
 
-  .player-card.is-collapsed-height {
-    height              : auto !important; 
-  }
-
   .external-side-volume {
     width               : 100%;
     height              : auto !important;
@@ -1358,8 +1408,8 @@ onUnmounted(() => {
     width               : 14px;
     height              : 14px;
     border-radius       : 3px;
-    background          : var(--color-accent);
-    border              : 2px solid #000000;
+    background            : var(--color-accent);
+    border                : 2px solid #000000;
     box-shadow          : 0px 1px 0px #000000;
   }
 
@@ -1380,11 +1430,6 @@ onUnmounted(() => {
 }
 
 @media (max-height: 700px) {
-  .music-player-wrapper.is-open .player-collapsible-content {
-    max-height          : 360px;
-    overflow-y          : auto;
-  }
-
   .playlist-content {
     height              : 140px;
   }

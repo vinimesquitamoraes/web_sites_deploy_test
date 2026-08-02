@@ -80,11 +80,18 @@ const mediaOrderConfig = [
     alt: '???',
     caption: '???',
     visible: true
-  }
+  },
+  {
+  fileName: 'ferris_special_mixtape.png',
+  alt: '???',
+  caption: '???',
+  visible: true
+}
 ]
 
 const modalOptions = [
-  { key: "replace_banner_for_map_renders", label: 'Use Map Renders as Banner' }
+  { key: "replace_banner_for_map_renders", label: 'Use Map Renders as Banner' },
+  { key: "unlocked_special_tape"         , label: 'Unlock Special Tape' }
 ]
 
 const sampleMediaItems = ref(
