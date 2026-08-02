@@ -400,7 +400,7 @@ onUnmounted(() => {
 }
 
 .thumbnail-item {
-  flex            : 0 0 calc(20% - 8px);
+  flex            : 0 0 calc(20%);
   aspect-ratio    : 16 / 9;
   opacity         : 0.5;
   cursor          : pointer;
@@ -433,13 +433,13 @@ onUnmounted(() => {
 
 .thumbnail-item.thumb-active {
   opacity : 1;
-  border  : 2px solid #E50012;
+  border  : 3px solid #E50012;
 }
 
 .thumb-img {
   width     : 100%;
   height    : 100%;
-  object-fit: contain;
+  object-fit: fill;
   display   : block;
 }
 

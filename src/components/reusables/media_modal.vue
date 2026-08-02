@@ -4,43 +4,44 @@
       <button class="close-btn" @click="$emit('close')" aria-label="Close Modal">&times;</button>
       
       <button v-if="showNav" class="modal-arrow left" @click="$emit('prev')" aria-label="Previous Media">
-        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
+        <span class="arrow-icon left-arrow"></span>
       </button>
 
-      <img 
-        v-if="mediaItem?.type === 'image'" 
-        :src="mediaItem.src" 
-        :alt="mediaItem.alt || 'Enlarged gallery preview'" 
-        class="modal-media" 
-      />
-      <video 
-        v-else-if="mediaItem?.type === 'video'" 
-        :src="mediaItem.src" 
-        controls 
-        autoplay 
-        playsinline
-        class="modal-media"
-      ></video>
+      <div class="media-wrapper">
+        <img 
+          v-if="mediaItem?.type === 'image'" 
+          :src="mediaItem.src" 
+          :alt="mediaItem.alt || 'Enlarged gallery preview'" 
+          class="modal-media" 
+        />
+        <video 
+          v-else-if="mediaItem?.type === 'video'" 
+          :src="mediaItem.src" 
+          controls 
+          autoplay 
+          playsinline
+          class="modal-media"
+        ></video>
+      </div>
 
       <button v-if="showNav" class="modal-arrow right" @click="$emit('next')" aria-label="Next Media">
-        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
+        <span class="arrow-icon right-arrow"></span>
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
-import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
-
 defineProps({
   isOpen: {
     type: Boolean,
-    required: true
+    required: false,
+    default: false
   },
   mediaItem: {
     type: Object,
-    required: true,
+    required: false,
+    default: () => ({})
   },
   showNav: {
     type: Boolean,
@@ -69,20 +70,33 @@ defineEmits(['close', 'next', 'prev'])
 
 .modal-content {
   position         : relative;
-  max-width        : 90vw;
-  max-height       : 90vh;
+  width            : 70vw;
+  height           : 75vh;
+  max-width        : 900px;
+  max-height       : 700px;
   display          : flex;
   align-items      : center;
   justify-content  : center;
 }
 
-.modal-media {
-  max-width        : 100%;
-  max-height       : 85vh;
-  display          : block;
-  object-fit       : contain;
+.media-wrapper {
+  width            : 100%;
+  height           : 100%;
+  display          : flex;
+  align-items      : center;
+  justify-content  : center;
   border           : 4px solid var(--color-modal-overlay-border);
   border-radius    : 4px;
+  box-sizing       : border-box;
+  overflow         : hidden;
+  background       : #000000;
+}
+
+.modal-media {
+  width            : 100%;
+  height           : 100%;
+  display          : block;
+  object-fit       : contain;
 }
 
 .close-btn {
@@ -101,32 +115,46 @@ defineEmits(['close', 'next', 'prev'])
   position         : absolute;
   top              : 50%;
   transform        : translateY(-50%);
-  background       : rgba(0, 0, 0, 0.6);
+  background       : transparent;
   border           : none;
-  padding          : 12px 10px;
+  width            : 40px;
+  height           : 40px;
   cursor           : pointer;
   z-index          : 10;
   display          : flex;
   align-items      : center;
   justify-content  : center;
-  transition       : background 0.2s;
   border-radius    : 4px;
 }
 
 .arrow-icon {
-  width            : 20px;
-  height           : 20px;
-  object-fit       : contain;
-  display          : block;
-  pointer-events   : none;
+  position            : absolute;
+  width               : 100%;
+  height              : 100%;
+  background-color    : var(--color-modal-arrow);
+  top                 : 50%;
+  left                : 50%;
+  transform           : translate(-50%, -50%);
+  padding             : 0;
+  -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
+  mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');
+  -webkit-mask-size   : contain;
+  mask-size           : contain;
+  -webkit-mask-repeat : no-repeat;
+  mask-repeat         : no-repeat;
 }
 
-.modal-arrow img {
-  filter           : brightness(0) invert(1);
+.arrow-icon.left-arrow {
+  transform           : translate(-50%, -50%) scaleX(-1);
+  animation           : choppy-horizontal-left 0.6s steps(3, end) infinite alternate;
 }
 
-.modal-arrow:hover {
-  background       : rgba(0, 0, 0, 0.9);
+.arrow-icon.right-arrow {
+  animation           : choppy-horizontal-right 0.6s steps(3, end) infinite alternate;
+}
+
+.modal-arrow:hover .arrow-icon {
+  background-color  : var(--color-modal-arrow-hover);
 }
 
 .modal-arrow.left { 
@@ -137,18 +165,42 @@ defineEmits(['close', 'next', 'prev'])
   right            : -60px; 
 }
 
+@keyframes choppy-horizontal-right {
+  0% {
+    transform: translate(-50%, -50%) translateX(0px);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateX(3px);
+  }
+}
+
+@keyframes choppy-horizontal-left {
+  0% {
+    transform: translate(-50%, -50%) scaleX(-1) translateX(0px);
+  }
+  100% {
+    transform: translate(-50%, -50%) scaleX(-1) translateX(3px);
+  }
+}
+
 @media (max-width: 768px) {
+  .modal-content {
+    width            : 90vw;
+    height           : 75vh;
+    max-width        : 100%;
+  }
+
   .modal-arrow.left {
-    left           : 10px;
+    left             : 10px;
   }
   
   .modal-arrow.right {
-    right          : 10px;
+    right            : 10px;
   }
 
   .close-btn {
-    top            : -40px;
-    right          : 5px;
+    top              : -40px;
+    right            : 5px;
   }
 }
 </style>

@@ -21,6 +21,23 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
   import: 'default' 
 })
 
+const gameFeaturesList = computed(() => [
+  [
+    t('SITE_HOME_FEATURE_1'),
+    t('SITE_HOME_FEATURE_2'),
+    t('SITE_HOME_FEATURE_3'),
+    t('SITE_HOME_FEATURE_4'),
+    t('SITE_HOME_FEATURE_5'),
+    t('SITE_HOME_FEATURE_6'),
+    t('SITE_HOME_FEATURE_7')
+  ],
+  [
+    "Made By Gala",
+    "For Gala",
+    "And from Gala",
+  ]
+])
+
 </script>
 
 <template>
@@ -41,10 +58,13 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
     
     <GaleryCarrousel 
       :image-modules="homeImages" 
-      :interval-time="3000"
+      :interval-time="10000"
     />
     
-    <Features />
+    <Features 
+      :title="t('SITE_HOME_FEATURES_TITLE')"
+      :features="gameFeaturesList"
+    />
     
     <CastList 
       view-type="list" 

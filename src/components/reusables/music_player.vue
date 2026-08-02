@@ -590,9 +590,18 @@ onUnmounted(() => {
   }
 }
 
+.music-player-container {
+  box-sizing            : border-box;
+  max-width             : 100vw;
+  overflow-x            : hidden;
+}
+
 .music-player-wrapper {
   position              : fixed;
   bottom                : 16px;
+  left                  : 16px;
+  right                 : 16px;
+  max-width             : calc(100vw - 32px);
   z-index               : 100;
   display               : flex;
   flex-direction        : column;
@@ -601,13 +610,12 @@ onUnmounted(() => {
   pointer-events        : none;
   opacity               : 0;
   visibility            : hidden;
-  transition            : bottom 0.2s ease-out, left 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
+  transition            : bottom 0.2s ease-out, left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
 .music-player-wrapper.is-ready {
   pointer-events        : auto;
   visibility            : visible;
-  /* damn animation speed here, AHHHHHHHHHHHHHHHHHHHHHHHHHHHH */
   animation             : playerEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -615,6 +623,8 @@ onUnmounted(() => {
   display               : flex;
   align-items           : flex-start;
   gap                   : 12px;
+  width                 : 100%;
+  box-sizing            : border-box;
 }
 
 .player-card {
@@ -626,7 +636,7 @@ onUnmounted(() => {
   box-shadow            : var(--music-player-shadow);
   overflow              : hidden;
   width                 : 360px;
-  max-width             : calc(100vw - 32px);
+  max-width             : 100%;
   box-sizing            : border-box;
   transition            : height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -690,6 +700,8 @@ onUnmounted(() => {
   padding               : 0 12px;
   transition            : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, padding 0.55s ease;
   pointer-events        : none;
+  box-sizing            : border-box;
+  width                 : 100%;
 }
 
 .music-player-wrapper.is-open .player-collapsible-content {
@@ -1110,6 +1122,8 @@ onUnmounted(() => {
   box-shadow            : 0px 4px 0px #000000;
   padding               : 10px;
   border-radius         : 12px;
+  box-sizing            : border-box;
+  width                 : 100%;
 }
 
 .playlist-header {
@@ -1184,6 +1198,9 @@ onUnmounted(() => {
   box-shadow            : 0 3px 0 #000000;
   cursor                : pointer;
   transition            : transform 0.05s ease, box-shadow 0.05s ease;
+  box-sizing            : border-box;
+  width                 : 100%;
+  max-width             : 100%;
 }
 
 .track-item:active {
@@ -1203,6 +1220,7 @@ onUnmounted(() => {
   color                 : var(--color-primary);
   font                  : var(--font-p);
   font-size             : var(--font-p-size);
+  flex-shrink           : 0;
 }
 
 .track-item.active .track-number {
@@ -1215,6 +1233,8 @@ onUnmounted(() => {
   text-overflow         : ellipsis;
   font                  : var(--font-p);
   font-size             : var(--font-track-names-size);
+  flex                  : 1;
+  min-width             : 0;
 }
 
 .pagination-controls {
@@ -1231,7 +1251,6 @@ onUnmounted(() => {
   background            : var(--color-bg-main);
   color                 : var(--color-text-main);
   border                : 2px solid #000000;
-
   padding               : 6px 12px;
   border-radius         : 6px;
   cursor                : pointer;
@@ -1260,11 +1279,11 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .music-player-wrapper {
-    left                : 16px !important;
-    right               : 28px !important;
+    left                : 12px !important;
+    right               : 12px !important;
     transform           : none !important;
     width               : auto !important;
-    max-width           : none;
+    max-width           : calc(100vw - 24px) !important;
   }
 
   .player-outer-layout {
@@ -1273,11 +1292,12 @@ onUnmounted(() => {
     align-items         : stretch;
     gap                 : 8px;
     padding-bottom      : 14px;
+    box-sizing          : border-box;
   }
 
   .player-card {
     width               : 100%;
-    max-width           : none;
+    max-width           : 100%;
   }
 
   .player-card.is-collapsed-height {
@@ -1335,8 +1355,8 @@ onUnmounted(() => {
     width               : 14px;
     height              : 14px;
     border-radius       : 3px;
-    background            : var(--color-accent);
-    border                : 2px solid #000000;
+    background          : var(--color-accent);
+    border              : 2px solid #000000;
     box-shadow          : 0px 1px 0px #000000;
   }
 
@@ -1345,7 +1365,7 @@ onUnmounted(() => {
     height              : 14px;
     border-radius       : 3px;
     background          : var(--color-accent);
-    border              : 2px solid #000000;
+    border                : 2px solid #000000;
     box-shadow          : 0px 1px 0px #000000;
   }
 
@@ -1353,6 +1373,27 @@ onUnmounted(() => {
     width               : 60px;
     height              : 28px;
     margin-top          : 0;
+  }
+}
+
+@media (max-height: 700px) {
+  .music-player-wrapper.is-open .player-collapsible-content {
+    max-height          : 360px;
+    overflow-y          : auto;
+  }
+
+  .playlist-content {
+    height              : 140px;
+  }
+  
+  .cassette-window {
+    height              : 30px;
+  }
+
+  .reel {
+    width               : 20px;
+    height              : 20px;
+    border-width        : 2px;
   }
 }
 </style>

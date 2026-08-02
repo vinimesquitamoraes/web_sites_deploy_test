@@ -148,6 +148,9 @@
   --color-custom-button-text-hover :#FFFFFF;
   --color-custom-button-hover      : #E50012;
   --color-custom-button-background : #FFFFFF;
+
+  --color-modal-arrow             : #ffffff;  
+  --color-modal-arrow-hover       : #E50012;
 }
 
 body {

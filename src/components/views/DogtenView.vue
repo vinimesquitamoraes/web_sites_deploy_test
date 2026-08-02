@@ -203,6 +203,6 @@ onMounted(() => {
   justify-content       : center;
   margin-bottom         : 20px;
   position              : relative;
-  z-index               : 9999;
+
 }
 </style>

@@ -43,9 +43,9 @@ defineEmits(['select'])
 
 <style scoped>
 .masonry-container {
-  column-count: 3;
-  column-gap: 20px;
-  width: 100%;
+  column-count  : 3;
+  column-gap    : 20px;
+  width         : 100%;
 }
 
 @media (max-width: 1024px) {
@@ -56,58 +56,57 @@ defineEmits(['select'])
 
 @media (max-width: 640px) {
   .masonry-container {
-    column-count: 1;
+    column-count  : 1;
   }
 }
 
 .masonry-item {
-  break-inside: avoid;
-  margin-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  cursor: pointer;
-  background-color: #ffffff;
+  break-inside      : avoid;
+  margin-bottom     : 20px;
+  position          : relative;
+  overflow          : hidden;
+  border-radius     : 12px;
+  cursor            : pointer;
+  background-color  : #ffffff;
   
-  /* Hard offset solid shadow matching your reference image */
-  border: 3px solid #000000;
-  box-shadow: 6px 6px 0px #000000;
+
+  border            : 3px solid #000000;
+  box-shadow        : var(--color-custom-button-shadow);  
   
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .masonry-item:hover {
-  /* Slight shift upward-left on hover for an interactive press effect */
-  transform: translateY(-3px) translateX(-3px);
-  box-shadow: 9px 9px 0px #000000;
+  transform     : translateY(-3px) translateX(-3px);
+  box-shadow    : var(--color-custom-button-active-shadow);
 }
 
 .masonry-item img,
 .masonry-item video {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
+  width            : 100%;
+  height           : auto;
+  display          : block;
+  object-fit       : cover;
 }
 
 .masonry-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-  padding: 20px 16px 12px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  position          : absolute;
+  bottom            : 0;
+  left              : 0;
+  right             : 0;
+  background        : linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding           : 20px 16px 12px;
+  opacity           : 0;
+  transition        : opacity 0.3s ease;
 }
 
 .masonry-item:hover .masonry-overlay {
-  opacity: 1;
+  opacity           : 1;
 }
 
 .masonry-title {
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 500;
+  color           : var(--color-default-text-color);
+  font-size       : 0.95rem;
+  font-weight     : 500;
 }
 </style>

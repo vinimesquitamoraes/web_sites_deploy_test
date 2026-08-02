@@ -1,45 +1,41 @@
 <script setup>
-import { ref,computed } from 'vue'
-
-import { useI18n } from '@/composables/useI18n'
+import { ref } from 'vue'
 
 import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 
-const features = computed(() => [
-  [
-    t('SITE_HOME_FEATURE_1'),
-    t('SITE_HOME_FEATURE_2'),
-    t('SITE_HOME_FEATURE_3'),
-    t('SITE_HOME_FEATURE_4'),
-    t('SITE_HOME_FEATURE_5'),
-    t('SITE_HOME_FEATURE_6'),
-    t('SITE_HOME_FEATURE_7')
- 
-  ],
-])
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'GAME FEATURES'
+  },
+  features: {
+    type: Array,
+    required: true,
+    default: () => []
+  }
+})
 
 const currentIndex = ref(0)
 
 const nextSlide = () => {
-  currentIndex.value = (currentIndex.value + 1) % features.length
+  if (props.features.length === 0) return
+  currentIndex.value = (currentIndex.value + 1) % props.features.length
 }
 
 const prevSlide = () => {
-  currentIndex.value = (currentIndex.value - 1 + features.length) % features.length
+  if (props.features.length === 0) return
+  currentIndex.value = (currentIndex.value - 1 + props.features.length) % props.features.length
 }
 
 const goToSlide = (index) => {
   currentIndex.value = index
 }
-
-const { t } = useI18n()
-
 </script>
 
 <template>
   <div class="game-features-container">
-    <h2 class="title">GAME FEATURES</h2>
+    <h2 class="title">{{ props.title }}</h2>
 
     <div class="features-wrapper">
       <div 
@@ -47,7 +43,7 @@ const { t } = useI18n()
         :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
       >
         <ul 
-          v-for="(list, listIdx) in features" 
+          v-for="(list, listIdx) in props.features" 
           :key="listIdx" 
           class="features-list"
         >
@@ -63,7 +59,7 @@ const { t } = useI18n()
       </div>
     </div>
 
-    <div v-if="features.length > 1" class="carousel-nav">
+    <div v-if="props.features.length > 1" class="carousel-nav">
       <button
         class="nav-btn"
         @click="prevSlide"
@@ -74,7 +70,7 @@ const { t } = useI18n()
 
       <div class="indicators">
         <span
-          v-for="(_, idx) in features"
+          v-for="(_, idx) in props.features"
           :key="idx"
           class="dot"
           :class="{ active: currentIndex === idx }"
@@ -96,7 +92,6 @@ const { t } = useI18n()
 <style scoped>
 .game-features-container {
   color          : var(--color-text);
-
   padding        : 40px;
   width          : 100%;
   box-sizing     : border-box;
@@ -117,7 +112,6 @@ const { t } = useI18n()
   overflow   : hidden;
   min-height : 280px;
   width      : 100%;
-  
 }
 
 .features-track {
@@ -134,17 +128,15 @@ const { t } = useI18n()
   flex-direction : column;
   gap            : 20px;
   flex           : 0 0 100%;
-
 }
 
 .feature-item {
   display     : flex;
   align-items : flex-start;
   gap         : 15px;
-  font-size   : 1.1rem;
-  line-height : 1.5;
   font-family : var(--font-p);
   font-size   : var(--font-p-size);
+  line-height : 1.5;
 }
 
 .feature-item p {
