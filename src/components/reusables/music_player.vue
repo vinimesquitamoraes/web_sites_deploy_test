@@ -108,6 +108,14 @@
             <div class="playlist-container">
               <div class="playlist-header">
                 <h3 class="playlist-title">Track List</h3>
+                <SocialMediaButton 
+                  platform      ="youtube" 
+                  variant       ="white" 
+                  hoverVariant  ="colored" 
+                  :tooltip-text ="t('SITE_MUSIC_PLAYER_LINK')"
+                  size          ="30"
+                />
+
               </div>
 
               <div class="playlist-content">
@@ -196,15 +204,17 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useI18n }  from '@/composables/useI18n'
 import { useRouter } from 'vue-router'
-import ToasterNotification from '../reusables/notification_toaster.vue'
+import ToasterNotification  from '../reusables/notification_toaster.vue'
+import SocialMediaButton    from '@/components/reusables/social_media_button.vue'
 
 import nintenBoppinIcon     from '@/assets/img/characters/Ninten_Boppin.gif'
 import ninten67Icon         from '@/assets/img/funny/Ninten_67.gif'
 import ferris_special_tape  from '@/assets/img/funny/ferris_special_mixtape.png'
 
 const router = useRouter()
-
+const { t } = useI18n()
 const props = defineProps({
   playlistId: {
     type    : String,
@@ -390,7 +400,7 @@ const onPlayerStateChange = (event) => {
     const currentTrack = tracks.value[currentTrackIndex.value]
     const trackTitle = currentTrack ? currentTrack.title : 'Unknown Track'
     
-    toastMessage.value = `Now Playing: ${trackTitle}`
+    toastMessage.value = `${t('SITE_MUSIC_TOASTER_NOTIF')}: ${trackTitle}`
     showToast.value = true
 
   } else if (event.data === window.YT.PlayerState.PAUSED) {
@@ -639,6 +649,7 @@ onUnmounted(() => {
   gap                   : 12px;
   width                 : 100%;
   box-sizing            : border-box;
+  overflow              : visible;
 }
 
 .player-card {
@@ -648,7 +659,7 @@ onUnmounted(() => {
   border                : 2px solid #000000;
   border-radius         : 12px;
   box-shadow            : var(--music-player-shadow);
-  overflow              : hidden;
+  overflow              : visible;
   width                 : 360px;
   max-width             : 100%;
   box-sizing            : border-box;
@@ -711,7 +722,7 @@ onUnmounted(() => {
   flex-direction        : column;
   gap                   : 12px;
   opacity               : 0;
-  overflow              : hidden;
+  overflow              : visible;
   padding               : 0 12px;
   pointer-events        : none;
   box-sizing            : border-box;

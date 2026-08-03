@@ -1,11 +1,58 @@
+
+<template>
+  <div class="main-content">
+    <Banner
+      sessionKey                  ="replace_banner_for_map_renders"
+      :alternativeImages          ="mapRenderImagesArray"
+      alternativeScrollDirection  ="both"
+      subtitle                    =""
+      :showLogo                   ="false"
+      :showCtaButton              ="false"
+    />
+
+    <div class="galery-container">
+      <div class="button-wrapper">
+        <CustomButton 
+          :text        ="t('SITE_DOGTEN_OPTIONS_BUTTON')"
+          bgColor     ="#222"
+          hoverBgColor="#444"
+          textColor   ="#fff"
+          @click      ="isOptionsModalOpen = true"
+        />
+      </div>
+
+      <OptionsModal 
+        v-model   ="isOptionsModalOpen"
+        :title     ="t('SITE_DOGTEN_OPTIONS_BUTTON')"
+        :options  ="modalOptions"
+        @change   ="handleModalChange"
+      />
+
+      <MediaGallery :items="sampleMediaItems" @select="openModal" />
+
+      <MediaModal 
+        :isOpen     ="isMediaModalOpen" 
+        :mediaItem  ="sampleMediaItems[currentIndex]" 
+        :showNav    ="sampleMediaItems.length > 1"
+        @close      ="closeModal"
+        @next       ="nextMedia"
+        @prev       ="prevMedia"
+      />
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from '@/composables/useI18n'
 
 import Banner          from '@/components/reusables/banner.vue'
 import MediaGallery    from '@/components/reusables/mansory_gallery.vue'
 import MediaModal      from '@/components/reusables/media_modal.vue'
 import CustomButton    from '@/components/reusables/custom_button.vue'
 import OptionsModal    from '@/components/reusables/options_modal.vue'
+
+const { t } = useI18n()
 
 const funnyModules = import.meta.glob('@/assets/img/funny/*.{png,jpg,jpeg,svg,webp,gif,mp4}', {
   eager: true,
@@ -90,8 +137,8 @@ const mediaOrderConfig = [
 ]
 
 const modalOptions = [
-  { key: "replace_banner_for_map_renders", label: 'Use Map Renders as Banner' },
-  { key: "unlocked_special_tape"         , label: 'Unlock Special Tape' }
+  { key: "replace_banner_for_map_renders", label: t('SITE_DOGTEN_OPTIONS_OP1') },
+  { key: "unlocked_special_tape"         , label: t('SITE_DOGTEN_OPTIONS_OP2') }
 ]
 
 const sampleMediaItems = ref(
@@ -151,49 +198,6 @@ onMounted(() => {
   }
 })
 </script>
-
-<template>
-  <div class="main-content">
-    <Banner
-      sessionKey                  ="replace_banner_for_map_renders"
-      :alternativeImages          ="mapRenderImagesArray"
-      alternativeScrollDirection  ="both"
-      subtitle                    =""
-      :showLogo                   ="false"
-      :showCtaButton              ="false"
-    />
-
-    <div class="galery-container">
-      <div class="button-wrapper">
-        <CustomButton 
-          text        ="Super Secret Options"
-          bgColor     ="#222"
-          hoverBgColor="#444"
-          textColor   ="#fff"
-          @click      ="isOptionsModalOpen = true"
-        />
-      </div>
-
-      <OptionsModal 
-        v-model="isOptionsModalOpen"
-        title="Preferences"
-        :options="modalOptions"
-        @change="handleModalChange"
-      />
-
-      <MediaGallery :items="sampleMediaItems" @select="openModal" />
-
-      <MediaModal 
-        :isOpen="isMediaModalOpen" 
-        :mediaItem="sampleMediaItems[currentIndex]" 
-        :showNav="sampleMediaItems.length > 1"
-        @close="closeModal"
-        @next="nextMedia"
-        @prev="prevMedia"
-      />
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .galery-container {

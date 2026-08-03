@@ -1,3 +1,89 @@
+<template>
+  <div class="gallery-container" tabindex="-1">
+    <p class="gallery-title">Gallery</p>
+
+    <div class="main-viewport" tabindex="-1">
+      <div 
+        class="slides-track" 
+        :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+      >
+        <div 
+          v-for="(slide, index) in slides" 
+          :key="slide.id" 
+          class="slide-item"
+          tabindex="-1"
+        >
+          <img 
+            :src="slide.isGif && index === currentIndex ? slide.img : (slide.staticFrame || slide.img)" 
+            alt="Gallery Slide Image" 
+            class="slide-img clickable" 
+            @click="openModal(index)"
+          />
+        </div>
+      </div>
+
+      <button class="nav-arrow left" @click="prevSlide(true)" aria-label="Previous Slide">
+        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
+      </button>
+      <button class="nav-arrow right" @click="nextSlide(true)" aria-label="Next Slide">
+        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
+      </button>
+
+      <div class="pagination-dots">
+        <span 
+          v-for="(slide, index) in slides" 
+          :key="slide.id" 
+          class="dot"
+          :class="{ active: index === currentIndex }"
+          @click="selectSlide(index)"
+        ></span>
+      </div>
+    </div>
+
+    <div class="timer-bar-wrapper" v-if="!isModalOpen">
+      <div 
+        class="timer-bar" 
+        :key="timerKey" 
+        :style="{ animationDuration: `${props.intervalTime}ms` }"
+      ></div>
+    </div>
+
+    <div class="thumbnails-container">
+      <button class="thumb-arrow left" @click="scrollThumbnails('left')" aria-label="Previous Thumbnails">
+        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
+      </button>
+      
+      <div class="thumbnails-track" ref="thumbnailsTrackRef">
+        <div 
+          v-for="(slide, index) in slides" 
+          :key="slide.id" 
+          class="thumbnail-item"
+          :class="{ 'thumb-active': index === currentIndex }"
+          @click="selectSlide(index)"
+        >
+          <img 
+            :src="slide.staticFrame || slide.thumb" 
+            alt="Thumbnail Preview" 
+            class="thumb-img" 
+          />
+        </div>
+      </div>
+
+      <button class="thumb-arrow right" @click="scrollThumbnails('right')" aria-label="Next Thumbnails">
+        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
+      </button>
+    </div>
+
+    <MediaModal 
+      :is-open="isModalOpen" 
+      :media-item="currentModalMediaItem" 
+      @close="closeModal" 
+      @next="nextSlide(true)"
+      @prev="prevSlide(true)"
+    />
+  </div>
+</template>
+
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 
@@ -147,91 +233,7 @@ onUnmounted(() => {
 })
 </script>
 
-<template>
-  <div class="gallery-container" tabindex="-1">
-    <p class="gallery-title">Gallery</p>
 
-    <div class="main-viewport" tabindex="-1">
-      <div 
-        class="slides-track" 
-        :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
-      >
-        <div 
-          v-for="(slide, index) in slides" 
-          :key="slide.id" 
-          class="slide-item"
-          tabindex="-1"
-        >
-          <img 
-            :src="slide.isGif && index === currentIndex ? slide.img : (slide.staticFrame || slide.img)" 
-            alt="Gallery Slide Image" 
-            class="slide-img clickable" 
-            @click="openModal(index)"
-          />
-        </div>
-      </div>
-
-      <button class="nav-arrow left" @click="prevSlide(true)" aria-label="Previous Slide">
-        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
-      </button>
-      <button class="nav-arrow right" @click="nextSlide(true)" aria-label="Next Slide">
-        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
-      </button>
-
-      <div class="pagination-dots">
-        <span 
-          v-for="(slide, index) in slides" 
-          :key="slide.id" 
-          class="dot"
-          :class="{ active: index === currentIndex }"
-          @click="selectSlide(index)"
-        ></span>
-      </div>
-    </div>
-
-    <div class="timer-bar-wrapper" v-if="!isModalOpen">
-      <div 
-        class="timer-bar" 
-        :key="timerKey" 
-        :style="{ animationDuration: `${props.intervalTime}ms` }"
-      ></div>
-    </div>
-
-    <div class="thumbnails-container">
-      <button class="thumb-arrow left" @click="scrollThumbnails('left')" aria-label="Previous Thumbnails">
-        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
-      </button>
-      
-      <div class="thumbnails-track" ref="thumbnailsTrackRef">
-        <div 
-          v-for="(slide, index) in slides" 
-          :key="slide.id" 
-          class="thumbnail-item"
-          :class="{ 'thumb-active': index === currentIndex }"
-          @click="selectSlide(index)"
-        >
-          <img 
-            :src="slide.staticFrame || slide.thumb" 
-            alt="Thumbnail Preview" 
-            class="thumb-img" 
-          />
-        </div>
-      </div>
-
-      <button class="thumb-arrow right" @click="scrollThumbnails('right')" aria-label="Next Thumbnails">
-        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
-      </button>
-    </div>
-
-    <MediaModal 
-      :is-open="isModalOpen" 
-      :media-item="currentModalMediaItem" 
-      @close="closeModal" 
-      @next="nextSlide(true)"
-      @prev="prevSlide(true)"
-    />
-  </div>
-</template>
 
 <style scoped>
 .gallery-container {

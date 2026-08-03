@@ -56,7 +56,7 @@ import MediaModal from './media_modal.vue'
 const props = defineProps({
   heading: {
     type: String,
-    default: 'Overview'
+    default: ''
   },
   text: {
     type: String,

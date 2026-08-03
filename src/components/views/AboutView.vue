@@ -4,13 +4,13 @@
    
       <ContentSection 
         v-for="(section, index) in infoSections" 
-        :key="index"
-        :heading="section.title"
-        :text="section.text" 
-        :mediaSrc="section.image"
-        :mediaType="section.content_type"
+        :key          ="index"
+        :heading      ="section.title"
+        :text         ="section.text" 
+        :mediaSrc     ="section.image"
+        :mediaType    ="section.content_type"
         :mediaPosition="index % 2 === 0 ? 'right' : 'left'"
-        :redBorder="section.redBorder ?? true"
+        :redBorder    ="section.redBorder ?? true"
         :imageOpenable="section.imageOpenable ?? true"
       />
 
@@ -24,10 +24,11 @@
     <div class="godot_foot_note">
       <ContentSection  
         heading=""
-        :text="footnoteText"
+        :text="t('SITE_ABOUT_OPENSOURCE_P2')"
         mediaType="text"
       />
       <SocialMediaButton platform="github" variant="black" hoverVariant="colored" />
+   
     </div>
    
   </div>
@@ -50,41 +51,40 @@ import imgGodotLogo from '@/assets/img/logos/goto_logo_large_color_light.png'
 
 const { t } = useI18n()
 
-const footnoteText = computed(() => t('SITE_ABOUT_OPEN_SOURCE_FOOTNOTE'))
 
 const infoSections = computed(() => [
   {
-    title       : t('SITE_ABOUT_TITLE_1'),
-    text        : t('SITE_ABOUT_BODY_1'),
+    title       : t('SITE_ABOUT_OVERVIEW_TITLE'),
+    text        : t('SITE_ABOUT_OVERVIEW_P1')+"\n"+t('SITE_ABOUT_OVERVIEW_P2'),
     content_type: "text"
   },
   {
-    title       : t('SITE_ABOUT_TITLE_2'),
-    text        : t('SITE_ABOUT_BODY_2'),
+    title       : t('SITE_ABOUT_WORLD_TITLE'),
+    text        : t('SITE_ABOUT_WORLD_P1'),
     image       : imgSc1,
     content_type: "image"
   },
   {
-    title       : t('SITE_ABOUT_TITLE_3'),
-    text        : t('SITE_ABOUT_BODY_3'),
+    title       : t('SITE_ABOUT_COMBAT_TITLE'),
+    text        : t('SITE_ABOUT_COMBAT_P1'),
     image       : imgSc2,
     content_type: "image"
   },
   {
-    title       : t('SITE_ABOUT_TITLE_4'),
-    text        : t('SITE_ABOUT_BODY_4'),
+    title       : t('SITE_ABOUT_VISUALS_TITLE'),
+    text        : t('SITE_ABOUT_VISUALS_P1'),
     image       : imgSc3,
     content_type: "image"
   },
   {
-    title       : t('SITE_ABOUT_TITLE_5'),
-    text        : t('SITE_ABOUT_BODY_5'),
+    title       : t('SITE_ABOUT_MUSIC_TITLE'),
+    text        : t('SITE_ABOUT_MUSIC_P1'),
     image       : imgSc4,
     content_type: "image"
   },  
   {
-    title       : t('SITE_ABOUT_TITLE_6'),
-    text        : t('SITE_ABOUT_BODY_6'),
+    title       : t('SITE_ABOUT_OPENSOURCE_TITLE'),
+    text        : t('SITE_ABOUT_OPENSOURCE_P1'),
     image       : imgGodotLogo,
     content_type: "image",
     redBorder   : false,

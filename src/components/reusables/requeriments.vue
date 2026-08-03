@@ -18,10 +18,10 @@ import { useI18n } from '@/composables/useI18n'
 const { t } = useI18n()
 
 const requirements = ref([
-{ key: 'SITE_ABOUT_REQ_OS',            value: 'SITE_ABOUT_REQ_OS_DETAILS' },
-{ key: 'SITE_ABOUT_REQ_RAM',           value: 'SITE_ABOUT_REQ_RAM_DETAILS' },
-{ key: 'SITE_ABOUT_REQ_VIDEO',         value: 'SITE_ABOUT_REQ_VIDEO_DETAILS' },
-{ key: 'SITE_ABOUT_REQ_LANGUAGES',     value: 'SITE_ABOUT_REQ_LANGUAGES_DETAILS' }
+{ key: 'SITE_DOWNLOAD_REQ_OS',            value: 'SITE_DOWNLOAD_REQ_OS_DETAILS' },
+{ key: 'SITE_DOWNLOAD_REQ_RAM',           value: 'SITE_DOWNLOAD_REQ_RAM_DETAILS' },
+{ key: 'SITE_DOWNLOAD_REQ_VIDEO',         value: 'SITE_DOWNLOAD_REQ_VIDEO_DETAILS' },
+{ key: 'SITE_DOWNLOAD_REQ_LANGUAGES',     value: 'SITE_DOWNLOAD_REQ_LANGUAGES_DETAILS' }
 ])
 </script>
 

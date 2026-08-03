@@ -137,6 +137,7 @@ const { t } = useI18n()
   align-items       : center;
   flex-direction    : row;
   gap               : 20px;
+  flex-wrap         : wrap;
 }
 
 .footer-socials img {
@@ -202,6 +203,17 @@ const { t } = useI18n()
   .footer-nav {
     flex-direction: column;
     gap           : 20px;
+  }
+
+  .footer-socials {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-socials {
+    gap: 12px;
+    justify-content: center;
   }
 }
 </style>

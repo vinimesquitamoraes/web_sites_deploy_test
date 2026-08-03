@@ -5,7 +5,8 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
-  base:"/web_sites_deploy_test/",
+  base: "/web_sites_deploy_test/",
+  assetsInclude: ['**/*.xlsx'],
   plugins: [
     vue(),
     vueDevTools(),

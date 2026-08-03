@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
 import CreditsSection from '@/components/reusables/credit_section.vue'
@@ -24,10 +24,10 @@ const { t } = useI18n()
 
 const currentAct = ref('all')
 
-const availableActs = ref([
-  { id: 'all' , label: 'All' },
-  { id: '1'   , label: 'Act 1' },
-  { id: '2'   , label: 'Act 2' },
+const availableActs = computed(() => [
+  { id: 'all', label: t('SITE_CREDITS_ALL_LABEL') },
+  { id: '1',   label: t('SITE_CREDITS_ACT_LABEL') + ' 1' },
+  { id: '2',   label: t('SITE_CREDITS_ACT_LABEL') + ' 2' },
 ])
 </script>
 

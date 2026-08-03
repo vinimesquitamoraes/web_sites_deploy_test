@@ -31,11 +31,7 @@ const gameFeaturesList = computed(() => [
     t('SITE_HOME_FEATURE_6'),
     t('SITE_HOME_FEATURE_7')
   ],
-  [
-    "Made By Gala",
-    "For Gala",
-    "And from Gala",
-  ]
+
 ])
 
 </script>
@@ -43,17 +39,17 @@ const gameFeaturesList = computed(() => [
 <template>
   <div class="main-content">
     <Banner
-      sessionKey="replace_banner_for_map_renders"
-      :alternativeImages="mapRenderImagesArray"
+      sessionKey                ="replace_banner_for_map_renders"
+      :alternativeImages        ="mapRenderImagesArray"
       alternativeScrollDirection="both"
-      :subtitle="t('SITE_HOME_HEADLINE')"
+      :subtitle                 ="t('SITE_HOME_BANNER_TEXT')"
     />
  
     <ContentSection 
-      :heading="t('SITE_HOME_HEADLINE')"
-      :text="t('SITE_HOME_INTRO_2')" 
-      mediaType="video" 
-      mediaSrc="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
+      :heading  ="t('SITE_HOME_HEADLINE')"
+      :text     ="t('SITE_HOME_INTRO_2')" 
+      mediaType ="video" 
+      mediaSrc  ="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
     />
     
     <GaleryCarrousel 
@@ -62,7 +58,7 @@ const gameFeaturesList = computed(() => [
     />
     
     <Features 
-      :title="t('SITE_HOME_FEATURES_TITLE')"
+      :title="t('SITE_HOME_FEATURE_TITLE')"
       :features="gameFeaturesList"
     />
     

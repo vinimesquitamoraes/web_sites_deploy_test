@@ -2,13 +2,13 @@
   <div class="main-content">
 
     <ContentSection 
-        :heading    ="t('SITE_ABOUT_DL_TITLE')"
-        :text       ="t('SITE_ABOUT_DL_INTRO_1')" 
+        :heading    ="t('SITE_DOWNLOAD_TITLE')"
+        :text       ="t('SITE_DOWNLOAD_P1')" 
         mediaType   ="text" 
     />
     
     <ContentSection 
-        :text       ="t('SITE_ABOUT_DL_INTRO_2')" 
+        :text       ="t('SITE_DOWNLOAD_P2')" 
         :show-header="false"
         mediaType   ="text" 
     />

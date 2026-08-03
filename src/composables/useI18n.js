@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
-import Papa from 'papaparse'
+import * as XLSX from 'xlsx'
+import excelUrl from '@/assets/xlsx/translations.xlsx?url'
 
 const translations = ref({})
 const currentLang = ref('en')
@@ -18,62 +19,50 @@ export const setLanguage = (lang) => {
 }
 
 export function useI18n() {
-  const loadTranslations = () => {
+  const loadTranslations = async () => {
     if (isLoaded.value) return
 
     try {
       const languageMap = {}
 
-      const csvModules = import.meta.glob('@/assets/csv/*.csv', {
-        query: '?raw',
-        eager: true,
-        import: 'default'
-      })
-
-      for (const filePath in csvModules) {
-        const csvText = csvModules[filePath]
-        debugLog(`Processing bundled CSV: ${filePath}`)
-        
-        if (!csvText) {
-          console.warn(`File is empty: ${filePath}`)
-          continue
-        }
-
-        const hasCsvStructure = csvText.includes(';')
-        if (!hasCsvStructure) {
-          console.warn(`Skipping ${filePath}: Not a valid CSV format.`)
-          continue
-        }
-
-        Papa.parse(csvText, {
-          header: true,
-          delimiter: ';', 
-          skipEmptyLines: true,
-          complete: (results) => {
-            results.data.forEach((row) => {
-              const rawKey = row.Key || row.key
-              if (!rawKey) return
-
-              const keyName = String(rawKey).trim()
-
-              for (const [colName, value] of Object.entries(row)) {
-                const trimmedCol = colName.trim()
-                
-                if (trimmedCol.toLowerCase() === 'key' || trimmedCol === '__parsed_extra' || !trimmedCol) continue
-
-                const lang = trimmedCol
-                const stringValue = value !== undefined && value !== null ? String(value) : ''
-
-                if (!languageMap[lang]) {
-                  languageMap[lang] = {}
-                }
-
-                languageMap[lang][keyName] = stringValue.trim()
-              }
-            })
-          }
-        })
+      const response = await fetch(excelUrl)
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch translations.xlsx: ${response.statusText}`)
       }
+
+      const arrayBuffer = await response.arrayBuffer()
+
+      const workbook  = XLSX.read(arrayBuffer, { type: 'array' })
+      
+      const firstSheetName = workbook.SheetNames[0]
+      const worksheet = workbook.Sheets[firstSheetName]
+
+      const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '' })
+
+      rows.forEach((row) => {
+        const keyField = Object.keys(row).find(k => k.toLowerCase() === 'key')
+        const rawKey = keyField ? row[keyField] : null
+        
+        if (!rawKey) return
+
+        const keyName = String(rawKey).trim()
+
+        for (const [colName, value] of Object.entries(row)) {
+          const trimmedCol = colName.trim()
+          
+          if (trimmedCol.toLowerCase() === 'key' || !trimmedCol) continue
+
+          const lang = trimmedCol
+          const stringValue = value !== undefined && value !== null ? String(value) : ''
+
+          if (!languageMap[lang]) {
+            languageMap[lang] = {}
+          }
+
+          languageMap[lang][keyName] = stringValue.trim()
+        }
+      })
 
       translations.value = languageMap
       isLoaded.value = true
@@ -84,7 +73,7 @@ export function useI18n() {
       debugLog('--------------------------')
 
     } catch (error) {
-      console.error('Failed to process translation CSVs:', error)
+      console.error('Failed to process translation Excel file:', error)
     }
   }
 

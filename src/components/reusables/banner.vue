@@ -1,13 +1,16 @@
 <template>
   <section class="hero-banner">
     <div class="hero-image-wrapper">
-      <div 
-        class="hero-bg-image"
-        :class="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
-        :style="{ backgroundImage: `url(${activeImageSrc})` }"
-        :aria-label="imageAlt"
-        role="img"
-      ></div>
+      <transition name="bg-fade">
+        <div 
+          class="hero-bg-image"
+          :key="activeImageSrc"
+          :class="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
+          :style="{ backgroundImage: `url(${activeImageSrc})` }"
+          :aria-label="imageAlt"
+          role="img"
+        ></div>
+      </transition>
       <div class="hero-overlay"></div>
     </div>
 
@@ -27,6 +30,14 @@
           @click="$emit('cta-click')"
         />
       </slot>
+    </div>
+
+    <div class="timer-bar-wrapper" v-if="props.alternativeImages.length > 1 && isScrollableActive">
+      <div 
+        class="timer-bar" 
+        :key="timerKey" 
+        :style="{ animationDuration: `${props.imageChangeInterval}ms` }"
+      ></div>
     </div>
   </section>
 </template>
@@ -84,6 +95,11 @@ const props = defineProps({
     required: false,
     default : 'both'
   },
+  imageChangeInterval: {
+    type    : Number,
+    required: false,
+    default : 25000
+  },
   showLogo: {
     type    : Boolean,
     required: false,
@@ -119,6 +135,7 @@ const isSessionActive = ref(
 )
 
 const randomAlternativeImage = ref(getRandomAlternative())
+const timerKey = ref(0)
 
 const checkSessionState = () => {
   if (!props.sessionKey) return
@@ -127,20 +144,38 @@ const checkSessionState = () => {
     isSessionActive.value = latestValue
     if (latestValue && props.alternativeImages.length > 0) {
       randomAlternativeImage.value = getRandomAlternative()
+      timerKey.value++
     }
   }
 }
 
 let intervalId = null
+let bgCycleIntervalId = null
 
 onMounted(() => {
   if (props.sessionKey) {
     intervalId = setInterval(checkSessionState, 500)
   }
+
+  if (props.alternativeImages.length > 1) {
+    bgCycleIntervalId = setInterval(() => {
+      if (isScrollableActive.value) {
+        let nextImage = getRandomAlternative()
+        
+        while (nextImage === randomAlternativeImage.value) {
+          nextImage = getRandomAlternative()
+        }
+        
+        randomAlternativeImage.value = nextImage
+        timerKey.value++
+      }
+    }, props.imageChangeInterval)
+  }
 })
 
 onUnmounted(() => {
   if (intervalId) clearInterval(intervalId)
+  if (bgCycleIntervalId) clearInterval(bgCycleIntervalId)
 })
 
 const activeImageSrc = computed(() => {
@@ -192,11 +227,24 @@ defineEmits(['cta-click'])
 }
 
 .hero-bg-image {
+  position            : absolute;
+  top                 : 0;
+  left                : 0;
   width               : 100%;
   height              : 100%;
   background-size     : cover;
   background-position : center;
   background-repeat   : no-repeat;
+}
+
+.bg-fade-enter-active,
+.bg-fade-leave-active {
+  transition          : opacity 1s ease-in-out;
+}
+
+.bg-fade-enter-from,
+.bg-fade-leave-to {
+  opacity             : 0;
 }
 
 .scroll-horizontal {
@@ -289,6 +337,27 @@ defineEmits(['cta-click'])
   font                : var(--font-h2);
   font-size           : var(--font-h2-size);
   color               : var(--color-default-text-color);
+}
+
+.timer-bar-wrapper {
+  position            : absolute;
+  bottom              : 0;
+  left                : 0;
+  width               : 100%;
+  height              : 6px;
+  background          : rgba(0, 0, 0, 0.5);
+  z-index             : 10;
+}
+
+.timer-bar {
+  height              : 100%;
+  background          : var(--color-primary, #E50012);
+  animation           : progress-anim linear infinite;
+}
+
+@keyframes progress-anim {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
 
 @media (max-width: 768px) {
