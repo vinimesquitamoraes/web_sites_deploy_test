@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed} from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
 import Banner          from '@/components/reusables/banner.vue'
@@ -136,10 +136,10 @@ const mediaOrderConfig = [
 }
 ]
 
-const modalOptions = [
+const modalOptions = computed(() => [
   { key: "replace_banner_for_map_renders", label: t('SITE_DOGTEN_OPTIONS_OP1') },
   { key: "unlocked_special_tape"         , label: t('SITE_DOGTEN_OPTIONS_OP2') }
-]
+])
 
 const sampleMediaItems = ref(
   mediaOrderConfig

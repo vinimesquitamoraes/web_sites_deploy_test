@@ -2,7 +2,7 @@
   <div class="music-player-container">
     <div 
       class="music-player-wrapper" 
-      :class="{ 'is-open': isOpen, 'is-ready': isReady }"
+      :class="{ 'is-open': isOpen, 'is-ready': isReady, 'special-theme': showImageTape && hasSpecialTapeAccess }"
       :style="{ 
         bottom: playerBottom + 'px',
         left: (isCentered || footerBehavior === 'center') ? '50%' : '16px',
@@ -191,13 +191,13 @@
     </div>
 
     <ToasterNotification 
-      v-model="showToast"
-      :message="toastMessage"
-      :icon="toastIcon"
-      type="info"
-      position="top-left"
-      :duration="4000"
-      @close="handleToastClose"
+      v-model     ="showToast"
+      :message    ="toastMessage"
+      :icon       ="toastIcon"
+      type        ="info"
+      position    ="top-left"
+      :duration   ="4000"
+      @close      ="handleToastClose"
     />
   </div>
 </template>
@@ -400,7 +400,7 @@ const onPlayerStateChange = (event) => {
     const currentTrack = tracks.value[currentTrackIndex.value]
     const trackTitle = currentTrack ? currentTrack.title : 'Unknown Track'
     
-    toastMessage.value = `${t('SITE_MUSIC_TOASTER_NOTIF')}: ${trackTitle}`
+    toastMessage.value = `${t('SITE_MUSIC_PLAYER_TOASTER_NOTIF')}: ${trackTitle}`
     showToast.value = true
 
   } else if (event.data === window.YT.PlayerState.PAUSED) {
@@ -637,6 +637,17 @@ onUnmounted(() => {
   transition            : bottom 0.2s ease-out, left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
+.music-player-wrapper.special-theme {
+  --color-accent-special                      : #7b2cbf;
+  --color-accent                              : #9d4edd;
+  --color-accent-light                        : #c77dff;
+  --color-primary                             : #5a189a;
+  --color-music-player-playbt-playing         : #7b2cbf;
+  --color-music-player-playbt-playing-pressed : #5a189a;
+  --color-music-player-playbt-paused          : #3c096c;
+  --color-music-player-playbt-paused-pressed  : #240046;
+}
+
 .music-player-wrapper.is-ready {
   pointer-events        : auto;
   visibility            : visible;
@@ -659,7 +670,7 @@ onUnmounted(() => {
   border                : 2px solid #000000;
   border-radius         : 12px;
   box-shadow            : var(--music-player-shadow);
-  overflow              : visible;
+  overflow              : hidden;
   width                 : 360px;
   max-width             : 100%;
   box-sizing            : border-box;
@@ -681,6 +692,7 @@ onUnmounted(() => {
   z-index               : 2;
   box-sizing            : border-box;
   flex-shrink           : 0;
+  overflow              : hidden
 }
 
 .expand-toggle-btn {
@@ -1164,7 +1176,7 @@ onUnmounted(() => {
   color                 : var(--color-text-muted);
 }
 
-.lcd-status-tag {
+.lcd-status-tag, .lcd-track-num, .lcd-time-display{
   color                 : var(--color-accent);
 }
 

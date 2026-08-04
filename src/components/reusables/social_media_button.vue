@@ -8,6 +8,7 @@
     :aria-label="props.tooltipText || platformInfo.label"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    ref="linkRef"
   >
     <img
       :src="currentIcon"
@@ -16,11 +17,13 @@
       :height="size"
       class="social-icon"
     />
-    <transition name="tooltip-fade">
-      <span v-if="showTooltip" class="social-tooltip" role="tooltip">
-        {{ props.tooltipText || platformInfo.label }}
-      </span>
-    </transition>
+    <teleport to="body">
+      <transition name="tooltip-fade">
+        <span v-if="showTooltip" class="social-tooltip" role="tooltip" :style="tooltipStyle">
+          {{ props.tooltipText || platformInfo.label }}
+        </span>
+      </transition>
+    </teleport>
   </a>
 </template>
 
@@ -51,6 +54,9 @@ const props = defineProps({
     validator: (value) => ['colored', 'white', 'black'].includes(value)
   }
 })
+
+const linkRef = ref(null)
+const tooltipStyle = ref({})
 
 const key = props.platform.toLowerCase()
 
@@ -115,6 +121,15 @@ const handleMouseEnter = () => {
   if (tooltipTimer) clearTimeout(tooltipTimer)
   
   tooltipTimer = setTimeout(() => {
+    if (linkRef.value) {
+      const rect = linkRef.value.getBoundingClientRect()
+      tooltipStyle.value = {
+        position: 'fixed',
+        left: `${rect.left + rect.width / 2}px`,
+        top: `${rect.top - 12}px`,
+        transform: 'translateX(-50%) translateY(-100%)'
+      }
+    }
     showTooltip.value = true
   }, 500)
 }
@@ -158,10 +173,6 @@ onUnmounted(() => {
 }
 
 .social-tooltip {
-	position         : absolute;
-	bottom           : calc(100% + 12px);
-	left             : 50%;
-	transform        : translateX(-50%);
 	background-color : #ffffff;
 	border           : 3px solid #000000;
 	border-radius    : 12px;
@@ -173,7 +184,7 @@ onUnmounted(() => {
 	padding          : 8px 16px;
 	white-space      : nowrap;
 	pointer-events   : none;
-	z-index          : 11;
+	z-index          : 99999;
 }
 
 .social-tooltip::after {
@@ -194,12 +205,12 @@ onUnmounted(() => {
 
 .tooltip-fade-enter-from {
 	opacity          : 0;
-	transform        : translateX(-50%) translateY(10px) scale(0.95);
+	transform        : translateX(-50%) translateY(calc(-100% + 10px)) scale(0.95) !important;
 }
 
 .tooltip-fade-leave-to {
 	opacity          : 0;
-	transform        : translateX(-50%) translateY(5px);
+	transform        : translateX(-50%) translateY(calc(-100% + 5px)) !important;
 }
 
 @media (max-width: 768px) {

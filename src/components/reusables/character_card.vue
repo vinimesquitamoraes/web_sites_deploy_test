@@ -102,7 +102,7 @@ const imageShapeClass = computed(() => {
 .character-image {
   width          : 100%;
   height         : 100%;
-  object-fit     : contain; /* Changed from cover to contain to prevent cropping */
+  object-fit     : contain; 
   display        : block;
 }
 

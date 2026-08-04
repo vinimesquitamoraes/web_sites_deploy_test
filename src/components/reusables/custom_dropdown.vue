@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown-container">
+  <div class="dropdown-container" ref="dropdownRef">
     <div class="dropdown-trigger" @click="isOpen = !isOpen">
       <div class="arrow-wrapper" :class="{ open: isOpen }">
         <span class="arrow-icon"></span>
@@ -40,6 +40,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const isOpen = ref(false)
+const dropdownRef = ref(null)
 
 const selectedLabel = computed(() => {
   const current = props.options.find(opt => opt.id === props.modelValue)
@@ -52,7 +53,7 @@ const selectOption = (id) => {
 }
 
 const closeDropdown = (e) => {
-  if (!e.target.closest('.dropdown-container')) {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
     isOpen.value = false
   }
 }
@@ -63,17 +64,19 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
 
 <style scoped>
 .dropdown-container {
-  width             : 100%;
-  max-width         : 120px;
+  width             : max-content;
+  min-width         : 120px;
+  max-width         : 100%;
   position          : relative;
   font-family       : inherit;
+  box-sizing        : border-box;
 }
 
 .dropdown-trigger {
   width             : 100%;
   box-sizing        : border-box;
-  font              : var(--font-dropdown );
-  font-size         : var(--font-dropdown-size );
+  font              : var(--font-dropdown);
+  font-size         : var(--font-dropdown-size);
   font-weight       : bold;
   padding           : 0.6rem 1rem 0.6rem 2.4rem;
   border            : 2px solid #000000;
@@ -87,6 +90,15 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   position          : relative;
   display           : flex;
   align-items       : center;
+  white-space       : nowrap;
+  overflow          : hidden;
+  text-overflow     : ellipsis;
+}
+
+.selected-label {
+  overflow          : hidden;
+  text-overflow     : ellipsis;
+  white-space       : nowrap;
 }
 
 .arrow-wrapper {
@@ -139,26 +151,30 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   position            : absolute;
   top                 : calc(100% + 6px);
   left                : 0;
-  width               : 100%;
+  width               : max-content;
+  min-width           : 100%;
+  max-width           : 90vw;
   background-color    : var(--color-hover);
   border              : 2px solid #000000;
   border-radius       : 6px;
   box-shadow          : 3px 3px 0px #000000;
   z-index             : 99;
-  overflow            : hidden;
+  overflow-y          : auto;
+  max-height          : 250px;
   box-sizing          : border-box;
 }
 
 .dropdown-option {
   padding             : 0.6rem 1rem 0.6rem 2.4rem;
-  font                : var(--font-dropdown );
-  font-size           : var(--font-dropdown-size );
+  font                : var(--font-dropdown);
+  font-size           : var(--font-dropdown-size);
   font-weight         : bold;
   color               : #000000;
   cursor              : pointer;
   text-transform      : uppercase;
   position            : relative;
   transition          : background-color 0.15s ease;
+  white-space         : nowrap;
 }
 
 .dropdown-option:hover {
@@ -197,6 +213,17 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   mask-repeat         : no-repeat;
   
   animation           : choppy-horizontal 0.6s steps(3, end) infinite alternate;
+}
+
+@media (max-width: 480px) {
+  .dropdown-container {
+    width             : 100%;
+  }
+  
+  .dropdown-options-list {
+    width             : 100%;
+    max-width         : 100%;
+  }
 }
 
 @keyframes choppy-horizontal {

@@ -22,13 +22,7 @@
 
         <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
         
-        <CustomButton 
-          v-if="showCtaButton"
-          :text="ctaText || t('SITE_NAV_DOWNLOAD')"
-          fontSize="var(--font-h2-size)"
-          :to="ctaLink"
-          @click="$emit('cta-click')"
-        />
+        <CustomButton :text="ctaText || t('SITE_NAV_DOWNLOAD')" :to="ctaLink" @click="$emit('cta-click')" fontSize="var(--font-h2-size)" v-if="showCtaButton"/>
       </slot>
     </div>
 
@@ -213,6 +207,7 @@ defineEmits(['cta-click'])
   margin-right        : -50vw;
   display             : flex;
   align-items         : center;
+  justify-content     : center;
   overflow            : hidden;
   box-sizing          : border-box;
 }
@@ -316,11 +311,19 @@ defineEmits(['cta-click'])
   display             : flex;
   flex-direction      : column;
   align-items         : center;
+  justify-content     : center;
   text-align          : center;
+  box-sizing          : border-box;
+  transform           : none !important;
+  left                : auto !important;
+  right               : auto !important;
 }
 
 .hero-logo-wrapper {
   margin-bottom       : 1.5rem;
+  display             : flex;
+  justify-content     : center;
+  width               : 100%;
 }
 
 .hero-logo-image {
@@ -331,12 +334,20 @@ defineEmits(['cta-click'])
 }
 
 .hero-subtitle {
-  max-width           : 600px;
+  text-align          : center !important;
+  margin-left         : auto !important;
+  margin-right        : auto !important;
+  max-width           : min(100%, 800px);
+  width               : 100%;
   margin-bottom       : 2rem;
   opacity             : 0.9;
   font                : var(--font-h2);
-  font-size           : var(--font-h2-size);
+  font-size           : clamp(1rem, 2vw, var(--font-h2-size));
   color               : var(--color-default-text-color);
+  box-sizing          : border-box;
+  display             : block !important;
+  word-break          : normal;
+  overflow-wrap       : break-word;
 }
 
 .timer-bar-wrapper {
@@ -361,13 +372,17 @@ defineEmits(['cta-click'])
 }
 
 @media (max-width: 768px) {
+  .hero-content {
+    padding           : 0 1rem;
+  }
+
   .hero-logo-image {
     max-width         : 250px;
   }
   
   .hero-subtitle {
     font              : var(--font-mobile-h2);
-    font-size         : var(--font-mobile-h2-size);
+    font-size         : clamp(0.875rem, 3.5vw, var(--font-mobile-h2-size));
   }
 }
 </style>

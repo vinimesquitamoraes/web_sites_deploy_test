@@ -51,6 +51,7 @@ const { t } = useI18n()
   align-items       : center;
   flex-direction    : row;
   gap               : 40px;
+
 }
 
 .nav-link {
@@ -124,12 +125,11 @@ const { t } = useI18n()
   }
 
   .nav-container.nav-active {
-    max-height      : 400px; 
+    max-height      : 500px; 
     padding         : 30px clamp(20px, 8vw, 40px);    
     opacity         : 1;
     visibility      : visible;
-    overflow-y      : auto;        
+    overflow        : visible;
   }
 }
-
 </style>

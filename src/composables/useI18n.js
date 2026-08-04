@@ -54,13 +54,13 @@ export function useI18n() {
           if (trimmedCol.toLowerCase() === 'key' || !trimmedCol) continue
 
           const lang = trimmedCol
-          const stringValue = value !== undefined && value !== null ? String(value) : ''
+          const stringValue = value !== undefined && value !== null ? String(value).trim() : ''
 
           if (!languageMap[lang]) {
             languageMap[lang] = {}
           }
 
-          languageMap[lang][keyName] = stringValue.trim()
+          languageMap[lang][keyName] = stringValue
         }
       })
 
@@ -78,20 +78,24 @@ export function useI18n() {
   }
 
   const t = (key) => {
-    const langDict = translations.value[currentLang.value]
-    if (!langDict || langDict[key] === undefined) {
-      const fallbackDict = translations.value['en']
-      if (fallbackDict && fallbackDict[key] !== undefined) {
-        return fallbackDict[key]
-      }
-      console.warn(`Translation key not found: "${key}"`)
-      return key 
+    const lang = currentLang.value
+    const langDict = translations.value[lang]
+    
+    if (langDict && langDict[key] !== undefined && langDict[key] !== '') {
+      return langDict[key]
     }
-    return langDict[key]
+
+    return `MISSING_KEY:${key} in LANG:${lang}`
   }
 
   const availableLanguages = computed(() => {
-    return Object.keys(translations.value)
+    const langs = {}
+    Object.keys(translations.value).forEach((lang) => {
+      langs[lang] = translations.value[lang]?.['SITE_THIS_LANGUAGE'] 
+        ? translations.value[lang]['SITE_THIS_LANGUAGE'] 
+        : lang
+    })
+    return langs
   })
 
   return {
