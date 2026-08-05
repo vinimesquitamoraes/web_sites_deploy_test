@@ -111,7 +111,6 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   color             : #fff;
 }
 
-/* On mobile, align it properly relative to the layout flow */
 @media (max-width: 900px) {
   .lang-selector-container {
     width           : 100%;

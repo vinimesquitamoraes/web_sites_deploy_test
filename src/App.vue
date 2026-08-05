@@ -65,8 +65,11 @@
   --font-body                 : 'Motherish', sans-serif;
   --font-button               : 'Motherish', sans-serif;
   --font-p                    : 'Motherish', sans-serif;
-  --font-dropdown             : 'Motherish', sans-serif;;
-  
+  --font-dropdown             : 'Motherish', sans-serif;
+  --font-credits-title        : 'Motherish', sans-serif;
+  --font-credits-role         : 'Motherish', sans-serif;
+  --font-credits-name         : 'Motherish', sans-serif;
+
   --font-navbar-size          : 25px;
   --font-h1-size              : 60px;
   --font-h2-size              : 32px;
@@ -76,6 +79,10 @@
   --font-body-size            : 16px;
   --font-button-size          : 16px;
   --font-dropdown-size        : 20px;
+  
+  --font-credits-title-size   : 24px;
+  --font-credits-role-size    : 20px;
+  --font-credits-name-size    : 16px;
 
   --font-mobile-navbar        : 'Motherish', sans-serif;
   --font-mobile-h1            : 'Motherish', sans-serif;
@@ -143,7 +150,6 @@
   --toaster-error-bg          : #f5b7b1;
   --toaster-error-border      : #c0392b;
 
-  
   --color-custom-button-text       :#000000;
   --color-custom-button-text-hover :#FFFFFF;
   --color-custom-button-hover      : #E50012;
@@ -153,6 +159,7 @@
   --color-modal-arrow-hover       : #E50012;
   
   --color-credits-background  : #000000;
+  --color-credits-title       : #e67e22; 
   --color-credits-role        : #e67e22;
   --color-credits-name        : #ffffff;
 

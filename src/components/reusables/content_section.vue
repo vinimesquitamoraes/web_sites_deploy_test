@@ -269,7 +269,7 @@ const closeImageModal = () => {
   display               : block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1220px) {
   .content-section {
     flex-direction      : column !important; 
     gap                 : 20px;

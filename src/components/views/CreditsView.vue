@@ -17,7 +17,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
-import CreditsSection from '@/components/reusables/credit_section.vue'
+import CreditsSection from '@/components/reusables/credits_all.vue'
 import CustomDropdown from '@/components/reusables/custom_dropdown.vue'
 
 const { t } = useI18n()

@@ -68,7 +68,7 @@ const props = defineProps({
   },
   titleColor: {
     type: String,
-    default: '#ffffff'
+    default: 'var(--color-credits-title)'
   },
   subtitleColor: {
     type: String,
@@ -77,7 +77,15 @@ const props = defineProps({
   textColor: {
     type: String,
     default: 'var(--color-credits-name)'
-  }
+  },
+  columns: {
+    type: [Number, String],
+    default: 2
+  },
+  textAlign: {
+    type: String,
+    default: 'left'
+  },
 })
 
 const resolveName = (person) => {
@@ -125,12 +133,13 @@ const resolveLink = (person) => {
 }
 
 .credits-main-title {
-  font-size         : 24px;
+  text-decoration   : none;
+  font-size         : var(--font-credits-title-size);
+  font-family       : var(--font-credits-title);
   font-weight       : bold;
   letter-spacing    : 2px;
   margin            : 0;
   text-transform    : uppercase;
-  border-bottom     : 2px solid currentColor;
   padding-bottom    : 4px;
 }
 
@@ -155,7 +164,7 @@ const resolveLink = (person) => {
   padding           : 0;
   list-style        : none;
   display           : grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(v-bind(columns), 1fr);
   gap               : 0.25rem 2rem;
 }
 
@@ -166,8 +175,10 @@ const resolveLink = (person) => {
   white-space       : nowrap;
   overflow          : hidden;
   text-overflow     : ellipsis;
-  text-align        : left;
+  text-align        : v-bind(textAlign);
+  justify-content   : v-bind(textAlign);
   display           : flex;
+  
 }
 
 .credit-link {
