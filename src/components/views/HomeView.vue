@@ -37,6 +37,8 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
       mediaType       ="video" 
       mediaSrc        ="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
       text-align      ="left"
+      
+      
     />
 
     <GaleryCarrousel 

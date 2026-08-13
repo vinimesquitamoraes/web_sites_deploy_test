@@ -5,24 +5,18 @@
 
     <FoldableSection 
       v-for="(section, index) in infoSections" 
-      :key="index"
-      :title="section.title"
-    >
-      <ContentSection
-        :heading        ="section.title"
-        :text           ="section.text"
-        :mediaType      ="section.content_type"
-        :mediaSrc       ="section.image || ''"
-        :mediaAlt       ="section.mediaAlt || section.title"
-        :redBorder      ="section.redBorder || false"
-        :imageOpenable  ="section.imageOpenable !== false"
-        :showHeader     ="false"
-        headingColor    ="#ffffff"
-        textColor       ="#ffffff"
-        layout          ="horizontal"
-        mediaPosition   ="right"
-      />
-    </FoldableSection>
+      :key            ="index"
+      :title          ="section.title"
+      :heading        ="section.title"
+      :content        ="section.text"
+      :media-type     ="section.content_type"
+      :media-src      ="section.image || ''"
+      :media-alt      ="section.mediaAlt || section.title"
+      :image-openable ="section.imageOpenable !== false"
+      :show-header    ="false"
+      layout          ="horizontal"
+      media-position="right"
+    />
   </div>
 </template>
 
@@ -30,7 +24,6 @@
 import { computed } from 'vue'
 import { useI18n }   from '@/composables/useI18n'
 import FoldableSection  from '@/components/reusables/foldable_section.vue'
-import ContentSection   from '@/components/reusables/content_section.vue'
 
 defineProps({
   headingColor: {

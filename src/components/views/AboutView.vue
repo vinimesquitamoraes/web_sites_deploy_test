@@ -13,8 +13,12 @@
       :redBorder    ="section.redBorder ?? true"
       :imageOpenable="section.imageOpenable ?? true"
       :headingAlign ="section.headingAlign ?? 'left'"
-      :textPadding  ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 0')"
-      :hasShadow    ="section.hasShadow ?? true"
+      :textPadding  ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 21px')"
+      :mediaFit     ="section.mediaFit ?? 'cover'"
+      :mediaShadow  ="section.mediaShadow ?? 'var(--content-section-media-shadow)'"
+      :mediaBorder  ="section.mediaBorder ?? ''"
+      :border       ="section.border ?? 'transparent'"
+      :shadow       ="section.shadow ?? ''"
       headerPosition="inside"
       mediaWidth    ="775px" 
       mediaHeight   ="450px"
@@ -50,10 +54,11 @@ import SocialMediaButton  from '@/components/reusables/social_media_button.vue'
 import MusicPlayer        from '@/components/reusables/music_player.vue'
 
 
-import imgSc1 from '@/assets/img/screenshots/sc1.png'
-import imgSc2 from '@/assets/img/screenshots/sc2.png'
-import imgSc3 from '@/assets/img/screenshots/sc3.png'
-import imgSc4 from '@/assets/img/screenshots/sc4.png'
+import combatImage  from '@/assets/img/screenshots/sc4.png'
+import fieldImage   from '@/assets/img/screenshots/sc1.png'
+import storyImage   from '@/assets/img/screenshots/sc2.png'
+import visualImage  from '@/assets/img/screenshots/sc3.png'
+import musicImage   from '@/assets/img/screenshots/sc5.png'
 
 import imgGodotLogo from '@/assets/img/logos/goto_logo_large_color_light.png'
 
@@ -66,34 +71,49 @@ const infoSections = computed(() => [
     text        : [t('SITE_ABOUT_OVERVIEW_P1'), t('SITE_ABOUT_OVERVIEW_P2')],
     content_type: "text",
     headingAlign: "center",
-    textPadding  :"0 60px 0 60px"
+    textPadding  :"0 0 0 0"
   },
   {
     title       : t('SITE_ABOUT_COMBAT_TITLE'),
     text        : t('SITE_ABOUT_COMBAT_P1'),
-    image       : imgSc4,
+    image       : combatImage,
+    content_type: "image",
+  },
+  {
+    title       : t('SITE_ABOUT_FIELD_SKILLS_TITLE'),
+    text        : t('SITE_ABOUT_FIELD_SKILLS_P1'),
+    image       : fieldImage,
+    content_type: "image",
+  },
+  {
+    title       : t('SITE_ABOUT_STORY_TITLE'),
+    text        : t('SITE_ABOUT_STORY_P1'),
+    image       : storyImage,
     content_type: "image",
   },
   {
     title       : t('SITE_ABOUT_VISUALS_TITLE'),
     text        : t('SITE_ABOUT_VISUALS_P1'),
-    image       : imgSc3,
-    content_type: "image",
+    image       : visualImage,
+    content_type: "image"
   },
   {
     title       : t('SITE_ABOUT_MUSIC_TITLE'),
     text        : t('SITE_ABOUT_MUSIC_P1'),
-    image       : imgSc1,
+    image       : musicImage,
     content_type: "image"
-  },  
+  },    
   {
     title         : t('SITE_ABOUT_OPENSOURCE_TITLE'),
     text          : t('SITE_ABOUT_OPENSOURCE_P1'),
     image         : imgGodotLogo,
     content_type  : "image",
-    redBorder     : false,
     imageOpenable : false,
-    hasShadow     : false,
+    mediaFit      : 'contain',
+    mediaShadow   : 'none',
+    mediaBorder   : 'none',
+    border        : 'none',
+    shadow        : 'none'
   }
 ])
 

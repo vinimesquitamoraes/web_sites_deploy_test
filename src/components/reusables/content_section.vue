@@ -1,12 +1,22 @@
 <template>
   <div 
     class="content-section-wrapper"
-    :style="{ padding: sectionPadding }"
+    :style="{ 
+      padding: sectionPadding, 
+      backgroundColor: contentBg, 
+      borderRadius: borderRadius,
+      border: border,
+      boxShadow: shadow 
+    }"
   >
     <h2 
-      v-if="showHeader && heading && headerPosition === 'top'" 
-      class="heading top-heading" 
-      :style="{ color: headingColor, textAlign: headingAlign }"
+      v-if="shouldShowHeader && headerPosition === 'top'" 
+      class="content-section-heading content-section-top-heading" 
+      :style="{ 
+        color: headingColor, 
+        textAlign: headingAlign,
+        border: headerBorder 
+      }"
       v-html="heading"
     ></h2>
 
@@ -15,21 +25,28 @@
       :class="[layout, mediaPosition, { 'text-only': mediaType === 'text', 'image-centered': textParagraphs.length === 0 }]"
     >
       <div 
-        v-if="textParagraphs.length || (showHeader && heading && headerPosition === 'inside')" 
-        class="text-container"
-        :style="{ padding: textPadding }"
+        v-if="textParagraphs.length || (shouldShowHeader && headerPosition === 'inside')" 
+        class="content-section-text-container"
+        :style="{ 
+          padding: textPadding,
+          border: textBorder
+        }"
       >
         <h2 
-          v-if="showHeader && heading && headerPosition === 'inside'" 
-          class="heading inside-heading" 
-          :style="{ color: headingColor, textAlign: headingAlign }"
+          v-if="shouldShowHeader && headerPosition === 'inside'" 
+          class="content-section-heading content-section-inside-heading" 
+          :style="{ 
+            color: headingColor, 
+            textAlign: headingAlign,
+            border: headerBorder 
+          }"
           v-html="heading"
         ></h2>
 
         <p 
           v-for="(paragraph, index) in textParagraphs" 
           :key="index" 
-          class="body-text" 
+          class="content-section-body-text" 
           :style="{ color: textColor, textAlign: textAlign }"
           v-html="paragraph"
         ></p>
@@ -37,42 +54,56 @@
 
       <div 
         v-if="mediaType !== 'text'" 
-        class="media-wrapper"
-        :style="{ width: mediaWidth }"
+        class="content-section-media-wrapper"
+        :style="{ '--media-width': mediaWidth }"
       >
         <div 
-          class="media-container" 
+          class="content-section-media-container" 
           :class="{ 
-            'red-border': redBorder, 
-            'clickable-media': mediaType === 'image' && mediaSrc && !hasError,
-            'no-shadow': !hasShadow 
+            'content-section-clickable-media': mediaType === 'image' && mediaSrc && !hasError && imageOpenable
           }"
-          :style="{ height: mediaHeight !== 'auto' ? mediaHeight : 'auto' }"
+          :style="{ 
+            height: mediaHeight !== 'auto' ? mediaHeight : 'auto',
+            filter: mediaShadow
+          }"
           @click="openImageModal"
         >
-          <slot name="media">
-            <iframe 
-              v-if="mediaType === 'video' && mediaSrc"
-              :src="mediaSrc" 
-              :title="mediaAlt || heading"
-              class="video-iframe"
-              :style="{ height: mediaHeight !== 'auto' ? mediaHeight : '322px' }"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
+          <div 
+            class="content-section-media-inner"
+            :style="{ 
+              border: mediaBorder,
+              borderRadius: mediaBorderRadius
+            }"
+          >
+            <slot name="media">
+              <iframe 
+                v-if="mediaType === 'video' && mediaSrc"
+                :src="mediaSrc" 
+                :title="mediaAlt || heading"
+                class="content-section-video-iframe"
+                :style="{ height: mediaHeight !== 'auto' ? mediaHeight : '322px' }"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
 
-            <img 
-              v-else-if="mediaType === 'image' && mediaSrc"
-              :src="mediaSrc" 
-              :alt="mediaAlt || heading"
-              class="media-img"
-              :style="{ color: textColor, maxHeight: mediaHeight !== 'auto' ? mediaHeight : 'none' }"
-              @error="hasError = true"
-            />
-          </slot>
+              <img 
+                v-else-if="mediaType === 'image' && mediaSrc"
+                :src="mediaSrc" 
+                :alt="mediaAlt || heading"
+                class="content-section-media-img"
+                :style="{ 
+                  color: textColor, 
+                  height: mediaHeight !== 'auto' ? mediaHeight : 'auto',
+                  maxHeight: mediaHeight !== 'auto' ? mediaHeight : 'none',
+                  objectFit: mediaHeight !== 'auto' ? mediaFit : 'contain'
+                }"
+                @error="hasError = true"
+              />
+            </slot>
+          </div>
         </div>
-        <span v-if="mediaCaption" class="media-caption" :style="{ color: textColor }">
+        <span v-if="mediaCaption" class="content-section-media-caption" :style="{ color: textColor }">
           {{ mediaCaption }}
         </span>
       </div>
@@ -100,10 +131,6 @@ const props = defineProps({
     type: [String, Array],
     default: () => []
   },
-  showHeader: {
-    type: Boolean,
-    default: true
-  },
   headerPosition: {
     type: String,
     default: 'top',
@@ -119,6 +146,34 @@ const props = defineProps({
     validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
   },
   textColor: {
+    type: String,
+    default: ''
+  },
+  contentBg: {
+    type: String,
+    default: 'transparent'
+  },
+  borderRadius: {
+    type: String,
+    default: '0px'
+  },
+  border: {
+    type: String,
+    default: 'transparent'
+  },
+  headerBorder: {
+    type: String,
+    default: 'transparent'
+  },
+  textBorder: {
+    type: String,
+    default: 'none'
+  },
+  mediaBorder: {
+    type: String,
+    default: ''
+  },
+  mediaBorderRadius: {
     type: String,
     default: ''
   },
@@ -170,17 +225,22 @@ const props = defineProps({
     default: 'horizontal',
     validator: (value) => ['horizontal', 'vertical'].includes(value)
   },
-  redBorder: {
-    type: Boolean,
-    default: false
-  },
   imageOpenable: {
     type: Boolean,
     default: true
   },
-  hasShadow: {
-    type: Boolean,
-    default: true
+  mediaShadow: {
+    type: String,
+    default: 'var(--content-section-media-shadow)'
+  },
+  mediaFit: {
+    type: String,
+    default: 'contain',
+    validator: (value) => ['cover', 'contain', 'fill', 'scale-down'].includes(value)
+  },
+  shadow: {
+    type: String,
+    default: ''
   }
 })
 
@@ -192,6 +252,10 @@ const textParagraphs = computed(() => {
     return props.text.filter(p => Boolean(p))
   }
   return props.text ? [props.text] : []
+})
+
+const shouldShowHeader = computed(() => {
+  return Boolean(props.heading) && textParagraphs.value.length > 0
 })
 
 watch(() => props.mediaSrc, () => {
@@ -213,40 +277,38 @@ const closeImageModal = () => {
 
 <style scoped>
 .content-section-wrapper {
-  width                 : 100%;
+  width                 : calc(100% - 4px);
   display               : flex;
   flex-direction        : column;
   align-items           : center;
   box-sizing            : border-box;
-  margin                : 20px 0 0 0;
+  margin                : 10px 4px 4px 0;
+  position              : relative;
+  z-index               : 1;
 }
 
-.heading {
+.content-section-heading {
   width                 : 100%;
-  font-family           : var(--font-h2);
-  font-size             : var(--font-h2-size);
-  color                 : var(--color-h2);
+  font-family           : var(--content-section-font-h2);
+  font-size             : var(--content-section-font-h2-size);
+  color                 : var(--content-section-color-h2);
   margin                : 0;
+  box-sizing            : border-box;
 }
 
-.heading.top-heading {
-  margin-bottom         : 24px;
-}
-
-.heading.inside-heading {
+.content-section-heading.content-section-top-heading {
   margin-bottom         : 16px;
 }
 
-.heading :deep(i),
-.heading :deep(em) {
-  font-style            : italic;
+.content-section-heading.content-section-inside-heading {
+  margin-bottom         : 12px;
 }
 
 .content-section {
   display               : flex;
   align-items           : center;
-  justify-content       : center;
-  gap                   : 30px;
+  justify-content       : flex-start;
+  gap                   : 20px;
   width                 : 100%;
   box-sizing            : border-box;
 }
@@ -283,143 +345,156 @@ const closeImageModal = () => {
   flex-direction        : column;
 }
 
-.content-section.text-only .text-container {
+.content-section.text-only .content-section-text-container {
   width                 : 100%;
   max-width             : 100%;
 }
 
-.text-container {
+.content-section-text-container {
   width                 : 675px;
   max-width             : 100%;
   display               : flex;
-  justify-content       : center;
-  align-items           : center;
+  justify-content       : flex-start;
+  align-items           : flex-start;
   flex-direction        : column;
-  gap                   : 12px;
+  gap                   : 8px;
   box-sizing            : border-box;
 }
 
-.body-text {
+.content-section-body-text {
   align-self            : stretch;
-  font-family           : var(--font-p);
-  font-size             : var(--font-p-size);
-  color                 : var(--color-p, #1F1F1F);
-  font-weight           : 500;
+  font-family           : var(--content-section-font-p);
+  font-size             : var(--content-section-font-p-size);
+  color                 : var(--content-section-color-p);
   margin                : 0;
   line-height           : 1.4;
 }
 
-.body-text :deep(i),
-.body-text :deep(em) {
-  font-style            : italic;
-}
-
-.media-wrapper {
+.content-section-media-wrapper {
+  width                 : var(--media-width, 535px);
   display               : flex;
   flex-direction        : column;
   align-items           : center;
-  gap                   : 8px;
   max-width             : 100%;
   flex-shrink           : 0;
-  padding               : 0 8px 8px 0;
-  box-sizing            : border-box;
 }
 
-.media-caption {
-  font-family           : var(--font-p);
+.content-section-media-caption {
+  font-family           : var(--content-section-font-p);
   font-size             : 14px;
   text-align            : center;
+  margin-top            : 6px;
 }
 
-.media-container {
+.content-section-media-container {
   width                 : 100%;
   max-width             : 100%;
+  display               : block;
+  position              : relative;
+  height                : auto;
+}
+
+.content-section-media-inner {
+  width                 : 100%;
+  height                : auto;
   overflow              : hidden;
-  border-radius         : 12px; 
-  border                : 3px solid #000000;
-  box-shadow            : var(--color-custom-button-shadow, 8px 8px 0px #000000);
-  background            : #ffffff;
-  box-sizing            : border-box;
-  display               : flex;
-  align-items           : center;
-  justify-content       : center;
-  transition            : transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  border                : var(--content-section-media-border);
+  border-radius         : var(--content-section-media-radius);
+  background-color      : #ffffff;
+  display               : block;
+  position              : relative;
 }
 
-.media-container.no-shadow {
-  box-shadow            : none !important;
-  border                : none !important;
-  border-radius         : 0;
-  background            : transparent;
-}
-
-.clickable-media {
+.content-section-clickable-media {
   cursor                : pointer;
 }
 
-.clickable-media:hover {
-  transform             : translateY(-3px) translateX(-3px);
-  box-shadow            : var(--color-custom-button-active-shadow, 11px 11px 0px #000000);
-}
-
-.clickable-media.no-shadow:hover {
-  transform             : none;
-  box-shadow            : none !important;
-  border                : none !important;
-}
-
-.media-container.red-border {
-  border                : 3px solid #E50012;
-  box-shadow            : var(--color-custom-button-shadow, 8px 8px 0px #E50012);
-  padding               : 8px;
-}
-
-.media-container.red-border.clickable-media:hover {
-  transform             : translateY(-3px) translateX(-3px);
-  box-shadow            : var(--color-custom-button-active-shadow, 11px 11px 0px #E50012);
-}
-
-.media-container.red-border.no-shadow,
-.media-container.red-border.no-shadow.clickable-media:hover {
-  box-shadow            : none !important;
-  border                : none !important;
-  transform             : none;
-  padding               : 0;
-}
-
-.media-img {
+.content-section-media-img {
   width                 : 100%;
   height                : auto;
-  object-fit            : contain;
   display               : block;
 }
 
-.video-iframe {
+.content-section-video-iframe {
   width                 : 100%;
   border                : none;
   display               : block;
 }
 
+/* Responsive Media Queries */
 @media (max-width: 1220px) {
-  .content-section {
-    flex-direction      : column !important; 
-    gap                 : 20px;
+  .content-section-wrapper {
+    width               : calc(100% - 12px);
+    margin              : 12px 12px 12px 0;
+    padding             : 12px 14px !important; 
   }
 
-  .heading {
+  .content-section {
+    flex-direction      : column !important; 
+    justify-content     : flex-start !important;
+    align-items         : stretch !important;
+    gap                 : 20px !important;
+  }
+
+  .content-section-text-container {
+    width               : 100% !important;
+    align-items         : flex-start !important;
+  }
+
+  .content-section-heading {
     font-size           : 28px; 
   }
 
-  .heading.top-heading {
-    margin-bottom       : 16px;
+  .content-section-heading.content-section-top-heading {
+    margin-bottom       : 8px;
   }
 
-  .media-wrapper {
+  .content-section-media-wrapper {
     width               : 100% !important;
   }
+
+  .content-section-media-container {
+    height              : auto !important;
+  }
+
+  .content-section-media-inner {
+    height              : auto !important;
+  }
+
+  .content-section-media-img {
+    height              : auto !important;
+    max-height          : none !important;
+    object-fit          : contain !important;
+  }
   
-  .video-iframe {
+  .content-section-video-iframe {
     height              : 220px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-section-wrapper {
+    width               : calc(100% - 12px);
+    margin              : 8px 12px 8px 0;
+    padding             : 10px 10px !important;
+  }
+
+  .content-section-heading {
+    font-size           : 24px;
+  }
+
+  .content-section-body-text {
+    font-size           : 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-section-heading {
+    font-size           : 20px;
+  }
+  
+  .content-section {
+    gap                 : 16px !important;
   }
 }
 </style>

@@ -261,6 +261,27 @@
   --gallery-thumb-shadow-mobile         : 2px 2px 0px #000000;
   --gallery-thumb-shadow-mobile-active  : 2px 2px 0px #E50012;
 
+  /* Foldable Stuff ===================================================================================================*/
+  --foldable-header-bg     : transparent;
+  --foldable-title-color   : #202020;
+  --foldable-body-bg       : #ffffff;
+  --foldable-text-color    : #ffffff;
+  --foldable-icon-color    : #ffffff;
+  --foldable-icon-outline  : #202020;
+  --foldable-icon-bg       : transparent;
+  --foldable-body-border   : 3px solid #202020;
+  --foldable-content-shadow: 0px 4px 0px #7a6c86;
+
+  --content-section-font-h2          : 'Motherish', sans-serif;
+  --content-section-font-h2-size     : var(--font-h2-size);
+  --content-section-color-h2         : #E50012;
+  --content-section-font-p           : 'Motherish', sans-serif;
+  --content-section-font-p-size      : var(--font-p-size);
+  --content-section-color-p          : #1f1f1f;
+  --content-section-media-border        : 4px solid#000000;
+  --content-section-media-radius        : 24px;
+  --content-section-media-shadow        : drop-shadow(10px 10px 0px #000000);
+  --content-section-media-shadow-active : drop-shadow(13px 13px 0px #000000);
 }
 
 body {
