@@ -1,31 +1,31 @@
 <template>
   <component 
-    :is="clickable ? 'a' : 'div'"
-    :href="clickable ? resolvedUrl : undefined"
-    :target="clickable ? '_blank' : undefined"
-    :rel="clickable ? 'noopener noreferrer' : undefined"
-    class="platform-link"
+    :is           ="isClickable ? 'a' : 'div'"
+    :href         ="isClickable ? resolvedUrl : undefined"
+    :target       ="isClickable ? '_blank' : undefined"
+    :rel          ="isClickable ? 'noopener noreferrer' : undefined"
+    :tabindex     ="isClickable ? undefined : -1"
+    :aria-disabled="!isClickable"
+    class         ="platform-link"
     :class="[
       `variant-${variant}`, 
-      `hover-${hoverVariant}`,
-      { 'is-clickable': clickable }
+      { 
+        'is-clickable': isClickable,
+        'not-clickable': !isClickable,
+        'has-custom-color': Boolean(color),
+        'has-custom-hover-color': isClickable && Boolean(hoverColor)
+      }
     ]"
+    :style="customStyles"
     :aria-label="platformInfo.label"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
+    @click="handleClick"
   >
-    <img
-      :src="currentIcon"
-      :alt="`${platformInfo.label} Icon`"
-      :width="size"
-      :height="size"
-      class="platform-icon"
-    />
+    <div class="platform-icon" />
   </component>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   platform: {
@@ -46,14 +46,29 @@ const props = defineProps({
     default: 'colored',
     validator: (value) => ['colored', 'white', 'black'].includes(value)
   },
+  color: {
+    type: String,
+    default: 'var(--color-operational-system-icons-color)'
+  },
+  hoverColor: {
+    type: String,
+    default: 'var(--color-operational-system-icons-hover-color)'
+  },
   url: {
     type: String,
     default: ''
   },
   clickable: {
-    type: Boolean,
+    type: [Boolean, String],
     default: true
   }
+})
+
+const isClickable = computed(() => {
+  if (typeof props.clickable === 'string') {
+    return props.clickable.toLowerCase() !== 'false'
+  }
+  return Boolean(props.clickable)
 })
 
 const platformInput = props.platform.toLowerCase()
@@ -101,46 +116,104 @@ const getIconPath = (v, iconKey) => {
   }
 }
 
-const defaultIcon = getIconPath(props.variant, key)
-const hoverIcon = getIconPath(props.hoverVariant, key)
+const defaultIcon = computed(() => getIconPath(props.variant, key))
+const hoverIcon = computed(() => getIconPath(props.hoverVariant, key))
 
-const currentIcon = ref(defaultIcon)
+const customStyles = computed(() => {
+  const numericSize = typeof props.size === 'number' ? `${props.size}px` : props.size
 
-const handleMouseEnter = () => {
-  currentIcon.value = hoverIcon
-}
+  return {
+    '--icon-size'               : numericSize,
+    '--icon-mask-default'       : `url("${defaultIcon.value}")`,
+    '--icon-mask-hover'         : `url("${hoverIcon.value}")`,
+    '--icon-color-custom'       : props.color || undefined,
+    '--icon-hover-color-custom' : props.hoverColor || props.color || undefined
+  }
+})
 
-const handleMouseLeave = () => {
-  currentIcon.value = defaultIcon
+const handleClick = (e) => {
+  if (!isClickable.value) {
+    e.preventDefault()
+    e.stopPropagation()
+    e.stopImmediatePropagation()
+  }
 }
 </script>
 
 <style scoped>
 .platform-link {
-  display:         inline-flex;
-  align-items:     center;
-  justify-content: center;
-  text-decoration: none;
-  transition:      transform 0.2s ease, opacity 0.2s ease;
+  display                      : inline-flex;
+  align-items                  : center;
+  justify-content              : center;
+  text-decoration              : none;
+}
+
+.platform-link.not-clickable,
+.platform-link.not-clickable * {
+  pointer-events               : none !important;
+  cursor                       : default !important;
+  user-select                  : none !important;
+  transform                    : none !important;
+  transition                   : none !important;
+  animation                    : none !important;
+}
+
+.platform-link.not-clickable:hover,
+.platform-link.not-clickable:hover * {
+  transform                    : none !important;
+  opacity                      : 1 !important;
+  color                        : var(--icon-color-custom, inherit) !important;
+  -webkit-mask-image           : var(--icon-mask-default) !important;
+  mask-image                   : var(--icon-mask-default) !important;
 }
 
 .platform-link.is-clickable {
-  cursor:          pointer;
+  cursor                       : pointer;
+  transition                   : transform 0.2s ease, opacity 0.2s ease;
 }
 
 .platform-link.is-clickable:hover {
-  transform:       translateY(-3px);
-  opacity:         0.85;
+  transform                    : translateY(-3px);
+  opacity                      : 0.85;
 }
 
 .platform-icon {
-  display:         block;
-  object-fit:      contain;
-  transition:      filter 0.3s ease;
+  width                        : var(--icon-size);
+  height                       : var(--icon-size);
+  background-color             : currentColor;
+  
+  -webkit-mask-image           : var(--icon-mask-default);
+  mask-image                   : var(--icon-mask-default);
+  -webkit-mask-repeat          : no-repeat;
+  mask-repeat                  : no-repeat;
+  -webkit-mask-position        : center;
+  mask-position               : center;
+  -webkit-mask-size            : contain;
+  mask-size                    : contain;
 }
 
-.variant-black .platform-icon,
-.hover-black:hover .platform-icon {
-  filter:          brightness(0);
+.platform-link.is-clickable .platform-icon {
+  transition                   : background-color 0.3s ease, -webkit-mask-image 0.3s ease, mask-image 0.3s ease;
+}
+
+.variant-white {
+  color                        : #ffffff;
+}
+
+.variant-black {
+  color                        : #000000;
+}
+
+.has-custom-color {
+  color                        : var(--icon-color-custom);
+}
+
+.platform-link.is-clickable.has-custom-hover-color:hover {
+  color                        : var(--icon-hover-color-custom);
+}
+
+.platform-link.is-clickable:hover .platform-icon {
+  -webkit-mask-image           : var(--icon-mask-hover);
+  mask-image                   : var(--icon-mask-hover);
 }
 </style>

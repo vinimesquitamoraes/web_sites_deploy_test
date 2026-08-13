@@ -94,7 +94,7 @@ const triangleUrl = computed(() => `url(${svgTriangle})`)
 const characters = computed(() => [
   {
     name        : t('SITE_HOME_NINTEN_TITLE'),
-    description : t('SITE_HOME_NINTEN_1'),
+    description : [t('SITE_HOME_NINTEN_1'), t('SITE_HOME_NINTEN_2')],
     portrait    : imgNintenPortrait,
     image       : imgNinten,
     imageShape  : 'circle',
@@ -103,7 +103,7 @@ const characters = computed(() => [
   },
   {
     name        : t('SITE_HOME_LLOYD_TITLE'),
-    description : t('SITE_HOME_LLOYD_1'),
+    description : [t('SITE_HOME_LLOYD_1'), t('SITE_HOME_LLOYD_2')],
     portrait    : imgLloydPortrait,
     image       : imgLloyd,
     imageShape  : 'circle',
@@ -112,7 +112,7 @@ const characters = computed(() => [
   },
   {
     name        : t('SITE_HOME_ANA_TITLE'),
-    description : t('SITE_HOME_ANA_1'),
+    description : [t('SITE_HOME_ANA_1'), t('SITE_HOME_ANA_2')],
     portrait    : imgAnaPortrait,
     image       : imgAna,
     imageShape  : 'circle',
@@ -121,7 +121,7 @@ const characters = computed(() => [
   },
   {
     name        : t('SITE_HOME_TEDDY_TITLE'),
-    description : t('SITE_HOME_TEDDY_1'),
+    description : [t('SITE_HOME_TEDDY_1'), t('SITE_HOME_TEDDY_2')],
     portrait    : imgTeddyPortrait,
     image       : imgTeddy,
     imageShape  : 'circle',
@@ -139,6 +139,7 @@ onMounted(() => {
 
 <style scoped>
 .cast-section {
+  margin-top     : 40px;
   display        : flex;
   flex-direction : column;
   align-items    : center;
@@ -149,7 +150,7 @@ onMounted(() => {
 .section-title {
   font-size      : 36px;
   margin         : 0 0 20px 0;
-  font-family    : sans-serif;
+  font-family    : var(--font-h2)
 }
 
 .tab-view-wrapper {

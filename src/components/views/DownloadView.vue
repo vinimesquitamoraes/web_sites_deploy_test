@@ -14,17 +14,21 @@
     />
     
     <div class="platforms-grid">
-        <PlatformButton platform="windows" size="100px"/>
-        <PlatformButton platform="linux"   size="100px"/>
-        <PlatformButton platform="macos"   size="100px"/>
+        <PlatformButton platform="windows" size="100px" :clickable="false"/>
+        <PlatformButton platform="linux"   size="100px" :clickable="false"/>
+        <PlatformButton platform="macos"   size="100px" :clickable="false"/>
     </div>
 
     <div class="button-container">
-        <CustomButton 
-            text="" 
-            iconSize="280" 
-            height="100px"
-            :iconSrc="iconItchio" 
+       <CustomButton 
+            text            ="" 
+            iconSize        ="100%" 
+            width           ="280px"
+            height          ="100px"
+            bgColor         =var(--color-itchio-button-color)
+            hoverBgColor    =var(--color-itchio-button-hover-color)
+            hoverIconColor  =var(--color-itchio-button-icon-hover-color)
+            :iconSrc        ="iconItchio" 
             externalUrl="https://mother-encore.itch.io/mother-encore"
         />
     </div>
@@ -46,7 +50,7 @@ import PlatformButton   from '@/components/reusables/so_buttons.vue'
 import CustomButton     from '@/components/reusables/custom_button.vue'
 import Requirements     from '@/components/reusables/requeriments.vue'
 import img_lloydDad     from '@/assets/img/characters/Lloyd_Dad.png'
-import iconItchio       from '@/assets/svg/itchio.svg'
+import iconItchio       from '@/assets/svg/itchio.svg?url'
 
 const { t } = useI18n()
 

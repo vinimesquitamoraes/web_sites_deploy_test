@@ -68,23 +68,23 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   min-width         : 120px;
   max-width         : 100%;
   position          : relative;
-  font-family       : inherit;
+  font-family       : var(--font-dropdown);
+  font-size         : var(--font-dropdown-size);
+  font-weight         : bold;
   box-sizing        : border-box;
 }
 
 .dropdown-trigger {
   width             : 100%;
   box-sizing        : border-box;
-  font              : var(--font-dropdown);
-  font-size         : var(--font-dropdown-size);
   font-weight       : bold;
   padding           : 0.6rem 1rem 0.6rem 2.4rem;
-  border            : 2px solid #000000;
+  border            : var(--color-dropdown-border);
   border-radius     : 6px;
-  background-color  : var(--color-hover, #ff9900);
-  color             : #000000;
+  background-color  : var(--color-dropdown-trigger-bg);
+  color             : var(--color-dropdown-trigger-text);
   cursor            : pointer;
-  box-shadow        : 3px 3px 0px #000000;
+  box-shadow        : var(--color-dropdown-shadow);
   text-transform    : uppercase;
   transition        : all 0.15s ease-in-out;
   position          : relative;
@@ -92,7 +92,6 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   align-items       : center;
   white-space       : nowrap;
   overflow          : hidden;
-  text-overflow     : ellipsis;
 }
 
 .selected-label {
@@ -123,7 +122,7 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   top                 : 50%;
   width               : 14px;
   height              : 16px;
-  background-color    : #000000;
+  background-color    : var(--color-dropdown-arrow);
   transform           : translateY(-50%);
   
   -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
@@ -137,14 +136,14 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
 }
 
 .dropdown-trigger:hover {
-  background-color  : var(--color-primary, #E50012);
-  color             : #ffffff;
+  background-color  : var(--color-dropdown-trigger-hover-bg);
+  color             : var(--color-dropdown-trigger-hover-text);
   transform         : translateY(-2px);
-  box-shadow        : 4px 4px 0px #000000;
+  box-shadow        : var(--color-dropdown-hover-shadow);
 }
 
 .dropdown-trigger:hover .arrow-icon {
-  background-color  : #ffffff;
+  background-color  : var(--color-dropdown-arrow-hover);
 }
 
 .dropdown-options-list {
@@ -154,10 +153,10 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   width               : max-content;
   min-width           : 100%;
   max-width           : 90vw;
-  background-color    : var(--color-hover);
-  border              : 2px solid #000000;
+  background-color    : var(--color-dropdown-list-bg);
+  border              : var(--color-dropdown-list-border);
   border-radius       : 6px;
-  box-shadow          : 3px 3px 0px #000000;
+  box-shadow          : var(--color-dropdown-shadow);
   z-index             : 99;
   overflow-y          : auto;
   max-height          : 250px;
@@ -166,10 +165,7 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
 
 .dropdown-option {
   padding             : 0.6rem 1rem 0.6rem 2.4rem;
-  font                : var(--font-dropdown);
-  font-size           : var(--font-dropdown-size);
-  font-weight         : bold;
-  color               : #000000;
+  color               : var(--color-dropdown-option-text);
   cursor              : pointer;
   text-transform      : uppercase;
   position            : relative;
@@ -178,12 +174,12 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
 }
 
 .dropdown-option:hover {
-  background-color    : var(--color-primary, #E50012);
-  color               : #ffffff;
+  background-color    : var(--color-dropdown-option-hover-bg);
+  color               : var(--color-dropdown-option-hover-text);
 }
 
 .dropdown-option:hover .option-arrow {
-  background-color    : #ffffff;
+  background-color    : var(--color-dropdown-arrow-hover);
 }
 
 .dropdown-option .option-arrow {
@@ -191,8 +187,8 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
 }
 
 .dropdown-option.active {
-  background-color    : #000000;
-  color               : #ffffff;
+  background-color    : var(--color-dropdown-option-active-bg);
+  color               : var(--color-dropdown-option-active-text);
 }
 
 .dropdown-option.active .option-arrow {
@@ -203,7 +199,7 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   transform           : translateY(-50%);
   width               : 14px;
   height              : 16px;
-  background-color    : #ffffff;
+  background-color    : var(--color-dropdown-active-arrow);
   
   -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
   mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');

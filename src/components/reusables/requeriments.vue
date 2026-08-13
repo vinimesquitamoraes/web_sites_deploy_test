@@ -1,14 +1,14 @@
 <template>
-<div class="requirements-container">
-<table class="requirements-table">
-<tbody>
-<tr v-for="item in requirements" :key="item.key">
-<td class="requirement-label">{{ t(item.key) }}</td>
-<td class="requirement-value">{{t(item.value) }}</td>
-</tr>
-</tbody>
-</table>
-</div>
+  <div class="requirements-container">
+    <table class="requirements-table">
+      <tbody>
+        <tr v-for="item in requirements" :key="item.key">
+          <td class="requirement-label">{{ t(item.key) }}</td>
+          <td class="requirement-value">{{ t(item.value) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script setup>
@@ -18,10 +18,10 @@ import { useI18n } from '@/composables/useI18n'
 const { t } = useI18n()
 
 const requirements = ref([
-{ key: 'SITE_DOWNLOAD_REQ_OS',            value: 'SITE_DOWNLOAD_REQ_OS_DETAILS' },
-{ key: 'SITE_DOWNLOAD_REQ_RAM',           value: 'SITE_DOWNLOAD_REQ_RAM_DETAILS' },
-{ key: 'SITE_DOWNLOAD_REQ_VIDEO',         value: 'SITE_DOWNLOAD_REQ_VIDEO_DETAILS' },
-{ key: 'SITE_DOWNLOAD_REQ_LANGUAGES',     value: 'SITE_DOWNLOAD_REQ_LANGUAGES_DETAILS' }
+  { key: 'SITE_DOWNLOAD_REQ_OS',        value: 'SITE_DOWNLOAD_REQ_OS_DETAILS' },
+  { key: 'SITE_DOWNLOAD_REQ_RAM',       value: 'SITE_DOWNLOAD_REQ_RAM_DETAILS' },
+  { key: 'SITE_DOWNLOAD_REQ_VIDEO',     value: 'SITE_DOWNLOAD_REQ_VIDEO_DETAILS' },
+  { key: 'SITE_DOWNLOAD_REQ_LANGUAGES', value: 'SITE_DOWNLOAD_REQ_LANGUAGES_DETAILS' }
 ])
 </script>
 
@@ -32,18 +32,16 @@ const requirements = ref([
   font-family     : var(--font-h3);
   font-size       : var(--font-h3-size);
   background-color: var(--color-requiriments-key-background);
-  overflow-x      : hidden;
-  box-shadow       : var(--color-requiriments-shadow);
+  border-radius   : 30px;
+  border          : var(--color-requiriments-container-border);
+  box-shadow      : var(--color-requiriments-shadow);
 }
 
 .requirements-table {
   width           : 100%;
-  border-collapse : collapse;
-  color           : var(--color-default-text-color);
-}
-
-.requirements-table tr {
-  box-shadow      : var(--color-requiriments-shadow); 
+  border-collapse : separate;
+  border-spacing  : 0;
+  color           : var(--color-requiriments-key-text);
 }
 
 .requirements-table td {
@@ -51,22 +49,41 @@ const requirements = ref([
   vertical-align  : middle;
 }
 
+.requirements-table tr:first-child .requirement-label {
+  border-top-left-radius: 27px;
+}
+
+.requirements-table tr:first-child .requirement-value {
+  border-top-right-radius: 27px;
+}
+
+.requirements-table tr:last-child .requirement-label {
+  border-bottom-left-radius: 27px;
+}
+
+.requirements-table tr:last-child .requirement-value {
+  border-bottom-right-radius: 27px;
+}
+
 .requirement-label {
+  color                 : var(--color-requiriments-key-text);
   width                 : 25%;
   background-color      : var(--color-requiriments-key-background);
   font-weight           : bold;
-  border-color          : var(--color-keys-border-color);
-  border-style          : solid;
-  border-bottom-width   : 1px;
+  border-bottom         : var(--color-requiriments-key-border-bottom);
 }
 
 .requirement-value {
+  color                 : var(--color-requiriments-value-text);  
   width                 : 75%;
   background-color      : var(--color-requiriments-value-background);
   line-height           : 1.4;
-  border-color          : var(--color-values-border-color);
-  border-style          : solid;
-  border-bottom-width   : 1px;
+  border-bottom         : var(--color-requiriments-value-border-bottom);
+}
+
+.requirements-table tr:last-child .requirement-label,
+.requirements-table tr:last-child .requirement-value {
+  border-bottom         : none;
 }
 
 @media screen and (max-width: 768px) {
@@ -74,16 +91,30 @@ const requirements = ref([
   .requirements-table tbody,
   .requirements-table tr,
   .requirements-table td {
-    display     : block;
-    width       : 100% !important;
+    display             : block;
+    width               : 100% !important;
+  }
+
+  .requirements-table tr:first-child td:first-child {
+    border-top-left-radius : 27px;
+    border-top-right-radius: 27px;
+  }
+
+  .requirements-table tr:last-child td:last-child {
+    border-bottom-left-radius : 27px;
+    border-bottom-right-radius: 27px;
   }
 
   .requirements-table tr {
-    margin-bottom: 12px;
+    border-bottom       : var(--color-requiriments-mobile-row-border-bottom);
+  }
+
+  .requirements-table tr:last-child {
+    border-bottom       : none;
   }
 
   .requirement-label {
-    border-bottom-width: 0px;
+    border-bottom       : none;
   }
 }
 </style>

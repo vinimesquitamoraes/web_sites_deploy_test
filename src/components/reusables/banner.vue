@@ -22,7 +22,12 @@
 
         <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
         
-        <CustomButton :text="ctaText || t('SITE_NAV_DOWNLOAD')" :to="ctaLink" @click="$emit('cta-click')" fontSize="var(--font-h2-size)" v-if="showCtaButton"/>
+        <CustomButton 
+          :text="ctaText || t('SITE_NAV_DOWNLOAD')" 
+          :to="ctaLink" @click="$emit('cta-click')" 
+          fontSize="var(--font-h2-size)" 
+          v-if="showCtaButton"
+        />
       </slot>
     </div>
 
@@ -341,13 +346,14 @@ defineEmits(['cta-click'])
   width               : 100%;
   margin-bottom       : 2rem;
   opacity             : 0.9;
-  font                : var(--font-h2);
-  font-size           : clamp(1rem, 2vw, var(--font-h2-size));
-  color               : var(--color-default-text-color);
   box-sizing          : border-box;
   display             : block !important;
   word-break          : normal;
   overflow-wrap       : break-word;
+  font-family         : var(--font-h2)     !important;
+  font-size           : var(--font-h2-size)!important;
+  font-weight         : bold;
+  color               : var(--color-default-text-color);
 }
 
 .timer-bar-wrapper {
@@ -381,8 +387,8 @@ defineEmits(['cta-click'])
   }
   
   .hero-subtitle {
-    font              : var(--font-mobile-h2);
-    font-size         : clamp(0.875rem, 3.5vw, var(--font-mobile-h2-size));
+    font-family       : var(--font-mobile-h2) !important;
+    font-size         : clamp(0.875rem, 3.5vw, var(--font-mobile-h2-size)) !important;
   }
 }
 </style>

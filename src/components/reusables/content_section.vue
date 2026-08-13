@@ -1,43 +1,70 @@
 <template>
-  <div class="content-section" :class="[layout, mediaPosition, { 'text-only': mediaType === 'text', 'image-centered': !text }]">
-    <div v-if="text" class="text-container">
-      <h2 v-if="showHeader" class="heading" :style="{ color: headingColor }">{{ heading }}</h2>
-      <p class="body-text" :style="{ color: textColor }">{{ text }}</p>
-    </div>
+  <div class="content-section-wrapper" :style="{ padding: padding }">
+    <h2 
+      v-if="showHeader && heading && headerPosition === 'top'" 
+      class="heading top-heading" 
+      :style="{ color: headingColor, textAlign: headingAlign }"
+      v-html="heading"
+    ></h2>
 
     <div 
-      v-if="mediaType !== 'text'" 
-      class="media-wrapper"
+      class="content-section" 
+      :class="[layout, mediaPosition, { 'text-only': mediaType === 'text', 'image-centered': textParagraphs.length === 0 }]"
     >
-      <div 
-        class="media-container" 
-        :class="{ 'red-border': redBorder, 'clickable-media': mediaType === 'image' && mediaSrc && !hasError }"
-        @click="openImageModal"
-      >
-        <slot name="media">
-          <iframe 
-            v-if="mediaType === 'video' && mediaSrc"
-            :src="mediaSrc" 
-            :title="mediaAlt || heading"
-            class="video-iframe"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+      <div v-if="textParagraphs.length || (showHeader && heading && headerPosition === 'inside')" class="text-container">
+        <h2 
+          v-if="showHeader && heading && headerPosition === 'inside'" 
+          class="heading inside-heading" 
+          :style="{ color: headingColor, textAlign: headingAlign }"
+          v-html="heading"
+        ></h2>
 
-          <img 
-            v-else-if="mediaType === 'image' && mediaSrc"
-            :src="mediaSrc" 
-            :alt="mediaAlt || heading"
-            class="media-img"
-            :style="{ color: textColor }"
-            @error="hasError = true"
-          />
-        </slot>
+        <p 
+          v-for="(paragraph, index) in textParagraphs" 
+          :key="index" 
+          class="body-text" 
+          :style="{ color: textColor, textAlign: textAlign }"
+          v-html="paragraph"
+        ></p>
       </div>
-      <span v-if="mediaCaption" class="media-caption" :style="{ color: textColor }">
-        {{ mediaCaption }}
-      </span>
+
+      <div 
+        v-if="mediaType !== 'text'" 
+        class="media-wrapper"
+        :style="{ width: mediaWidth }"
+      >
+        <div 
+          class="media-container" 
+          :class="{ 'red-border': redBorder, 'clickable-media': mediaType === 'image' && mediaSrc && !hasError }"
+          :style="{ height: mediaHeight !== 'auto' ? mediaHeight : 'auto' }"
+          @click="openImageModal"
+        >
+          <slot name="media">
+            <iframe 
+              v-if="mediaType === 'video' && mediaSrc"
+              :src="mediaSrc" 
+              :title="mediaAlt || heading"
+              class="video-iframe"
+              :style="{ height: mediaHeight !== 'auto' ? mediaHeight : '322px' }"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+
+            <img 
+              v-else-if="mediaType === 'image' && mediaSrc"
+              :src="mediaSrc" 
+              :alt="mediaAlt || heading"
+              class="media-img"
+              :style="{ color: textColor, maxHeight: mediaHeight !== 'auto' ? mediaHeight : 'none' }"
+              @error="hasError = true"
+            />
+          </slot>
+        </div>
+        <span v-if="mediaCaption" class="media-caption" :style="{ color: textColor }">
+          {{ mediaCaption }}
+        </span>
+      </div>
     </div>
   </div>
 
@@ -50,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import MediaModal from './media_modal.vue'
 
 const props = defineProps({
@@ -59,20 +86,39 @@ const props = defineProps({
     default: ''
   },
   text: {
-    type: String,
-    default: ''
+    type: [String, Array],
+    default: () => []
   },
   showHeader: {
     type: Boolean,
     default: true
   },
+  headerPosition: {
+    type: String,
+    default: 'top',
+    validator: (value) => ['top', 'inside'].includes(value)
+  },
   headingColor: {
     type: String,
     default: ''
   },
+  headingAlign: {
+    type: String,
+    default: 'center',
+    validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
+  },
   textColor: {
     type: String,
     default: ''
+  },
+  textAlign: {
+    type: String,
+    default: 'center',
+    validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
+  },
+  padding: {
+    type: String,
+    default: '20px'
   },
   mediaSrc: {
     type: String,
@@ -85,6 +131,14 @@ const props = defineProps({
   mediaCaption: {
     type: String,
     default: ''
+  },
+  mediaWidth: {
+    type: String,
+    default: '535px'
+  },
+  mediaHeight: {
+    type: String,
+    default: 'auto'
   },
   mediaType: {
     type: String,
@@ -114,6 +168,13 @@ const props = defineProps({
 const isModalOpen = ref(false)
 const hasError = ref(false)
 
+const textParagraphs = computed(() => {
+  if (Array.isArray(props.text)) {
+    return props.text.filter(p => Boolean(p))
+  }
+  return props.text ? [props.text] : []
+})
+
 watch(() => props.mediaSrc, () => {
   hasError.value = false
 })
@@ -132,6 +193,36 @@ const closeImageModal = () => {
 </script>
 
 <style scoped>
+.content-section-wrapper {
+  width                 : 100%;
+  display               : flex;
+  flex-direction        : column;
+  align-items           : center;
+  box-sizing            : border-box;
+}
+
+.heading {
+  width                 : 100%;
+  font-family           : var(--font-h2);
+  font-size             : var(--font-h2-size);
+  color                 : var(--color-h2);
+  font-weight           : 500;
+  margin                : 0;
+}
+
+.heading.top-heading {
+  margin-bottom         : 24px;
+}
+
+.heading.inside-heading {
+  margin-bottom         : 16px;
+}
+
+.heading :deep(i),
+.heading :deep(em) {
+  font-style            : italic;
+}
+
 .content-section {
   display               : flex;
   align-items           : center;
@@ -139,7 +230,6 @@ const closeImageModal = () => {
   gap                   : 30px;
   width                 : 100%;
   box-sizing            : border-box;
-  padding               : 20px;
 }
 
 .content-section.image-centered {
@@ -179,10 +269,6 @@ const closeImageModal = () => {
   max-width             : 100%;
 }
 
-.content-section.text-only .body-text {
-  text-align            : center;
-}
-
 .text-container {
   width                 : 675px;
   max-width             : 100%;
@@ -190,16 +276,7 @@ const closeImageModal = () => {
   justify-content       : center;
   align-items           : center;
   flex-direction        : column;
-}
-
-.heading {
-  align-self            : stretch;
-  font-size             : 40px;
-  font-family           : var(--font-h2);
-  color                 : var(--color-h2);
-  text-align            : center;
-  font-weight           : 500;
-  margin                : 0 0 15px 0;
+  gap                   : 12px;
 }
 
 .body-text {
@@ -207,10 +284,14 @@ const closeImageModal = () => {
   font-family           : var(--font-p);
   font-size             : var(--font-p-size);
   color                 : var(--color-p, #1F1F1F);
-  text-align            : center;
   font-weight           : 500;
   margin                : 0;
   line-height           : 1.4;
+}
+
+.body-text :deep(i),
+.body-text :deep(em) {
+  font-style            : italic;
 }
 
 .media-wrapper {
@@ -218,7 +299,6 @@ const closeImageModal = () => {
   flex-direction        : column;
   align-items           : center;
   gap                   : 8px;
-  width                 : 535px;
   max-width             : 100%;
   flex-shrink           : 0;
 }
@@ -231,7 +311,6 @@ const closeImageModal = () => {
 
 .media-container {
   width                 : 100%;
-  height                : auto;
   max-width             : 100%;
   overflow              : hidden;
   border-radius         : 8px; 
@@ -264,7 +343,6 @@ const closeImageModal = () => {
 
 .video-iframe {
   width                 : 100%;
-  height                : 322px;
   border                : none;
   display               : block;
 }
@@ -279,21 +357,16 @@ const closeImageModal = () => {
     font-size           : 28px; 
   }
 
-  .body-text {
-    font-size           : 18px; 
-    text-align          : left; 
-  }
-
-  .content-section.text-only .body-text {
-    text-align          : center;
+  .heading.top-heading {
+    margin-bottom       : 16px;
   }
 
   .media-wrapper {
-    width               : 100%;
+    width               : 100% !important;
   }
   
   .video-iframe {
-    height              : 220px;
+    height              : 220px !important;
   }
 }
 </style>

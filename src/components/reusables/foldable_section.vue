@@ -1,5 +1,5 @@
 <template>
-  <div class="foldable-item" :class="{ 'is-open': internalOpen }">
+  <div ref="rootRef" class="foldable-item" :class="{ 'is-open': internalOpen }">
     
     <button type="button" class="foldable-header" @click="toggleFold">
       <span class="foldable-title">{{ title }}</span>
@@ -8,11 +8,19 @@
       </span>
     </button>
 
-    
     <div class="foldable-collapse">
       <div class="foldable-body-wrapper">
         <div class="foldable-body">
-          <slot></slot>
+          <template v-if="formattedParagraphs.length">
+            <p 
+              v-for="(paragraph, index) in formattedParagraphs" 
+              :key="index" 
+              class="foldable-text-paragraph"
+              :style="{ textAlign: textAlign }"
+              v-html="paragraph"
+            ></p>
+          </template>
+          <slot v-else></slot>
         </div>
       </div>
     </div>
@@ -20,26 +28,62 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 
 const props = defineProps({
   title: {
     type: String,
     required: true
   },
+  content: {
+    type: [String, Array],
+    default: () => []
+  },
+  textAlign: {
+    type: String,
+    default: 'left',
+    validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
+  },
   modelValue: {
     type: Boolean,
     default: undefined
+  },
+  autoScroll: {
+    type: Boolean,
+    default: true
   }
 })
 
 const emit = defineEmits(['update:modelValue', 'toggle'])
 
+const rootRef = ref(null)
 const internalOpen = ref(false)
+
+const formattedParagraphs = computed(() => {
+  if (Array.isArray(props.content)) {
+    return props.content.filter(item => Boolean(item))
+  }
+  return props.content ? [props.content] : []
+})
+
+const scrollToSelf = () => {
+  if (props.autoScroll && rootRef.value) {
+    nextTick(() => {
+      rootRef.value.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      })
+    })
+  }
+}
 
 watch(() => props.modelValue, (newVal) => {
   if (newVal !== undefined) {
+    const wasOpen = internalOpen.value
     internalOpen.value = newVal
+    if (!wasOpen && newVal) {
+      scrollToSelf()
+    }
   }
 }, { immediate: true })
 
@@ -47,6 +91,10 @@ const toggleFold = () => {
   internalOpen.value = !internalOpen.value
   emit('update:modelValue', internalOpen.value)
   emit('toggle', internalOpen.value)
+
+  if (internalOpen.value) {
+    scrollToSelf()
+  }
 }
 </script>
 
@@ -56,7 +104,6 @@ const toggleFold = () => {
   background-color    : var(--color-background, #161616);
   border-radius       : 8px;
   box-sizing          : border-box;
-  
 }
 
 .foldable-item:hover {
@@ -130,10 +177,24 @@ const toggleFold = () => {
   box-sizing          : border-box;
   display             : flex;
   flex-direction      : column;
+  gap                 : 12px;
 }
 
-.foldable-body{
-  width               : 100%;
-  box-sizing          : border-box;
+.foldable-text-paragraph {
+  color               : var(--color-default-text-color, #ffffff);
+  font-family         : var(--font-p, sans-serif);
+  font-size           : var(--font-p-size, 16px);
+  line-height         : 1.5;
+  margin              : 0;
+}
+
+.foldable-text-paragraph :deep(i),
+.foldable-text-paragraph :deep(em) {
+  font-style          : italic;
+}
+
+.foldable-text-paragraph :deep(a) {
+  color               : var(--color-hyperlinks, #fdd268);
+  text-decoration     : underline;
 }
 </style>

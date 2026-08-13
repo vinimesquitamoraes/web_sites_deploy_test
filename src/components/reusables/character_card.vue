@@ -30,7 +30,11 @@
     <div class="character-info">
       <h3>{{ name }}</h3>
       <div class="separator-line"></div>
-      <p>{{ description }}</p>
+      <p 
+        v-for="(paragraph, index) in descriptionParagraphs" 
+        :key="index"
+        v-html="paragraph"
+      ></p>
     </div>
   </div>
 </template>
@@ -40,7 +44,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
   name        : { type: String, required: true },
-  description : { type: String, required: true },
+  description : { type: [String, Array], required: true },
   image       : { type: String, required: true },
   isReversed  : { type: Boolean, default: false },
   orientation : { type: String, default: 'horizontal', validator: (val) => ['horizontal', 'vertical'].includes(val) },
@@ -52,6 +56,13 @@ const props = defineProps({
 
 const imageShapeClass = computed(() => {
   return `shape-${props.imageShape}`;
+});
+
+const descriptionParagraphs = computed(() => {
+  if (Array.isArray(props.description)) {
+    return props.description.filter(p => Boolean(p));
+  }
+  return props.description ? [props.description] : [];
 });
 </script>
 
@@ -115,7 +126,7 @@ const imageShapeClass = computed(() => {
   display        : flex;
   flex-direction : column;
   align-items    : center;
-  gap            : 15px;
+  gap            : 12px;
 }
 
 .character-card.is-vertical .character-info {
@@ -123,30 +134,36 @@ const imageShapeClass = computed(() => {
 }
 
 .character-info h3 {
-  color          : var(--color-default-text-color);
-  font-size      : var(--font-h3-size);
-  font-family    : var(--font-h3-family, sans-serif);
-  font-weight    : 600;
+  color          : var(--character-card-title-color, var(--color-default-text-color));
+  font-family    : var(--character-card-title-font, var(--font-h3, var(--font-h1)));
+  font-size      : var(--character-card-title-size, var(--font-h3-size, var(--font-h1-size)));
+  font-weight    : var(--character-card-title-weight, 600);
   margin         : 0;
   text-align     : center;
 }
 
 .separator-line {
   width          : 100%;
-  height         : 3px;
-  background     : #ffffff;
+  height         : var(--character-card-separator-height, 3px);
+  background     : var(--character-card-separator-color, #ffffff);
   border-radius  : 2px;
-  margin-bottom  : 10px;
+  margin-bottom  : 3px;
 }
 
 .character-info p {
-  color          : var(--color-default-text-color);
-  font-size      : var(--font-p-size);
-  font-family    : var(--font-body-family, var(--font-body));
+  color          : var(--character-card-body-color, var(--color-default-text-color));
+  font-family    : var(--character-card-body-font, var(--font-p, var(--font-body-family)));
+  font-size      : var(--character-card-body-size, var(--font-p-size));
+  font-weight    : var(--character-card-body-weight, 500);
+  line-height    : var(--character-card-body-line-height, 1.5);
   margin         : 0;
-  line-height    : 1.5;
   text-align     : left;
   width          : 100%;
+}
+
+.character-info p :deep(i),
+.character-info p :deep(em) {
+  font-style     : italic;
 }
 
 @media (max-width: 768px) {
@@ -167,6 +184,10 @@ const imageShapeClass = computed(() => {
 
   .character-info {
     align-items    : center;
+  }
+
+  .character-info h3 {
+    font-size      : var(--character-card-title-size-mobile, var(--font-mobile-h3-size, var(--character-card-title-size)));
   }
 
   .character-info p {

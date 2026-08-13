@@ -54,7 +54,8 @@
   --color-bg-gray             : #a3a0a0;
   --color-place-holder-green  : #25D366;
   --color-hover               : #fdd268;
-  
+  --color-hyperlinks          : #fdd268;
+  --color-default-border      : 3px solid #000000;
   --color-default-background  : #FFFFFF;
 
   --font-navbar               : 'Motherish', sans-serif;
@@ -108,6 +109,22 @@
   --color-back-to-top-button-shadow        : 13px 13px 0px #000000;
   --color-back-to-top-button-active-shadow : 0 2px 0px rgba(0, 0, 0, 1);
 
+  --character-card-title-color      : var(--color-default-text-color);
+  --character-card-title-font       : var(--font-h3, var(--font-h1));
+  --character-card-title-size       : 60px;
+  --character-card-title-size-mobile: var(--font-mobile-h3-size);
+  --character-card-title-weight     : 600;
+
+  --character-card-body-color       : var(--color-default-text-color);
+  --character-card-body-font        : var(--font-p, var(--font-body-family));
+  --character-card-body-size        : 24px;
+  --character-card-body-weight      : 500;
+  --character-card-body-line-height : 1.5;
+
+  --character-card-separator-color  : #ffffff;
+  --character-card-separator-height : 3px;
+
+
   --font-track-names-size     : 0.8rem;
   --music-player-shadow-size  : 0 15px 0px;
 
@@ -155,6 +172,7 @@
   --color-custom-button-hover      : #E50012;
   --color-custom-button-background : #FFFFFF;
   
+  
   --color-modal-arrow             : #ffffff;  
   --color-modal-arrow-hover       : #E50012;
   
@@ -163,12 +181,43 @@
   --color-credits-role        : #e67e22;
   --color-credits-name        : #ffffff;
 
-  --color-requiriments-key-background    : #E50012;
-  --color-requiriments-value-background  : #000000;
-  --color-requiriments-shadow            : 13px 13px 0px #000000;
-  --color-requiriments-border            : #000000;
-  --color-keys-border-color              : #000000;  
-  --color-values-border-color            : #E50012;    
+  --color-operational-system-icons-color       : #E50012;
+  --color-operational-system-icons-hover-color : #E50012;
+
+  --color-itchio-button-color            : #ffffff;
+  --color-itchio-button-hover-color      : #E50012;
+  --color-itchio-button-icon-color       : #E50012;
+  --color-itchio-button-icon-hover-color : #ffffff;
+
+
+  --color-requiriments-key-background           : #E50012;
+  --color-requiriments-value-background         : #ffffff;
+  --color-requiriments-key-text                 : #ffffff;
+  --color-requiriments-value-text               : #000000;
+  --color-requiriments-shadow                   : 13px 13px 0px #000000;
+  --color-requiriments-container-border         : 3px solid #000000;
+  --color-requiriments-key-border-bottom        : 3px solid #000000;
+  --color-requiriments-value-border-bottom      : 3px solid #E50012;
+  --color-requiriments-mobile-row-border-bottom : 3px solid #E50012;
+
+  --color-dropdown-border             : 3px solid #000000;
+  --color-dropdown-shadow             : 3px 3px 0px #000000;
+  --color-dropdown-hover-shadow       : 4px 4px 0px #000000;
+  --color-dropdown-trigger-bg         : #ff9900;
+  --color-dropdown-trigger-text       : #000000;
+  --color-dropdown-trigger-hover-bg   : #E50012;
+  --color-dropdown-trigger-hover-text : #ffffff;
+  --color-dropdown-arrow              : #000000;
+  --color-dropdown-arrow-hover        : #ffffff;
+  --color-dropdown-list-bg            : #ff9900;
+  --color-dropdown-list-border        : 2px solid #000000;
+  --color-dropdown-option-text        : #000000;
+  --color-dropdown-option-hover-bg    : #E50012;
+  --color-dropdown-option-hover-text  : #ffffff;
+  --color-dropdown-option-active-bg   : #E50012;
+  --color-dropdown-option-active-text : #ffffff;
+  --color-dropdown-active-arrow       : #ffffff;
+
 }
 
 body {
@@ -210,6 +259,7 @@ body {
   flex-direction        : column;
   align-items           : center;
   margin-top            : auto;
+
 }
 
 .main-content {

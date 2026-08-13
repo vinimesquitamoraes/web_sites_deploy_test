@@ -12,6 +12,11 @@
         :mediaPosition="index % 2 === 0 ? 'right' : 'left'"
         :redBorder    ="section.redBorder ?? true"
         :imageOpenable="section.imageOpenable ?? true"
+        headerPosition="inside"
+        mediaWidth    ="700px" 
+        mediaHeight   ="400px"
+        textAlign     ="left"
+        :headingAlign  ="section.headingAlign ?? 'left'"
       />
 
   
@@ -22,12 +27,13 @@
       volumeLayout="bar"
     />
     <div class="godot_foot_note">
-      <ContentSection  
-        heading=""
-        :text="t('SITE_ABOUT_OPENSOURCE_P2')"
-        mediaType="text"
+
+      <SocialMediaButton 
+      platform     ="github" 
+      variant      ="black" 
+      hoverVariant ="colored" 
+      tooltipText  ="MOTHER-Encore-Demo-Source-Code"
       />
-      <SocialMediaButton platform="github" variant="black" hoverVariant="colored" />
    
     </div>
    
@@ -55,20 +61,16 @@ const { t } = useI18n()
 const infoSections = computed(() => [
   {
     title       : t('SITE_ABOUT_OVERVIEW_TITLE'),
-    text        : t('SITE_ABOUT_OVERVIEW_P1')+"\n"+t('SITE_ABOUT_OVERVIEW_P2'),
-    content_type: "text"
-  },
-  {
-    title       : t('SITE_ABOUT_WORLD_TITLE'),
-    text        : t('SITE_ABOUT_WORLD_P1'),
-    image       : imgSc1,
-    content_type: "image"
+    text        : [t('SITE_ABOUT_OVERVIEW_P1'), t('SITE_ABOUT_OVERVIEW_P2')],
+    content_type: "text",
+    headingAlign: "center"
   },
   {
     title       : t('SITE_ABOUT_COMBAT_TITLE'),
     text        : t('SITE_ABOUT_COMBAT_P1'),
-    image       : imgSc2,
-    content_type: "image"
+    image       : imgSc4,
+    content_type: "image",
+    
   },
   {
     title       : t('SITE_ABOUT_VISUALS_TITLE'),
@@ -79,7 +81,7 @@ const infoSections = computed(() => [
   {
     title       : t('SITE_ABOUT_MUSIC_TITLE'),
     text        : t('SITE_ABOUT_MUSIC_P1'),
-    image       : imgSc4,
+    image       : imgSc1,
     content_type: "image"
   },  
   {

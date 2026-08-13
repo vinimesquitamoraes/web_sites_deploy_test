@@ -54,7 +54,7 @@ const infoSections = computed(() => [
   },
   {
     title         : t('SITE_FAQ_Q2'),
-    text          : t('SITE_FAQ_A2_1'),
+    text          : [t('SITE_FAQ_A2_1'), t('SITE_FAQ_A2_2')],
     content_type  : "text"
   },
   {
@@ -64,7 +64,7 @@ const infoSections = computed(() => [
   },
   {
     title         : t('SITE_FAQ_Q4'),
-    text          : t('SITE_FAQ_A4_1'),
+    text          : [t('SITE_FAQ_A4_1'), t('SITE_FAQ_A4_2')],
     content_type  : "text"
   },
   {

@@ -101,8 +101,8 @@ const goToSlide = (index) => {
 
 .title {
   color          : #ff3322;
-  font-family    : var(--font-h1);
-  font-size      : var(--font-h1-size);
+  font-family    : var(--font-h2);
+  font-size      : var(--font-h2-size);
   font-weight    : 900;
   letter-spacing : 1px;
   margin-bottom  : 30px;

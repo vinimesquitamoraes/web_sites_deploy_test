@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted} from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
 import CreditsSection from '@/components/reusables/credits_all.vue'
@@ -29,9 +29,18 @@ const availableActs = computed(() => [
   { id: '1',   label: t('SITE_CREDITS_ACT_LABEL') + ' 1' },
   { id: '2',   label: t('SITE_CREDITS_ACT_LABEL') + ' 2' },
 ])
+
+onMounted(() => {
+  document.body.style.backgroundColor = 'var(--color-credits-background)'
+})
+
+onUnmounted(() => {
+  document.body.style.backgroundColor = 'var(--color-default-background)'
+})
 </script>
 
 <style scoped>
+
 .credits-view {
   width             : 100%;
   box-sizing        : border-box;

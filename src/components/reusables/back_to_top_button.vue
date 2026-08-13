@@ -104,7 +104,7 @@ onUnmounted(() => {
   width               : 56px;
   height              : 56px;
   background-color    : #ffffff;
-  border              : 3px solid #000000;
+  border              : var(--color-default-border);
   border-radius       : 16px;
   cursor              : pointer;
   display             : flex;

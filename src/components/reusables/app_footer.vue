@@ -34,7 +34,9 @@ const { t } = useI18n()
       <div class="footer-bottom-section">
         <div class="footer-divider"></div>
         <p class="footer-disclaimer">
-          {{ t('SITE_FOOTER_DISCLAIMER') }}
+          {{ t('SITE_FOOTER_DISCLAIMER_1') }}
+        </p>
+        <p class="footer-disclaimer" v-html="t('SITE_FOOTER_DISCLAIMER_2')">
         </p>
         <p class="footer-framework">
           {{ t('SITE_FOOTER_FRAMEWORK') }}
@@ -168,6 +170,14 @@ const { t } = useI18n()
   line-height       : 28px;
   margin            : 0;
   opacity           : 0.9;
+  text-align        : center;
+}
+.footer-disclaimer :deep(a) {
+  color                 : var(--color-hyperlinks);              
+  text-decoration       : underline;     
+  text-underline-offset : 3px;    
+  font-weight           : 600;
+  transition            : opacity 0.2s ease;
 }
 
 .footer-framework {
