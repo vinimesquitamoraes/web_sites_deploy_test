@@ -1,5 +1,5 @@
 <template>
-  <div class="content-section-wrapper" :style="{ padding: padding }">
+  <div class="content-section-wrapper">
     <h2 
       v-if="showHeader && heading && headerPosition === 'top'" 
       class="heading top-heading" 
@@ -11,7 +11,11 @@
       class="content-section" 
       :class="[layout, mediaPosition, { 'text-only': mediaType === 'text', 'image-centered': textParagraphs.length === 0 }]"
     >
-      <div v-if="textParagraphs.length || (showHeader && heading && headerPosition === 'inside')" class="text-container">
+      <div 
+        v-if="textParagraphs.length || (showHeader && heading && headerPosition === 'inside')" 
+        class="text-container"
+        :style="{ padding: textPadding }"
+      >
         <h2 
           v-if="showHeader && heading && headerPosition === 'inside'" 
           class="heading inside-heading" 
@@ -116,9 +120,9 @@ const props = defineProps({
     default: 'center',
     validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
   },
-  padding: {
+  textPadding: {
     type: String,
-    default: '20px'
+    default: '0px'
   },
   mediaSrc: {
     type: String,
@@ -277,6 +281,7 @@ const closeImageModal = () => {
   align-items           : center;
   flex-direction        : column;
   gap                   : 12px;
+  box-sizing            : border-box;
 }
 
 .body-text {

@@ -2,23 +2,24 @@
   <div class="about-page-container">
     <div class="main-content">
    
-      <ContentSection 
-        v-for="(section, index) in infoSections" 
-        :key          ="index"
-        :heading      ="section.title"
-        :text         ="section.text" 
-        :mediaSrc     ="section.image"
-        :mediaType    ="section.content_type"
-        :mediaPosition="index % 2 === 0 ? 'right' : 'left'"
-        :redBorder    ="section.redBorder ?? true"
-        :imageOpenable="section.imageOpenable ?? true"
-        headerPosition="inside"
-        mediaWidth    ="700px" 
-        mediaHeight   ="400px"
-        textAlign     ="left"
-        :headingAlign  ="section.headingAlign ?? 'left'"
-      />
-
+     <ContentSection
+      v-for="(section, index) in infoSections" 
+      :key          ="index"
+      :heading      ="section.title"
+      :text         ="section.text" 
+      :mediaSrc     ="section.image"
+      :mediaType    ="section.content_type"
+      :mediaPosition="index % 2 === 0 ? 'right' : 'left'"
+      :redBorder    ="section.redBorder ?? true"
+      :imageOpenable="section.imageOpenable ?? true"
+      :headingAlign ="section.headingAlign ?? 'left'"
+      :textPadding  ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 0')"
+      headerPosition="inside"
+      mediaWidth    ="775px" 
+      mediaHeight   ="450px"
+      textAlign     ="left"
+    />
+          
   
     </div>
     <MusicPlayer 
@@ -63,20 +64,20 @@ const infoSections = computed(() => [
     title       : t('SITE_ABOUT_OVERVIEW_TITLE'),
     text        : [t('SITE_ABOUT_OVERVIEW_P1'), t('SITE_ABOUT_OVERVIEW_P2')],
     content_type: "text",
-    headingAlign: "center"
+    headingAlign: "center",
+    textPadding  :"0 60px 0 60px"
   },
   {
     title       : t('SITE_ABOUT_COMBAT_TITLE'),
     text        : t('SITE_ABOUT_COMBAT_P1'),
     image       : imgSc4,
     content_type: "image",
-    
   },
   {
     title       : t('SITE_ABOUT_VISUALS_TITLE'),
     text        : t('SITE_ABOUT_VISUALS_P1'),
     image       : imgSc3,
-    content_type: "image"
+    content_type: "image",
   },
   {
     title       : t('SITE_ABOUT_MUSIC_TITLE'),

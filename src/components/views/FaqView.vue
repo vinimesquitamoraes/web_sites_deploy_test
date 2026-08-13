@@ -79,10 +79,50 @@ const infoSections = computed(() => [
   },
   {
     title         : t('SITE_FAQ_Q7'),
-    content_type  : "image",
-    image         : idkImages[`/src/assets/img/funny/idk_${currentLang.value}.jpeg`] || '',
-    mediaAlt      : "IDK image meme"
+    text          : t('SITE_FAQ_A7'),
+    content_type  : "text",
+  
   },
+  {
+    title         : t('SITE_FAQ_Q8'),
+    text          : t('SITE_FAQ_A8'),
+    content_type  : "text"
+  },
+  {
+    title         : t('SITE_FAQ_Q9'),
+    text          : t('SITE_FAQ_A9'),
+    content_type  : "text"
+  },
+  {
+    title         : t('SITE_FAQ_Q10'),
+    text          : t('SITE_FAQ_A10'),
+    content_type  : "text"
+  },
+  {
+    title         : t('SITE_FAQ_Q11'),
+    text          : t('SITE_FAQ_A11'),
+    content_type  : "text"
+  },
+  {
+    title         : t('SITE_FAQ_Q12'),
+    text          : t('SITE_FAQ_A12'),
+    content_type  : "text"
+  },
+  {
+    title         : t('SITE_FAQ_Q13'),
+    text          : t('SITE_FAQ_A13'),
+    content_type  : "text"
+  },
+  {
+    title         : t('SITE_FAQ_Q14'),
+    text          : t('SITE_FAQ_A14'),
+    content_type  : "text"
+  },
+  {
+    title         : t('SITE_FAQ_Q15'),
+    text          : t('SITE_FAQ_A15'),
+    content_type  : "text"
+  },  
 ]) 
 </script>
 
