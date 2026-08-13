@@ -103,12 +103,15 @@
   --font-mobile-button-size   : 16px;
   --font-mobile-p-size        : 16px;
 
+  /* Custom Button Stuff ===================================================================================================*/
   --color-custom-button-shadow        : 13px 13px 0px #000000;
   --color-custom-button-active-shadow : 0 2px 0px rgba(0, 0, 0, 1);
 
+  /* Back to Top Button Stuff ==============================================================================================*/
   --color-back-to-top-button-shadow        : 13px 13px 0px #000000;
   --color-back-to-top-button-active-shadow : 0 2px 0px rgba(0, 0, 0, 1);
 
+  /* Character Card Stuff ==================================================================================================*/
   --character-card-title-color      : var(--color-default-text-color);
   --character-card-title-font       : var(--font-h3, var(--font-h1));
   --character-card-title-size       : 60px;
@@ -124,7 +127,7 @@
   --character-card-separator-color  : #ffffff;
   --character-card-separator-height : 3px;
 
-
+  /* Music Player Stuff ====================================================================================================*/
   --font-track-names-size     : 0.8rem;
   --music-player-shadow-size  : 0 15px 0px;
 
@@ -147,11 +150,9 @@
   --color-text-muted          : #f87171;
   --color-white               : #ffffff;
 
-  --color-modal-overlay       : rgba(0, 0, 0, 0.85);
-  --color-modal-overlay-border: rgba(214, 98, 98, 0.85);
-
   --color-navigation-mobile-shadow: 0 10px 20px rgba(0,0,0,0.15);
 
+  /* Toaster Stuff ========================================================================================================= */
   --toaster-bg-main           : #ffffff;
   --toaster-border-color      : #000000;
   --toaster-shadow            : 4px 4px 0px #000000;
@@ -167,29 +168,35 @@
   --toaster-error-bg          : #f5b7b1;
   --toaster-error-border      : #c0392b;
 
+  /* Custom Button Stuff =================================================================================================== */
   --color-custom-button-text       :#000000;
   --color-custom-button-text-hover :#FFFFFF;
   --color-custom-button-hover      : #E50012;
   --color-custom-button-background : #FFFFFF;
   
-  
+  /* Modal Stuff ========================================================================================================== */
+  --color-modal-overlay       : rgba(0, 0, 0, 0.85);
+  --color-modal-overlay-border: rgba(214, 98, 98, 0.85);
   --color-modal-arrow             : #ffffff;  
   --color-modal-arrow-hover       : #E50012;
   
+  /* Credits Stuff ========================================================================================================= */
   --color-credits-background  : #000000;
   --color-credits-title       : #e67e22; 
   --color-credits-role        : #e67e22;
   --color-credits-name        : #ffffff;
 
+  /* Operational System Icons Stuff ======================================================================================== */
   --color-operational-system-icons-color       : #E50012;
   --color-operational-system-icons-hover-color : #E50012;
 
+  /* Itch.io Button Stuff ================================================================================================== */
   --color-itchio-button-color            : #ffffff;
   --color-itchio-button-hover-color      : #E50012;
   --color-itchio-button-icon-color       : #E50012;
   --color-itchio-button-icon-hover-color : #ffffff;
 
-
+  /* Requirements Stuff =====================================================================================================*/
   --color-requiriments-key-background           : #E50012;
   --color-requiriments-value-background         : #ffffff;
   --color-requiriments-key-text                 : #ffffff;
@@ -200,6 +207,7 @@
   --color-requiriments-value-border-bottom      : 3px solid #E50012;
   --color-requiriments-mobile-row-border-bottom : 3px solid #E50012;
 
+  /* Dropdown Stuff ======================================================================================================== */
   --color-dropdown-border             : 3px solid #000000;
   --color-dropdown-shadow             : 3px 3px 0px #000000;
   --color-dropdown-hover-shadow       : 4px 4px 0px #000000;
@@ -217,6 +225,41 @@
   --color-dropdown-option-active-bg   : #E50012;
   --color-dropdown-option-active-text : #ffffff;
   --color-dropdown-active-arrow       : #ffffff;
+
+  /* Gallery Stuff ========================================================================================================= */
+  --gallery-title-color                 : var(--color-h2, #000000);
+  --gallery-title-font                  : var(--font-h2, sans-serif);
+  --gallery-title-size                  : var(--font-h2-size, 32px);
+
+  --gallery-accent-color                : #E50012;
+  --gallery-border-color                : #000000;
+
+  --gallery-viewport-bg                 : #ffffff;
+  --gallery-viewport-shadow             : 6px 6px 0px #000000;
+  --gallery-viewport-shadow-mobile      : 4px 4px 0px #000000;
+
+  --gallery-timer-bg                    : rgba(0, 0, 0, 0.08);
+
+  --gallery-dot-bg                      : rgba(0, 0, 0, 0.3);
+  --gallery-dot-border-color            : #ffffff;
+  --gallery-dot-border                  : 1px solid var(--gallery-dot-border-color);
+
+  --gallery-arrow-bg                    : #ffffff;
+  --gallery-arrow-icon-filter           : invert(15%) sepia(95%) saturate(6932%) hue-rotate(352deg) brightness(97%) contrast(113%);
+  --gallery-arrow-shadow-right          : 4px 4px 0px #000000;
+  --gallery-arrow-shadow-right-hover    : 2px 2px 0px #000000;
+  --gallery-arrow-shadow-right-active   : 0px 0px 0px #000000;
+  --gallery-arrow-shadow-left           : -4px 4px 0px #000000;
+  --gallery-arrow-shadow-left-hover     : -2px 2px 0px #000000;
+  --gallery-arrow-shadow-left-active    : 0px 0px 0px #000000;
+
+  --gallery-thumb-bg                    : #ffffff;
+  --gallery-thumb-tint-bg               : rgba(229, 0, 18, 0.35);
+  --gallery-thumb-shadow                : 3px 3px 0px #000000;
+  --gallery-thumb-shadow-hover          : 4px 4px 0px #000000;
+  --gallery-thumb-shadow-active         : 3px 3px 0px #E50012;
+  --gallery-thumb-shadow-mobile         : 2px 2px 0px #000000;
+  --gallery-thumb-shadow-mobile-active  : 2px 2px 0px #E50012;
 
 }
 

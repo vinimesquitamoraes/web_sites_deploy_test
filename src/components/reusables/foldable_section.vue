@@ -11,16 +11,7 @@
     <div class="foldable-collapse">
       <div class="foldable-body-wrapper">
         <div class="foldable-body">
-          <template v-if="formattedParagraphs.length">
-            <p 
-              v-for="(paragraph, index) in formattedParagraphs" 
-              :key="index" 
-              class="foldable-text-paragraph"
-              :style="{ textAlign: textAlign }"
-              v-html="paragraph"
-            ></p>
-          </template>
-          <slot v-else></slot>
+          <slot></slot>
         </div>
       </div>
     </div>

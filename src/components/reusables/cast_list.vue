@@ -1,6 +1,6 @@
 <template>
   <section class="cast-section">
-    <h2 class="section-title">Cast</h2>
+    <h2 class="section-title">{{ t('SITE_HOME_CAST') }}</h2>
 
     <div v-if="viewType === 'tab'" class="tab-view-wrapper">
       <div class="tabs-container">
@@ -148,9 +148,12 @@ onMounted(() => {
 }
 
 .section-title {
-  font-size      : 36px;
+  width          : 100%;
   margin         : 0 0 20px 0;
-  font-family    : var(--font-h2)
+  text-align     : center;
+  color          : var(--color-h2);
+  font-size      : var(--font-h2-size);
+  font-family    : var(--font-h2);
 }
 
 .tab-view-wrapper {

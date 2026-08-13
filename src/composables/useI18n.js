@@ -10,7 +10,7 @@ const excelUrls = [
 ]
 
 const translations = ref({})
-const currentLang = ref('en')
+const currentLang = ref('new')
 const isLoaded = ref(false)
 
 const ignored_langs    = new Set(['es_ES'])
@@ -48,14 +48,14 @@ export function useI18n() {
         debugLog('[useI18n] Fetch successful. Converting to ArrayBuffer...')
         const arrayBuffer = await response.arrayBuffer()
 
-        debugLog('[useI18n] Parsing Excel workbook...')
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' })
+        debugLog('[useI18n] Parsing Excel Sheets...')
+        const Sheets = XLSX.read(arrayBuffer, { type: 'array' })
         
-        debugLog(`[useI18n] Workbook parsed. Found ${workbook.SheetNames.length} sheet(s):`, workbook.SheetNames)
+        debugLog(`[useI18n] Sheets parsed. Found ${Sheets.SheetNames.length} sheet(s):`, Sheets.SheetNames)
 
-        workbook.SheetNames.forEach(sheetName => {
+        Sheets.SheetNames.forEach(sheetName => {
           debugLog(`[useI18n] --- Processing Sheet: "${sheetName}" ---`)
-          const worksheet = workbook.Sheets[sheetName]
+          const worksheet = Sheets.Sheets[sheetName]
           const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '' })
           
           let validKeyCount = 0

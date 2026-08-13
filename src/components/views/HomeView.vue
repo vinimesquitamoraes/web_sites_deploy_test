@@ -32,11 +32,11 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
     />
  
     <ContentSection 
-      :heading  ="t('SITE_HOME_HEADLINE')"
-      :text     ="[t('SITE_HOME_INTRO_1'),t('SITE_HOME_INTRO_2'),t('SITE_HOME_INTRO_3')]" 
-      mediaType ="video" 
-      mediaSrc  ="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
-      text-align="left"
+      :heading        ="t('SITE_HOME_HEADLINE')"
+      :text           ="[t('SITE_HOME_INTRO_1'),t('SITE_HOME_INTRO_2'),t('SITE_HOME_INTRO_3')]" 
+      mediaType       ="video" 
+      mediaSrc        ="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
+      text-align      ="left"
     />
 
     <GaleryCarrousel 

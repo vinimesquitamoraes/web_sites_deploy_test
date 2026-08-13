@@ -14,6 +14,7 @@
       :imageOpenable="section.imageOpenable ?? true"
       :headingAlign ="section.headingAlign ?? 'left'"
       :textPadding  ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 0')"
+      :hasShadow    ="section.hasShadow ?? true"
       headerPosition="inside"
       mediaWidth    ="775px" 
       mediaHeight   ="450px"
@@ -86,12 +87,13 @@ const infoSections = computed(() => [
     content_type: "image"
   },  
   {
-    title       : t('SITE_ABOUT_OPENSOURCE_TITLE'),
-    text        : t('SITE_ABOUT_OPENSOURCE_P1'),
-    image       : imgGodotLogo,
-    content_type: "image",
-    redBorder   : false,
-    imageOpenable: false
+    title         : t('SITE_ABOUT_OPENSOURCE_TITLE'),
+    text          : t('SITE_ABOUT_OPENSOURCE_P1'),
+    image         : imgGodotLogo,
+    content_type  : "image",
+    redBorder     : false,
+    imageOpenable : false,
+    hasShadow     : false,
   }
 ])
 

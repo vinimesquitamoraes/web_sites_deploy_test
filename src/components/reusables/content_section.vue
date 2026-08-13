@@ -1,5 +1,8 @@
 <template>
-  <div class="content-section-wrapper">
+  <div 
+    class="content-section-wrapper"
+    :style="{ padding: sectionPadding }"
+  >
     <h2 
       v-if="showHeader && heading && headerPosition === 'top'" 
       class="heading top-heading" 
@@ -39,7 +42,11 @@
       >
         <div 
           class="media-container" 
-          :class="{ 'red-border': redBorder, 'clickable-media': mediaType === 'image' && mediaSrc && !hasError }"
+          :class="{ 
+            'red-border': redBorder, 
+            'clickable-media': mediaType === 'image' && mediaSrc && !hasError,
+            'no-shadow': !hasShadow 
+          }"
           :style="{ height: mediaHeight !== 'auto' ? mediaHeight : 'auto' }"
           @click="openImageModal"
         >
@@ -120,6 +127,10 @@ const props = defineProps({
     default: 'center',
     validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
   },
+  sectionPadding: {
+    type: String,
+    default: '0px'
+  },
   textPadding: {
     type: String,
     default: '0px'
@@ -166,6 +177,10 @@ const props = defineProps({
   imageOpenable: {
     type: Boolean,
     default: true
+  },
+  hasShadow: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -203,6 +218,7 @@ const closeImageModal = () => {
   flex-direction        : column;
   align-items           : center;
   box-sizing            : border-box;
+  margin                : 20px 0 0 0;
 }
 
 .heading {
@@ -210,7 +226,6 @@ const closeImageModal = () => {
   font-family           : var(--font-h2);
   font-size             : var(--font-h2-size);
   color                 : var(--color-h2);
-  font-weight           : 500;
   margin                : 0;
 }
 
@@ -306,6 +321,8 @@ const closeImageModal = () => {
   gap                   : 8px;
   max-width             : 100%;
   flex-shrink           : 0;
+  padding               : 0 8px 8px 0;
+  box-sizing            : border-box;
 }
 
 .media-caption {
@@ -318,20 +335,56 @@ const closeImageModal = () => {
   width                 : 100%;
   max-width             : 100%;
   overflow              : hidden;
-  border-radius         : 8px; 
+  border-radius         : 12px; 
+  border                : 3px solid #000000;
+  box-shadow            : var(--color-custom-button-shadow, 8px 8px 0px #000000);
+  background            : #ffffff;
   box-sizing            : border-box;
   display               : flex;
   align-items           : center;
   justify-content       : center;
+  transition            : transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.media-container.no-shadow {
+  box-shadow            : none !important;
+  border                : none !important;
+  border-radius         : 0;
+  background            : transparent;
 }
 
 .clickable-media {
   cursor                : pointer;
 }
 
+.clickable-media:hover {
+  transform             : translateY(-3px) translateX(-3px);
+  box-shadow            : var(--color-custom-button-active-shadow, 11px 11px 0px #000000);
+}
+
+.clickable-media.no-shadow:hover {
+  transform             : none;
+  box-shadow            : none !important;
+  border                : none !important;
+}
+
 .media-container.red-border {
-  border                : 4px solid #ff3322;
+  border                : 3px solid #E50012;
+  box-shadow            : var(--color-custom-button-shadow, 8px 8px 0px #E50012);
   padding               : 8px;
+}
+
+.media-container.red-border.clickable-media:hover {
+  transform             : translateY(-3px) translateX(-3px);
+  box-shadow            : var(--color-custom-button-active-shadow, 11px 11px 0px #E50012);
+}
+
+.media-container.red-border.no-shadow,
+.media-container.red-border.no-shadow.clickable-media:hover {
+  box-shadow            : none !important;
+  border                : none !important;
+  transform             : none;
+  padding               : 0;
 }
 
 .media-img {
@@ -339,11 +392,6 @@ const closeImageModal = () => {
   height                : auto;
   object-fit            : contain;
   display               : block;
-  transition            : transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.clickable-media:hover .media-img {
-  transform             : scale(1.08);
 }
 
 .video-iframe {
