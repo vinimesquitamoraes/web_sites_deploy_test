@@ -65,8 +65,6 @@
             :media-position       ="mediaPosition"
             :layout               ="layout"
             :image-openable       ="imageOpenable"
-            :media-shadow         ="mediaShadow"
-            :shadow               ="shadow"
           >
             <template #media>
               <slot name="media"></slot>
@@ -122,10 +120,7 @@ const props = defineProps({
     type: String,
     default: 'var(--foldable-icon-outline)'
   },
-  shadow: {
-    type: String,
-    default: 'var(--foldable-content-shadow)'
-  },
+
 
   // ContentSection Stuff =============================================================================================================
   content: {
@@ -224,10 +219,6 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  mediaShadow: {
-    type: String,
-    default: 'var(--content-section-media-shadow)'
-  }
 })
 
 const emit = defineEmits(['update:modelValue', 'toggle'])

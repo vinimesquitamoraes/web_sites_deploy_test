@@ -1,11 +1,38 @@
 <template>
   <div v-if="isOpen" class="modal-overlay" @click="$emit('close')">
     <div class="modal-content" @click.stop>
-      <button class="close-btn" @click="$emit('close')" aria-label="Close Modal">&times;</button>
       
-      <button v-if="showNav" class="modal-arrow left" @click="$emit('prev')" aria-label="Previous Media">
-        <span class="arrow-icon left-arrow"></span>
-      </button>
+      <div class="close-btn-wrapper">
+        <CustomButton
+          class          = "close-btn"
+          text           = ""
+          iconSize       = "var(--media-modal-button-icon-size)"
+          width          = "var(--media-modal-button-size)"
+          height         = "var(--media-modal-button-size)"
+          iconColor      = "var(--media-modal-close-color)"
+          bgColor        = "var(--media-modal-button-bg)"
+          hoverBgColor   = "var(--media-modal-button-bg-hover)"
+          pressAnimation = "none"
+          :iconSrc       = "img_close"
+          @click         = "$emit('close')"
+        />
+      </div>
+      
+      <div v-if="showNav" class="modal-arrow left">
+        <CustomButton
+          text           = ""
+          iconSize       = "var(--media-modal-button-icon-size)"
+          width          = "var(--media-modal-button-size)"
+          height         = "var(--media-modal-button-size)"
+          iconColor      = "var(--media-modal-arrow-icon)"
+          bgColor        = "var(--media-modal-button-bg)"
+          hoverIconColor = "var(--media-modal-arrow-icon-hover)"
+          hoverBgColor   = "var(--media-modal-button-bg-hover)"
+          pressAnimation = "none"
+          :iconSrc       = "img_left_arrow"
+          @click         = "$emit('prev')"
+        />
+      </div>
 
       <div class="media-wrapper">
         <img 
@@ -24,14 +51,32 @@
         ></video>
       </div>
 
-      <button v-if="showNav" class="modal-arrow right" @click="$emit('next')" aria-label="Next Media">
-        <span class="arrow-icon right-arrow"></span>
-      </button>
+      <div v-if="showNav" class="modal-arrow right">
+        <CustomButton
+          text           = ""
+          iconSize       = "var(--media-modal-button-icon-size)"
+          width          = "var(--media-modal-button-size)"
+          height         = "var(--media-modal-button-size)"
+          iconColor      = "var(--media-modal-arrow-icon)"
+          bgColor        = "var(--media-modal-button-bg)"
+          hoverIconColor = "var(--media-modal-arrow-icon-hover)"
+          hoverBgColor   = "var(--media-modal-button-bg-hover)"
+          pressAnimation = "scale"
+          :iconSrc       = "img_right_arrow"
+          @click         = "$emit('next')"
+        />
+      </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
+import CustomButton from './custom_button.vue'
+import img_left_arrow from '@/assets/svg/triangle-left-12-filled.svg'
+import img_right_arrow from '@/assets/svg/triangle-right-12-filled.svg'
+import img_close from '@/assets/svg/close-svgrepo-com.svg'
+
 defineProps({
   isOpen: {
     type: Boolean,
@@ -59,7 +104,7 @@ defineEmits(['close', 'next', 'prev'])
   left             : 0;
   width            : 100vw;
   height           : 100vh;
-  background       : var(--color-modal-overlay);
+  background       : var(--media-modal-overlay-bg);
   display          : flex;
   justify-content  : center;
   align-items      : center;
@@ -70,126 +115,60 @@ defineEmits(['close', 'next', 'prev'])
 
 .modal-content {
   position         : relative;
-  width            : 70vw;
-  height           : 75vh;
-  max-width        : 900px;
-  max-height       : 700px;
+  width            : auto;
+  height           : auto;
+  max-width        : 90vw;
+  max-height       : 90vh;
   display          : flex;
   align-items      : center;
   justify-content  : center;
 }
 
 .media-wrapper {
-  width            : 100%;
-  height           : 100%;
+  width            : auto;
+  height           : auto;
   display          : flex;
   align-items      : center;
   justify-content  : center;
-  border           : 4px solid var(--color-modal-overlay-border);
-  border-radius    : 4px;
+  border           : var(--media-modal-border);
+  border-radius    : var(--media-modal-border-radius);
   box-sizing       : border-box;
   overflow         : hidden;
-  background       : #000000;
+  background       : var(--media-modal-media-bg);
 }
 
 .modal-media {
-  width            : 100%;
-  height           : 100%;
+  max-width        : 90vw;
+  max-height       : 85vh;
+  width            : auto;
+  height           : auto;
   display          : block;
   object-fit       : contain;
 }
 
-.close-btn {
+.close-btn-wrapper {
   position         : absolute;
-  top              : -45px;
-  right            : 0;
-  background       : transparent;
-  color            : #FFFFFF;
-  border           : none;
-  font-size        : 36px;
-  cursor           : pointer;
-  line-height      : 1;
+  top              : var(--media-modal-close-top);
+  right            : var(--media-modal-close-right);
+  z-index          : 10;
 }
 
 .modal-arrow {
   position         : absolute;
   top              : 50%;
   transform        : translateY(-50%);
-  background       : transparent;
-  border           : none;
-  width            : 40px;
-  height           : 40px;
-  cursor           : pointer;
   z-index          : 10;
-  display          : flex;
-  align-items      : center;
-  justify-content  : center;
-  border-radius    : 4px;
-}
-
-.arrow-icon {
-  position            : absolute;
-  width               : 100%;
-  height              : 100%;
-  background-color    : var(--color-modal-arrow);
-  top                 : 50%;
-  left                : 50%;
-  transform           : translate(-50%, -50%);
-  padding             : 0;
-  -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
-  mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');
-  -webkit-mask-size   : contain;
-  mask-size           : contain;
-  -webkit-mask-repeat : no-repeat;
-  mask-repeat         : no-repeat;
-}
-
-.arrow-icon.left-arrow {
-  transform           : translate(-50%, -50%) scaleX(-1);
-  animation           : choppy-horizontal-left 0.6s steps(3, end) infinite alternate;
-}
-
-.arrow-icon.right-arrow {
-  animation           : choppy-horizontal-right 0.6s steps(3, end) infinite alternate;
-}
-
-.modal-arrow:hover .arrow-icon {
-  background-color  : var(--color-modal-arrow-hover);
 }
 
 .modal-arrow.left { 
-  left             : -60px; 
+  left             : var(--media-modal-arrow-offset); 
 }
 
 .modal-arrow.right { 
-  right            : -60px; 
-}
-
-@keyframes choppy-horizontal-right {
-  0% {
-    transform: translate(-50%, -50%) translateX(0px);
-  }
-  100% {
-    transform: translate(-50%, -50%) translateX(3px);
-  }
-}
-
-@keyframes choppy-horizontal-left {
-  0% {
-    transform: translate(-50%, -50%) scaleX(-1) translateX(0px);
-  }
-  100% {
-    transform: translate(-50%, -50%) scaleX(-1) translateX(3px);
-  }
+  right            : var(--media-modal-arrow-offset); 
 }
 
 @media (max-width: 768px) {
-  .modal-content {
-    width            : 90vw;
-    height           : 75vh;
-    max-width        : 100%;
-  }
-
   .modal-arrow.left {
     left             : 10px;
   }
@@ -198,8 +177,8 @@ defineEmits(['close', 'next', 'prev'])
     right            : 10px;
   }
 
-  .close-btn {
-    top              : -40px;
+  .close-btn-wrapper {
+    top              : -45px;
     right            : 5px;
   }
 }

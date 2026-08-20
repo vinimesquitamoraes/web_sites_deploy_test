@@ -6,6 +6,7 @@ import Banner          from '@/components/reusables/banner.vue'
 import ContentSection  from '@/components/reusables/content_section.vue'
 import GaleryCarrousel from '@/components/reusables/galery_carousel.vue'
 import CastList        from '@/components/reusables/cast_list.vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
 
 const { t } = useI18n()
 
@@ -19,7 +20,7 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
   eager: true, 
   import: 'default' 
 })
-
+import img_left_arrow   from '@/assets/svg/triangle-svgrepo-com.svg?url'
 </script>
 
 <template>
@@ -30,17 +31,15 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
       alternativeScrollDirection="both"
       :subtitle                 ="t('SITE_HOME_BANNER_TEXT')"
     />
- 
+
     <ContentSection 
       :heading        ="t('SITE_HOME_HEADLINE')"
       :text           ="[t('SITE_HOME_INTRO_1'),t('SITE_HOME_INTRO_2'),t('SITE_HOME_INTRO_3')]" 
       mediaType       ="video" 
       mediaSrc        ="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
       text-align      ="left"
-      
-      
     />
-
+    
     <GaleryCarrousel 
       :image-modules="homeImages" 
       :interval-time="10000"

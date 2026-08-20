@@ -3,8 +3,8 @@ import { useI18n } from '@/composables/useI18n'
 
 import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
 
-import NavigationComponent  from './navigation_component.vue'
-import SocialMediaButton    from './social_media_button.vue'
+import NavigationComponent  from '@/components/reusables/navigation_component.vue'
+import SocialMediaButton    from '@/components/reusables/social_media_button.vue'
 
 const { t } = useI18n()
 </script>
@@ -49,6 +49,7 @@ const { t } = useI18n()
 </template>
 
 <style scoped>
+
 .logo-container {
   display           : flex;
   justify-content   : flex-start;
@@ -83,7 +84,7 @@ const { t } = useI18n()
   flex-direction          : column;
   gap                     : 50px;
   padding                 : 55px 60px 50px 60px;
-  background              : var(--color-primary);
+  background              : var(--color-footer-bg);
   border-top-left-radius  : 45px;
   border-top-right-radius : 45px;
   box-sizing              : border-box;
@@ -125,12 +126,14 @@ const { t } = useI18n()
   text-decoration   : none;
   opacity           : 0.8;
   transition        : opacity 0.2s ease;
+  color             : var(--color-footer-link);
 }
 
 .footer-link:hover,
 .footer-link.router-link-exact-active {
   opacity           : 1;
   font-weight       : bold;
+  color             : var(--color-footer-link-hover);
 }
 
 .footer-socials {
@@ -159,12 +162,12 @@ const { t } = useI18n()
 .footer-divider {
   width             : 100%;
   height            : 0px;
-  border-bottom     : 1px solid #FFFFFF;
+  border-bottom     : 1px solid var(--color-footer-divider);
 }
 
 .footer-disclaimer {
   width             : 100%;
-  color             : var(--color-default-text-color);
+  color             : var(--color-footer-text);
   font-size         : var(--font-p-size);
   font-family       : var(--font-p);
   line-height       : 28px;
@@ -173,7 +176,7 @@ const { t } = useI18n()
   text-align        : center;
 }
 .footer-disclaimer :deep(a) {
-  color                 : var(--color-hyperlinks);              
+  color                 : var(--color-footer-hyperlink);              
   text-decoration       : underline;     
   text-underline-offset : 3px;    
   font-weight           : 600;
@@ -182,20 +185,20 @@ const { t } = useI18n()
 
 .footer-framework {
   width             : 100%;
-  color             : var(--color-default-text-color);
+  color             : var(--color-footer-text);
   font-family       : var(--font-p);
   font-size         : var(--font-p-size);
   justify-content   : stretch;
   text-align        : center;
 }
 .footer-framework a {
-  color             : #42b883; 
+  color             : var(--color-footer-vue-link); 
   text-decoration   : none;
   transition        : color 0.3s ease;
 }
 
 .footer-framework a:hover {
-  color             :var(--color-hover);
+  color             : var(--color-footer-link-hover);
 }
 
 @media (max-width: 1024px) {

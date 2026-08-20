@@ -122,20 +122,25 @@ const infoSections = computed(() => [
 <style scoped>
 .heading {
   align-self            : stretch;
-  font-size             : var(--font-h1-size);
+  font-size             : clamp(1.5rem, 4vw, var(--font-h1-size));
   font-family           : var(--font-h1);
   color                 : var(--color-h1, #1F1F1F);
   text-align            : center;
   font-weight           : 500;
-  margin                : 0 0 15px 0;
+  margin                : 0 0 clamp(10px, 2vw, 15px) 0;
+  word-break            : break-word;
+  overflow-wrap         : break-word;
 }
 
 .faq-container {
+  width                 : 100%;
   max-width             : 900px;
   margin                : 0 auto;
-  padding               : 40px 20px;
+  padding               : clamp(20px, 4vw, 40px) clamp(12px, 3vw, 20px);
   display               : flex;
   flex-direction        : column;
   gap                   : 12px;
+  box-sizing            : border-box;
+  overflow-x            : hidden;
 }
 </style>

@@ -40,45 +40,51 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-
 .credits-view {
   width             : 100%;
+  max-width         : 100%;
   box-sizing        : border-box;
   display           : flex;
   flex-direction    : column;
   align-items       : center;
   background-color  : var(--color-credits-background);
-  padding           : 3rem ;
+  padding           : clamp(1rem, 3vw, 3rem);
+  overflow-x        : hidden;
 }
 
 .credits-header-wrapper {
   width             : 100%;
   max-width         : 800px;
   text-align        : center;
-  margin-bottom     : 2rem;
+  margin-bottom     : clamp(1rem, 3vw, 2rem);
   display           : flex;
   flex-direction    : column;
   align-items       : center;
+  padding           : 0 1rem;
+  box-sizing        : border-box;
 }
 
 .credits-main-title {
-  color             : var(--color-default-text-color );
+  color             : var(--color-default-text-color);
   font-family       : var(--font-h1);
-  font-size         : var(--font-h2-size);
+  font-size         : clamp(1.25rem, 4vw, var(--font-h2-size));
   text-transform    : uppercase;
-  margin            : 0 0 1.5rem 0;
+  margin            : 0 0 clamp(0.75rem, 2vw, 1.5rem) 0;
   padding-bottom    : 0.5rem;
-  letter-spacing    : 2px;
+  letter-spacing    : clamp(1px, 0.5vw, 2px);
   display           : inline-block;
+  text-align        : center;
+  word-break        : break-word;
+  overflow-wrap     : break-word;
 }
 
 @media (max-width: 768px) {
   .credits-view {
-    padding-top     : 2rem;
+    padding         : 0.75rem;
   }
-  .credits-main-title {
-    font-size       : var(--font-mobile-h2-size);
-    margin-bottom   : 1rem;
+  .credits-header-wrapper {
+    width           : 100%;
+    padding         : 0 0.5rem;
   }
 }
 </style>

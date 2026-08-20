@@ -19,6 +19,13 @@
       footerBehavior="stay" 
     />
 
+    <MusicPlayer 
+      v-if="!route.meta.hideMusicPlayer"
+      playlistId="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
+      footerBehavior="stay" 
+      volumeLayout="bar"
+    />
+
     <div ref="footerRef" class="footer-container">
       <AppFooter />
     </div>
@@ -27,12 +34,15 @@
 
 <script setup>
   import { onMounted } from 'vue'
-  import { useI18n }        from '@/composables/useI18n'
+  import { useRoute } from 'vue-router'
+  import { useI18n } from '@/composables/useI18n'
 
   import AppHeader      from '@/components/reusables/app_header.vue'
   import AppFooter      from '@/components/reusables/app_footer.vue'
   import BackToTop      from '@/components/reusables/back_to_top_button.vue'
+  import MusicPlayer    from '@/components/reusables/music_player.vue'
   
+  const route = useRoute()
   const { loadTranslations, isLoaded } = useI18n()
 
   onMounted(() => {
@@ -46,30 +56,35 @@
   src: url('/src/assets/fonts/Motherish/Motherish-Regular.otf');
 }
 :root {
+  /*Default Styles ==========================================================================================================================================================*/
   --color-primary             : #E50012;
-  --color-h1                  : #E50012;
-  --color-h2                  : #E50012;
-  --color-default-text-color  : #FFFFFF;
+  --color-secondary           : #fdd268;
   --color-black               : #000000;
-  --color-bg-gray             : #a3a0a0;
   --color-place-holder-green  : #25D366;
-  --color-hover               : #fdd268;
-  --color-hyperlinks          : #fdd268;
-  --color-default-border      : 3px solid #000000;
+  --color-default-text-color  : #FFFFFF;
+
+  --color-h1                  : var(--color-primary);
+  --color-h2                  : var(--color-primary);
+  --color-hyperlinks          : var(--color-secondary);
+
+  --default-border            : 3px solid #000000;
+  --default-border-radius     : 10px;
   --color-default-background  : #FFFFFF;
 
-  --font-navbar               : 'Motherish', sans-serif;
-  --font-h1                   : 'Motherish', sans-serif;
-  --font-h2                   : 'Motherish', sans-serif;
-  --font-h3                   : 'Motherish', sans-serif;
-  --font-h4                   : 'Motherish', sans-serif;
-  --font-body                 : 'Motherish', sans-serif;
-  --font-button               : 'Motherish', sans-serif;
-  --font-p                    : 'Motherish', sans-serif;
-  --font-dropdown             : 'Motherish', sans-serif;
-  --font-credits-title        : 'Motherish', sans-serif;
-  --font-credits-role         : 'Motherish', sans-serif;
-  --font-credits-name         : 'Motherish', sans-serif;
+  --font-default              : 'Motherish', sans-serif;
+
+  --font-navbar               : var(--font-default);
+  --font-h1                   : var(--font-default);
+  --font-h2                   : var(--font-default);
+  --font-h3                   : var(--font-default);
+  --font-h4                   : var(--font-default);
+  --font-body                 : var(--font-default);
+  --font-button               : var(--font-default);
+  --font-p                    : var(--font-default);
+  --font-dropdown             : var(--font-default);
+  --font-credits-title        : var(--font-default);
+  --font-credits-role         : var(--font-default);
+  --font-credits-name         : var(--font-default);
 
   --font-navbar-size          : 25px;
   --font-h1-size              : 60px;
@@ -78,21 +93,21 @@
   --font-h4-size              : 24px;
   --font-p-size               : 20px;
   --font-body-size            : 16px;
-  --font-button-size          : 16px;
+
   --font-dropdown-size        : 20px;
   
   --font-credits-title-size   : 24px;
   --font-credits-role-size    : 20px;
   --font-credits-name-size    : 16px;
 
-  --font-mobile-navbar        : 'Motherish', sans-serif;
-  --font-mobile-h1            : 'Motherish', sans-serif;
-  --font-mobile-h2            : 'Motherish', sans-serif;
-  --font-mobile-h3            : 'Motherish', sans-serif;
-  --font-mobile-h4            : 'Motherish', sans-serif;
-  --font-mobile-body          : 'Motherish', sans-serif;
-  --font-mobile-button        : 'Motherish', sans-serif;
-  --font-mobile-p             : 'Motherish', sans-serif;
+  --font-mobile-navbar        : var(--font-default);
+  --font-mobile-h1            : var(--font-default);
+  --font-mobile-h2            : var(--font-default);
+  --font-mobile-h3            : var(--font-default);
+  --font-mobile-h4            : var(--font-default);
+  --font-mobile-body          : var(--font-default);
+  --font-mobile-button        : var(--font-default);
+  --font-mobile-p             : var(--font-default);
   
   --font-mobile-navbar-size   : 60px;
   --font-mobile-h1-size       : 60px;
@@ -103,13 +118,44 @@
   --font-mobile-button-size   : 16px;
   --font-mobile-p-size        : 16px;
 
+  /*Foorter Syles =========================================================================================================*/
+  --color-footer-bg                   : var(--color-primary);
+  --color-footer-text                 : var(--color-default-text-color);
+  --color-footer-divider              : var(--color-default-background);
+  --color-footer-link                 : var(--color-default-text-color);
+  --color-footer-link-hover           : var(--color-hover);
+  --color-footer-hyperlink            : var(--color-hyperlinks);
+  --color-footer-vue-link             : #42b883;
+
   /* Custom Button Stuff ===================================================================================================*/
-  --color-custom-button-shadow        : 13px 13px 0px #000000;
-  --color-custom-button-active-shadow : 0 2px 0px rgba(0, 0, 0, 1);
+  --color-custom-button-background    : var(--color-default-background);
+  --color-custom-button-hover         : var(--color-primary);
+  
+  --color-custom-button-text          : var(--color-black);
+  --color-custom-button-text-hover    : var(--color-default-text-color);
+
+  --color-custom-icon                 : var(--color-black);
+  --color-custom-icon-hover           : var(--color-custom-button-background);
+
+  --custom-button-border              : var(--default-border);
+  --custom-button-border-radius       : var(--default-border-radius);
+
+  --custom-button-font                : var(--font-default);
+  --custom-button-font-size           : 16px;
+
+  /* Itch.io Button Stuff ================================================================================================== */
+    --color-itchio-button-icon             : var(--color-black);
+    --color-itchio-button-bg               : var(--color-default-background);
+    
+    --color-itchio-button-icon-hover       : #ffffff;
+    --color-itchio-button-bg-hover         : var(--color-primary);
 
   /* Back to Top Button Stuff ==============================================================================================*/
-  --color-back-to-top-button-shadow        : 13px 13px 0px #000000;
-  --color-back-to-top-button-active-shadow : 0 2px 0px rgba(0, 0, 0, 1);
+  --back-to-top-button-bg-color              : var(--color-default-background);
+  --back-to-top-button-border                : var(--default-border);
+  --back-to-top-button-border-radius         : var(--default-border-radius);
+  --back-to-top-button-bg-hover              : var(--color-primary);
+
 
   /* Character Card Stuff ==================================================================================================*/
   --character-card-title-color      : var(--color-default-text-color);
@@ -124,21 +170,38 @@
   --character-card-body-weight      : 500;
   --character-card-body-line-height : 1.5;
 
-  --character-card-separator-color  : #ffffff;
-  --character-card-separator-height : 3px;
+  --character-card-separator-color  : var(--color-default-background);
+  --character-card-separator-height : 4px;
+  
+/* Gallery Stuff ========================================================================================================= */
+  --gallery-title-color         : var(--color-h2);
+  --gallery-title-size          : var(--font-h2-size);
+  --gallery-title-font          : var(--font-h2);
+
+  --gallery-viewport-bg         : var(--color-default-background);
+  --gallery-border              : var(--default-border);
+  --gallery-timer-bg            : rgba(112, 3, 3, 0.144);
+  --gallery-accent-color        : var(--color-primary);
+  --gallery-dot-bg              : var(--color-default-background);
+  --gallery-dot-border          : none;
+  --gallery-thumb-bg            : var(--color-default-background);
+  --gallery-thumb-tint-bg       : rgba(255, 71, 87, 0.3);
+
+  --gallery-button-icon         : var(--color-primary);
+  --gallery-button-bg           : var(--color-default-background);
+  --gallery-button-icon-hover   : var(--color-default-background);
+  --gallery-button-bg-hover     : var(--color-primary);
+  
+  --gallery-button-icon-size    : 95%;
+  --gallery-button-size         : 50px;
 
   /* Music Player Stuff ====================================================================================================*/
   --font-track-names-size     : 0.8rem;
-  --music-player-shadow-size  : 0 15px 0px;
-
-  --music-player-shadow       : 13px 13px 0px #000000;
 
   --color-music-player-playbt-paused                 :#e74c3c; 
   --color-music-player-playbt-paused-pressed         :#c0392b;
   --color-music-player-playbt-playing                :#e68a00;
   --color-music-player-playbt-playing-pressed        :#e74c3c;
-  --color-music-player-pagination-btn-shadow         : 3px 3px 0px #000000;
-  --color-music-player-pagination-btn-active-shadow  : 3px 3px 0px #000000;
 
   --color-bg-main             : #272526;
   --color-bg-dark             : #000000;
@@ -150,12 +213,9 @@
   --color-text-muted          : #f87171;
   --color-white               : #ffffff;
 
-  --color-navigation-mobile-shadow: 0 10px 20px rgba(0,0,0,0.15);
-
   /* Toaster Stuff ========================================================================================================= */
   --toaster-bg-main           : #ffffff;
   --toaster-border-color      : #000000;
-  --toaster-shadow            : 4px 4px 0px #000000;
   --toaster-font-size         : 0.85rem;
   --toaster-icon-color        : #ff6b6b;
   --toaster-text-color        : #000000;
@@ -168,12 +228,6 @@
   --toaster-error-bg          : #f5b7b1;
   --toaster-error-border      : #c0392b;
 
-  /* Custom Button Stuff =================================================================================================== */
-  --color-custom-button-text       :#000000;
-  --color-custom-button-text-hover :#FFFFFF;
-  --color-custom-button-hover      : #E50012;
-  --color-custom-button-background : #FFFFFF;
-  
   /* Modal Stuff ========================================================================================================== */
   --color-modal-overlay       : rgba(0, 0, 0, 0.85);
   --color-modal-overlay-border: rgba(214, 98, 98, 0.85);
@@ -190,27 +244,19 @@
   --color-operational-system-icons-color       : #E50012;
   --color-operational-system-icons-hover-color : #E50012;
 
-  /* Itch.io Button Stuff ================================================================================================== */
-  --color-itchio-button-color            : #ffffff;
-  --color-itchio-button-hover-color      : #E50012;
-  --color-itchio-button-icon-color       : #E50012;
-  --color-itchio-button-icon-hover-color : #ffffff;
-
   /* Requirements Stuff =====================================================================================================*/
   --color-requiriments-key-background           : #E50012;
   --color-requiriments-value-background         : #ffffff;
   --color-requiriments-key-text                 : #ffffff;
   --color-requiriments-value-text               : #000000;
-  --color-requiriments-shadow                   : 13px 13px 0px #000000;
   --color-requiriments-container-border         : 3px solid #000000;
   --color-requiriments-key-border-bottom        : 3px solid #000000;
   --color-requiriments-value-border-bottom      : 3px solid #E50012;
   --color-requiriments-mobile-row-border-bottom : 3px solid #E50012;
 
+
   /* Dropdown Stuff ======================================================================================================== */
   --color-dropdown-border             : 3px solid #000000;
-  --color-dropdown-shadow             : 3px 3px 0px #000000;
-  --color-dropdown-hover-shadow       : 4px 4px 0px #000000;
   --color-dropdown-trigger-bg         : #ff9900;
   --color-dropdown-trigger-text       : #000000;
   --color-dropdown-trigger-hover-bg   : #E50012;
@@ -226,41 +272,7 @@
   --color-dropdown-option-active-text : #ffffff;
   --color-dropdown-active-arrow       : #ffffff;
 
-  /* Gallery Stuff ========================================================================================================= */
-  --gallery-title-color                 : var(--color-h2, #000000);
-  --gallery-title-font                  : var(--font-h2, sans-serif);
-  --gallery-title-size                  : var(--font-h2-size, 32px);
-
-  --gallery-accent-color                : #E50012;
-  --gallery-border-color                : #000000;
-
-  --gallery-viewport-bg                 : #ffffff;
-  --gallery-viewport-shadow             : 6px 6px 0px #000000;
-  --gallery-viewport-shadow-mobile      : 4px 4px 0px #000000;
-
-  --gallery-timer-bg                    : rgba(0, 0, 0, 0.08);
-
-  --gallery-dot-bg                      : rgba(0, 0, 0, 0.3);
-  --gallery-dot-border-color            : #ffffff;
-  --gallery-dot-border                  : 1px solid var(--gallery-dot-border-color);
-
-  --gallery-arrow-bg                    : #ffffff;
-  --gallery-arrow-icon-filter           : invert(15%) sepia(95%) saturate(6932%) hue-rotate(352deg) brightness(97%) contrast(113%);
-  --gallery-arrow-shadow-right          : 4px 4px 0px #000000;
-  --gallery-arrow-shadow-right-hover    : 2px 2px 0px #000000;
-  --gallery-arrow-shadow-right-active   : 0px 0px 0px #000000;
-  --gallery-arrow-shadow-left           : -4px 4px 0px #000000;
-  --gallery-arrow-shadow-left-hover     : -2px 2px 0px #000000;
-  --gallery-arrow-shadow-left-active    : 0px 0px 0px #000000;
-
-  --gallery-thumb-bg                    : #ffffff;
-  --gallery-thumb-tint-bg               : rgba(229, 0, 18, 0.35);
-  --gallery-thumb-shadow                : 3px 3px 0px #000000;
-  --gallery-thumb-shadow-hover          : 4px 4px 0px #000000;
-  --gallery-thumb-shadow-active         : 3px 3px 0px #E50012;
-  --gallery-thumb-shadow-mobile         : 2px 2px 0px #000000;
-  --gallery-thumb-shadow-mobile-active  : 2px 2px 0px #E50012;
-
+  
   /* Foldable Stuff ===================================================================================================*/
   --foldable-header-bg     : transparent;
   --foldable-title-color   : #202020;
@@ -270,18 +282,33 @@
   --foldable-icon-outline  : #202020;
   --foldable-icon-bg       : transparent;
   --foldable-body-border   : 3px solid #202020;
-  --foldable-content-shadow: 0px 4px 0px #7a6c86;
 
-  --content-section-font-h2          : 'Motherish', sans-serif;
-  --content-section-font-h2-size     : var(--font-h2-size);
-  --content-section-color-h2         : #E50012;
-  --content-section-font-p           : 'Motherish', sans-serif;
-  --content-section-font-p-size      : var(--font-p-size);
-  --content-section-color-p          : #1f1f1f;
-  --content-section-media-border        : 4px solid#000000;
-  --content-section-media-radius        : 24px;
-  --content-section-media-shadow        : drop-shadow(10px 10px 0px #000000);
-  --content-section-media-shadow-active : drop-shadow(13px 13px 0px #000000);
+  /* Content Section Stuff ===================================================================================================*/
+  --content-section-font-h2             : var(--font-default);
+  --content-section-font-h2-size        : var(--font-h2-size);
+  --content-section-color-h2            : var(--color-primary);
+  --content-section-font-p              : var(--font-default);
+  --content-section-font-p-size         : var(--font-p-size);
+  --content-section-color-p             : var(--color-black);
+  --content-section-media-border        : var(--default-border);
+  --content-section-media-radius        : var(--default-border-radius);
+
+/* Media Modal Cstuff ========================================================================================== */
+--media-modal-overlay-bg       : rgba(68, 9, 9, 0.534);
+--media-modal-border           : var(--default-border);
+--media-modal-border-radius    : var(--default-border-radius);
+--media-modal-media-bg         : var(--color-black);
+--media-modal-button-size      : 40px;
+--media-modal-button-bg        : transparent;
+--media-modal-button-bg-hover  : rgba(255, 255, 255, 0.1);
+--media-modal-button-icon-size :  95%;
+--media-modal-close-color      : var(--color-default-background);
+--media-modal-close-top        : -50px;
+--media-modal-close-right      : 0;
+--media-modal-close-font-size  : 28px;
+--media-modal-arrow-icon       : var(--color-modal-arrow);
+--media-modal-arrow-icon-hover : var(--color-modal-arrow-hover);
+--media-modal-arrow-offset     : -60px;
 }
 
 body {

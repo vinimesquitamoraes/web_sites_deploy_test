@@ -2,20 +2,20 @@
   <div 
     class="content-section-wrapper"
     :style="{ 
-      padding: sectionPadding, 
-      backgroundColor: contentBg, 
-      borderRadius: borderRadius,
-      border: border,
-      boxShadow: shadow 
+      padding         : sectionPadding, 
+      backgroundColor : contentBg, 
+      borderRadius    : borderRadius,
+      border          : border,
+      
     }"
   >
     <h2 
       v-if="shouldShowHeader && headerPosition === 'top'" 
       class="content-section-heading content-section-top-heading" 
       :style="{ 
-        color: headingColor, 
-        textAlign: headingAlign,
-        border: headerBorder 
+        color       : headingColor, 
+        textAlign   : headingAlign,
+        border      : headerBorder 
       }"
       v-html="heading"
     ></h2>
@@ -28,17 +28,17 @@
         v-if="textParagraphs.length || (shouldShowHeader && headerPosition === 'inside')" 
         class="content-section-text-container"
         :style="{ 
-          padding: textPadding,
-          border: textBorder
+          padding : textPadding,
+          border  : textBorder
         }"
       >
         <h2 
           v-if="shouldShowHeader && headerPosition === 'inside'" 
           class="content-section-heading content-section-inside-heading" 
           :style="{ 
-            color: headingColor, 
-            textAlign: headingAlign,
-            border: headerBorder 
+            color     : headingColor, 
+            textAlign : headingAlign,
+            border    : headerBorder 
           }"
           v-html="heading"
         ></h2>
@@ -63,8 +63,7 @@
             'content-section-clickable-media': mediaType === 'image' && mediaSrc && !hasError && imageOpenable
           }"
           :style="{ 
-            height: mediaHeight !== 'auto' ? mediaHeight : 'auto',
-            filter: mediaShadow
+            height: mediaHeight !== 'auto' ? mediaHeight : 'auto'
           }"
           @click="openImageModal"
         >
@@ -229,19 +228,11 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  mediaShadow: {
-    type: String,
-    default: 'var(--content-section-media-shadow)'
-  },
   mediaFit: {
     type: String,
     default: 'contain',
     validator: (value) => ['cover', 'contain', 'fill', 'scale-down'].includes(value)
   },
-  shadow: {
-    type: String,
-    default: ''
-  }
 })
 
 const isModalOpen = ref(false)

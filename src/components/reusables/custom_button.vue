@@ -1,25 +1,25 @@
 <template>
-  <Transition name="fade-bounce" appear>
+  <Transition appear name="fade-bounce">
     <button 
       class="custom-btn" 
-      :class="{ 'icon-only': !text }"
+      :class="[
+        { 'icon-only': !text }, 
+        `press-${pressAnimation}`
+      ]"
       :style="buttonStyles"
       @click="handleClick"
-      @mouseenter="isHovered = true"
-      @mouseleave="isHovered = false"
     >
       <div v-if="iconSrc" class="icon-wrapper" :style="iconWrapperStyles">
-        <!-- Masked color fill div (used when iconColor/hoverIconColor is provided) -->
+      
         <div 
-          v-if="iconColor || hoverIconColor"
+          v-if="hasValidColor"
           class="button-icon-masked"
           :style="maskedIconStyles"
         ></div>
 
-        <!-- Regular image tag (used when no color tinting is requested) -->
         <img 
           v-else
-          :src="iconSrc" 
+          :src="processedIconSrc" 
           class="button-icon" 
           alt="" 
         />
@@ -33,13 +33,13 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
   text: {
     type                       : String,
-    default                    : 'BUTTON'
+    default                    : ''
   },
   iconSrc: {
     type                       : String,
@@ -51,11 +51,11 @@ const props = defineProps({
   },
   iconColor: {
     type                       : String,
-    default                    : "#000000"
+    default                    : "var(--color-custom-icon)"
   },
   hoverIconColor: {
     type                       : String,
-    default                    : null
+    default                    : "var(--color-custom-icon-hover)"
   },
   width: {
     type                       : [Number, String],
@@ -67,7 +67,7 @@ const props = defineProps({
   },
   fontSize: {
     type                       : [Number, String],
-    default                    : 'var(--font-button-size)'
+    default                    : 'var(--custom-button-font-size)'
   },
   bgColor: {
     type                       : String,
@@ -92,16 +92,38 @@ const props = defineProps({
   externalUrl: {
     type                       : String,
     default                    : null
-  }
+  },
+  pressAnimation: {
+    type                       : String,
+    default                    : 'push',
+    validator                  : (value) => ['scale', 'lift', 'push', 'none'].includes(value)
+  },
 })
 
 const emit = defineEmits(['click'])
 const router = useRouter()
-const isHovered = ref(false)
+
+const processedIconSrc = computed(() => {
+  if (!props.iconSrc) return ''
+  const trimmed = props.iconSrc.trim()
+  if (trimmed.startsWith('<svg') || trimmed.endsWith('</svg>')) {
+    return `data:image/svg+xml;utf8,${encodeURIComponent(trimmed)}`
+  }
+  return props.iconSrc
+})
+
+const hasValidColor = computed(() => {
+  return (props.iconColor && props.iconColor.trim() !== '') || 
+         (props.hoverIconColor && props.hoverIconColor.trim() !== '')
+})
 
 const buttonStyles = computed(() => ({
-  backgroundColor              : isHovered.value ? props.hoverBgColor : props.bgColor,
-  color                        : isHovered.value ? props.hoverTextColor : props.textColor,
+  '--local-bg'                 : props.bgColor,
+  '--local-hover-bg'           : props.hoverBgColor,
+  '--local-text'               : props.textColor,
+  '--local-hover-text'         : props.hoverTextColor,
+  '--local-icon-color'         : props.iconColor,
+  '--local-hover-icon-color'   : props.hoverIconColor,
   width                        : typeof props.width === 'number' ? `${props.width}px` : props.width,
   height                       : typeof props.height === 'number' ? `${props.height}px` : props.height
 }))
@@ -123,14 +145,9 @@ const iconWrapperStyles = computed(() => {
 })
 
 const maskedIconStyles = computed(() => {
-  const activeColor = isHovered.value 
-    ? (props.hoverIconColor || props.iconColor) 
-    : (props.iconColor || props.hoverIconColor)
-
   return {
-    backgroundColor            : activeColor,
-    maskImage                  : `url(${props.iconSrc})`,
-    WebkitMaskImage            : `url(${props.iconSrc})`
+    maskImage                  : `url("${processedIconSrc.value}")`,
+    WebkitMaskImage            : `url("${processedIconSrc.value}")`
   }
 })
 
@@ -159,39 +176,49 @@ const handleClick = (event) => {
   display                      : inline-flex;
   align-items                  : center;
   justify-content              : center;
-  gap                          : 10px; 
-  padding                      : 0.75rem 2.5rem;
-  
+  gap                          : clamp(6px, 1.5vw, 10px); 
+  padding                      : clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 2.5rem);
   max-width                    : 100%;
   text-align                   : center;
   box-sizing                   : border-box;
 
-  border                       : var(--color-default-border);
-  border-radius                : 6px;
+  background-color             : var(--local-bg);
+  color                        : var(--local-text);
+  border                       : var(--custom-button-border);
+  border-radius                : var(--custom-button-border-radius);
   cursor                       : pointer;
-  box-shadow                   : var(--color-custom-button-shadow);      
   
-  transition                   : transform 1s cubic-bezier(0.1, 1, 0.2, 1), 
-                                 background-color 0.4s ease, 
-                                 box-shadow 1s cubic-bezier(0.1, 1, 0.2, 1), 
-                                 color 0.4s ease;
+  transition                   : background-color 0.4s ease, 
+                                 color 0.4s ease,
+                                 transform 0.1s ease;
 
   -webkit-tap-highlight-color  : transparent;
-  -webkit-backface-visibility  : hidden;
-  backface-visibility          : hidden;
-  -webkit-transform-style      : preserve-3d;
-  transform-style              : preserve-3d;
-  will-change                  : transform, box-shadow, opacity;
   overflow                     : hidden;
 }
 
-.custom-btn.icon-only {
-  padding                      : 0.5rem; 
+.custom-btn.press-scale:active {
+  transform                    : scale(0.95) !important;
 }
 
-.custom-btn:active {
-  transform                    : translateY(2px);
-  box-shadow                   : var(--color-custom-button-active-shadow);      
+.custom-btn.press-lift:active {
+  transform                    : translateY(-2px) !important;
+}
+
+.custom-btn.press-push:active {
+  transform                    : translateY(2px) !important;
+}
+
+.custom-btn.press-none:active {
+  transform                    : none !important;
+}
+
+.custom-btn:hover {
+  background-color             : var(--local-hover-bg);
+  color                        : var(--local-hover-text);
+}
+
+.custom-btn.icon-only {
+  padding                      : clamp(0.35rem, 1vw, 0.5rem); 
 }
 
 .icon-wrapper {
@@ -215,14 +242,19 @@ const handleClick = (event) => {
 .button-icon-masked {
   width                        : 100%;
   height                       : 100%;
+  background-color             : var(--local-icon-color);
   mask-repeat                  : no-repeat;
-  WebkitMaskRepeat             : no-repeat;
+  -webkit-mask-repeat          : no-repeat;
   mask-position                : center;
-  WebkitMaskPosition           : center;
+  -webkit-mask-position        : center;
   mask-size                    : contain;
-  WebkitMaskSize               : contain;
+  -webkit-mask-size            : contain;
   transition                   : background-color 0.4s ease;
   pointer-events               : none;
+}
+
+.custom-btn:hover .button-icon-masked {
+  background-color             : var(--local-hover-icon-color);
 }
 
 .fade-bounce-enter-active {
@@ -245,9 +277,15 @@ const handleClick = (event) => {
 }
 
 .button-text {
-  font-family                  : var(--font-button);
+  font-family                  : var(--custom-button-font, var(--font-default));
   white-space                  : normal; 
   word-wrap                    : break-word;
   line-height                  : 1.2;
+}
+
+@media screen and (max-width: 768px) {
+  .custom-btn {
+    width                      : 100%;
+  }
 }
 </style>

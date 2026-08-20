@@ -88,8 +88,7 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   background        : #222;
   border            : 1px solid currentColor;
   border-radius     : 4px;
-  box-shadow        : 0 4px 6px rgba(0, 0, 0, 0.3);
-  z-index           : 99999;
+  z-index           : 10;
   min-width         : max-content;
   white-space       : nowrap;
 }

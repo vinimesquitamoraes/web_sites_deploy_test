@@ -48,7 +48,9 @@ const routes = [
       description   : 'A Reimagining of the classic NES game.',
       image         :  LOGO_IMAGE_URL,
       themeColor    : '#c24b49',
-      twitterSite   : '@Mother_Encore'
+      twitterSite   : '@Mother_Encore',
+      // hideMusicPlayer: true
+      
     }
   },
    { 

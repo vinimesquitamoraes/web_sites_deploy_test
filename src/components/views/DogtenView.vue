@@ -1,4 +1,3 @@
-
 <template>
   <div class="main-content">
     <Banner
@@ -200,20 +199,29 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.main-content {
+  width             : 100%;
+  max-width         : 100%;
+  box-sizing        : border-box;
+  overflow-x        : hidden;
+}
+
 .galery-container {
-  max-width             : 900px;
-  margin                : 0 auto;
-  padding               : 40px 20px;
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 12px;
+  width             : 100%;
+  max-width         : 900px;
+  margin            : 0 auto;
+  padding           : clamp(20px, 4vw, 40px) clamp(12px, 3vw, 20px);
+  display           : flex;
+  flex-direction    : column;
+  gap               : 12px;
+  box-sizing        : border-box;
 }
 
 .button-wrapper {
   display               : flex;
   justify-content       : center;
-  margin-bottom         : 20px;
+  margin-bottom         : clamp(12px, 2.5vw, 20px);
   position              : relative;
-
+  width                 : 100%;
 }
 </style>

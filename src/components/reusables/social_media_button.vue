@@ -176,7 +176,6 @@ onUnmounted(() => {
 	background-color : #ffffff;
 	border           : 3px solid #000000;
 	border-radius    : 12px;
-	box-shadow       : var(--color-back-to-top-button-shadow);
 	color            : var(--color-primary);
 	font-family      : var(--font-p, sans-serif);
 	font-weight      : bold;

@@ -109,7 +109,6 @@ const closeModal = () => {
 .modal-panel {
   border                      : 2px solid #000000;
   border-radius               : 12px;
-  box-shadow                  : var(--color-custom-button-shadow);
   display                     : flex;
   flex-direction              : column;
   box-sizing                  : border-box;

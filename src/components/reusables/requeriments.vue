@@ -34,7 +34,7 @@ const requirements = ref([
   background-color: var(--color-requiriments-key-background);
   border-radius   : 30px;
   border          : var(--color-requiriments-container-border);
-  box-shadow      : var(--color-requiriments-shadow);
+  overflow        : hidden; 
 }
 
 .requirements-table {
@@ -87,22 +87,36 @@ const requirements = ref([
 }
 
 @media screen and (max-width: 768px) {
+  .requirements-container {
+    width               : calc(100% - 32px);
+    margin-left         : auto;
+    margin-right        : auto;
+  }
+
   .requirements-table,
   .requirements-table tbody,
   .requirements-table tr,
   .requirements-table td {
     display             : block;
     width               : 100% !important;
+    box-sizing          : border-box;
   }
 
-  .requirements-table tr:first-child td:first-child {
-    border-top-left-radius : 27px;
-    border-top-right-radius: 27px;
+  .requirements-table tr:first-child .requirement-label,
+  .requirements-table tr:first-child .requirement-value,
+  .requirements-table tr:last-child .requirement-label,
+  .requirements-table tr:last-child .requirement-value {
+    border-radius       : 0;
   }
 
-  .requirements-table tr:last-child td:last-child {
-    border-bottom-left-radius : 27px;
-    border-bottom-right-radius: 27px;
+  .requirements-table tr:first-child .requirement-label {
+    border-top-left-radius  : 27px;
+    border-top-right-radius : 27px;
+  }
+
+  .requirements-table tr:last-child .requirement-value {
+    border-bottom-left-radius  : 27px;
+    border-bottom-right-radius : 27px;
   }
 
   .requirements-table tr {

@@ -3,110 +3,138 @@
     <h2 class="gallery-title">{{ t('SITE_HOME_GALLERY') }}</h2>
 
     <div class="carousel-main-row">
-      <button 
-        class="nav-arrow left" 
-        @click="prevSlide(true)" 
-        aria-label="Previous Slide"
-      >
-        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
-      </button>
+      <CustomButton
+        class          = "nav-arrow left"
+        text           = ""
+        iconSize       = "var(--gallery-button-icon-size)"
+        width          = "var(--gallery-button-size)"
+        height         = "var(--gallery-button-size)"
+        iconColor      = "var(--gallery-button-icon)"
+        bgColor        = "var(--gallery-button-bg)"
+        hoverIconColor = "var(--gallery-button-icon-hover)"
+        hoverBgColor   = "var(--gallery-button-bg-hover)"
+        pressAnimation = "scale"
+        :iconSrc       = "img_left_arrow"
+        @click         = "prevSlide(true)"
+      />
 
       <div 
-        class="main-viewport" 
-        tabindex="-1"
-        @touchstart="handleTouchStart"
-        @touchend="handleTouchEnd"
+        class         = "main-viewport" 
+        tabindex      = "-1"
+        @touchstart   = "handleTouchStart"
+        @touchend     = "handleTouchEnd"
       >
         <div 
-          class="slides-track" 
-          :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+          class       = "slides-track" 
+          :style      = "{ transform: `translateX(-${currentIndex * 100}%)` }"
         >
           <div 
-            v-for="(slide, index) in slides" 
-            :key="slide.id" 
-            class="slide-item"
-            tabindex="-1"
+            v-for     = "(slide, index) in slides" 
+            :key      = "slide.id" 
+            class     = "slide-item"
+            tabindex  = "-1"
           >
             <img 
-              :src="slide.isGif && index === currentIndex ? slide.img : (slide.staticFrame || slide.img)" 
-              alt="Gallery Slide Image" 
-              class="slide-img clickable" 
-              @click="openModal(index)"
+              :src    = "slide.isGif && index === currentIndex ? slide.img : (slide.staticFrame || slide.img)" 
+              alt     = "Gallery Slide Image" 
+              class   = "slide-img clickable" 
+              @click  = "openModal(index)"
             />
           </div>
         </div>
 
         <div class="pagination-dots">
           <span 
-            v-for="(slide, index) in slides" 
-            :key="slide.id" 
-            class="dot"
-            :class="{ active: index === currentIndex }"
-            @click="selectSlide(index)"
+            v-for     = "(slide, index) in slides" 
+            :key      = "slide.id" 
+            class     = "dot"
+            :class    = "{ active: index === currentIndex }"
+            @click    = "selectSlide(index)"
           ></span>
         </div>
       </div>
 
-      <button 
-        class="nav-arrow right" 
-        @click="nextSlide(true)" 
-        aria-label="Next Slide"
-      >
-        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
-      </button>
+      <CustomButton
+        class          = "nav-arrow right"
+        text           = ""
+        iconSize       = "var(--gallery-button-icon-size)"
+        width          = "var(--gallery-button-size)"
+        height         = "var(--gallery-button-size)"
+        iconColor      = "var(--gallery-button-icon)"
+        bgColor        = "var(--gallery-button-bg)"
+        hoverIconColor = "var(--gallery-button-icon-hover)"
+        hoverBgColor   = "var(--gallery-button-bg-hover)"
+        pressAnimation = "scale"
+        :iconSrc       = "img_right_arrow"
+        @click         = "nextSlide(true)"
+      />
     </div>
 
     <div class="timer-bar-wrapper" v-if="!isModalOpen">
       <div 
-        class="timer-bar" 
-        :key="timerKey" 
-        :style="{ animationDuration: `${props.intervalTime}ms` }"
+        class         = "timer-bar" 
+        :key          = "timerKey" 
+        :style        = "{ animationDuration: `${props.intervalTime}ms` }"
       ></div>
     </div>
 
     <div class="thumbnails-container">
-      <button 
-        class="thumb-arrow left" 
-        @click="scrollThumbnails('left')" 
-        aria-label="Previous Thumbnails"
-      >
-        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
-      </button>
+      <CustomButton
+        class          = "thumb-arrow left"
+        text           = ""
+        iconSize       = "var(--gallery-button-icon-size)"
+        width          = "var(--gallery-button-size)"
+        height         = "var(--gallery-button-size)"
+        iconColor      = "var(--gallery-button-icon)"
+        bgColor        = "var(--gallery-button-bg)"
+        hoverIconColor = "var(--gallery-button-icon-hover)"
+        hoverBgColor   = "var(--gallery-button-bg-hover)"
+        pressAnimation = "scale"
+        :iconSrc       = "img_left_arrow"
+        @click         = "scrollThumbnails('left')"
+      />
       
       <div class="thumbnails-track-wrapper">
         <div class="thumbnails-track" ref="thumbnailsTrackRef">
           <div 
-            v-for="(slide, index) in slides" 
-            :key="slide.id" 
-            class="thumbnail-item"
-            :class="{ 'thumb-active': index === currentIndex }"
-            @click="selectSlide(index)"
+            v-for     = "(slide, index) in slides" 
+            :key      = "slide.id" 
+            class     = "thumbnail-item"
+            :class    = "{ 'thumb-active': index === currentIndex }"
+            @click    = "selectSlide(index)"
           >
             <img 
-              :src="slide.staticFrame || slide.thumb" 
-              alt="Thumbnail Preview" 
-              class="thumb-img" 
+              :src    = "slide.staticFrame || slide.thumb" 
+              alt     = "Thumbnail Preview" 
+              class   = "thumb-img" 
             />
             <div class="red-tint-overlay"></div>
           </div>
         </div>
       </div>
 
-      <button 
-        class="thumb-arrow right" 
-        @click="scrollThumbnails('right')" 
-        aria-label="Next Thumbnails"
-      >
-        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
-      </button>
+      <CustomButton
+        class          = "thumb-arrow right"
+        text           = ""
+        iconSize       = "var(--gallery-button-icon-size)"
+        width          = "var(--gallery-button-size)"
+        height         = "var(--gallery-button-size)"
+        iconColor      = "var(--gallery-button-icon)"
+        bgColor        = "var(--gallery-button-bg)"
+        hoverIconColor = "var(--gallery-button-icon-hover)"
+        hoverBgColor   = "var(--gallery-button-bg-hover)"
+        pressAnimation = "none"
+        :iconSrc       = "img_right_arrow"
+        @click         = "scrollThumbnails('right')"
+      />
     </div>
 
     <MediaModal 
-      :is-open="isModalOpen" 
-      :media-item="currentModalMediaItem" 
-      @close="closeModal" 
-      @next="nextSlide(true)"
-      @prev="prevSlide(true)"
+      :is-open        = "isModalOpen" 
+      :media-item     = "currentModalMediaItem" 
+      @close          = "closeModal" 
+      @next           = "nextSlide(true)"
+      @prev           = "prevSlide(true)"
     />
   </div>
 </template>
@@ -116,6 +144,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n }    from '@/composables/useI18n'
 
 import MediaModal from './media_modal.vue'
+import CustomButton from './custom_button.vue'
 
 import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
@@ -287,32 +316,36 @@ onUnmounted(() => {
 <style scoped>
 .gallery-container {
   width          : 100%;
-  max-width      : 1240px;
+  max-width      : 100%;
   height         : auto;
   display        : flex;
   flex-direction : column;
   align-items    : center;
   gap            : 15px;
-  padding        : 0 15px;
+  padding        : clamp(10px, 3vw, 20px) clamp(8px, 2.5vw, 15px);
   box-sizing     : border-box;
-  margin         : 0 auto;
+  margin         : 10px auto;
+  overflow-x     : hidden;
 }
 
 .gallery-title {
-  width       : 100%;
-  margin      : 0 0 10px 0;
-  text-align  : center;
-  color       : var(--gallery-title-color);
-  font-size   : var(--gallery-title-size);
-  font-family : var(--gallery-title-font);
+  width          : 100%;
+  margin         : 0 0 10px 0;
+  text-align     : center;
+  color          : var(--gallery-title-color);
+  font-size      : clamp(1.25rem, 4vw, var(--gallery-title-size));
+  font-family    : var(--gallery-title-font);
+  word-break     : break-word;
+  overflow-wrap  : break-word;
 }
 
 .carousel-main-row {
   width       : 100%;
   display     : flex;
   align-items : center;
-  gap         : 12px;
+  gap         : clamp(6px, 2vw, 12px);
   box-sizing  : border-box;
+  max-width   : 1240px;
 }
 
 .main-viewport {
@@ -325,9 +358,9 @@ onUnmounted(() => {
   display       : flex;
   align-items   : center;
   border-radius : 14px;
-  border        : 3px solid var(--gallery-border-color);
-  box-shadow    : var(--gallery-viewport-shadow);
+  border        : var(--gallery-border);
   touch-action  : pan-y;
+  min-width     : 0;
 }
 
 .slides-track {
@@ -358,10 +391,12 @@ onUnmounted(() => {
 
 .timer-bar-wrapper {
   width         : 100%;
+  max-width     : 1240px;
   height        : 4px;
   background    : var(--gallery-timer-bg);
   border-radius : 2px;
   overflow      : hidden;
+  box-sizing    : border-box;
 }
 
 .timer-bar {
@@ -377,65 +412,8 @@ onUnmounted(() => {
 
 .nav-arrow,
 .thumb-arrow {
-  position        : relative;
-  background      : var(--gallery-arrow-bg);
-  border          : 3px solid var(--gallery-border-color);
-  border-radius   : 12px;
-  padding         : 10px;
-  cursor          : pointer;
-  z-index         : 10;
-  display         : flex;
-  align-items     : center;
-  justify-content : center;
-  outline         : none;
-  transition      : transform 0.15s ease, box-shadow 0.15s ease;
-  flex-shrink     : 0;
-  min-width       : 42px;
-  min-height      : 42px;
-  box-sizing      : border-box;
-}
-
-.nav-arrow.right,
-.thumb-arrow.right {
-  box-shadow: var(--gallery-arrow-shadow-right);
-}
-
-.nav-arrow.right:hover,
-.thumb-arrow.right:hover {
-  transform : translate(2px, 2px);
-  box-shadow: var(--gallery-arrow-shadow-right-hover);
-}
-
-.nav-arrow.right:active,
-.thumb-arrow.right:active {
-  transform : translate(4px, 4px);
-  box-shadow: var(--gallery-arrow-shadow-right-active);
-}
-
-.nav-arrow.left,
-.thumb-arrow.left {
-  box-shadow: var(--gallery-arrow-shadow-left);
-}
-
-.nav-arrow.left:hover,
-.thumb-arrow.left:hover {
-  transform : translate(-2px, 2px);
-  box-shadow: var(--gallery-arrow-shadow-left-hover);
-}
-
-.nav-arrow.left:active,
-.thumb-arrow.left:active {
-  transform : translate(-4px, 4px);
-  box-shadow: var(--gallery-arrow-shadow-left-active);
-}
-
-.arrow-icon {
-  width          : 20px;
-  height         : 20px;
-  object-fit     : contain;
-  display        : block;
-  pointer-events : none; 
-  filter         : var(--gallery-arrow-icon-filter);
+  flex-shrink : 0;
+  z-index     : 10;
 }
 
 .pagination-dots {
@@ -465,10 +443,11 @@ onUnmounted(() => {
 
 .thumbnails-container {
   width           : 100%;
+  max-width       : 1240px;
   display         : flex;
   align-items     : center;
   justify-content : space-between;
-  gap             : 12px;
+  gap             : clamp(6px, 2vw, 12px);
   position        : relative;
   padding         : 5px 0 0 0;
   box-sizing      : border-box;
@@ -478,6 +457,7 @@ onUnmounted(() => {
   position : relative;
   flex     : 1;
   overflow : hidden;
+  min-width: 0;
 }
 
 .thumbnails-track {
@@ -501,12 +481,11 @@ onUnmounted(() => {
   aspect-ratio    : 16 / 9;
   opacity         : 0.75;
   cursor          : pointer;
-  transition      : opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition      : opacity 0.2s, transform 0.2s;
   overflow        : hidden;
   box-sizing      : border-box;
   border-radius   : 8px;
   border          : 2px solid var(--gallery-border-color);
-  box-shadow      : var(--gallery-thumb-shadow);
   background      : var(--gallery-thumb-bg);
 }
 
@@ -525,13 +504,11 @@ onUnmounted(() => {
 .thumbnail-item:hover {
   opacity   : 1;
   transform : translate(-1px, -1px);
-  box-shadow: var(--gallery-thumb-shadow-hover);
 }
 
 .thumbnail-item.thumb-active {
   opacity   : 1;
   border    : 3px solid var(--gallery-accent-color);
-  box-shadow: var(--gallery-thumb-shadow-active);
 }
 
 .thumbnail-item.thumb-active .red-tint-overlay {
@@ -558,43 +535,26 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .gallery-container {
-    padding : 0 10px;
+    padding : 0.75rem 0.5rem;
     gap     : 10px;
   }
 
   .carousel-main-row {
-    gap: 8px;
+    gap: 6px;
   }
 
   .main-viewport {
     border-width  : 2px;
-    box-shadow    : var(--gallery-viewport-shadow-mobile, 4px 4px 0px #000000);
     border-radius : 10px;
-  }
-
-  .nav-arrow,
-  .thumb-arrow {
-    padding       : 8px;
-    min-width     : 36px;
-    min-height    : 36px;
-    border-width  : 2px;
-    border-radius : 8px;
-  }
-
-  .arrow-icon {
-    width  : 16px;
-    height : 16px;
   }
 
   .thumbnail-item {
     flex         : 0 0 calc(33.333% - 7px);
     border-width : 2px;
-    box-shadow   : var(--gallery-thumb-shadow-mobile, 2px 2px 0px #000000);
   }
   
   .thumbnail-item.thumb-active {
     border-width : 2px;
-    box-shadow   : var(--gallery-thumb-shadow-mobile-active, 2px 2px 0px #E50012);
   }
 }
 
@@ -605,18 +565,6 @@ onUnmounted(() => {
 
   .thumbnails-container {
     gap: 6px;
-  }
-
-  .nav-arrow,
-  .thumb-arrow {
-    padding    : 6px;
-    min-width  : 30px;
-    min-height : 30px;
-  }
-
-  .arrow-icon {
-    width  : 14px;
-    height : 14px;
   }
 
   .thumbnail-item {

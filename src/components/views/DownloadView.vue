@@ -25,9 +25,10 @@
             iconSize        ="100%" 
             width           ="280px"
             height          ="100px"
-            bgColor         =var(--color-itchio-button-color)
-            hoverBgColor    =var(--color-itchio-button-hover-color)
-            hoverIconColor  =var(--color-itchio-button-icon-hover-color)
+            iconColor       =var(--color-itchio-button-icon)
+            bgColor         =var(--color-itchio-button-bg)
+            hoverIconColor  =var(--color-itchio-button-icon-hover)
+            hoverBgColor    =var(--color-itchio-button-bg-hover)
             :iconSrc        ="iconItchio" 
             externalUrl="https://mother-encore.itch.io/mother-encore"
         />
@@ -53,45 +54,59 @@ import img_lloydDad     from '@/assets/img/characters/Lloyd_Dad.png'
 import iconItchio       from '@/assets/svg/itchio.svg?url'
 
 const { t } = useI18n()
-
-
 </script>
 
 <style scoped>
-.main-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
+
 
 .platforms-grid {
     width             : 100%;
+    max-width         : 800px;
     display           : flex;
     justify-content   : center;
     align-items       : center;
-    gap               : 24px; 
+    gap               : clamp(12px, 2.5vw, 24px); 
+    flex-wrap         : wrap;
+    box-sizing        : border-box;
 }
 
 .button-container {
     width             : 100%;
+    max-width         : 100%;
     display           : flex;
     justify-content   : center;
-    margin-top        : 2rem; 
+    margin-top        : clamp(1.25rem, 3vw, 2rem); 
+    box-sizing        : border-box;
 }
 
 .page-character-container {
     width             : 100%;
     display           : flex;
     justify-content   : center;
-    margin-top        : 60px;
+    margin-top        : clamp(30px, 6vw, 60px);
     margin-bottom     : -20px;
     pointer-events    : none;
+    box-sizing        : border-box;
 }
 
 .page-character {
-    width             : 240px;
+    width             : clamp(140px, 20vw, 240px);
     height            : auto;
     object-fit        : contain;
     display           : block;
+}
+
+@media screen and (max-width: 768px) {
+  .platforms-grid {
+    flex-direction    : row;
+    justify-content   : center;
+    gap               : 16px;
+  }
+
+  .platforms-grid > * {
+    max-width         : 100%;
+    display           : flex;
+    justify-content   : center;
+  }
 }
 </style>

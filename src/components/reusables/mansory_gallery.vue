@@ -68,17 +68,11 @@ defineEmits(['select'])
   border-radius     : 12px;
   cursor            : pointer;
   background-color  : #ffffff;
-  
-
   border            : 3px solid #000000;
-  box-shadow        : var(--color-custom-button-shadow);  
-  
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .masonry-item:hover {
   transform     : translateY(-3px) translateX(-3px);
-  box-shadow    : var(--color-custom-button-active-shadow);
 }
 
 .masonry-item img,

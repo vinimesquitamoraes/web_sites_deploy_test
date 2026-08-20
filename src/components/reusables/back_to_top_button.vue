@@ -96,24 +96,21 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style>
 .scroll-top-btn {
   position            : fixed;
   bottom              : v-bind(dynamicBottomCSS); 
   right               : 30px;
   width               : 56px;
   height              : 56px;
-  background-color    : #ffffff;
-  border              : var(--color-default-border);
-  border-radius       : 16px;
+  background-color    : var(--back-to-top-button-bg-color);
+  border              : var(--back-to-top-button-border);
+  border-radius       : var(--back-to-top-button-border-radius);
   cursor              : pointer;
   display             : flex;
   align-items         : center;
   justify-content     : center;
-  box-shadow          : var(--color-back-to-top-button-shadow);
   z-index             : 99; 
-  transition          : transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease, bottom 0.1s ease-out;
-
   backface-visibility : hidden;
   transform-style     : preserve-3d;
   will-change         : transform, bottom;
@@ -138,15 +135,13 @@ onUnmounted(() => {
 }
 
 .scroll-top-btn:hover {
-  background-color    : var(--color-primary);
+  background-color    : var(--back-to-top-button-bg-hover);
   transform           : translateY(-4px);
-  box-shadow          : var(--color-back-to-top-button-shadow);
   --arrow-color       : var(--hover-arrow-color);
 }
 
 .scroll-top-btn:active {
   transform           : translateY(0px);
-  box-shadow          : var(--color-back-to-top-button-active-shadow );
 }
 
 .fade-bounce-enter-active {

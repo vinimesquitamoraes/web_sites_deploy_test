@@ -669,7 +669,6 @@ onUnmounted(() => {
   background            : var(--color-bg-main);
   border                : 2px solid #000000;
   border-radius         : 12px;
-  box-shadow            : var(--music-player-shadow);
   overflow              : hidden;
   width                 : 360px;
   max-width             : 100%;
@@ -765,7 +764,6 @@ onUnmounted(() => {
   background            : var(--color-bg-main);
   border                : 2px solid #000000;
   border-radius         : 12px;
-  box-shadow            : var(--music-player-shadow);
   padding               : 6px;
   box-sizing            : border-box;
   flex-shrink           : 0;
@@ -848,7 +846,6 @@ onUnmounted(() => {
   border-radius         : 3px;
   background            : var(--color-accent);
   border                : 2px solid #000000;
-  box-shadow            : 0px 1px 0px #000000;
 }
 
 .vertical-range-input::-moz-range-thumb {
@@ -857,7 +854,6 @@ onUnmounted(() => {
   border-radius         : 3px;
   background            : var(--color-accent);
   border                : 2px solid #000000;
-  box-shadow            : 0px 1px 0px #000000;
 }
 
 .mobile-slider-track {
@@ -868,7 +864,6 @@ onUnmounted(() => {
   background            : var(--color-surface);
   border                : 2px solid #000000;
   border-radius         : 6px;
-  box-shadow            : 0 3px 0 #000000;
   color                 : var(--color-text-main);
   font-size             : 0.55rem;
   font-weight           : 700;
@@ -876,7 +871,6 @@ onUnmounted(() => {
   width                 : 32px;
   height                : 22px;
   cursor                : pointer;
-  transition            : transform 0.05s ease, box-shadow 0.05s ease;
   display               : flex;
   justify-content       : center;
   align-items           : center;
@@ -885,7 +879,6 @@ onUnmounted(() => {
 
 .mute-btn:active {
   transform             : translateY(2px);
-  box-shadow            : 0 1px 0 #000000;
 }
 
 .mute-btn.active {
@@ -912,19 +905,16 @@ onUnmounted(() => {
   background            : var(--color-surface);
   border                : 2px solid #000000;
   border-radius         : 6px;
-  box-shadow            : 0 3px 0 #000000;
   cursor                : pointer;
   display               : flex;
   justify-content       : center;
   align-items           : center;
-  transition            : transform 0.05s ease, box-shadow 0.05s ease;
   padding               : 0;
   min-width             : 0;
 }
 
 .top-mech-btn:active, .top-mech-btn.active {
   transform             : translateY(2px);
-  box-shadow            : 0 1px 0 #000000;
 }
 
 .play-mech-btn {
@@ -1001,7 +991,6 @@ onUnmounted(() => {
   width                 : 100%;
   background            : var(--color-primary);
   border                : 2px solid #000000;
-  box-shadow            : 0px 4px 0px #000000;
   padding               : 12px;
   border-radius         : 12px;
   box-sizing            : border-box;
@@ -1049,13 +1038,10 @@ onUnmounted(() => {
   padding               : 2px 6px;
   cursor                : pointer;
   color                 : var(--color-text-main);
-  box-shadow            : 0 2px 0 #000000;
-  transition            : transform 0.05s ease, box-shadow 0.05s ease;
 }
 
 .tape-toggle-btn:active {
   transform             : translateY(2px);
-  box-shadow            : none;
 }
 
 .cassette-door {
@@ -1193,7 +1179,6 @@ onUnmounted(() => {
   gap                   : 8px;
   background            : var(--color-primary);
   border                : 2px solid #000000;
-  box-shadow            : 0px 4px 0px #000000;
   padding               : 10px;
   border-radius         : 12px;
   box-sizing            : border-box;
@@ -1272,9 +1257,7 @@ onUnmounted(() => {
   background            : var(--color-text-main);
   border                : 2px solid #000000;
   border-radius         : 6px;
-  box-shadow            : 0 3px 0 #000000;
   cursor                : pointer;
-  transition            : transform 0.05s ease, box-shadow 0.05s ease;
   box-sizing            : border-box;
   width                 : 100%;
   max-width             : 100%;
@@ -1282,7 +1265,6 @@ onUnmounted(() => {
 
 .track-item:active {
   transform             : translateY(2px);
-  box-shadow            : 0 1px 0 #000000;
 }
 
 .track-item.active {
@@ -1329,26 +1311,22 @@ onUnmounted(() => {
   background            : var(--color-bg-main);
   color                 : var(--color-text-main);
   border                : 2px solid #000000;
-  box-shadow            : var( --color-music-player-pagination-btn-shadow);
   padding               : 6px 12px;
   border-radius         : 6px;
   cursor                : pointer;
   font-size             : 0.7rem;
   font-weight           : 700;
   font-family           : var(--font-p);
-  transition            : transform 0.05s ease, box-shadow 0.05s ease;
 }
 
 .page-btn:active:not(:disabled) {
   transform             : translateY(3px) translateX(3px);
-  box-shadow            : none;
 }
 
 .page-btn:disabled {
   opacity               : 0.3;
   cursor                : not-allowed;
   transform             : translateY(3px) translateX(3px);
-  box-shadow            : none;
 }
 
 .page-info {
@@ -1433,7 +1411,6 @@ onUnmounted(() => {
     border-radius       : 3px;
     background            : var(--color-accent);
     border                : 2px solid #000000;
-    box-shadow          : 0px 1px 0px #000000;
   }
 
   .mobile-range-input::-moz-range-thumb {
@@ -1442,7 +1419,6 @@ onUnmounted(() => {
     border-radius       : 3px;
     background          : var(--color-accent);
     border                : 2px solid #000000;
-    box-shadow          : 0px 1px 0px #000000;
   }
 
   .mute-btn {

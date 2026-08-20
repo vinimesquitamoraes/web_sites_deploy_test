@@ -84,7 +84,6 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   background-color  : var(--color-dropdown-trigger-bg);
   color             : var(--color-dropdown-trigger-text);
   cursor            : pointer;
-  box-shadow        : var(--color-dropdown-shadow);
   text-transform    : uppercase;
   transition        : all 0.15s ease-in-out;
   position          : relative;
@@ -139,7 +138,7 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   background-color  : var(--color-dropdown-trigger-hover-bg);
   color             : var(--color-dropdown-trigger-hover-text);
   transform         : translateY(-2px);
-  box-shadow        : var(--color-dropdown-hover-shadow);
+
 }
 
 .dropdown-trigger:hover .arrow-icon {
@@ -156,7 +155,6 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   background-color    : var(--color-dropdown-list-bg);
   border              : var(--color-dropdown-list-border);
   border-radius       : 6px;
-  box-shadow          : var(--color-dropdown-shadow);
   z-index             : 99;
   overflow-y          : auto;
   max-height          : 250px;

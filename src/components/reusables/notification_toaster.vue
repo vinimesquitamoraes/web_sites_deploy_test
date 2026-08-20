@@ -117,7 +117,6 @@ const transitionName = computed(() => {
   background            : var(--toaster-bg-main, #ffffff);
   border                : 2px solid var(--toaster-border-color, #000000);
   border-radius         : 10px;
-  box-shadow            : var(--toaster-shadow, 4px 4px 0px #000000);
   padding               : 12px 16px;
   max-width             : 380px;
   box-sizing            : border-box;

@@ -1,6 +1,6 @@
 <template>
-  <div class="about-page-container">
-    <div class="main-content">
+  <div class="main-content">
+    <div class="about-page-container">
    
      <ContentSection
       v-for="(section, index) in infoSections" 
@@ -11,36 +11,28 @@
       :mediaType    ="section.content_type"
       :mediaPosition="index % 2 === 0 ? 'right' : 'left'"
       :redBorder    ="section.redBorder ?? true"
-      :imageOpenable="section.imageOpenable ?? true"
+      :imageOpenable="section.imageOpenable ?? false"
       :headingAlign ="section.headingAlign ?? 'left'"
       :textPadding  ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 21px')"
       :mediaFit     ="section.mediaFit ?? 'cover'"
-      :mediaShadow  ="section.mediaShadow ?? 'var(--content-section-media-shadow)'"
       :mediaBorder  ="section.mediaBorder ?? ''"
       :border       ="section.border ?? 'transparent'"
-      :shadow       ="section.shadow ?? ''"
       headerPosition="inside"
       mediaWidth    ="775px" 
       mediaHeight   ="450px"
       textAlign     ="left"
     />
           
-  
     </div>
-    <MusicPlayer 
-      playlistId="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
-      footerBehavior="stay" 
-      volumeLayout="bar"
-    />
-    <div class="godot_foot_note">
+    
 
+    <div class="godot_foot_note">
       <SocialMediaButton 
       platform     ="github" 
       variant      ="black" 
       hoverVariant ="colored" 
       tooltipText  ="MOTHER-Encore-Demo-Source-Code"
       />
-   
     </div>
    
   </div>
@@ -49,10 +41,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
+
 import ContentSection     from '@/components/reusables/content_section.vue'
 import SocialMediaButton  from '@/components/reusables/social_media_button.vue'
-import MusicPlayer        from '@/components/reusables/music_player.vue'
-
 
 import combatImage  from '@/assets/img/screenshots/sc4.png'
 import fieldImage   from '@/assets/img/screenshots/sc1.png'
@@ -63,7 +54,6 @@ import musicImage   from '@/assets/img/screenshots/sc5.png'
 import imgGodotLogo from '@/assets/img/logos/goto_logo_large_color_light.png'
 
 const { t } = useI18n()
-
 
 const infoSections = computed(() => [
   {
@@ -108,43 +98,47 @@ const infoSections = computed(() => [
     text          : t('SITE_ABOUT_OPENSOURCE_P1'),
     image         : imgGodotLogo,
     content_type  : "image",
-    imageOpenable : false,
     mediaFit      : 'contain',
-    mediaShadow   : 'none',
     mediaBorder   : 'none',
     border        : 'none',
-    shadow        : 'none'
   }
 ])
-
-
 </script>
 
 <style scoped>
+.main-content {
+  width             : 100%;
+  max-width         : 100%;
+  box-sizing        : border-box;
+  overflow-x        : hidden;
+  padding           : clamp(1rem, 3vw, 2.5rem) clamp(0.75rem, 2.5vw, 1.5rem);
+  display           : flex;
+  flex-direction    : column;
+  align-items       : center;
+}
+
 .about-page-container {
   display           : flex;
   flex-direction    : column;
   align-items       : center;
   width             : 100%;
-}
-
-.main-content {
-  width             : 100%;
-  max-width         : 1240px;
-  display           : flex;
-  flex-direction    : column;
-  gap               : 20px;
-  padding           : 10px;
+  max-width         : 1200px;
+  gap               : clamp(1rem, 2.5vw, 1.5rem);
+  box-sizing        : border-box;
 }
 
 .godot_foot_note {
   width             : 100%;
-  max-width         : 1240px;
-  margin-bottom     : 50px;
-  padding           : 10px;
   box-sizing        : border-box;
   display           : flex;
   flex-direction    : column;
   align-items       : center;
+  margin-top        : clamp(1.5rem, 3vw, 2.5rem);
+}
+
+@media screen and (max-width: 768px) {
+  .main-content {
+    padding         : 0.75rem 0.5rem;
+  }
 }
 </style>

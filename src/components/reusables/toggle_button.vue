@@ -144,7 +144,6 @@ const handleClick = (event) => {
   backface-visibility         : hidden;
   -webkit-transform-style     : preserve-3d;
   transform-style             : preserve-3d;
-  will-change                 : transform, box-shadow, opacity;
 }
 
 .switch-input {
@@ -156,13 +155,9 @@ const handleClick = (event) => {
   display                     : inline-flex;
   align-items                 : center;
   box-sizing                  : border-box;
-
   border                      : 2px solid #000000;
-  border-radius               : 999px;
-  box-shadow                  : var(--color-back-to-top-button-shadow);     
-  
+  border-radius               : var(--default-border-radius);
   transition                  : background-color 0.4s ease, 
-                                box-shadow 1s cubic-bezier(0.1, 1, 0.2, 1), 
                                 color 0.4s ease;
 }
  
@@ -170,7 +165,6 @@ const handleClick = (event) => {
   position                    : absolute;
   left                        : 4px;
   background-color            : var(--color-black );
-  border                      : var(--color-back-to-top-button-shadow);
   border-radius               : 50%;
   display                     : flex;
   align-items                 : center;
@@ -179,10 +173,6 @@ const handleClick = (event) => {
   
   transition                  : transform 0.4s cubic-bezier(0.1, 1, 0.2, 1), 
                                 background-color 0.4s ease;
-}
-
-.custom-switch:active .slider {
-  box-shadow                  : var(--color-custom-button-active-shadow);      
 }
 
 .custom-switch.is-active .slider,

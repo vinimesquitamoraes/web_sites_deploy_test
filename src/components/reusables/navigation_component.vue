@@ -27,7 +27,7 @@
 
 <script setup>
 import { useI18n }            from '@/composables/useI18n'
-import CustomLanguageDropdown from './custom_lang_dropdown.vue'
+import CustomLanguageDropdown from '@/components/reusables/custom_lang_dropdown.vue'
 
 defineProps({
   isMenuOpen: {
@@ -121,7 +121,6 @@ const { t } = useI18n()
     visibility      : hidden;
     overflow        : hidden;
     transition      : all 0.3s ease-in-out;
-    box-shadow      :  var(--color-navigation-mobile-shadow);
   }
 
   .nav-container.nav-active {

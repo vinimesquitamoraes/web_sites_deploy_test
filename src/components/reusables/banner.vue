@@ -44,7 +44,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
-import CustomButton from './custom_button.vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
 import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
 import img_defaultBanner from '@/assets/img/funny/ninten_Dough.png'
 
