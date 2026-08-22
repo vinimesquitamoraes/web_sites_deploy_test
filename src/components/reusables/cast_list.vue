@@ -40,11 +40,12 @@
         :key          ="character.name"
         :name         ="character.name"
         :description  ="character.description"
-        :image        = "character.image"
+        :image        ="character.image"
         :imageShape   ="character.imageShape || 'circle'"
         :imageBgColor ="character.imageBgColor || 'transparent'"
         :isReversed   ="index % 2 !== 0" 
-        :imageScale   ="character.imageScale || 1.0"
+        :imageScale   ="character.imageScale   || undefined"
+        :imagePadding ="character.imagePadding || undefined"
       />
     </div>
   </section>
@@ -99,7 +100,7 @@ const characters = computed(() => [
     image       : imgNinten,
     imageShape  : 'circle',
     imageBgColor: 'var(--color-default-background)',
-    imageScale  : "0.8",
+    imageScale  : "1.3",
   },
   {
     name        : t('SITE_HOME_LLOYD_TITLE'),
@@ -108,7 +109,8 @@ const characters = computed(() => [
     image       : imgLloyd,
     imageShape  : 'circle',
     imageBgColor: 'var(--color-default-background)',
-    imageScale  : "0.8",
+    imageScale  : "1.3",
+    imagePadding: "0 0 90px 0",
   },
   {
     name        : t('SITE_HOME_ANA_TITLE'),
@@ -117,7 +119,9 @@ const characters = computed(() => [
     image       : imgAna,
     imageShape  : 'circle',
     imageBgColor: 'var(--color-default-background)',
-    imageScale  : "0.8",
+    imageScale  : "1.3",
+    imagePadding: "0 0 100px 0",
+
   },
   {
     name        : t('SITE_HOME_TEDDY_TITLE'),
@@ -125,7 +129,8 @@ const characters = computed(() => [
     portrait    : imgTeddyPortrait,
     image       : imgTeddy,
     imageShape  : 'circle',
-    imageBgColor: 'var(--color-default-background)'
+    imageBgColor: 'var(--color-default-background)',
+    imageScale  : "1.6",
   }
 ]);
 
@@ -145,6 +150,7 @@ onMounted(() => {
   align-items    : center;
   width          : 100%;
   box-sizing     : border-box;
+
 }
 
 .section-title {
@@ -248,7 +254,7 @@ onMounted(() => {
   padding        : 20px;
   display        : flex;
   flex-direction : column;
-  gap            : 30px;
+  gap            : 40px;
   align-items    : center;
   width          : 100%;
   box-sizing     : border-box;
@@ -283,11 +289,14 @@ onMounted(() => {
     display      : none;
   }
   .tabs-container {
-    gap          : 16px;
+    gap          : 30px;
     padding      : 10px 15px;
   }
   .cast-display {
     min-height   : auto;
+  }
+  .cast-grid{
+    gap          :  80px;
   }
 }
 </style>

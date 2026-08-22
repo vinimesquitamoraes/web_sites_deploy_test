@@ -83,7 +83,6 @@ import { ref, watch, nextTick } from 'vue'
 import ContentSection from '@/components/reusables/content_section.vue'
 
 const props = defineProps({
-  // Foldable Props
   title: {
     type: String,
     required: true

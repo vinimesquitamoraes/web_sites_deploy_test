@@ -11,19 +11,18 @@
       :class="imageShapeClass"
       :style="{ 
         backgroundColor: imageBgColor, 
-        width: imageSize, 
-        height: imageSize,
-        minWidth: imageSize,
-        minHeight: imageSize,
-        maxWidth: imageSize,
-        maxHeight: imageSize
+        width     : imageSize, 
+        height    : imageSize,
+        minWidth  : imageSize,
+        minHeight : imageSize,
+        maxWidth  : imageSize,
+        maxHeight : imageSize,
       }"
     >
       <img 
-        :src="image" 
-        :alt="name" 
-        class="character-image" 
-        :style="{ transform: `scale(${imageScale})` }"
+        :src    ="image" 
+        :alt    ="name" 
+        class   ="character-image" 
       />
     </div>
 
@@ -36,6 +35,7 @@
         v-html="paragraph"
       ></p>
     </div>
+
   </div>
 </template>
 
@@ -51,7 +51,8 @@ const props = defineProps({
   imageShape  : { type: String, default: 'circle', validator: (val) => ['circle', 'square'].includes(val) },
   imageBgColor: { type: String, default: 'transparent' },
   imageSize   : { type: String, default: '340px' },
-  imageScale  : { type: [Number, String], default: 1 }
+  imageScale  : { type: [Number, String], default: 1},
+  imagePadding: { type: String, default: "0 0 70px 0"},
 });
 
 const imageShapeClass = computed(() => {
@@ -70,7 +71,7 @@ const descriptionParagraphs = computed(() => {
 .character-card {
   width          : 100%;
   max-width      : 100%;
-  min-height     : 380px;
+  min-height     : 80px;
   background     : var(--color-primary);
   border-radius  : 30px;
   padding        : 30px 40px;
@@ -78,7 +79,7 @@ const descriptionParagraphs = computed(() => {
   align-items    : center;
   gap            : 40px;
   box-sizing     : border-box;
-  overflow       : hidden;
+  overflow       : visible;
 }
 
 .character-card.reverse {
@@ -95,7 +96,7 @@ const descriptionParagraphs = computed(() => {
   display        : flex;
   justify-content: center;
   align-items    : center;
-  overflow       : hidden; 
+  overflow       : visible; 
 }
 
 .image-wrapper.shape-circle {
@@ -115,6 +116,12 @@ const descriptionParagraphs = computed(() => {
   height         : 100%;
   object-fit     : contain; 
   display        : block;
+  transform      : scale(v-bind(imageScale));
+  padding        : v-bind(imagePadding);
+  filter         : drop-shadow(4px    0 0 #ffffff) 
+                   drop-shadow(-4px   0 0 #ffffff) 
+                   drop-shadow(0    4px 0 #ffffff) 
+                   drop-shadow(0   -4px 0 #ffffff);
 }
 
 .character-card.is-vertical .image-wrapper {
