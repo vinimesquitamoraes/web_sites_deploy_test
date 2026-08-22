@@ -4,7 +4,7 @@
 - Script names in snake_case;
 - Folder names in snake_case as well;
 - Class names in CamelCase;
-- Function names in camelCase;
+- Function names in lower camelCase;
 - Do not use accents in any names (can cause issues depending on the OS)
 Versionamento
 MAJOR version when you make incompatible API changes

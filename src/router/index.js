@@ -20,11 +20,12 @@ const routes = [
     name: 'Home', 
     component: HomeView,
     meta: {
-      title         : 'MOTHER Encore - Home',
-      description   : 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!',
-      image         :  LOGO_IMAGE_URL, 
-      themeColor    : '#c24b49',
-      twitterSite   : '@Mother_Encore'
+      title           : 'MOTHER Encore - Home',
+      description     : 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!',
+      image           :  LOGO_IMAGE_URL, 
+      themeColor      : '#c24b49',
+      twitterSite     : '@Mother_Encore',
+      hideMusicPlayer : true
     }
   },
   { 
@@ -49,7 +50,6 @@ const routes = [
       image         :  LOGO_IMAGE_URL,
       themeColor    : '#c24b49',
       twitterSite   : '@Mother_Encore',
-      // hideMusicPlayer: true
       
     }
   },

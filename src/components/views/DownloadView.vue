@@ -61,7 +61,6 @@ const { t } = useI18n()
 
 .platforms-grid {
     width             : 100%;
-    max-width         : 800px;
     display           : flex;
     justify-content   : center;
     align-items       : center;

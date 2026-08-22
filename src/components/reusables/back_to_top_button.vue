@@ -36,10 +36,7 @@ const handleScroll = () => {
 const handleFooterOverlap = () => {
   const isMobile = window.innerWidth <= 768
   
-  
   const mobilePlayerHeight = 160
- 
-
   const defaultBottom = isMobile ? (20 + mobilePlayerHeight + 12) : 30
 
   isHidden.value = false
