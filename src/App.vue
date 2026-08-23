@@ -21,9 +21,10 @@
 
     <MusicPlayer 
       v-if="!route.meta.hideMusicPlayer"
-      playlistId="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
-      footerBehavior="stay" 
-      volumeLayout="bar"
+      playlistId        ="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
+      footerBehavior    ="stay" 
+      volumeLayout      ="bar"
+      minimizedBehavior = "compact"
     />
 
     <div ref="footerRef" class="footer-container">
@@ -155,7 +156,7 @@
   --back-to-top-button-border                : var(--default-border);
   --back-to-top-button-border-radius         : var(--default-border-radius);
   --back-to-top-button-bg-hover              : var(--color-primary);
-
+  --back-to-top-button-size                  : 56px;
 
   /* Character Card Stuff ==================================================================================================*/
   --character-card-title-color      : var(--color-default-text-color);
@@ -212,6 +213,35 @@
   --color-text-main           : #f8fafc;
   --color-text-muted          : #f87171;
   --color-white               : #ffffff;
+
+  --music-player-color-bg-main                 : var(--color-bg-main);
+  --music-player-color-bg-dark                 : var(--color-bg-dark);
+  --music-player-color-surface                 : var(--color-surface);
+  --music-player-color-text-main               : var(--color-text-main);
+  --music-player-color-text-muted              : var(--color-text-muted);
+  --music-player-color-white                   : var(--color-white);
+  --music-player-color-accent                  : var(--color-accent);
+  --music-player-color-accent-light            : var(--color-accent-light);
+  
+  --music-player-color-accent-special          : #7b2cbf;
+  --music-player-color-primary                 : #5a189a;
+  --music-player-color-playbt-playing          : #7b2cbf;
+  --music-player-color-playbt-playing-pressed  : #5a189a;
+  --music-player-color-playbt-paused           : #3c096c;
+  --music-player-color-playbt-paused-pressed   : #240046;
+  --music-player-color-placeholder-green       : var(--color-placeholder-green);
+
+  --music_player-compact-button                : 56px;
+
+  --music-player-border-width                  : 2px;
+  --music-player-border-style                  : solid;
+  --music-player-border-color                  : #000000;
+  --music-player-border-radius                 : 12px;
+
+  --music_player-font-h1                       : var(--font-h1);
+  --music_player-font-p                        : var(--font-p);
+  --music_player-font-p-size                   : var(--font-p-size);
+  --music_player-font-track-names-size         : var(--font-track-names-size);
 
   /* Toaster Stuff ========================================================================================================= */
   --toaster-bg-main           : #ffffff;

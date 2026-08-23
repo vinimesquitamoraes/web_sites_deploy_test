@@ -98,8 +98,8 @@ onUnmounted(() => {
   position            : fixed;
   bottom              : v-bind(dynamicBottomCSS); 
   right               : 30px;
-  width               : 56px;
-  height              : 56px;
+  width               : var(--back-to-top-button-size);
+  height              : var(--back-to-top-button-size);
   background-color    : var(--back-to-top-button-bg-color);
   border              : var(--back-to-top-button-border);
   border-radius       : var(--back-to-top-button-border-radius);

@@ -1,203 +1,121 @@
 <template>
   <div class="music-player-container">
     <div 
-      class="music-player-wrapper" 
-      :class="{ 'is-open': isOpen, 'is-ready': isReady, 'special-theme': showImageTape && hasSpecialTapeAccess }"
-      :style="{ 
-        bottom: playerBottom + 'px',
-        left: (isCentered || footerBehavior === 'center') ? '50%' : '16px',
-        right: 'auto',
-        transform: (isCentered || footerBehavior === 'center') ? 'translateX(-50%)' : 'none',
-        opacity: isHidden ? 0 : undefined,
-        visibility: isHidden ? 'hidden' : 'visible'
+      class         = "music-player-wrapper" 
+      :class        = "{ 
+        'is-open'       : isOpen, 
+        'is-ready'      : isReady, 
+        'special-theme' : showImageTape && hasSpecialTapeAccess,
+        'compact-mode'  : minimizedBehavior === 'compact' && !isCompactForcedOpen 
+      }"
+      :style        = "{ 
+        bottom     : playerBottom + 'px',
+        left       : (isCentered || footerBehavior === 'center') ? '50%' : '16px',
+        right      : 'auto',
+        transform  : (isCentered || footerBehavior === 'center') ? 'translateX(-50%)' : 'none',
+        opacity    : isHidden ? 0 : undefined,
+        visibility : isHidden ? 'hidden' : 'visible'
       }"
     >
       <div class="hidden-player">
         <div id="youtube-player"></div>
       </div>
 
-      <div class="player-outer-layout">
-        <div class="player-card">
-  
-          <div class="player-control-bar">
-            <button class="expand-toggle-btn" @click="toggleOpen" :aria-label="isOpen ? 'Collapse Player' : 'Expand Player'">
-              <span class="expand-icon-span" :class="{ 'is-expanded': isOpen }"></span>
-            </button>
+      <Transition name="compact-pop">
+        <CustomButton 
+          v-if           = "minimizedBehavior === 'compact' && !isCompactForcedOpen || isPlayerHidden"
+          class          = "compact-toggle-btn"
+          :iconSrc       = "musicNoteSvg"
+          :iconSize      = "20"
+          width          = 'var(--music_player-compact-button)'
+          height         = 'var(--music_player-compact-button)'
+          pressAnimation = "scale"
+          aria-label     = "Expand Music Player"
+          @click         = "toggleCompactOpen"
+        />
+      </Transition>
 
-            <div class="top-buttons-bar">
-              <button class="top-mech-btn" @click="prevTrack" title="Rewind" aria-label="Rewind">
-                <span class="control-icon-span prev-svg"></span>
-              </button>
+      <Transition name="slide-out-left" @after-leave="onPlayerHiddenComplete">
+        <div v-if="!isPlayerHiddenAction" class="player-outer-layout">
+          <div class="player-card">
+            <div class="player-control-bar">
+              <div class="control-bar-buttons">
+                <button 
+                  class         = "secondary-action-btn"
+                  @click        = "handleSecondaryAction"
+                  aria-label    = "Minimize Player"
+                >
+                  <span class="secondary-icon-span"></span>
+                </button>
 
-              <button class="top-mech-btn play-mech-btn" :class="{ 'is-playing': isPlaying }" @click="togglePlay" :title="isPlaying ? 'Pause' : 'Play'" :aria-label="isPlaying ? 'Pause' : 'Play'">
-                <span v-if="!isPlaying" class="control-icon-span play-svg"></span>
-                <span v-else class="control-icon-span pause-svg"></span>
-              </button>
-
-              <button class="top-mech-btn" @click="stopPlayer" title="Stop" aria-label="Stop">
-                <span class="control-icon-span stop-svg"></span>
-              </button>
-
-              <button class="top-mech-btn" @click="nextTrack" title="Load / Next" aria-label="Load / Next">
-                <span class="control-icon-span next-svg"></span>
-              </button>
-
-              <button class="top-mech-btn rec-mech-btn" @click="handleRecClick" :class="{ active: isRecording }" title="Record" aria-label="Record">
-                <span class="control-icon-span rec-svg"></span>
-              </button>
-            </div>
-          </div>
-
-          <div class="player-collapsible-content">
-            <div class="music-player walkman-device">
-              <div class="walkman-chassis">
-                <div class="walkman-top-panel">
-                  <div class="model-badge">
-                    <span class="brand-name">WALKMAN</span>
-                  </div>
-                  <button v-if="hasSpecialTapeAccess" class="tape-toggle-btn" @click="toggleTapeStyle">
-                    {{ showImageTape ? 'DEFAULT' : 'SPECIAL' }}
-                  </button>
-                </div>
-
-                <div class="walkman-control-board">
-                  <div class="lcd-panel">
-                    <div class="lcd-screen-inner">
-                      <div class="lcd-top-row">
-                        <span class="lcd-status-tag">{{ isPlaying ? 'PLAY' : 'STOP' }}</span>
-                        <span class="lcd-track-num">TRK {{ currentTrackIndex + 1 }}</span>
-                        <span class="lcd-time-display">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
-                      </div>
-                      <input 
-                        type="range" 
-                        min="0" 
-                        :max="duration || 0" 
-                        step="0.1"
-                        :value="currentTime" 
-                        @input="onSeek"
-                        class="lcd-progress-slider"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="cassette-door" :class="{ spinning: isPlaying }">
-                  <div v-if="showImageTape && hasSpecialTapeAccess" class="custom-image-tape-container">
-                    <img :src="ferris_special_tape" alt="Custom Cassette" class="custom-cassette-img" />
-                  </div>
-                  <div v-else class="cassette-shell">
-                    <div class="cassette-label-header">
-                      <span class="label-brand">ENCORE MIXTAPE</span>
-                      <span class="label-type">VOL.II</span>
-                    </div>
-
-                    <div class="cassette-window">
-                      <div class="reel left-reel">
-                        <div class="reel-hub"></div>
-                      </div>
-                   
-                      <div class="reel right-reel">
-                        <div class="reel-hub"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="playlist-container">
-              <div class="playlist-header">
-                <h3 class="playlist-title">Track List</h3>
-                <SocialMediaButton 
-                  platform      ="youtube" 
-                  variant       ="white" 
-                  hoverVariant  ="colored" 
-                  :tooltip-text ="t('SITE_MUSIC_PLAYER_LINK')"
-                  size          ="30"
-                />
-
+                <button 
+                  class         = "expand-toggle-btn" 
+                  @click        = "toggleOpen" 
+                  :aria-label   = "isOpen ? 'Collapse Player' : 'Expand Player'"
+                >
+                  <span class="expand-icon-span" :class="{ 'is-expanded': isOpen }"></span>
+                </button>
               </div>
 
-              <div class="playlist-content">
-                <div class="playlist-body-area">
-                  <div v-if="isLoadingTracks" class="loading-state">
-                    Loading...
-                  </div>
-
-                  <ul class="track-list" v-else>
-                    <li 
-                      v-for="(track, index) in paginatedTracks" 
-                      :key="track.id"
-                      class="track-item"
-                      :class="{ active: currentTrackIndex === getGlobalIndex(index) }"
-                      @click="playTrack(index)"
-                    >
-                      <span class="track-number">{{ getGlobalIndex(index) + 1 }}</span>
-                      <span class="track-name">{{ track.title }}</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div class="pagination-controls" :style="{ opacity: (!isLoadingTracks && totalPages > 1) ? 1 : 0, pointerEvents: (!isLoadingTracks && totalPages > 1) ? 'auto' : 'none' }">
-                  <button class="page-btn" :disabled="currentPage === 1" @click="currentPage--">PREV</button>
-                  <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-                  <button class="page-btn" :disabled="currentPage === totalPages" @click="currentPage++">NEXT</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="external-side-volume" :class="`layout-${volumeLayout}`">
-          <div class="volume-control-container">
-            <span class="control-label">VOL</span>
-            
-            <div v-if="volumeLayout === 'wheel'" class="thumbwheel" @wheel.prevent="onWheelVolume">
-              <div class="wheel-ridges"></div>
-            </div>
-
-            <div v-else-if="volumeLayout === 'bar'" class="vertical-slider-track">
-              <input 
-                type="range" 
-                min="0" 
-                max="100" 
-                step="1"
-                :value="volume" 
-                @input="onVolumeChange"
-                class="vertical-range-input"
-                :style="{ '--volume-percent': volume + '%' }"
+              <PlayerControls 
+                :isPlaying    = "isPlaying" 
+                :isRecording  = "isRecording"
+                @prev         = "prevTrack"
+                @togglePlay   = "togglePlay"
+                @stop         = "stopPlayer"
+                @next         = "nextTrack"
+                @record       = "handleRecClick"
               />
             </div>
 
-            <div class="mobile-slider-track">
-              <input 
-                type="range" 
-                min="0" 
-                max="100" 
-                step="1"
-                :value="volume" 
-                @input="onVolumeChange"
-                class="mobile-range-input"
-                :style="{ '--volume-percent': volume + '%' }"
+            <div class="player-collapsible-content">
+              <WalkmanDevice 
+                :isPlaying            = "isPlaying"
+                :hasSpecialTapeAccess = "hasSpecialTapeAccess"
+                :showImageTape        = "showImageTape"
+                :currentTrackIndex    = "currentTrackIndex"
+                :currentTime          = "currentTime"
+                :duration             = "duration"
+                :specialTapeImg       = "ferris_special_tape"
+                :formatTime           = "formatTime"
+                @toggleTapeStyle      = "toggleTapeStyle"
+                @seek                 = "onSeek"
+              />
+
+              <PlaylistView 
+                :isLoadingTracks   = "isLoadingTracks"
+                :paginatedTracks   = "paginatedTracks"
+                :currentTrackIndex = "currentTrackIndex"
+                :currentPage       = "currentPage"
+                :totalPages        = "totalPages"
+                :tooltipText       = "t('SITE_MUSIC_PLAYER_LINK')"
+                :getGlobalIndex    = "getGlobalIndex"
+                @playTrack         = "playTrack"
+                @updatePage        = "(val) => currentPage = val"
               />
             </div>
           </div>
 
-          <button class="mute-btn" @click="toggleMute" :class="{ active: isMuted }" :title="isMuted ? 'Unmute' : 'Mute'" :aria-label="isMuted ? 'Unmute' : 'Mute'">
-            {{ isMuted ? 'OFF' : 'MUT' }}
-          </button>
+          <VolumeControl 
+            :volumeLayout  = "volumeLayout"
+            :volume        = "volume"
+            :isMuted       = "isMuted"
+            @wheelVolume   = "onWheelVolume"
+            @volumeChange  = "onVolumeChange"
+            @toggleMute    = "toggleMute"
+          />
         </div>
-      </div>
+      </Transition>
     </div>
 
     <ToasterNotification 
-      v-model     ="showToast"
-      :message    ="toastMessage"
-      :icon       ="toastIcon"
-      type        ="info"
-      position    ="top-left"
-      :duration   ="4000"
-      @close      ="handleToastClose"
+      v-model     = "showToast"
+      :message    = "toastMessage"
+      :icon       = "toastIcon"
+      type        = "info"
+      position    = "top-left"
+      :duration   = "4000"
+      @close      = "handleToastClose"
     />
   </div>
 </template>
@@ -206,9 +124,16 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
 import { useRouter } from 'vue-router'
-import ToasterNotification  from '../reusables/notification_toaster.vue'
-import SocialMediaButton    from '@/components/reusables/social_media_button.vue'
 
+import ToasterNotification  from '@/components/reusables/notification_toaster.vue'
+import CustomButton         from '@/components/reusables/custom_button.vue'
+
+import PlayerControls  from '@/components/reusables/music_player_controls.vue'
+import WalkmanDevice   from '@/components/reusables/music_player_walkman.vue'
+import PlaylistView    from '@/components/reusables/music_player_playlist.vue'
+import VolumeControl   from '@/components/reusables/music_player_volume_control.vue'
+
+import musicNoteSvg         from '@/assets/svg/music-note-4-svgrepo-com.svg'
 import nintenBoppinIcon     from '@/assets/img/characters/Ninten_Boppin.gif'
 import ninten67Icon         from '@/assets/img/funny/Ninten_67.gif'
 import ferris_special_tape  from '@/assets/img/funny/ferris_special_mixtape.png'
@@ -225,49 +150,66 @@ const props = defineProps({
     default : 5
   },
   footerBehavior: {
-    type: String,
-    default: 'center',
+    type    : String,
+    default : 'center',
     validator: (value) => ['center', 'stay', 'hide', 'overlap'].includes(value)
   },
   volumeLayout: {
-    type: String,
-    default: 'wheel',
+    type    : String,
+    default : 'wheel',
     validator: (value) => ['wheel', 'bar'].includes(value)
+  },
+  minimizedBehavior: {
+    type    : String,
+    default : 'default',
+    validator: (value) => ['default', 'compact'].includes(value)
   }
 })
 
-const isOpen            = ref(false)
-const isPlaying         = ref(false)
-const isRecording       = ref(false)
-const recClickCount     = ref(0)
-const currentTrackIndex = ref(0)
-const currentTime       = ref(0)
-const duration          = ref(0)
-const volume            = ref(80)
-const isMuted           = ref(false)
-const tracks            = ref([])
-const currentPage       = ref(1)
-const isLoadingTracks   = ref(true)
-const showImageTape     = ref(false)
+const isOpen              = ref(false)
+const isCompactForcedOpen = ref(false)
+const isPlayerHidden      = ref(false)
+const isPlayerHiddenAction = ref(false)
+const isPlaying           = ref(false)
+const isRecording         = ref(false)
+const recClickCount       = ref(0)
+const currentTrackIndex   = ref(0)
+const currentTime         = ref(0)
+const duration            = ref(0)
+const volume              = ref(80)
+const isMuted             = ref(false)
+const tracks              = ref([])
+const currentPage         = ref(1)
+const isLoadingTracks     = ref(true)
+const showImageTape       = ref(false)
 
 const hasSpecialTapeAccess = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
 
-const playerBottom      = ref(16)
-const isCentered        = ref(false)
-const isHidden          = ref(false)
-const isReady           = ref(false)
+const playerBottom        = ref(16)
+const isCentered          = ref(false)
+const isHidden            = ref(false)
+const isReady             = ref(false)
 
-const showToast         = ref(false)
-const toastMessage      = ref('')
-const defaultToastIcon  = ref(nintenBoppinIcon)
-const toastIcon         = ref(nintenBoppinIcon)
+const showToast           = ref(false)
+const toastMessage        = ref('')
+const defaultToastIcon    = ref(nintenBoppinIcon)
+const toastIcon           = ref(nintenBoppinIcon)
 
-let player              = null
-let progressInterval    = null
-let lastVolume          = 80
+let player                = null
+let progressInterval      = null
+let lastVolume            = 80
 
 const toggleTapeStyle = () => {
   showImageTape.value = !showImageTape.value
+}
+
+const handleSecondaryAction = () => {
+  isPlayerHiddenAction.value = true
+  isOpen.value = false
+}
+
+const onPlayerHiddenComplete = () => {
+  isPlayerHidden.value = true
 }
 
 const handle_footer_overlap = () => {
@@ -310,6 +252,12 @@ const handle_footer_overlap = () => {
 
 const toggleOpen = () => {
   isOpen.value = !isOpen.value
+}
+
+const toggleCompactOpen = () => {
+  isPlayerHidden.value = false
+  isPlayerHiddenAction.value = false
+  isCompactForcedOpen.value = true
 }
 
 const extractPlaylistId = (urlOrId) => {
@@ -370,9 +318,9 @@ const createPlayer = () => {
       origin     : window.location.origin
     },
     events     : {
-      onReady    : (e) => onPlayerReady(e, cleanListId),
+      onReady       : (e) => onPlayerReady(e, cleanListId),
       onStateChange : onPlayerStateChange,
-      onError    : onPlayerError
+      onError       : onPlayerError
     }
   })
 }
@@ -605,110 +553,171 @@ onUnmounted(() => {
 <style scoped>
 @keyframes playerEntrance {
   0% {
-    opacity: 0;
-    transform: translateY(60px) scale(0.92);
+    opacity   : 0;
+    transform : translateY(60px) scale(0.92);
   }
   100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    opacity   : 1;
+    transform : translateY(0) scale(1);
   }
 }
 
 .music-player-container {
-  box-sizing            : border-box;
-  max-width             : 100vw;
-  overflow-x            : hidden;
+  box-sizing  : border-box;
+  max-width   : 100vw;
+  overflow-x  : hidden;
 }
 
 .music-player-wrapper {
-  position              : fixed;
-  bottom                : 16px;
-  left                  : 16px;
-  right                 : 16px;
-  max-width             : calc(100vw - 32px);
-  z-index               : 100;
-  display               : flex;
-  flex-direction        : column;
-  width                 : auto;
-  box-sizing            : border-box;
-  pointer-events        : none;
-  opacity               : 0;
-  visibility            : hidden;
-  transition            : bottom 0.2s ease-out, left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
+  position       : fixed;
+  bottom         : 16px;
+  left           : 16px;
+  right          : 16px;
+  max-width      : calc(100vw - 32px);
+  z-index        : 100;
+  display        : flex;
+  flex-direction : column;
+  width          : auto;
+  box-sizing     : border-box;
+  pointer-events : none;
+  opacity        : 0;
+  visibility     : hidden;
+  transition     : bottom 0.2s ease-out, left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
+
+  --music-player-color-accent-special          : var(--color-accent-special);
+  --music-player-color-accent                  : var(--color-accent);
+  --music-player-color-accent-light            : var(--color-accent-light);
+  --music-player-color-primary                 : var(--color-primary);
+  --music-player-color-playbt-playing          : var(--color-music-player-playbt-playing);
+  --music-player-color-playbt-playing-pressed  : var(--color-music-player-playbt-playing-pressed);
+  --music-player-color-playbt-paused           : var(--color-music-player-playbt-paused);
+  --music-player-color-playbt-paused-pressed   : var(--color-music-player-playbt-paused-pressed);
 }
 
 .music-player-wrapper.special-theme {
-  --color-accent-special                      : #7b2cbf;
-  --color-accent                              : #9d4edd;
-  --color-accent-light                        : #c77dff;
-  --color-primary                             : #5a189a;
-  --color-music-player-playbt-playing         : #7b2cbf;
-  --color-music-player-playbt-playing-pressed : #5a189a;
-  --color-music-player-playbt-paused          : #3c096c;
-  --color-music-player-playbt-paused-pressed  : #240046;
+  --music-player-color-accent-special          : #7b2cbf;
+  --music-player-color-accent                  : #9d4edd;
+  --music-player-color-accent-light            : #c77dff;
+  --music-player-color-primary                 : #5a189a;
+  --music-player-color-playbt-playing          : #7b2cbf;
+  --music-player-color-playbt-playing-pressed  : #5a189a;
+  --music-player-color-playbt-paused           : #3c096c;
+  --music-player-color-playbt-paused-pressed   : #240046;
 }
 
 .music-player-wrapper.is-ready {
-  pointer-events        : auto;
-  visibility            : visible;
-  animation             : playerEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events : auto;
+  visibility     : visible;
+  animation      : playerEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.compact-pop-enter-active {
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.compact-pop-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.compact-pop-enter-from,
+.compact-pop-leave-to {
+  opacity   : 0;
+  transform : scale(0.4) translateY(20px);
+}
+
+
+.slide-out-left-enter-active {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-out-left-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-out-left-enter-from {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.slide-out-left-leave-to {
+  opacity: 0;
+  transform: translateX(-120%);
+}
+
+.compact-toggle-btn {
+  background     : var(--music-player-color-bg-main, var(--color-bg-main)) !important;
+  border         : 2px solid #000000 !important;
+  border-radius  : 50% !important;
+  box-shadow     : 0 4px 6px rgba(0,0,0,0.15);
+  padding        : 0 !important;
 }
 
 .player-outer-layout {
-  display               : flex;
-  align-items           : flex-start;
-  gap                   : 12px;
-  width                 : 100%;
-  box-sizing            : border-box;
-  overflow              : visible;
+  display     : flex;
+  align-items : flex-start;
+  gap         : 12px;
+  width       : 100%;
+  box-sizing  : border-box;
+  overflow    : visible;
 }
 
 .player-card {
-  display               : flex;
-  flex-direction        : column;
-  background            : var(--color-bg-main);
-  border                : 2px solid #000000;
-  border-radius         : 12px;
-  overflow              : hidden;
-  width                 : 360px;
-  max-width             : 100%;
-  box-sizing            : border-box;
-  max-height            : 88px;
-  transition            : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  display        : flex;
+  flex-direction : column;
+  background     : var(--music-player-color-bg-main, var(--color-bg-main));
+  border         : 2px solid #000000;
+  border-radius  : 12px;
+  overflow       : hidden;
+  width          : 360px;
+  max-width      : 100%;
+  box-sizing     : border-box;
+  max-height     : 88px;
+  transition     : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .music-player-wrapper.is-open .player-card {
-  max-height            : 800px;
+  max-height     : 800px;
 }
 
 .player-control-bar {
-  display               : flex;
-  flex-direction        : column;
-  align-items           : center;
-  background            : var(--color-bg-main);
-  padding               : 6px 8px 10px 8px;
-  gap                   : 4px;
-  z-index               : 2;
-  box-sizing            : border-box;
-  flex-shrink           : 0;
-  overflow              : hidden
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
+  background     : var(--music-player-color-bg-main, var(--color-bg-main));
+  padding        : 6px 8px 10px 8px;
+  gap            : 4px;
+  z-index        : 2;
+  box-sizing     : border-box;
+  flex-shrink    : 0;
+  overflow       : hidden;
 }
 
-.expand-toggle-btn {
-  background            : transparent;
-  border                : none;
-  cursor                : pointer;
-  padding               : 2px 16px;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  width                 : 100%;
+.control-bar-buttons {
+  display         : flex;
+  justify-content : space-between;
+  align-items     : center;
+  width           : 100%;
+  padding         : 2px 4px;
+  gap             : 8px;
+}
+
+.expand-toggle-btn,
+.secondary-action-btn {
+  flex           : 1;
+  background     : transparent;
+  border         : none;
+  cursor         : pointer;
+  padding        : 2px 8px;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  width          : 100%;
 }
 
 .expand-icon-span {
   width                 : 22px;
   height                : 22px;
-  background-color      : var(--color-accent-light);
+  background-color      : var(--music-player-color-accent-light);
   -webkit-mask-image    : url('@/assets/svg/triangle-up-12-filled.svg');
   mask-image            : url('@/assets/svg/triangle-up-12-filled.svg');
   -webkit-mask-size     : contain;
@@ -725,722 +734,78 @@ onUnmounted(() => {
 }
 
 .expand-toggle-btn:hover .expand-icon-span {
-  background-color      : var(--color-white);
+  background-color      : var(--music-player-color-white, #ffffff);
 }
 
-.player-collapsible-content {
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 12px;
-  opacity               : 0;
-  overflow              : visible;
-  padding               : 0 12px;
-  pointer-events        : none;
-  box-sizing            : border-box;
-  width                 : 100%;
-  transition            : opacity 0.3s ease, padding 0.4s ease;
-}
-
-.music-player-wrapper.is-open .player-collapsible-content {
-  opacity               : 1;
-  padding               : 0 12px 12px 12px;
-  pointer-events        : auto;
-}
-
-.hidden-player {
-  position              : absolute;
-  width                 : 1px;
-  height                : 1px;
-  overflow              : hidden;
-  left                  : -9999px;
-  opacity               : 0;
-  pointer-events        : none;
-}
-
-.external-side-volume {
-  display               : flex;
-  flex-direction        : column;
-  align-items           : center;
-  background            : var(--color-bg-main);
-  border                : 2px solid #000000;
-  border-radius         : 12px;
-  padding               : 6px;
-  box-sizing            : border-box;
-  flex-shrink           : 0;
-  gap                   : 4px;
-}
-
-.external-side-volume.layout-wheel {
-  height                : 88px;
-}
-
-.external-side-volume.layout-bar {
-  height                : 150px;
-}
-
-.volume-control-container {
-  display               : flex;
-  flex-direction        : column;
-  align-items           : center;
-  gap                   : 2px;
-  flex                  : 1;
-}
-
-.control-label {
-  font-size             : 0.55rem;
-  font-weight           : 700;
-  color                 : var(--color-accent-light);
-  letter-spacing        : 0.5px;
-}
-
-.thumbwheel {
-  width                 : 26px;
-  height                : 36px;
-  background            : var(--color-surface);
-  border-radius         : 4px;
-  border                : 2px solid #000000;
-  cursor                : ns-resize;
-  position              : relative;
-  overflow              : hidden;
-}
-
-.wheel-ridges {
-  position              : absolute;
-  top                   : 0;
-  bottom                : 0;
-  left                  : 0;
-  right                 : 0;
-  background            : repeating-linear-gradient(0deg, var(--color-bg-main), var(--color-bg-main) 2px, #000000 3px, var(--color-bg-main) 4px);
-}
-
-.vertical-slider-track {
-  width                 : 24px;
-  height                : 90px;
-  background            : var(--color-surface);
-  border                : 2px solid #000000;
-  border-radius         : 6px;
-  position              : relative;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  overflow              : hidden;
-}
-
-.vertical-range-input {
-  -webkit-appearance    : none;
-  appearance            : none;
-  width                 : 86px;
-  height                : 6px;
-  background            : linear-gradient(to right, var(--color-accent) var(--volume-percent, 0%), var(--color-bg-dark) var(--volume-percent, 0%));
-  border-radius         : 3px;
-  transform             : rotate(-90deg);
-  cursor                : pointer;
-  outline               : none;
-}
-
-.vertical-range-input::-webkit-slider-thumb {
-  -webkit-appearance    : none;
-  appearance            : none;
-  width                 : 14px;
-  height                : 14px;
-  border-radius         : 3px;
-  background            : var(--color-accent);
-  border                : 2px solid #000000;
-}
-
-.vertical-range-input::-moz-range-thumb {
-  width                 : 14px;
-  height                : 14px;
-  border-radius         : 3px;
-  background            : var(--color-accent);
-  border                : 2px solid #000000;
-}
-
-.mobile-slider-track {
-  display               : none;
-}
-
-.mute-btn {
-  background            : var(--color-surface);
-  border                : 2px solid #000000;
-  border-radius         : 6px;
-  color                 : var(--color-text-main);
-  font-size             : 0.55rem;
-  font-weight           : 700;
-  font-family           : monospace;
-  width                 : 32px;
+.secondary-icon-span {
+  width                 : 22px;
   height                : 22px;
-  cursor                : pointer;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  margin-top            : auto;
-}
-
-.mute-btn:active {
-  transform             : translateY(2px);
-}
-
-.mute-btn.active {
-  background            : var(--color-accent);
-  color                 : var(--color-white);
-}
-
-.top-buttons-bar {
-  display               : flex;
-  justify-content       : center;
-  gap                   : 6px;
-  width                 : 100%;
-  background            : var(--color-bg-dark);
-  border                : 2px solid #000000;
-  padding               : 4px 6px; 
-  border-radius         : 8px;
-  box-sizing            : border-box;
-  overflow              : visible;
-}
-
-.top-mech-btn {
-  flex                  : 1;
-  height                : 34px;
-  background            : var(--color-surface);
-  border                : 2px solid #000000;
-  border-radius         : 6px;
-  cursor                : pointer;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  padding               : 0;
-  min-width             : 0;
-}
-
-.top-mech-btn:active, .top-mech-btn.active {
-  transform             : translateY(2px);
-}
-
-.play-mech-btn {
-  background            : var(--color-music-player-playbt-paused);
-}
-
-.play-mech-btn:active {
-  background            : var(--color-music-player-playbt-paused-pressed);
-}
-
-.play-mech-btn.is-playing {
-  background            : var(--color-music-player-playbt-playing); 
-}
-
-.play-mech-btn.is-playing:active {
-  background            : var( --color-music-player-playbt-playing-pressed); 
-}
-
-.rec-mech-btn {
-  background            : #e74c3c;
-}
-
-.control-icon-span {
-  display               : block;
-  width                 : 16px;
-  height                : 16px;
-  background-color      : var(--color-text-main);
+  background-color      : var(--music-player-color-accent-light);
+  -webkit-mask-image    : url('@/assets/svg/triangle-left-12-filled.svg');
+  mask-image            : url('@/assets/svg/triangle-left-12-filled.svg');
   -webkit-mask-size     : contain;
   mask-size             : contain;
   -webkit-mask-repeat   : no-repeat;
   mask-repeat           : no-repeat;
   -webkit-mask-position : center;
   mask-position         : center;
-  pointer-events        : none;
+  transition            : background-color 0.15s;
 }
 
-.top-mech-btn:hover .control-icon-span {
-  background-color      : #ffffff;
+.secondary-action-btn:hover .secondary-icon-span {
+  background-color      : var(--music-player-color-white, #ffffff);
 }
 
-.prev-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-prev.svg');
-  mask-image            : url('@/assets/svg/player-prev.svg');
+.player-collapsible-content {
+  display        : flex;
+  flex-direction : column;
+  gap            : 12px;
+  opacity        : 0;
+  overflow       : visible;
+  padding        : 0 12px;
+  pointer-events : none;
+  box-sizing     : border-box;
+  width          : 100%;
+  transition     : opacity 0.3s ease, padding 0.4s ease;
 }
 
-.play-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-play.svg');
-  mask-image            : url('@/assets/svg/player-play.svg');
+.music-player-wrapper.is-open .player-collapsible-content {
+  opacity        : 1;
+  padding        : 0 12px 12px 12px;
+  pointer-events : auto;
 }
 
-.pause-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-pause.svg');
-  mask-image            : url('@/assets/svg/player-pause.svg');
-}
-
-.stop-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-stop.svg');
-  mask-image            : url('@/assets/svg/player-stop.svg');
-}
-
-.next-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-next.svg');
-  mask-image            : url('@/assets/svg/player-next.svg');
-}
-
-.rec-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-rec.svg');
-  mask-image            : url('@/assets/svg/player-rec.svg');
-}
-
-.music-player.walkman-device {
-  display               : flex;
-  flex-direction        : column;
-  width                 : 100%;
-  background            : var(--color-primary);
-  border                : 2px solid #000000;
-  padding               : 12px;
-  border-radius         : 12px;
-  box-sizing            : border-box;
-  color                 : var(--color-bg-dark);
-  font-family           : system-ui, -apple-system, sans-serif;
-  user-select           : none;
-}
-
-.walkman-chassis {
-  background            : var(--color-bg-main);
-  border                : 2px solid #000000;
-  border-radius         : 10px;
-  padding               : 12px;
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 10px;
-}
-
-.walkman-top-panel {
-  display               : flex;
-  justify-content       : space-between;
-  align-items           : center;
-}
-
-.model-badge {
-  display               : flex;
-  flex-direction        : column;
-  align-items           : flex-start;
-}
-
-.brand-name {
-  font-weight           : 900;
-  font-size             : 0.75rem;
-  letter-spacing        : 2px;
-  color                 : var(--color-accent-light);
-  font                  : var(--font-h1);
-}
-
-.tape-toggle-btn {
-  background            : var(--color-surface);
-  border                : 2px solid #000000;
-  border-radius         : 4px;
-  font-size             : 0.55rem;
-  font-weight           : 700;
-  padding               : 2px 6px;
-  cursor                : pointer;
-  color                 : var(--color-text-main);
-}
-
-.tape-toggle-btn:active {
-  transform             : translateY(2px);
-}
-
-.cassette-door {
-  position              : relative;
-  background            : var(--color-surface);
-  border                : 2px solid #000000;
-  border-radius         : 6px;
-  padding               : 8px;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  height                : 80px;
-  box-sizing            : border-box;
-  overflow              : hidden;
-}
-
-.custom-image-tape-container {
-  width                 : 100%;
-  height                : 100%;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  position              : relative;
-}
-
-.custom-cassette-img {
-  width                 : 100%;
-  height                : 100%;
-  object-fit            : cover;
-  display               : block;
-}
-
-.cassette-shell {
-  width                 : 100%;
-  background            : var(--color-text-main);
-  border-radius         : 4px;
-  padding               : 8px;
-  box-sizing            : border-box;
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 6px;
-}
-
-.cassette-label-header {
-  display               : flex;
-  justify-content       : space-between;
-  font                  : var(--font-p);
-  font-size             : 0.5rem;
-  font-weight           : 700;
-  color                 : var(--color-placeholder-green);
-  border-bottom         : 1px solid var(--color-accent-light);
-  padding-bottom        : 2px;
-}
-
-.cassette-window {
-  background            : var(--color-bg-dark);
-  height                : 42px;
-  border-radius         : 4px;
-  display               : flex;
-  justify-content       : space-around;
-  align-items           : center;
-  position              : relative;
-  overflow              : hidden;
-}
-
-.reel {
-  width                 : 28px;
-  height                : 28px;
-  border                : 3px dashed var(--color-accent-light);
-  border-radius         : 50%;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  animation             : spin 2s linear infinite;
-  animation-play-state  : paused;
-}
-
-.cassette-door.spinning .reel {
-  animation-play-state  : running;
-}
-
-.reel-hub {
-  width                 : 8px;
-  height                : 8px;
-  background            : var(--color-bg-main);
-  border-radius         : 50%;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.walkman-control-board {
-  display               : flex;
-  flex-direction        : column;
-}
-
-.lcd-panel {
-  background            : var(--color-bg-dark);
-  border                : 2px solid #000000;
-  border-radius         : 6px;
-  padding               : 6px 10px;
-}
-
-.lcd-screen-inner {
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 4px;
-}
-
-.lcd-top-row {
-  display               : flex;
-  justify-content       : space-between;
-  font                  : var(--font-p);
-  font-size             : 0.7rem;
-  font-weight           : 700;
-  color                 : var(--color-text-muted);
-}
-
-.lcd-status-tag, .lcd-track-num, .lcd-time-display{
-  color                 : var(--color-accent);
-}
-
-.lcd-progress-slider {
-  width                 : 100%;
-  accent-color          : var(--color-accent);
-  cursor                : pointer;
-  height                : 4px;
-}
-
-.playlist-container {
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 8px;
-  background            : var(--color-primary);
-  border                : 2px solid #000000;
-  padding               : 10px;
-  border-radius         : 12px;
-  box-sizing            : border-box;
-  width                 : 100%;
-  overflow              : visible;
-}
-
-.playlist-header {
-  display               : flex;
-  justify-content       : space-between;
-  align-items           : center;
-  background            : var(--color-bg-main);
-  border                : 2px solid #000000;
-  padding               : 8px 12px;
-  border-radius         : 6px;
-  user-select           : none;
-}
-
-.playlist-title {
-  font-size             : 0.8rem;
-  margin                : 0;
-  font-weight           : 700;
-  color                 : var(--color-text-main);
-}
-
-.playlist-content {
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 6px;
-  height                : 215px;
-  max-height            : 215px;
-  justify-content       : space-between;
-  overflow              : hidden;
-  box-sizing            : border-box;
-  overflow              : visible;
-}
-
-.playlist-body-area {
-  display               : flex;
-  flex-direction        : column;
-  flex                  : 1;
-  overflow              : hidden;
-}
-
-.loading-state {
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  flex                  : 1;
-  color                 : var(--color-text-muted);
-  font-size             : 0.8rem;
-  background            : var(--color-text-main);
-  border-radius         : 6px;
-  font-family           : monospace;
-}
-
-.track-list {
-  list-style            : none;
-  padding               : 0;
-  margin                : 0;
-  display               : flex;
-  flex-direction        : column;
-  gap                   : 6px;
-  flex                  : 1;
-  overflow-y            : auto;
-  font                  : var(--font-p);
-  font-size             : var(--font-p-size);
-  padding-bottom        : 10px;
-}
-
-.track-item {
-  display               : flex;
-  align-items           : center;
-  gap                   : 10px;
-  padding               : 8px 10px;
-  background            : var(--color-text-main);
-  border                : 2px solid #000000;
-  border-radius         : 6px;
-  cursor                : pointer;
-  box-sizing            : border-box;
-  width                 : 100%;
-  max-width             : 100%;
-}
-
-.track-item:active {
-  transform             : translateY(2px);
-}
-
-.track-item.active {
-  background            : var(--color-accent);
-  color                 : var(--color-white);
-  font-weight           : 700;
-  font                  : var(--font-p);
-  font-size             : var(--font-p-size);
-}
-
-.track-number {
-  color                 : var(--color-primary);
-  font                  : var(--font-p);
-  font-size             : var(--font-p-size);
-  flex-shrink           : 0;
-}
-
-.track-item.active .track-number {
-  color                 : var(--color-accent-light);
-}
-
-.track-name {
-  white-space           : nowrap;
-  overflow              : hidden;
-  text-overflow         : ellipsis;
-  font                  : var(--font-p);
-  font-size             : var(--font-track-names-size);
-  flex                  : 1;
-  min-width             : 0;
-}
-
-.pagination-controls {
-  display               : flex;
-  justify-content       : space-between;
-  align-items           : center;
-  padding               : 4px 0;
-  height                : 30px;
-  box-sizing            : border-box;
-  transition            : opacity 0.2s ease;
-  overflow              : visible;
-}
-
-.page-btn {
-  background            : var(--color-bg-main);
-  color                 : var(--color-text-main);
-  border                : 2px solid #000000;
-  padding               : 6px 12px;
-  border-radius         : 6px;
-  cursor                : pointer;
-  font-size             : 0.7rem;
-  font-weight           : 700;
-  font-family           : var(--font-p);
-}
-
-.page-btn:active:not(:disabled) {
-  transform             : translateY(3px) translateX(3px);
-}
-
-.page-btn:disabled {
-  opacity               : 0.3;
-  cursor                : not-allowed;
-  transform             : translateY(3px) translateX(3px);
-}
-
-.page-info {
-  font-size             : 0.75rem;
-  color                 : var(--color-accent-light);
-  font-family           : monospace;
+.hidden-player {
+  position       : absolute;
+  width          : 1px;
+  height         : 1px;
+  overflow       : hidden;
+  left           : -9999px;
+  opacity        : 0;
+  pointer-events : none;
 }
 
 @media (max-width: 480px) {
   .music-player-wrapper {
-    left                : 12px !important;
-    right               : 12px !important;
-    transform           : none !important;
-    width               : auto !important;
-    max-width           : calc(100vw - 24px) !important;
+    left          : 12px !important;
+    right         : 12px !important;
+    transform     : none !important;
+    width         : auto !important;
+    max-width     : calc(100vw - 24px) !important;
   }
 
   .player-outer-layout {
-    width               : 100%;
-    flex-direction      : column;
-    align-items         : stretch;
-    gap                 : 8px;
-    padding-bottom      : 14px;
-    box-sizing          : border-box;
+    width         : 100%;
+    flex-direction: column;
+    align-items   : stretch;
+    gap           : 8px;
+    padding-bottom: 14px;
+    box-sizing    : border-box;
   }
 
   .player-card {
-    width               : 100%;
-    max-width           : 100%;
-  }
-
-  .external-side-volume {
-    width               : 100%;
-    height              : auto !important;
-    flex-direction      : row;
-    justify-content     : space-between;
-    align-items         : center;
-    padding             : 8px 12px;
-    box-sizing          : border-box;
-  }
-
-  .volume-control-container {
-    flex-direction      : row;
-    align-items         : center;
-    gap                 : 10px;
-    flex                : 1;
-    margin-right        : 12px;
-  }
-
-  .thumbwheel, .vertical-slider-track {
-    display             : none !important;
-  }
-
-  .mobile-slider-track {
-    display             : flex;
-    flex                : 1;
-    height              : 26px;
-    background          : var(--color-surface);
-    border              : 2px solid #000000;
-    border-radius       : 6px;
-    align-items         : center;
-    padding             : 0 8px;
-    box-sizing          : border-box;
-  }
-
-  .mobile-range-input {
-    -webkit-appearance  : none;
-    appearance          : none;
-    width               : 100%;
-    height              : 6px;
-    background          : linear-gradient(to right, var(--color-accent) var(--volume-percent, 0%), var(--color-bg-dark) var(--volume-percent, 0%));
-    border-radius       : 3px;
-    outline             : none;
-    cursor              : pointer;
-  }
-
-  .mobile-range-input::-webkit-slider-thumb {
-    -webkit-appearance  : none;
-    appearance          : none;
-    width               : 14px;
-    height              : 14px;
-    border-radius       : 3px;
-    background            : var(--color-accent);
-    border                : 2px solid #000000;
-  }
-
-  .mobile-range-input::-moz-range-thumb {
-    width               : 14px;
-    height              : 14px;
-    border-radius       : 3px;
-    background          : var(--color-accent);
-    border                : 2px solid #000000;
-  }
-
-  .mute-btn {
-    width               : 60px;
-    height              : 28px;
-    margin-top          : 0;
-  }
-}
-
-@media (max-height: 700px) {
-  .playlist-content {
-    height              : 140px;
-  }
-  
-  .cassette-window {
-    height              : 30px;
-  }
-
-  .reel {
-    width               : 20px;
-    height              : 20px;
-    border-width        : 2px;
+    width         : 100%;
+    max-width     : 100%;
   }
 }
 </style>
