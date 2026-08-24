@@ -62,7 +62,7 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   flex-direction        : column;
   align-items           : center;
   background            : var(--music-player-color-bg-main);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+  border                : var(--music-player-border);
   border-radius         : var(--music-player-border-radius);
   padding               : 6px;
   box-sizing            : border-box;
@@ -97,8 +97,8 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   width                 : 26px;
   height                : 36px;
   background            : var(--music-player-color-surface);
-  border-radius         : 4px;
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
   cursor                : ns-resize;
   position              : relative;
   overflow              : hidden;
@@ -117,8 +117,8 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   width                 : 24px;
   height                : 90px;
   background            : var(--music-player-color-surface);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  border-radius         : 6px;
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
   position              : relative;
   display               : flex;
   justify-content       : center;
@@ -145,7 +145,7 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   height                : 14px;
   border-radius         : 3px;
   background            : var(--music-player-color-accent);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+  border                : var(--music-player-border);
 }
 
 .vertical-range-input::-moz-range-thumb {
@@ -153,7 +153,7 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   height                : 14px;
   border-radius         : 3px;
   background            : var(--music-player-color-accent);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+  border                : var(--music-player-border);
 }
 
 .mobile-slider-track {
@@ -162,9 +162,9 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
 
 .mute-btn {
   background            : var(--music-player-color-surface);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  border-radius         : 6px;
-  color                 : var(--music-player-color-text-main);
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
+  color                 : var(--music-player-color-bg-secondary);
   font-size             : 0.55rem;
   font-weight           : 700;
   font-family           : monospace;
@@ -214,7 +214,7 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
     flex                : 1;
     height              : 26px;
     background          : var(--music-player-color-surface);
-    border              : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+    border              : var(--music-player-border);
     border-radius       : 6px;
     align-items         : center;
     padding             : 0 8px;
@@ -239,15 +239,15 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
     height              : 14px;
     border-radius       : 3px;
     background          : var(--music-player-color-accent);
-    border              : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+    border              : var(--music-player-border);
   }
 
   .mobile-range-input::-moz-range-thumb {
     width               : 14px;
     height              : 14px;
-    border-radius       : 3px;
+    border              : var(--music-player-border);
+    border-radius       : var(--music-player-border-radius);
     background          : var(--music-player-color-accent);
-    border              : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
   }
 
   .mute-btn {

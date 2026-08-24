@@ -1,17 +1,18 @@
 <template>
-  <div class="music-player walkman-device">
+  <div class="music-player walkman">
     <div class="walkman-chassis">
       <div class="walkman-top-panel">
         <div class="model-badge">
           <span class="brand-name">WALKMAN</span>
         </div>
-        <button 
+        <CustomButton 
           v-if          ="hasSpecialTapeAccess" 
           class         ="tape-toggle-btn" 
+          :text         ="showImageTape ? 'DEFAULT' : 'SPECIAL'"
+          height        ="20px"
+          font-size     ="0.55rem"
           @click        ="$emit('toggleTapeStyle')"
-        >
-          {{ showImageTape ? 'DEFAULT' : 'SPECIAL' }}
-        </button>
+        />
       </div>
 
       <div class="walkman-control-board">
@@ -60,29 +61,48 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
+
 defineProps({
-  isPlaying            : Boolean,
-  hasSpecialTapeAccess : Boolean,
-  showImageTape        : Boolean,
-  currentTrackIndex    : Number,
-  currentTime          : Number,
-  duration             : Number,
-  specialTapeImg       : String,
-  formatTime           : Function
+  isPlaying         : Boolean,
+  showImageTape     : Boolean,
+  currentTrackIndex : Number,
+  currentTime       : Number,
+  duration          : Number,
+  specialTapeImg    : String,
+  formatTime        : Function
 })
 
 defineEmits(['toggleTapeStyle', 'seek'])
+
+const hasSpecialTapeAccess = ref(false)
+
+const checkSessionAccess = () => {
+  hasSpecialTapeAccess.value = sessionStorage.getItem('unlocked_special_tape') === 'true'
+}
+
+onMounted(() => {
+  checkSessionAccess()
+  window.addEventListener('session-storage-updated', checkSessionAccess)
+  window.addEventListener('storage', checkSessionAccess)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('session-storage-updated', checkSessionAccess)
+  window.removeEventListener('storage', checkSessionAccess)
+})
 </script>
 
 <style scoped>
-.music-player.walkman-device {
+.music-player.walkman {
   display               : flex;
   flex-direction        : column;
   width                 : 100%;
   background            : var(--music-player-color-primary);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  padding               : 12px;
+  border                : var(--music-player-border);
   border-radius         : var(--music-player-border-radius);
+  padding               : 12px;
   box-sizing            : border-box;
   color                 : var(--music-player-color-bg-dark);
   font-family           : system-ui, -apple-system, sans-serif;
@@ -91,8 +111,8 @@ defineEmits(['toggleTapeStyle', 'seek'])
 
 .walkman-chassis {
   background            : var(--music-player-color-bg-main);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  border-radius         : 10px;
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
   padding               : 12px;
   display               : flex;
   flex-direction        : column;
@@ -120,25 +140,17 @@ defineEmits(['toggleTapeStyle', 'seek'])
 }
 
 .tape-toggle-btn {
-  background            : var(--music-player-color-surface);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  border-radius         : 4px;
-  font-size             : 0.55rem;
-  font-weight           : 700;
+  background-color      : var(--music-player-color-surface);
+  color                 : var(--music-player-color-bg-secondary);
   padding               : 2px 6px;
-  cursor                : pointer;
-  color                 : var(--music-player-color-text-main);
-}
-
-.tape-toggle-btn:active {
-  transform             : translateY(2px);
+  font-weight           : 700;
 }
 
 .cassette-door {
   position              : relative;
   background            : var(--music-player-color-surface);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  border-radius         : 6px;
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
   padding               : 8px;
   display               : flex;
   justify-content       : center;
@@ -166,7 +178,7 @@ defineEmits(['toggleTapeStyle', 'seek'])
 
 .cassette-shell {
   width                 : 100%;
-  background            : var(--music-player-color-text-main);
+  background            : var(--music-player-color-bg-secondary);
   border-radius         : 4px;
   padding               : 8px;
   box-sizing            : border-box;
@@ -232,8 +244,8 @@ defineEmits(['toggleTapeStyle', 'seek'])
 
 .lcd-panel {
   background            : var(--music-player-color-bg-dark);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  border-radius         : 6px;
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
   padding               : 6px 10px;
 }
 
@@ -249,7 +261,6 @@ defineEmits(['toggleTapeStyle', 'seek'])
   font                  : var(--music_player-font-p);
   font-size             : 0.7rem;
   font-weight           : 700;
-  color                 : var(--music-player-color-text-muted);
 }
 
 .lcd-status-tag, .lcd-track-num, .lcd-time-display{

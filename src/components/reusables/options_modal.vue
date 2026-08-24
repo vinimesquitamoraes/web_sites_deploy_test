@@ -4,7 +4,13 @@
       <div class="modal-panel" :style="panelStyles">
         <div class="modal-header">
           <h3 class="modal-title">{{ title }}</h3>
-          <button class="close-btn" @click="closeModal">&times;</button>
+          <CustomButton
+            :icon-src="closeIcon"
+            icon-size="30"
+            bg-color="transparent"
+            hover-bg-color="transparent"
+            @click="closeModal"
+          />
         </div>
 
         <div class="modal-body">
@@ -12,8 +18,14 @@
             <span class="option-label">{{ option.label }}</span>
             
             <ToggleSwitch
-              :modelValue="sessionState[option.key]"
-              @update:modelValue="(val) => toggleOption(option.key, val)"
+              :modelValue         ="sessionState[option.key]"
+              @update:modelValue  ="(val) => toggleOption(option.key, val)"
+              :activeIconSrc="closeIcon"
+              icon-color="#FFD700"
+              handle-bg-color="#1A1A1A"
+              bg-color="#333333"
+              active-bg-color="#4A5568"
+              hover-bg-color="#2D3748"
             />
           </div>
         </div>
@@ -23,8 +35,11 @@
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue'
+import { reactive, computed, onMounted, onUnmounted } from 'vue'
 import ToggleSwitch from './toggle_button.vue'
+import CustomButton from './custom_button.vue'
+
+import closeIcon from '@/assets/svg/close-svgrepo-com.svg'
 
 const props = defineProps({
   modelValue: {
@@ -64,9 +79,14 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change'])
 
 const sessionState = reactive({})
-props.options.forEach(opt => {
-  sessionState[opt.key] = sessionStorage.getItem(opt.key) === 'true'
-})
+
+const syncSessionState = () => {
+  props.options.forEach(opt => {
+    sessionState[opt.key] = sessionStorage.getItem(opt.key) === 'true'
+  })
+}
+
+syncSessionState()
 
 const panelStyles = computed(() => {
   const w = props.width
@@ -82,12 +102,25 @@ const panelStyles = computed(() => {
 const toggleOption = (key, nextValue) => {
   sessionState[key] = nextValue
   sessionStorage.setItem(key, nextValue ? 'true' : 'false')
+
+  window.dispatchEvent(new Event('session-storage-updated'))
+
   emit('change', { key, value: nextValue, allState: sessionState })
 }
 
 const closeModal = () => {
   emit('update:modelValue', false)
 }
+
+onMounted(() => {
+  window.addEventListener('session-storage-updated', syncSessionState)
+  window.addEventListener('storage', syncSessionState)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('session-storage-updated', syncSessionState)
+  window.removeEventListener('storage', syncSessionState)
+})
 </script>
 
 <style scoped>
@@ -130,16 +163,6 @@ const closeModal = () => {
   margin                      : 0;
   font-size                   : 1.25rem;
   word-break                  : break-word;
-}
-
-.close-btn {
-  background                  : none;
-  border                      : none;
-  font-size                   : 1.5rem;
-  cursor                      : pointer;
-  font-weight                 : bold;
-  flex-shrink                 : 0;
-  padding                     : 0 0.25rem;
 }
 
 .modal-body {

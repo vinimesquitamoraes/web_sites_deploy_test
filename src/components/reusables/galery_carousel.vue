@@ -413,7 +413,6 @@ onUnmounted(() => {
 .nav-arrow,
 .thumb-arrow {
   flex-shrink : 0;
-  z-index     : 10;
 }
 
 .pagination-dots {

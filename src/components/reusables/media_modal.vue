@@ -115,18 +115,17 @@ defineEmits(['close', 'next', 'prev'])
 
 .modal-content {
   position         : relative;
-  width            : auto;
-  height           : auto;
-  max-width        : 90vw;
-  max-height       : 90vh;
+  width            : 85vw;
+  height           : 80vh;
+  max-width        : 1200px;
   display          : flex;
   align-items      : center;
   justify-content  : center;
 }
 
 .media-wrapper {
-  width            : auto;
-  height           : auto;
+  width            : 100%;
+  height           : 100%;
   display          : flex;
   align-items      : center;
   justify-content  : center;
@@ -138,10 +137,8 @@ defineEmits(['close', 'next', 'prev'])
 }
 
 .modal-media {
-  max-width        : 90vw;
-  max-height       : 85vh;
-  width            : auto;
-  height           : auto;
+  width            : 100%;
+  height           : 100%;
   display          : block;
   object-fit       : contain;
 }
@@ -169,6 +166,11 @@ defineEmits(['close', 'next', 'prev'])
 }
 
 @media (max-width: 768px) {
+  .modal-content {
+    width            : 92vw;
+    height           : 70vh;
+  }
+
   .modal-arrow.left {
     left             : 10px;
   }

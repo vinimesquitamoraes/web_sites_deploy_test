@@ -6,7 +6,7 @@
         'is-open'       : isOpen, 
         'is-ready'      : isReady, 
         'special-theme' : showImageTape && hasSpecialTapeAccess,
-        'compact-mode'  : minimizedBehavior === 'compact' && !isCompactForcedOpen 
+        'compact-mode'  : isPlayerHidden 
       }"
       :style        = "{ 
         bottom     : playerBottom + 'px',
@@ -21,18 +21,30 @@
         <div id="youtube-player"></div>
       </div>
 
-      <Transition name="compact-pop">
-        <CustomButton 
-          v-if           = "minimizedBehavior === 'compact' && !isCompactForcedOpen || isPlayerHidden"
-          class          = "compact-toggle-btn"
-          :iconSrc       = "musicNoteSvg"
-          :iconSize      = "20"
-          width          = 'var(--music_player-compact-button)'
-          height         = 'var(--music_player-compact-button)'
-          pressAnimation = "scale"
-          aria-label     = "Expand Music Player"
-          @click         = "toggleCompactOpen"
-        />
+      <Transition name="compact-pop" @leave="onCompactLeave">
+        <div v-if="isPlayerHidden" class="compact-button-wrapper">
+          <CustomButton 
+            :iconSrc        = "musicNoteSvg"
+            class           = 'compact-button'
+            iconSize        = 'var(--music_player-compact-button-icon-size)'
+            width           = 'var(--music_player-compact-button-size)'
+            height          = 'var(--music_player-compact-button-size)'
+            bg-color        = 'var(--music_player-compact-button-color-bg)'
+            hover-bg-color  = 'var(--music_player-compact-button-color-bg-hover)'
+            icon-color      = 'var(--music_player-compact-button-color-icon)'
+            hover-icon-color= 'var(--music_player-compact-button-color-icon-hover)'
+            
+            aria-label      = "Expand Music Player"
+            @click          = "toggleCompactOpen"
+          />
+
+          <FloatingNotes 
+            :active="isPlaying" 
+            :colors="['#00cec9', '#fd79a8', '#ffeaa7']"
+            speed="1.2s"
+            distance="-60px"            
+          />
+        </div>
       </Transition>
 
       <Transition name="slide-out-left" @after-leave="onPlayerHiddenComplete">
@@ -88,7 +100,7 @@
                 :currentTrackIndex = "currentTrackIndex"
                 :currentPage       = "currentPage"
                 :totalPages        = "totalPages"
-                :tooltipText       = "t('SITE_MUSIC_PLAYER_LINK')"
+                tooltipText       = "Listen to the full OST here!"
                 :getGlobalIndex    = "getGlobalIndex"
                 @playTrack         = "playTrack"
                 @updatePage        = "(val) => currentPage = val"
@@ -132,6 +144,7 @@ import PlayerControls  from '@/components/reusables/music_player_controls.vue'
 import WalkmanDevice   from '@/components/reusables/music_player_walkman.vue'
 import PlaylistView    from '@/components/reusables/music_player_playlist.vue'
 import VolumeControl   from '@/components/reusables/music_player_volume_control.vue'
+import FloatingNotes   from '@/components/reusables/music_player_floating_notes.vue'
 
 import musicNoteSvg         from '@/assets/svg/music-note-4-svgrepo-com.svg'
 import nintenBoppinIcon     from '@/assets/img/characters/Ninten_Boppin.gif'
@@ -167,16 +180,17 @@ const props = defineProps({
 })
 
 const isOpen              = ref(false)
-const isCompactForcedOpen = ref(false)
-const isPlayerHidden      = ref(false)
-const isPlayerHiddenAction = ref(false)
+
+const isPlayerHidden      = ref(true)
+const isPlayerHiddenAction = ref(true)
+
 const isPlaying           = ref(false)
 const isRecording         = ref(false)
 const recClickCount       = ref(0)
 const currentTrackIndex   = ref(0)
 const currentTime         = ref(0)
 const duration            = ref(0)
-const volume              = ref(80)
+const volume              = ref(20)
 const isMuted             = ref(false)
 const tracks              = ref([])
 const currentPage         = ref(1)
@@ -257,7 +271,6 @@ const toggleOpen = () => {
 const toggleCompactOpen = () => {
   isPlayerHidden.value = false
   isPlayerHiddenAction.value = false
-  isCompactForcedOpen.value = true
 }
 
 const extractPlaylistId = (urlOrId) => {
@@ -454,8 +467,7 @@ const handleRecClick = () => {
     toastIcon.value     = ninten67Icon
     
     sessionStorage.setItem('unlocked_dogten', 'true')
-    hasSpecialTapeAccess.value = true
-
+    
     setTimeout(() => {
       router.push('/dogten')
     }, 1500)
@@ -548,6 +560,12 @@ onUnmounted(() => {
   stopProgressInterval()
   window.removeEventListener('scroll', handle_footer_overlap)
 })
+
+const onCompactLeave = (el) => {
+  el.style.opacity = '0'
+  el.style.visibility = 'hidden'
+  el.style.transition = 'none'
+}
 </script>
 
 <style scoped>
@@ -562,6 +580,20 @@ onUnmounted(() => {
   }
 }
 
+@keyframes floatNote {
+  0% {
+    opacity   : 0;
+    transform : translateY(0) scale(0.5) rotate(-10deg);
+  }
+  30% {
+    opacity   : 1;
+  }
+  100% {
+    opacity   : 0;
+    transform : translateY(var(--note-float-distance, -50px)) translateX(12px) scale(1.1) rotate(15deg);
+  }
+}
+
 .music-player-container {
   box-sizing  : border-box;
   max-width   : 100vw;
@@ -570,11 +602,8 @@ onUnmounted(() => {
 
 .music-player-wrapper {
   position       : fixed;
-  bottom         : 16px;
-  left           : 16px;
-  right          : 16px;
   max-width      : calc(100vw - 32px);
-  z-index        : 100;
+  z-index        : 3;
   display        : flex;
   flex-direction : column;
   width          : auto;
@@ -583,19 +612,9 @@ onUnmounted(() => {
   opacity        : 0;
   visibility     : hidden;
   transition     : bottom 0.2s ease-out, left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
-
-  --music-player-color-accent-special          : var(--color-accent-special);
-  --music-player-color-accent                  : var(--color-accent);
-  --music-player-color-accent-light            : var(--color-accent-light);
-  --music-player-color-primary                 : var(--color-primary);
-  --music-player-color-playbt-playing          : var(--color-music-player-playbt-playing);
-  --music-player-color-playbt-playing-pressed  : var(--color-music-player-playbt-playing-pressed);
-  --music-player-color-playbt-paused           : var(--color-music-player-playbt-paused);
-  --music-player-color-playbt-paused-pressed   : var(--color-music-player-playbt-paused-pressed);
 }
 
 .music-player-wrapper.special-theme {
-  --music-player-color-accent-special          : #7b2cbf;
   --music-player-color-accent                  : #9d4edd;
   --music-player-color-accent-light            : #c77dff;
   --music-player-color-primary                 : #5a189a;
@@ -606,17 +625,12 @@ onUnmounted(() => {
 }
 
 .music-player-wrapper.is-ready {
-  pointer-events : auto;
   visibility     : visible;
-  animation      : playerEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation      : playerEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .compact-pop-enter-active {
   transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.compact-pop-leave-active {
-  transition: all 0.2s ease-in;
 }
 
 .compact-pop-enter-from,
@@ -625,13 +639,12 @@ onUnmounted(() => {
   transform : scale(0.4) translateY(20px);
 }
 
-
 .slide-out-left-enter-active {
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .slide-out-left-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-out-left-enter-from {
@@ -644,15 +657,18 @@ onUnmounted(() => {
   transform: translateX(-120%);
 }
 
-.compact-toggle-btn {
-  background     : var(--music-player-color-bg-main, var(--color-bg-main)) !important;
-  border         : 2px solid #000000 !important;
-  border-radius  : 50% !important;
-  box-shadow     : 0 4px 6px rgba(0,0,0,0.15);
-  padding        : 0 !important;
+.compact-button-wrapper {
+  position       : relative;
+  display        : inline-flex;
+  pointer-events : auto;
+}
+
+.compact-button {
+  margin-bottom  : 30px;
 }
 
 .player-outer-layout {
+  pointer-events : auto;
   display     : flex;
   align-items : flex-start;
   gap         : 12px;
@@ -664,9 +680,9 @@ onUnmounted(() => {
 .player-card {
   display        : flex;
   flex-direction : column;
-  background     : var(--music-player-color-bg-main, var(--color-bg-main));
-  border         : 2px solid #000000;
-  border-radius  : 12px;
+  background     : var(--music-player-color-bg-main);
+  border         : var(--music-player-border);
+  border-radius  : var(--music-player-border-radius);
   overflow       : hidden;
   width          : 360px;
   max-width      : 100%;
@@ -683,7 +699,7 @@ onUnmounted(() => {
   display        : flex;
   flex-direction : column;
   align-items    : center;
-  background     : var(--music-player-color-bg-main, var(--color-bg-main));
+  background     : var(--music-player-color-bg-main);
   padding        : 6px 8px 10px 8px;
   gap            : 4px;
   z-index        : 2;
@@ -693,25 +709,31 @@ onUnmounted(() => {
 }
 
 .control-bar-buttons {
-  display         : flex;
-  justify-content : space-between;
+  display         : grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items     : center;
   width           : 100%;
   padding         : 2px 4px;
-  gap             : 8px;
 }
 
-.expand-toggle-btn,
 .secondary-action-btn {
-  flex           : 1;
+  justify-self   : start;
   background     : transparent;
   border         : none;
   cursor         : pointer;
   padding        : 2px 8px;
   display        : flex;
-  justify-content: center;
   align-items    : center;
-  width          : 100%;
+}
+
+.expand-toggle-btn {
+  justify-self   : center;
+  background     : transparent;
+  border         : none;
+  cursor         : pointer;
+  padding        : 2px 8px;
+  display        : flex;
+  align-items    : center;
 }
 
 .expand-icon-span {
@@ -806,6 +828,24 @@ onUnmounted(() => {
   .player-card {
     width         : 100%;
     max-width     : 100%;
+    flex-direction: column-reverse;
   }
+
+  .music-player-wrapper.is-open .player-collapsible-content {
+    padding       : 12px 12px 0 12px;
+  }
+
+  .player-collapsible-content > :first-child {
+    display: none;
+  }
+
+  .note {
+    --note-size          : 18px;  
+    --note-float-distance: -32px;  
+  }
+
+  .note-1 { left: 1%; }
+  .note-2 { left: 5%; }
+  .note-3 { left: 10%; }
 }
 </style>

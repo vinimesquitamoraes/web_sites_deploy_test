@@ -1,41 +1,89 @@
 <template>
   <div class="top-buttons-bar">
-    <button class="top-mech-btn" @click="$emit('prev')" title="Rewind" aria-label="Rewind">
-      <span class="control-icon-span prev-svg"></span>
-    </button>
+    <CustomButton
+      class            = "top-mech-btn"
+      :icon-src        = "prevSvg"
+      icon-size        = "16px"
+      icon-color       = "var(--music-player-color-bg-secondary)"
+      hover-icon-color = "var(--music-player-color-bg-secondary)"
+      padding          = "0"
+      width            = "100%"
+      height           = "34px"
+      title            = "Rewind"
+      aria-label       = "Rewind"
+      @click           = "$emit('prev')"
+    />
 
-    <button 
-      class         ="top-mech-btn play-mech-btn" 
-      :class        ="{ 'is-playing': isPlaying }" 
-      @click        ="$emit('togglePlay')" 
-      :title        ="isPlaying ? 'Pause' : 'Play'" 
-      :aria-label   ="isPlaying ? 'Pause' : 'Play'"
-    >
-      <span v-if="!isPlaying" class="control-icon-span play-svg"></span>
-      <span v-else class="control-icon-span pause-svg"></span>
-    </button>
+    <CustomButton
+      class            = "top-mech-btn play-mech-btn"
+      :class           = "{ 'is-playing': isPlaying }"
+      :icon-src        = "isPlaying ? pauseSvg : playSvg"
+      icon-size        = "16px"
+      icon-color       = "var(--music-player-color-bg-secondary)"
+      hover-icon-color = "var(--music-player-color-bg-secondary)"
+      padding          = "0"
+      width            = "100%"
+      height           = "34px"
+      :title           = "isPlaying ? 'Pause' : 'Play'"
+      :aria-label      = "isPlaying ? 'Pause' : 'Play'"
+      @click           = "$emit('togglePlay')"
+    />
 
-    <button class="top-mech-btn" @click="$emit('stop')" title="Stop" aria-label="Stop">
-      <span class="control-icon-span stop-svg"></span>
-    </button>
+    <CustomButton
+      class            = "top-mech-btn"
+      :icon-src        = "stopSvg"
+      icon-size        = "16px"
+      icon-color       = "var(--music-player-color-bg-secondary)"
+      hover-icon-color = "var(--music-player-color-bg-secondary)"
+      padding          = "0"
+      width            = "100%"
+      height           = "34px"
+      title            = "Stop"
+      aria-label       = "Stop"
+      @click           = "$emit('stop')"
+    />
 
-    <button class="top-mech-btn" @click="$emit('next')" title="Load / Next" aria-label="Load / Next">
-      <span class="control-icon-span next-svg"></span>
-    </button>
+    <CustomButton
+      class            = "top-mech-btn"
+      :icon-src        = "nextSvg"
+      icon-size        = "16px"
+      icon-color       = "var(--music-player-color-bg-secondary)"
+      hover-icon-color = "var(--music-player-color-bg-secondary)"
+      padding          = "0"
+      width            = "100%"
+      height           = "34px"
+      title            = "Load / Next"
+      aria-label       = "Load / Next"
+      @click           = "$emit('next')"
+    />
 
-    <button 
-      class         ="top-mech-btn rec-mech-btn" 
-      @click        ="$emit('record')" 
-      :class        ="{ active: isRecording }" 
-      title         ="Record" 
-      aria-label    ="Record"
-    >
-      <span class="control-icon-span rec-svg"></span>
-    </button>
+    <CustomButton
+      class            = "top-mech-btn rec-mech-btn"
+      :class           = "{ active: isRecording }"
+      :icon-src        = "recSvg"
+      icon-size        = "16px"
+      icon-color       = "var(--music-player-color-bg-secondary)"
+      hover-icon-color = "var(--music-player-color-bg-secondary)"
+      padding          = "0"
+      width            = "100%"
+      height           = "34px"
+      title            = "Record"
+      aria-label       = "Record"
+      @click           = "$emit('record')"
+    />
   </div>
 </template>
 
 <script setup>
+import CustomButton from '@/components/reusables/custom_button.vue'
+
+import prevSvg      from '@/assets/svg/player-prev.svg'
+import playSvg      from '@/assets/svg/player-play.svg'
+import pauseSvg     from '@/assets/svg/player-pause.svg'
+import stopSvg      from '@/assets/svg/player-stop.svg'
+import nextSvg      from '@/assets/svg/player-next.svg'
+import recSvg       from '@/assets/svg/player-rec.svg'
+
 defineProps({
   isPlaying   : Boolean,
   isRecording : Boolean
@@ -51,8 +99,7 @@ defineEmits(['prev', 'togglePlay', 'stop', 'next', 'record'])
   gap                   : 6px;
   width                 : 100%;
   background            : var(--music-player-color-bg-dark);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  padding               : 4px 6px; 
+  border                : var(--music-player-border);
   border-radius         : 8px;
   box-sizing            : border-box;
   overflow              : visible;
@@ -60,87 +107,27 @@ defineEmits(['prev', 'togglePlay', 'stop', 'next', 'record'])
 
 .top-mech-btn {
   flex                  : 1;
-  height                : 34px;
-  background            : var(--music-player-color-surface);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
-  border-radius         : 6px;
-  cursor                : pointer;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
-  padding               : 0;
   min-width             : 0;
-}
-
-.top-mech-btn:active, .top-mech-btn.active {
-  transform             : translateY(2px);
+  --color-custom-button-background: var(--music-player-color-surface);
 }
 
 .play-mech-btn {
-  background            : var(--music-player-color-playbt-paused);
+  --color-custom-button-background: var(--music-player-color-playbt-paused);
 }
 
-.play-mech-btn:active {
-  background            : var(--music-player-color-playbt-paused-pressed);
+.play-mech-btn:not(:disabled):active {
+  --color-custom-button-background: var(--music-player-color-playbt-paused-pressed);
 }
 
 .play-mech-btn.is-playing {
-  background            : var(--music-player-color-playbt-playing); 
+  --color-custom-button-background: var(--music-player-color-playbt-playing); 
 }
 
-.play-mech-btn.is-playing:active {
-  background            : var(--music-player-color-playbt-playing-pressed); 
+.play-mech-btn.is-playing:not(:disabled):active {
+  --color-custom-button-background: var(--music-player-color-playbt-playing-pressed); 
 }
 
 .rec-mech-btn {
-  background            : #e74c3c;
-}
-
-.control-icon-span {
-  display               : block;
-  width                 : 16px;
-  height                : 16px;
-  background-color      : var(--music-player-color-text-main);
-  -webkit-mask-size     : contain;
-  mask-size             : contain;
-  -webkit-mask-repeat   : no-repeat;
-  mask-repeat           : no-repeat;
-  -webkit-mask-position : center;
-  mask-position         : center;
-  pointer-events        : none;
-}
-
-.top-mech-btn:hover .control-icon-span {
-  background-color      : var(--music-player-color-white);
-}
-
-.prev-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-prev.svg');
-  mask-image            : url('@/assets/svg/player-prev.svg');
-}
-
-.play-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-play.svg');
-  mask-image            : url('@/assets/svg/player-play.svg');
-}
-
-.pause-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-pause.svg');
-  mask-image            : url('@/assets/svg/player-pause.svg');
-}
-
-.stop-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-stop.svg');
-  mask-image            : url('@/assets/svg/player-stop.svg');
-}
-
-.next-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-next.svg');
-  mask-image            : url('@/assets/svg/player-next.svg');
-}
-
-.rec-svg {
-  -webkit-mask-image    : url('@/assets/svg/player-rec.svg');
-  mask-image            : url('@/assets/svg/player-rec.svg');
+  --color-custom-button-background: #e74c3c;
 }
 </style>

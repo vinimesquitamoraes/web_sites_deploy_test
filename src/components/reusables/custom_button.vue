@@ -7,6 +7,7 @@
         `press-${pressAnimation}`
       ]"
       :style="buttonStyles"
+      :disabled="disabled"
       @click="handleClick"
     >
       <div v-if="iconSrc" class="icon-wrapper" :style="iconWrapperStyles">
@@ -37,6 +38,10 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
+  disabled: {
+    type                       : Boolean,
+    default                    : false
+  },
   text: {
     type                       : String,
     default                    : ''
@@ -56,6 +61,10 @@ const props = defineProps({
   hoverIconColor: {
     type                       : String,
     default                    : "var(--color-custom-icon-hover)"
+  },
+  padding: {
+    type                       : String,
+    default                    : 'clamp(0.35rem, 1vw, 0.5rem)'
   },
   width: {
     type                       : [Number, String],
@@ -124,6 +133,7 @@ const buttonStyles = computed(() => ({
   '--local-hover-text'         : props.hoverTextColor,
   '--local-icon-color'         : props.iconColor,
   '--local-hover-icon-color'   : props.hoverIconColor,
+  padding                      : props.padding,
   width                        : typeof props.width === 'number' ? `${props.width}px` : props.width,
   height                       : typeof props.height === 'number' ? `${props.height}px` : props.height
 }))
@@ -160,6 +170,8 @@ const textStyles = computed(() => {
 })
 
 const handleClick = (event) => {
+  if (props.disabled) return
+  
   emit('click', event)
 
   if (props.to) {
@@ -177,7 +189,6 @@ const handleClick = (event) => {
   align-items                  : center;
   justify-content              : center;
   gap                          : clamp(6px, 1.5vw, 10px); 
-  padding                      : clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 2.5rem);
   max-width                    : 100%;
   text-align                   : center;
   box-sizing                   : border-box;
@@ -190,35 +201,38 @@ const handleClick = (event) => {
   
   transition                   : background-color 0.4s ease, 
                                  color 0.4s ease,
-                                 transform 0.1s ease;
+                                 transform 0.1s ease,
+                                 opacity 0.3s ease;
 
   -webkit-tap-highlight-color  : transparent;
   overflow                     : hidden;
 }
 
-.custom-btn.press-scale:active {
+.custom-btn.press-scale:not(:disabled):active {
   transform                    : scale(0.95) !important;
 }
 
-.custom-btn.press-lift:active {
+.custom-btn.press-lift:not(:disabled):active {
   transform                    : translateY(-2px) !important;
 }
 
-.custom-btn.press-push:active {
+.custom-btn.press-push:not(:disabled):active {
   transform                    : translateY(2px) !important;
 }
 
-.custom-btn.press-none:active {
+.custom-btn.press-none:not(:disabled):active {
   transform                    : none !important;
 }
 
-.custom-btn:hover {
+.custom-btn:not(:disabled):hover {
   background-color             : var(--local-hover-bg);
   color                        : var(--local-hover-text);
 }
 
-.custom-btn.icon-only {
-  padding                      : clamp(0.35rem, 1vw, 0.5rem); 
+.custom-btn:disabled {
+  opacity                      : 0.5;
+  cursor                       : not-allowed;
+  pointer-events               : none;
 }
 
 .icon-wrapper {
@@ -253,7 +267,7 @@ const handleClick = (event) => {
   pointer-events               : none;
 }
 
-.custom-btn:hover .button-icon-masked {
+.custom-btn:not(:disabled):hover .button-icon-masked {
   background-color             : var(--local-hover-icon-color);
 }
 

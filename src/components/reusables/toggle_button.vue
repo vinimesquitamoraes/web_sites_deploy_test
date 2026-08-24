@@ -16,18 +16,19 @@
       
       <span class="slider" :style="sliderStyles">
         <span class="handle" :style="handleStyles">
+          <span 
+            v-if="processedIcon && iconColor" 
+            class="switch-icon-masked" 
+            :style="iconStyles"
+          ></span>
           <img 
-            v-if="iconSrc" 
-            :src="iconSrc" 
+            v-else-if="processedIcon" 
+            :src="processedIcon" 
             class="switch-icon" 
             :style="{ width: `${iconSize}px`, height: `${iconSize}px` }"
             alt="" 
           />
         </span>
-      </span>
-
-      <span v-if="text || $slots.default" class="switch-text" :style="textStyles">
-        <slot>{{ text }}</slot>
       </span>
     </label>
   </Transition>
@@ -41,17 +42,29 @@ const props = defineProps({
     type    : Boolean,
     default : false
   },
-  text: {
-    type    : String,
-    default : ''
-  },
   iconSrc: {
     type    : String,
     default : '' 
   },
+  activeIconSrc: {
+    type    : String,
+    default : ''
+  },
+  inactiveIconSrc: {
+    type    : String,
+    default : ''
+  },
   iconSize: {
     type    : [Number, String],
     default : 24 
+  },
+  iconColor: {
+    type    : String,
+    default : '#ffffff'
+  },
+  handleBgColor: {
+    type    : String,
+    default : 'var(--color-black)'
   },
   width: {
     type    : [Number, String],
@@ -60,10 +73,6 @@ const props = defineProps({
   height: {
     type    : [Number, String],
     default : 44
-  },
-  fontSize: {
-    type    : [Number, String],
-    default : 'var(--font-button-size)'
   },
   bgColor: {
     type    : String,
@@ -76,19 +85,28 @@ const props = defineProps({
   activeBgColor: {
     type    : String,
     default : 'var(--color-hover)'
-  },
-  textColor: {
-    type    : String,
-    default : 'var(--color-custom-button-text)'
-  },
-  hoverTextColor: {
-    type    : String,
-    default : 'var(--color-custom-button-text-hover)'
   }
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
 const isHovered = ref(false)
+
+const rawIcon = computed(() => {
+  if (props.modelValue) {
+    return props.activeIconSrc || props.iconSrc || props.inactiveIconSrc || ''
+  }
+  return props.inactiveIconSrc || props.iconSrc || props.activeIconSrc || ''
+})
+
+const processedIcon = computed(() => {
+  const icon = rawIcon.value
+  if (!icon) return ''
+  
+  if (typeof icon === 'string' && (icon.trim().startsWith('<svg') || icon.trim().endsWith('</svg>'))) {
+    return `data:image/svg+xml;utf8,${encodeURIComponent(icon.trim())}`
+  }
+  return icon
+})
 
 const sliderStyles = computed(() => {
   let bg = props.bgColor
@@ -110,16 +128,19 @@ const handleStyles = computed(() => {
   const size = h - 12
   return {
     width: `${size}px`,
-    height: `${size}px`
+    height: `${size}px`,
+    backgroundColor: props.handleBgColor
   }
 })
 
-const textStyles = computed(() => {
-  const size = props.fontSize
-  const finalSize = typeof size === 'number' ? `${size}px` : size
+const iconStyles = computed(() => {
+  const size = typeof props.iconSize === 'number' ? `${props.iconSize}px` : props.iconSize
   return {
-    fontSize: finalSize,
-    color: isHovered.value ? props.hoverTextColor : props.textColor
+    width: size,
+    height: size,
+    backgroundColor: props.iconColor,
+    maskImage: `url("${processedIcon.value}")`,
+    WebkitMaskImage: `url("${processedIcon.value}")`
   }
 })
 
@@ -135,7 +156,6 @@ const handleClick = (event) => {
 .custom-switch {
   display                     : inline-flex;
   align-items                 : center;
-  gap                         : 10px; 
   cursor                      : pointer;
   box-sizing                  : border-box;
 
@@ -164,7 +184,6 @@ const handleClick = (event) => {
 .handle {
   position                    : absolute;
   left                        : 4px;
-  background-color            : var(--color-black );
   border-radius               : 50%;
   display                     : flex;
   align-items                 : center;
@@ -197,6 +216,18 @@ label.custom-switch.is-active span.slider {
   pointer-events              : none;
 }
 
+.switch-icon-masked {
+  display                     : inline-block;
+  mask-repeat                 : no-repeat;
+  -webkit-mask-repeat         : no-repeat;
+  mask-position               : center;
+  -webkit-mask-position       : center;
+  mask-size                   : contain;
+  -webkit-mask-size           : contain;
+  pointer-events              : none;
+  transition                  : background-color 0.4s ease;
+}
+
 .fade-bounce-enter-active {
   transition                  : opacity 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
                                 transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -214,12 +245,5 @@ label.custom-switch.is-active span.slider {
 .fade-bounce-leave-to {
   opacity                     : 0;
   transform                   : scale(0.8) translateY(10px);
-}
-
-.switch-text {
-  font-family                 : var(--font-button);
-  white-space                 : normal; 
-  word-wrap                   : break-word;
-  line-height                 : 1.2;
 }
 </style>

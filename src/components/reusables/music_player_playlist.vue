@@ -32,20 +32,26 @@
         class        = "pagination-controls" 
         :style       = "{ opacity: (!isLoadingTracks && totalPages > 1) ? 1 : 0, pointerEvents: (!isLoadingTracks && totalPages > 1) ? 'auto' : 'none' }"
       >
-        <CustomButton 
-          text       = "PREV"
-          class      = "page-btn"
-          height     = "24px"
-          fontSize   = "0.65rem"
+        <CustomButton
+          bg-color   = "var(--music-player-color-bg-secondary)"
+          :icon-src  = "previous_icon"
+          iconColor  = "var(--music-player-color-bg-dark)"
+          height     = "30px"  
+          width      = "30px"    
+          iconSize   = "20px"
+          padding    = "0"
           :disabled  = "currentPage === 1"
           @click     = "$emit('updatePage', currentPage - 1)"
         />
         <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-        <CustomButton 
-          text       = "NEXT"
-          class      = "page-btn"
-          height     = "24px"
-          fontSize   = "0.65rem"
+        <CustomButton
+          bg-color   = "var(--music-player-color-bg-secondary)"
+          :icon-src  = "next_icon"
+          iconColor  = "var(--music-player-color-bg-dark)"
+          height     = "30px"  
+          width      = "30px"    
+          iconSize   = "20px"
+          padding    = "0"
           :disabled  = "currentPage === totalPages"
           @click     = "$emit('updatePage', currentPage + 1)"
         />
@@ -57,6 +63,9 @@
 <script setup>
 import SocialMediaButton from '@/components/reusables/social_media_button.vue'
 import CustomButton      from '@/components/reusables/custom_button.vue'
+
+import previous_icon from '@/assets/svg/triangle-left-12-filled.svg'
+import next_icon     from '@/assets/svg/triangle-right-12-filled.svg'
 
 defineProps({
   isLoadingTracks   : Boolean,
@@ -77,7 +86,7 @@ defineEmits(['playTrack', 'updatePage'])
   flex-direction        : column;
   gap                   : 8px;
   background            : var(--music-player-color-primary);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+  border                : var(--music-player-border);
   padding               : 10px;
   border-radius         : var(--music-player-border-radius);
   box-sizing            : border-box;
@@ -90,9 +99,9 @@ defineEmits(['playTrack', 'updatePage'])
   justify-content       : space-between;
   align-items           : center;
   background            : var(--music-player-color-bg-main);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
   padding               : 8px 12px;
-  border-radius         : 6px;
   user-select           : none;
 }
 
@@ -100,17 +109,17 @@ defineEmits(['playTrack', 'updatePage'])
   font-size             : 0.8rem;
   margin                : 0;
   font-weight           : 700;
-  color                 : var(--music-player-color-text-main);
+  color                 : var(--music-player-color-bg-secondary);
 }
 
 .playlist-content {
   display               : flex;
   flex-direction        : column;
   gap                   : 6px;
-  height                : 215px;
-  max-height            : 215px;
+  height                : 220px;
+  max-height            : 220px;
   justify-content       : space-between;
-  overflow              : hidden;
+  overflow              : visible;
   box-sizing            : border-box;
 }
 
@@ -126,9 +135,9 @@ defineEmits(['playTrack', 'updatePage'])
   justify-content       : center;
   align-items           : center;
   flex                  : 1;
-  color                 : var(--music-player-color-text-muted);
+  color                 : var(--music-player-color-bg-main);
   font-size             : 0.8rem;
-  background            : var(--music-player-color-text-main);
+  background            : var(--music-player-color-bg-secondary);
   border-radius         : 6px;
   font-family           : monospace;
 }
@@ -136,6 +145,7 @@ defineEmits(['playTrack', 'updatePage'])
 .track-list {
   list-style            : none;
   padding               : 0;
+  padding-right         : 8px;
   margin                : 0;
   display               : flex;
   flex-direction        : column;
@@ -145,6 +155,26 @@ defineEmits(['playTrack', 'updatePage'])
   font                  : var(--music_player-font-p);
   font-size             : var(--music_player-font-p-size);
   padding-bottom        : 10px;
+  
+  scrollbar-width       : thin;
+  scrollbar-color       : var(--music-player-color-accent) var(--music-player-color-bg-main);
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.track-list::-webkit-scrollbar {
+  width                 : 6px;
+  -webkit-appearance    : none;
+}
+
+.track-list::-webkit-scrollbar-track {
+  background            : var(--music-player-color-bg-main);
+  border-radius         : 3px;
+}
+
+.track-list::-webkit-scrollbar-thumb {
+  background            : var(--music-player-color-accent);
+  border-radius         : 3px;
 }
 
 .track-item {
@@ -152,8 +182,8 @@ defineEmits(['playTrack', 'updatePage'])
   align-items           : center;
   gap                   : 10px;
   padding               : 8px 10px;
-  background            : var(--music-player-color-text-main);
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color);
+  background            : var(--music-player-color-bg-secondary);
+  border                : var(--music-player-border);
   border-radius         : 6px;
   cursor                : pointer;
   box-sizing            : border-box;
@@ -198,21 +228,15 @@ defineEmits(['playTrack', 'updatePage'])
   display               : flex;
   justify-content       : space-between;
   align-items           : center;
-  padding               : 4px 0;
-  height                : 30px;
+  padding               : 4px 2px;
+  height                : 36px;
   box-sizing            : border-box;
   transition            : opacity 0.2s ease;
   overflow              : visible;
 }
 
-.page-btn {
-  background-color      : var(--music-player-color-bg-main) !important;
-  color                 : var(--music-player-color-text-main) !important;
-  border                : var(--music-player-border-width) var(--music-player-border-style) var(--music-player-border-color) !important;
-  border-radius         : 6px !important;
-  padding               : 2px 8px !important;
-  font-weight           : 700 !important;
-  font-family           : var(--music_player-font-p) !important;
+.pagination-controls :deep(.custom-btn) {
+  overflow              : visible !important;
 }
 
 .page-info {
@@ -223,7 +247,7 @@ defineEmits(['playTrack', 'updatePage'])
 
 @media (max-height: 700px) {
   .playlist-content {
-    height              : 140px;
+    height              : 145px;
   }
 }
 </style>

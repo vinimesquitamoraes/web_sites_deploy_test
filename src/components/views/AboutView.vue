@@ -10,7 +10,6 @@
       :mediaSrc     ="section.image"
       :mediaType    ="section.content_type"
       :mediaPosition="index % 2 === 0 ? 'right' : 'left'"
-      :redBorder    ="section.redBorder ?? true"
       :imageOpenable="section.imageOpenable ?? false"
       :headingAlign ="section.headingAlign ?? 'left'"
       :textPadding  ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 21px')"

@@ -21,6 +21,7 @@
       <transition name="tooltip-fade">
         <span v-if="showTooltip" class="social-tooltip" role="tooltip" :style="tooltipStyle">
           {{ props.tooltipText || platformInfo.label }}
+          <img :src="tooltipArrow" class="tooltip-arrow" alt="" />
         </span>
       </transition>
     </teleport>
@@ -29,6 +30,7 @@
 
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
+import tooltipArrow from '@/assets/svg/triangle-down-filled.svg'
 
 const props = defineProps({
   platform: {
@@ -173,6 +175,7 @@ onUnmounted(() => {
 }
 
 .social-tooltip {
+	position         : relative;
 	background-color : #ffffff;
 	border           : 3px solid #000000;
 	border-radius    : 12px;
@@ -186,15 +189,14 @@ onUnmounted(() => {
 	z-index          : 99999;
 }
 
-.social-tooltip::after {
-	content          : '';
+.tooltip-arrow {
 	position         : absolute;
 	top              : 100%;
 	left             : 50%;
-	transform        : translateX(-50%);
-	border-width     : 8px;
-	border-style     : solid;
-	border-color     : #000000 transparent transparent transparent;
+	transform        : translateX(-50%) translateY(-2px);
+	width            : 14px;
+	height           : auto;
+	pointer-events   : none;
 }
 
 .tooltip-fade-enter-active,
@@ -219,9 +221,9 @@ onUnmounted(() => {
 		border-radius : 8px;
 		border-width  : 2px;
 	}
-	
-	.social-tooltip::after {
-		border-width  : 6px;
+
+	.tooltip-arrow {
+		width         : 10px;
 	}
 }
 </style>

@@ -197,51 +197,40 @@
   --gallery-button-size         : 50px;
 
   /* Music Player Stuff ====================================================================================================*/
-  --font-track-names-size     : 0.8rem;
 
-  --color-music-player-playbt-paused                 :#e74c3c; 
-  --color-music-player-playbt-paused-pressed         :#c0392b;
-  --color-music-player-playbt-playing                :#e68a00;
-  --color-music-player-playbt-playing-pressed        :#e74c3c;
+  --music-player-color-bg-main                 : #272526;
+  --music-player-color-bg-secondary            : var(--color-default-background);
+  --music-player-color-bg-dark                 : #000000;
+  --music-player-color-surface                 : #361c21;
 
-  --color-bg-main             : #272526;
-  --color-bg-dark             : #000000;
-  --color-surface             : #361c21;
-  --color-border              : #522931;
-  --color-accent              : #ef4444;
-  --color-accent-light        : #fca5a5;
-  --color-text-main           : #f8fafc;
-  --color-text-muted          : #f87171;
-  --color-white               : #ffffff;
-
-  --music-player-color-bg-main                 : var(--color-bg-main);
-  --music-player-color-bg-dark                 : var(--color-bg-dark);
-  --music-player-color-surface                 : var(--color-surface);
-  --music-player-color-text-main               : var(--color-text-main);
+  --music-player-border                        : var(--default-border);
+  --music-player-border-radius                 : var(--default-border-radius);
+    
   --music-player-color-text-muted              : var(--color-text-muted);
   --music-player-color-white                   : var(--color-white);
-  --music-player-color-accent                  : var(--color-accent);
-  --music-player-color-accent-light            : var(--color-accent-light);
+  --music-player-color-accent                  : #ef4444;
+  --music-player-color-accent-light            : #fca5a5;
   
-  --music-player-color-accent-special          : #7b2cbf;
-  --music-player-color-primary                 : #5a189a;
-  --music-player-color-playbt-playing          : #7b2cbf;
-  --music-player-color-playbt-playing-pressed  : #5a189a;
-  --music-player-color-playbt-paused           : #3c096c;
+  --music-player-color-accent-special          : #7729bb;
+  --music-player-color-primary                 : var(--color-primary);
+  
+  --music-player-color-playbt-playing          : var(--color-primary);
+  --music-player-color-playbt-playing-pressed  : #8539d1;
+  --music-player-color-playbt-paused           : #ef4444;
   --music-player-color-playbt-paused-pressed   : #240046;
   --music-player-color-placeholder-green       : var(--color-placeholder-green);
 
-  --music_player-compact-button                : 56px;
-
-  --music-player-border-width                  : 2px;
-  --music-player-border-style                  : solid;
-  --music-player-border-color                  : #000000;
-  --music-player-border-radius                 : 12px;
+  --music_player-compact-button-color-bg        : var(--color-default-background);
+  --music_player-compact-button-color-bg-hover  : var(--color-primary);
+  --music_player-compact-button-color-icon      : var(--music_player-compact-button-color-bg-hover);
+  --music_player-compact-button-color-icon-hover: var(--music_player-compact-button-color-bg);
+  --music_player-compact-button-size            : 56px;
+  --music_player-compact-button-icon-size       : 56px;
 
   --music_player-font-h1                       : var(--font-h1);
   --music_player-font-p                        : var(--font-p);
   --music_player-font-p-size                   : var(--font-p-size);
-  --music_player-font-track-names-size         : var(--font-track-names-size);
+  --music_player-font-track-names-size         : 15px;
 
   /* Toaster Stuff ========================================================================================================= */
   --toaster-bg-main           : #ffffff;
@@ -258,12 +247,6 @@
   --toaster-error-bg          : #f5b7b1;
   --toaster-error-border      : #c0392b;
 
-  /* Modal Stuff ========================================================================================================== */
-  --color-modal-overlay       : rgba(0, 0, 0, 0.85);
-  --color-modal-overlay-border: rgba(214, 98, 98, 0.85);
-  --color-modal-arrow             : #ffffff;  
-  --color-modal-arrow-hover       : #E50012;
-  
   /* Credits Stuff ========================================================================================================= */
   --color-credits-background  : #000000;
   --color-credits-title       : #e67e22; 
@@ -336,8 +319,8 @@
 --media-modal-close-top        : -50px;
 --media-modal-close-right      : 0;
 --media-modal-close-font-size  : 28px;
---media-modal-arrow-icon       : var(--color-modal-arrow);
---media-modal-arrow-icon-hover : var(--color-modal-arrow-hover);
+--media-modal-arrow-icon       : var(--color-default-background);
+--media-modal-arrow-icon-hover : var(--color-primary);
 --media-modal-arrow-offset     : -60px;
 }
 
