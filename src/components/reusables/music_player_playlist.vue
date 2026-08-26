@@ -6,8 +6,9 @@
         platform     = "youtube" 
         variant      = "white" 
         hoverVariant = "colored" 
-        :tooltip-text= "tooltipText"
         size         = "30"
+        :tooltip-text= "tooltipText"
+        toolTipPosition = "left"
       />
     </div>
 

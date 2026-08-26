@@ -363,7 +363,7 @@ defineEmits(['cta-click'])
   width               : 100%;
   height              : 6px;
   background          : rgba(0, 0, 0, 0.5);
-  z-index             : 10;
+  z-index             : 1;
 }
 
 .timer-bar {

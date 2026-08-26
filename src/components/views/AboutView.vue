@@ -27,10 +27,10 @@
 
     <div class="godot_foot_note">
       <SocialMediaButton 
-      platform     ="github" 
-      variant      ="black" 
-      hoverVariant ="colored" 
-      tooltipText  ="MOTHER-Encore-Demo-Source-Code"
+        platform     ="github" 
+        variant      ="black" 
+        hoverVariant ="colored" 
+        tooltipText  ="MOTHER-Encore-Demo-Source-Code"
       />
     </div>
    
@@ -133,6 +133,7 @@ const infoSections = computed(() => [
   flex-direction    : column;
   align-items       : center;
   margin-bottom     : 30px;
+  z-index           : 99;
 }
 
 @media screen and (max-width: 768px) {
