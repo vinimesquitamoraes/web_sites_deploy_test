@@ -157,6 +157,8 @@
   --back-to-top-button-border-radius         : var(--default-border-radius);
   --back-to-top-button-bg-hover              : var(--color-primary);
   --back-to-top-button-size                  : 56px;
+  --back-to-top-button-icon-size             : 95%;
+
 
   /* Character Card Stuff ==================================================================================================*/
   --character-card-title-color      : var(--color-default-text-color);
@@ -225,7 +227,7 @@
   --music_player-compact-button-color-icon      : var(--music_player-compact-button-color-bg-hover);
   --music_player-compact-button-color-icon-hover: var(--music_player-compact-button-color-bg);
   --music_player-compact-button-size            : 56px;
-  --music_player-compact-button-icon-size       : 56px;
+  --music_player-compact-button-icon-size       : 95%;
 
   --music_player-font-h1                       : var(--font-h1);
   --music_player-font-p                        : var(--font-p);

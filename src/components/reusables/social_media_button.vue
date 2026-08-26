@@ -156,7 +156,6 @@ onUnmounted(() => {
 	justify-content  : center;
 	text-decoration  : none;
 	transition       : transform 0.15s ease;
-	z-index          : 10;
 }
 
 .social-link:hover {

@@ -4,8 +4,9 @@
     class="scroll-top-btn"
     :style="{ bottom: buttonBottom + 'px' }"
     :iconSrc="triangleIcon"
-    iconSize="28px"
-    aria-label="Scroll to top"
+    width     ='var(--back-to-top-button-size)'
+    height    ='var(--back-to-top-button-size )'
+    iconSize='var(--back-to-top-button-icon-size)'
     @click="scrollToTop"
   />
 </template>
@@ -35,9 +36,10 @@ const handleScroll = () => {
 
 const handleFooterOverlap = () => {
   const footerEl = document.querySelector('.footer-container')
+  const baseBottom = window.innerWidth <= 768 ? 20 : 30
   
   if (!footerEl) {
-    buttonBottom.value = 30
+    buttonBottom.value = baseBottom
     isHidden.value = false
     return
   }
@@ -46,7 +48,7 @@ const handleFooterOverlap = () => {
   const windowHeight = window.innerHeight
   const overlap = windowHeight - footerRect.top
 
-  buttonBottom.value = 30
+  buttonBottom.value = baseBottom
   isHidden.value = false
 
   if (overlap > 0) {
@@ -55,7 +57,7 @@ const handleFooterOverlap = () => {
         break
       case 'stay':
       case 'center':
-        buttonBottom.value = overlap + 30
+        buttonBottom.value = overlap + baseBottom
         break
       case 'hide':
         isHidden.value = true
@@ -63,7 +65,6 @@ const handleFooterOverlap = () => {
     }
   }
 }
-
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
@@ -83,18 +84,15 @@ onUnmounted(() => {
 
 <style>
 .scroll-top-btn {
-  position            : fixed !important;
-  bottom              : 30px; 
+  position            : fixed;
   right               : 30px;
-  width               : var(--back-to-top-button-size, 54px) !important;
-  height              : var(--back-to-top-button-size, 54px) !important;
-  max-width           : none !important;
+  width               : var(--back-to-top-button-size);
+  height              : var(--back-to-top-button-size);
   background-color    : var(--back-to-top-button-bg-color);
   border              : var(--back-to-top-button-border);
   border-radius       : var(--back-to-top-button-border-radius);
   z-index             : 2; 
-  transition          : bottom 0.2s ease-out, background-color 0.15s ease, transform 0.15s ease !important;
-
+  transition          : bottom 0.2s ease-out, background-color 0.15s ease, transform 0.15s ease;
   --local-icon-color       : var(--color-primary);
   --local-hover-icon-color : var(--color-default-text-color);
   --local-hover-bg         : var(--back-to-top-button-bg-hover);
@@ -110,9 +108,8 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .scroll-top-btn {
-    right               : 20px !important;
-    width               : 48px !important;
-    height              : 48px !important;
+    bottom : 20px ;
+
   }
 }
 </style>

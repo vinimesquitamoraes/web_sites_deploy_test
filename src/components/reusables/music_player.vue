@@ -229,7 +229,7 @@ const onPlayerHiddenComplete = () => {
 const handle_footer_overlap = () => {
   const footerEl = document.querySelector('.footer-container')
   if (!footerEl) {
-    playerBottom.value = 16
+    playerBottom.value = 30
     isCentered.value = false
     isHidden.value = false
     isReady.value = true
@@ -611,7 +611,7 @@ const onCompactLeave = (el) => {
   pointer-events : none;
   opacity        : 0;
   visibility     : hidden;
-  transition     : bottom 0.2s ease-out, left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
+  transition     : left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
 .music-player-wrapper.special-theme {
@@ -658,13 +658,11 @@ const onCompactLeave = (el) => {
 }
 
 .compact-button-wrapper {
-  position       : relative;
-  display        : inline-flex;
   pointer-events : auto;
 }
 
 .compact-button {
-  margin-bottom  : 30px;
+  margin-bottom  : 0;
 }
 
 .player-outer-layout {
@@ -809,13 +807,8 @@ const onCompactLeave = (el) => {
 
 @media (max-width: 480px) {
   .music-player-wrapper {
-    left          : 12px !important;
-    right         : 12px !important;
-    transform     : none !important;
-    width         : auto !important;
-    max-width     : calc(100vw - 24px) !important;
+    bottom: 20px ;
   }
-
   .player-outer-layout {
     width         : 100%;
     flex-direction: column;

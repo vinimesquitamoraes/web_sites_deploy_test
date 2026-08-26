@@ -132,7 +132,7 @@ const infoSections = computed(() => [
   display           : flex;
   flex-direction    : column;
   align-items       : center;
-  margin-top        : clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom     : 30px;
 }
 
 @media screen and (max-width: 768px) {
