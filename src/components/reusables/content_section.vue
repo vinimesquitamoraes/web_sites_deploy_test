@@ -460,7 +460,7 @@ const closeImageModal = () => {
   overflow              : hidden;
   border                : var(--content-section-media-border);
   border-radius         : var(--content-section-media-radius);
-  background-color      : var(--color-black);
+  background-color      :  v-bind(contentBg);
   display               : block;
   position              : relative;
 }

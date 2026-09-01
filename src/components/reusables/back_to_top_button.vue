@@ -7,6 +7,8 @@
     width     ='var(--back-to-top-button-size)'
     height    ='var(--back-to-top-button-size )'
     iconSize='var(--back-to-top-button-icon-size)'
+    iconColor='var(--back-to-top-button-icon-color)'
+    iconColorHover='var(--back-to-top-button-icon-color-hover)'
     @click="scrollToTop"
   />
 </template>
@@ -93,9 +95,6 @@ onUnmounted(() => {
   border-radius       : var(--back-to-top-button-border-radius);
   z-index             : 2; 
   transition          : bottom 0.2s ease-out, background-color 0.15s ease, transform 0.15s ease;
-  --local-icon-color       : var(--color-primary);
-  --local-hover-icon-color : var(--color-default-text-color);
-  --local-hover-bg         : var(--back-to-top-button-bg-hover);
 }
 
 .scroll-top-btn:hover {

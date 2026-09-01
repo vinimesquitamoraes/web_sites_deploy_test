@@ -14,7 +14,7 @@
           <h3 v-if="group.subtitle" class="credits-role" :style="{ color: subtitleColor }">
             {{ group.subtitle }}
           </h3>
-          <ul class="credits-names-list">
+          <ul class="credits-names-list" :style="{ justifyItems: computedAlign }">
             <li 
               v-for="(person, nameIndex) in group.names" 
               :key="nameIndex" 
@@ -35,13 +35,14 @@
               
               <span 
                 v-else 
-                :style="{ color: textColor }"
+                :style="{ color: textColor, cursor: isTooltipAllowed(section, group, person) ? 'not-allowed' : 'default' }"
                 class="credit-text-fallback"
               >
                 {{ resolveName(person) }}
               </span>
 
               <CustomTooltip 
+                v-if="isTooltipAllowed(section, group, person)"
                 :show="activeTooltipIndex === `${sIndex}-${index}-${nameIndex}`"
                 :text="getPersonLink(person) || 'No link available'"
                 position="top"
@@ -55,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import CustomTooltip from '@/components/reusables/tooltip.vue'
 
 const props = defineProps({
@@ -91,6 +92,12 @@ const props = defineProps({
 
 const activeTooltipIndex = ref(null)
 
+const computedAlign = computed(() => {
+  if (props.textAlign === 'center') return 'center'
+  if (props.textAlign === 'right') return 'end'
+  return 'start'
+})
+
 const resolveName = (person) => {
   if (typeof person === 'object' && person !== null) {
     return person.name
@@ -103,7 +110,6 @@ const resolveLink = (person) => {
   if (!nameStr) return null
   const targetKey = nameStr.trim().toLowerCase()
   
-  // Case-insensitive search through linksMap keys
   const foundKey = Object.keys(props.linksMap).find(
     k => k.trim().toLowerCase() === targetKey
   )
@@ -115,6 +121,15 @@ const getPersonLink = (person) => {
     return person.link
   }
   return resolveLink(person)
+}
+
+const isTooltipAllowed = (section, group, person) => {
+  if (section.showTooltip === false) return false
+  if (group.showTooltip === false) return false
+  if (typeof person === 'object' && person !== null && person.showTooltip === false) {
+    return false
+  }
+  return true
 }
 </script>
 
@@ -189,11 +204,11 @@ const getPersonLink = (person) => {
   font-size         : var(--font-p-size);
   overflow          : visible;
   text-align        : v-bind(textAlign);
-  justify-content   : v-bind(textAlign);
-  display           : flex;
+  display           : inline-flex;
   position          : relative;
   width             : fit-content;
   max-width         : 100%;
+  justify-self      : v-bind(computedAlign);
 }
 
 .credit-link {
@@ -211,7 +226,6 @@ const getPersonLink = (person) => {
 
 .credit-text-fallback {
   display           : inline-block;
-  cursor            : not-allowed;
 }
 
 @media (max-width: 768px) {

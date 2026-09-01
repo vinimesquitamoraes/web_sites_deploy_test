@@ -1,8 +1,8 @@
 <template>
   <div class="main-content">
     <div class="about-page-container">
-   
-     <ContentSection
+
+      <ContentSection
       v-for="(section, index) in infoSections" 
       :key          ="index"
       :heading      ="section.title"
@@ -16,14 +16,13 @@
       :mediaFit     ="section.mediaFit ?? 'cover'"
       :mediaBorder  ="section.mediaBorder ?? ''"
       :border       ="section.border ?? 'transparent'"
+      :contentBg    ="section.contentBg"
       headerPosition="inside"
       mediaWidth    ="775px" 
       mediaHeight   ="450px"
       textAlign     ="left"
-    />
-          
-    </div>
-    
+      />          
+    </div>    
 
     <div class="godot_foot_note">
       <SocialMediaButton 
@@ -100,6 +99,7 @@ const infoSections = computed(() => [
     mediaFit      : 'contain',
     mediaBorder   : 'none',
     border        : 'none',
+    contentBg     : 'transparent',
   }
 ])
 </script>

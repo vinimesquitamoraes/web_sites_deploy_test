@@ -153,9 +153,11 @@
 
   /* Back to Top Button Stuff ==============================================================================================*/
   --back-to-top-button-bg-color              : var(--color-default-background);
+  --back-to-top-button-icon-color            : var(--color-primary);
+  --back-to-top-button-bg-color-hover        : var(--color-primary);
+  --back-to-top-button-icon-color-hover      : var(--color-default-background);
   --back-to-top-button-border                : var(--default-border);
   --back-to-top-button-border-radius         : var(--default-border-radius);
-  --back-to-top-button-bg-hover              : var(--color-primary);
   --back-to-top-button-size                  : 56px;
   --back-to-top-button-icon-size             : 95%;
 

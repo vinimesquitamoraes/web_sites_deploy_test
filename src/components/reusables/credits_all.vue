@@ -41,19 +41,19 @@ const props = defineProps({
 const specialCredits = computed(() => [
   {
     title: t('CREDITS_THANKS_VERY'),
-  
+    showTooltip: false,
     groups: [
       {
-        names:[
-         t('CREDITS_NAME_FAN_TRANSL'),
-         t('CREDITS_NAME_COMMUNITY'),
-         t('CREDITS_NAME_DISCORD'),
-  
+        names: [
+          t('CREDITS_NAME_FAN_TRANSL'),
+          t('CREDITS_NAME_COMMUNITY'),
+          t('CREDITS_NAME_DISCORD'),
         ]
       }
     ]
   },
 ])
+
 
 const playerThanks = computed(() => [
   {

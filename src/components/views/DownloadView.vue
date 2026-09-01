@@ -9,7 +9,6 @@
     
     <ContentSection 
         :text       ="t('SITE_DOWNLOAD_P2')" 
-        :show-header="false"
         mediaType   ="text" 
     />
     
@@ -114,16 +113,16 @@ const { t } = useI18n()
 }
 
 @media screen and (max-width: 768px) {
-  .platforms-grid {
+    .platforms-grid {
     flex-direction    : row;
     justify-content   : center;
     gap               : 16px;
-  }
+    }
 
-  .platforms-grid > * {
+    .platforms-grid > * {
     max-width         : 100%;
     display           : flex;
     justify-content   : center;
-  }
+    }
 }
 </style>
