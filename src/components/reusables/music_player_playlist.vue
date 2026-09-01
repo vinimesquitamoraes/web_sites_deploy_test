@@ -1,15 +1,19 @@
 <template>
-  <div class="playlist-container">
+  <div 
+    class="playlist-container"
+    :style="{ '--page-size': pageSize }"
+  >
     <div class="playlist-header">
       <h3 class="playlist-title">Track List</h3>
       <SocialMediaButton 
-        platform     = "youtube" 
-        variant      = "white" 
-        hoverVariant = "colored" 
-        size         = "30"
-        :tooltip-text= "tooltipText"
+        platform        = "youtube" 
+        color           = "#ffffff" 
+        hoverColor      = "var(--music-player-color-accent)" 
+        size            = "30px"
+        :tooltip-text   = "t('SITE_MUSIC_PLAYER_LINK')"
         toolTipPosition = "left"
       />
+  
     </div>
 
     <div class="playlist-content">
@@ -62,6 +66,8 @@
 </template>
 
 <script setup>
+import { useI18n }  from '@/composables/useI18n'
+
 import SocialMediaButton from '@/components/reusables/social_media_button.vue'
 import CustomButton      from '@/components/reusables/custom_button.vue'
 
@@ -74,11 +80,16 @@ defineProps({
   currentTrackIndex : Number,
   currentPage       : Number,
   totalPages        : Number,
-  tooltipText       : String,
-  getGlobalIndex    : Function
+  getGlobalIndex    : Function,
+  pageSize          : {
+    type            : Number,
+    default         : 7
+  }
 })
 
 defineEmits(['playTrack', 'updatePage'])
+
+const { t } = useI18n()
 </script>
 
 <style scoped>
@@ -113,15 +124,18 @@ defineEmits(['playTrack', 'updatePage'])
   color                 : var(--music-player-color-bg-secondary);
 }
 
+/* Dynamically scales container height based on how many tracks (pageSize) are rendered */
 .playlist-content {
   display               : flex;
   flex-direction        : column;
   gap                   : 6px;
-  height                : 220px;
-  max-height            : 220px;
+  /* Calculates height dynamically: approx 35px per track item + gaps + padding + footer space */
+  height                : calc(var(--page-size, 7) * 36px + 45px);
+  max-height            : 60vh; /* Safety bound for smaller screens */
   justify-content       : space-between;
   overflow              : visible;
   box-sizing            : border-box;
+  transition            : height 0.3s ease;
 }
 
 .playlist-body-area {
@@ -146,16 +160,16 @@ defineEmits(['playTrack', 'updatePage'])
 .track-list {
   list-style            : none;
   padding               : 0;
-  padding-right         : 8px;
+  padding-right         : 4px;
   margin                : 0;
   display               : flex;
   flex-direction        : column;
-  gap                   : 6px;
+  gap                   : 4px;
   flex                  : 1;
   overflow-y            : auto;
   font                  : var(--music_player-font-p);
   font-size             : var(--music_player-font-p-size);
-  padding-bottom        : 10px;
+  padding-bottom        : 4px;
   
   scrollbar-width       : thin;
   scrollbar-color       : var(--music-player-color-accent) var(--music-player-color-bg-main);
@@ -181,8 +195,8 @@ defineEmits(['playTrack', 'updatePage'])
 .track-item {
   display               : flex;
   align-items           : center;
-  gap                   : 10px;
-  padding               : 8px 10px;
+  gap                   : 8px;
+  padding               : 6px 8px;
   background            : var(--music-player-color-bg-secondary);
   border                : var(--music-player-border);
   border-radius         : 6px;
@@ -244,11 +258,5 @@ defineEmits(['playTrack', 'updatePage'])
   font-size             : 0.75rem;
   color                 : var(--music-player-color-accent-light);
   font-family           : monospace;
-}
-
-@media (max-height: 700px) {
-  .playlist-content {
-    height              : 145px;
-  }
 }
 </style>

@@ -74,6 +74,7 @@
               borderRadius: mediaBorderRadius
             }"
           >
+            <!-- @slot media - Custom media content slot -->
             <slot name="media">
               <iframe 
                 v-if="mediaType === 'video' && mediaSrc"
@@ -121,116 +122,148 @@
 import { ref, computed, watch } from 'vue'
 import MediaModal from './media_modal.vue'
 
+/**
+  * Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts.
+  * 
+  * @displayName Content Section
+*/
+
 const props = defineProps({
+  /** Section heading text content. */
   heading: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Body text string or an array of text paragraphs. */
   text: {
-    type: [String, Array],
-    default: () => []
+    type    : [String, Array],
+    default : () => []
   },
+  /** Position of the heading relative to the section content (top, inside). */
   headerPosition: {
-    type: String,
-    default: 'top',
+    type    : String,
+    default : 'top',
     validator: (value) => ['top', 'inside'].includes(value)
   },
+  /** Custom text color for the heading. */
   headingColor: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Text alignment for the heading (left, center, right, justify). */
   headingAlign: {
-    type: String,
-    default: 'center',
+    type    : String,
+    default : 'center',
     validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
   },
+  /** Text color applied to text container block. */
   textColor: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Background color for the main section wrapper container. */
   contentBg: {
-    type: String,
-    default: 'transparent'
+    type    : String,
+    default : 'transparent'
   },
+  /** Border radius styling for the section container. */
   borderRadius: {
-    type: String,
-    default: '0px'
+    type    : String,
+    default : '0px'
   },
+  /** Border styling applied to the main section wrapper. */
   border: {
-    type: String,
-    default: 'transparent'
+    type    : String,
+    default : 'transparent'
   },
+  /** Border styling applied to the section header. */
   headerBorder: {
-    type: String,
-    default: 'transparent'
+    type    : String,
+    default : 'transparent'
   },
+  /** Border styling applied to the text container block. */
   textBorder: {
-    type: String,
-    default: 'none'
+    type    : String,
+    default : 'none'
   },
+  /** Border styling applied around the inner media wrapper. */
   mediaBorder: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Border radius styling applied to the inner media inner media wrapper. */
   mediaBorderRadius: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Text alignment for paragraphs (left, center, right, justify). */
   textAlign: {
-    type: String,
-    default: 'center',
+    type    : String,
+    default : 'center',
     validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
   },
+  /** Inner padding spacing applied to the section container wrapper. */
   sectionPadding: {
-    type: String,
-    default: '0px'
+    type    : String,
+    default : '0px'
   },
+  /** Inner padding spacing applied to the text content container block. */
   textPadding: {
-    type: String,
-    default: '0px'
+    type    : String,
+    default : '0px'
   },
+  /** Source URL for the media asset (image or video iframe). */
   mediaSrc: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Alternative description text for the media asset. */
   mediaAlt: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Caption text displayed underneath the media wrapper. */
   mediaCaption: {
-    type: String,
-    default: ''
+    type    : String,
+    default : ''
   },
+  /** Custom CSS width for the media wrapper element. */
   mediaWidth: {
-    type: String,
-    default: '535px'
+    type    : String,
+    default : '535px'
   },
+  /** Custom CSS height for the media display container. */
   mediaHeight: {
-    type: String,
-    default: 'auto'
+    type    : String,
+    default : 'auto'
   },
+  /** Type of media asset to display (image, video, text). */
   mediaType: {
-    type: String,
-    default: 'image',
+    type    : String,
+    default : 'image',
     validator: (value) => ['image', 'video', 'text'].includes(value)
   },
+  /** Alignment orientation of media relative to text (left, right). */
   mediaPosition: {
-    type: String,
-    default: 'right',
+    type    : String,
+    default : 'right',
     validator: (value) => ['left', 'right'].includes(value)
   },
+  /** Main structural flow layout configuration (horizontal, vertical). */
   layout: {
-    type: String,
-    default: 'horizontal',
+    type    : String,
+    default : 'horizontal',
     validator: (value) => ['horizontal', 'vertical'].includes(value)
   },
+  /** Controls whether images expand into a modal view on click. */
   imageOpenable: {
-    type: Boolean,
-    default: true
+    type    : Boolean,
+    default : true
   },
+  /** CSS object-fit rule for media images (cover, contain, fill, scale-down). */
   mediaFit: {
-    type: String,
-    default: 'contain',
+    type    : String,
+    default : 'contain',
     validator: (value) => ['cover', 'contain', 'fill', 'scale-down'].includes(value)
   },
 })
@@ -238,30 +271,66 @@ const props = defineProps({
 const isModalOpen = ref(false)
 const hasError = ref(false)
 
+/**
+  * Filters and formats raw input text into a valid array of paragraph string blocks.
+*/
 const textParagraphs = computed(() => {
-  if (Array.isArray(props.text)) {
-    return props.text.filter(p => Boolean(p))
+  const ParagraphBuilder = {
+    normalizeText(rawText) {
+      if (Array.isArray(rawText)) {
+        return rawText.filter(p => Boolean(p))
+      }
+      return rawText ? [rawText] : []
+    }
   }
-  return props.text ? [props.text] : []
+
+  return ParagraphBuilder.normalizeText(props.text)
 })
 
+/**
+  * Evaluates whether the header title should render based on availability of text and heading properties.
+*/
 const shouldShowHeader = computed(() => {
-  return Boolean(props.heading) && textParagraphs.value.length > 0
+  const HeaderBuilder = {
+    evaluate(headingText, paragraphsCount) {
+      return Boolean(headingText) && paragraphsCount > 0
+    }
+  }
+
+  return HeaderBuilder.evaluate(props.heading, textParagraphs.value.length)
 })
 
 watch(() => props.mediaSrc, () => {
   hasError.value = false
 })
 
+/**
+  * Intercepts clicks to trigger and display the image expansion modal when valid.
+*/
 const openImageModal = () => {
-  if (props.mediaType === 'image' && props.mediaSrc && props.imageOpenable && !hasError.value) {
+  const ModalOpenBuilder = {
+    canOpen(type, src, openable, errorState) {
+      return type === 'image' && src && openable && !errorState
+    }
+  }
+
+  if (ModalOpenBuilder.canOpen(props.mediaType, props.mediaSrc, props.imageOpenable, hasError.value)) {
     isModalOpen.value = true
     document.body.style.overflow = 'hidden'
   }
 }
 
+/**
+  * Closes the image modal view.
+*/
 const closeImageModal = () => {
-  isModalOpen.value = false
+  const ModalCloseBuilder = {
+    reset() {
+      return false
+    }
+  }
+
+  isModalOpen.value = ModalCloseBuilder.reset()
   document.body.style.overflow = ''
 }
 </script>
@@ -273,7 +342,7 @@ const closeImageModal = () => {
   flex-direction        : column;
   align-items           : center;
   box-sizing            : border-box;
-  margin                : 10px 4px 4px 0;
+  margin                : 30px 4px 4px 0;
   position              : relative;
   z-index               : 1;
 }
@@ -391,7 +460,7 @@ const closeImageModal = () => {
   overflow              : hidden;
   border                : var(--content-section-media-border);
   border-radius         : var(--content-section-media-radius);
-  background-color      : #ffffff;
+  background-color      : var(--color-black);
   display               : block;
   position              : relative;
 }
@@ -412,7 +481,6 @@ const closeImageModal = () => {
   display               : block;
 }
 
-/* Responsive Media Queries */
 @media (max-width: 1220px) {
   .content-section-wrapper {
     width               : calc(100% - 12px);

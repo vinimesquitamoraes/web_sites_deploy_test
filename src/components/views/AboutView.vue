@@ -110,7 +110,7 @@ const infoSections = computed(() => [
   max-width         : 100%;
   box-sizing        : border-box;
   overflow-x        : hidden;
-  padding           : clamp(1rem, 3vw, 2.5rem) clamp(0.75rem, 2.5vw, 1.5rem);
+  
   display           : flex;
   flex-direction    : column;
   align-items       : center;

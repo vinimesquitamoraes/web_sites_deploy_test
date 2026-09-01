@@ -37,7 +37,7 @@ const props = defineProps({
   },
   duration: {
     type: Number,
-    default: 300 // in milliseconds
+    default: 300 
   },
   backgroundColor: {
     type: String,

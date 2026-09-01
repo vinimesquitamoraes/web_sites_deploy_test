@@ -1,12 +1,11 @@
 <script setup>
-import { computed }    from 'vue'
 import { useI18n }     from '@/composables/useI18n'
 
 import Banner          from '@/components/reusables/banner.vue'
 import ContentSection  from '@/components/reusables/content_section.vue'
 import GaleryCarrousel from '@/components/reusables/galery_carousel.vue'
 import CastList        from '@/components/reusables/cast_list.vue'
-import CustomButton from '@/components/reusables/custom_button.vue'
+
 
 const { t } = useI18n()
 
@@ -20,7 +19,7 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
   eager: true, 
   import: 'default' 
 })
-import img_left_arrow   from '@/assets/svg/triangle-svgrepo-com.svg?url'
+
 </script>
 
 <template>

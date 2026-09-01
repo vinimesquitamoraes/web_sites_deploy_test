@@ -23,7 +23,7 @@ import linksCSVText from '@/assets/csv/credits_links.csv?raw'
 
 const { t } = useI18n()
 
-const toggle_debug_log = false 
+const toggle_debug_log = true 
 
 const debugLog = (...args) => {
   if (toggle_debug_log) {

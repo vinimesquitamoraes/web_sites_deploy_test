@@ -22,10 +22,31 @@ const { t } = useI18n()
           <NavigationComponent :showLanguageDropdown="false" />
 
           <div class="footer-socials">
-            <SocialMediaButton platform="twitter" variant="white" hoverVariant="colored" />
-            <SocialMediaButton platform="discord" variant="white" hoverVariant="colored" />
-            <SocialMediaButton platform="bluesky" variant="white" hoverVariant="colored" />
-            <SocialMediaButton platform="github"  variant="white" hoverVariant="colored" />
+            <SocialMediaButton 
+              platform   ="twitter" 
+              color      ="#ffffff" 
+              hoverColor ="#1da1f2" 
+            />
+            <SocialMediaButton 
+              platform   ="discord" 
+              color      ="#ffffff" 
+              hoverColor ="#5865f2" 
+            />
+            <SocialMediaButton 
+              platform   ="bluesky" 
+              color      ="#ffffff" 
+              hoverColor ="#0085ff" 
+            />
+            <SocialMediaButton 
+              platform   ="github" 
+              color      ="#ffffff" 
+              hoverColor ="#00000" 
+            />
+            <SocialMediaButton 
+              platform   ="itchio" 
+              color      ="#ffffff" 
+              hoverColor ="var(--color-secondary)" 
+            />
           </div>
         </div>
 

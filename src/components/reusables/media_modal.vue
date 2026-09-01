@@ -9,10 +9,11 @@
           iconSize       = "var(--media-modal-button-icon-size)"
           width          = "var(--media-modal-button-size)"
           height         = "var(--media-modal-button-size)"
-          iconColor      = "var(--media-modal-close-color)"
+          iconColor      = "var(--media-modal-arrow-icon)"
           bgColor        = "var(--media-modal-button-bg)"
+          hoverIconColor = "var(--media-modal-arrow-icon-hover)"
           hoverBgColor   = "var(--media-modal-button-bg-hover)"
-          pressAnimation = "none"
+          pressAnimation = "scale"
           :iconSrc       = "img_close"
           @click         = "$emit('close')"
         />
@@ -28,7 +29,7 @@
           bgColor        = "var(--media-modal-button-bg)"
           hoverIconColor = "var(--media-modal-arrow-icon-hover)"
           hoverBgColor   = "var(--media-modal-button-bg-hover)"
-          pressAnimation = "none"
+          pressAnimation = "push"
           :iconSrc       = "img_left_arrow"
           @click         = "$emit('prev')"
         />
@@ -61,7 +62,7 @@
           bgColor        = "var(--media-modal-button-bg)"
           hoverIconColor = "var(--media-modal-arrow-icon-hover)"
           hoverBgColor   = "var(--media-modal-button-bg-hover)"
-          pressAnimation = "scale"
+          pressAnimation = "push"
           :iconSrc       = "img_right_arrow"
           @click         = "$emit('next')"
         />
@@ -73,28 +74,45 @@
 
 <script setup>
 import CustomButton from './custom_button.vue'
-import img_left_arrow from '@/assets/svg/triangle-left-12-filled.svg'
-import img_right_arrow from '@/assets/svg/triangle-right-12-filled.svg'
-import img_close from '@/assets/svg/close-svgrepo-com.svg'
+
+import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
+import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
+import img_close        from '@/assets/svg/close-svgrepo-com.svg'
+
+/**
+  * Media modal component for displaying enlarged images or videos with custom navigation buttons.
+  * 
+  * @displayName Media Modal 2
+*/
 
 defineProps({
+  /** Controls whether the modal overlay is active and visible. */
   isOpen: {
-    type: Boolean,
+    type    : Boolean,
     required: false,
-    default: false
+    default : false
   },
+  /** Object containing the type, source URL, and alternative description text of the media asset. */
   mediaItem: {
-    type: Object,
+    type    : Object,
     required: false,
-    default: () => ({})
+    default : () => ({})
   },
+  /** Controls whether the left and right navigation arrows are visible. */
   showNav: {
-    type: Boolean,
-    default: true
+    type    : Boolean,
+    default : true
   }
 })
 
-defineEmits(['close', 'next', 'prev'])
+defineEmits([
+  /** Triggered when the user clicks the overlay background or the close button. */
+  'close', 
+  /** Triggered when the user clicks the right navigation arrow button. */
+  'next', 
+  /** Triggered when the user clicks the left navigation arrow button. */
+  'prev'
+])
 </script>
 
 <style scoped>

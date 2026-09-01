@@ -3,11 +3,11 @@
     <div class="hero-image-wrapper">
       <transition name="bg-fade">
         <div 
-          class="hero-bg-image"
-          :key="activeImageSrc"
-          :class="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
-          :style="{ backgroundImage: `url(${activeImageSrc})` }"
-          :aria-label="imageAlt"
+          class       ="hero-bg-image"
+          :key        ="activeImageSrc"
+          :class      ="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
+          :style      ="{ backgroundImage: `url(${activeImageSrc})` }"
+          :aria-label ="imageAlt"
           role="img"
         ></div>
       </transition>
@@ -15,7 +15,10 @@
     </div>
 
     <div class="hero-content center">
-      <slot>
+      <!-- 
+        @slot content - Custom content slot for replacing or extending the default hero inner content blocks.
+      -->
+      <slot name="content">
         <div class="hero-logo-wrapper" v-if="showLogo">
           <img :src="logoSrc" alt="Game Logo" class="hero-logo-image" />
         </div>
@@ -23,10 +26,20 @@
         <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
         
         <CustomButton 
-          :text="ctaText || t('SITE_NAV_DOWNLOAD')" 
-          :to="ctaLink" @click="$emit('cta-click')" 
-          fontSize="var(--font-h2-size)" 
           v-if="showCtaButton"
+          :text         ="ctaText || t('SITE_NAV_DOWNLOAD')" 
+          :to           ="ctaLink" 
+          @click        ="$emit('cta-click')" 
+          :icon-src     ="dowload_icon"
+          icon-color    ="var(--color-black)"
+          icon-size     ="40px"
+          icon-position ="left"
+          icon-margin   ="0   -5px 0 0"
+          text-margin   ="4px 10px 0 0"
+          fontSize      ="var(--font-h2-size)" 
+          width         ="200px"
+          height        ="60px"
+          :autoAdaptSize = true
         />
       </slot>
     </div>
@@ -44,76 +57,126 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
+
 import CustomButton from '@/components/reusables/custom_button.vue'
-import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
-import img_defaultBanner from '@/assets/img/funny/ninten_Dough.png'
+
+import img_gameLogo       from '@/assets/img/logos/Encore_Logo.png'
+import img_defaultBanner  from '@/assets/img/funny/ninten_Dough.png'
+import dowload_icon       from '@/assets/svg/download.svg'
+
+/**
+  * Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable.
+  * 
+  * @displayName Hero Banner
+  */
 
 const { t } = useI18n()
 
 const logoSrc = img_gameLogo
 
 const props = defineProps({
+  /**
+    * Default background image source URL.
+    */
   imageSrc: {
     type    : String,
     required: false,
     default : ''
   },
+  /**
+    * Accessibility description text for the background image.
+    */
   imageAlt: {
     type    : String,
     required: false,
     default : 'Hero banner background'
   },
+  /**
+    * Subtitle tha appears below logo.
+    */
   subtitle: {
     type    : String,
     required: false,
     default : '[Default Banner Text]'
   },
+  /**
+    * Determine if scrolling background animations are enabled.
+    */
   isScrollable: {
     type    : [Boolean, String],
     required: false,
     default : false
   },
+  /**
+    * Direction trajectory for background scrolling animation.
+    * @values none, horizontal, vertical, both
+    */
   scrollDirection: {
     type    : String,
     required: false,
     default : 'horizontal',
     validator: (value) => ['none', 'horizontal', 'vertical', 'both'].includes(value)
   },
+  /**
+    * Browser session storage lookup key for conditional alternative asset displays.
+    */
   sessionKey: {
     type    : String,
     required: false,
     default : ''
   },
+  /**
+    * List of alternative background images for active session rotation.
+    * @default []
+    */
   alternativeImages: {
     type    : Array,
     required: false,
     default : () => []
   },
+  /**
+    * Scroll animation direction when an alternative session state is active.
+    */
   alternativeScrollDirection: {
     type    : String,
     required: false,
     default : 'both'
   },
+  /**
+    * Time interval in milliseconds between background image transitions.
+    */
   imageChangeInterval: {
     type    : Number,
     required: false,
     default : 25000
   },
+  /**
+    * Controls whether the brand logo image container is visible.
+    */
   showLogo: {
     type    : Boolean,
     required: false,
     default : true
   },
+  /**
+    * Controls whether the call-to-action button element is visible.
+    */
   showCtaButton: {
     type    : Boolean,
     required: false,
     default : true
   },
+  /**
+    * Custom text label override string for the call-to-action button.
+    */
   ctaText: {
     type    : String,
     required: false,
     default : ''
   },
+  /**
+    * Target routing link destination path for the call-to-action button.
+    */
   ctaLink: {
     type    : String,
     required: false,
@@ -121,9 +184,23 @@ const props = defineProps({
   }
 })
 
+/**
+  * Selects a random alternative background image from the configured array.
+  * 
+  * @returns {string|undefined} The selected alternative image source URL or undefined.
+  */
 const getRandomAlternative = () => {
-  if (props.alternativeImages.length > 0) {
-    const randomIndex = Math.floor(Math.random() * props.alternativeImages.length)
+  const AlternativeBuilder = {
+    hasImages(images) {
+      return images.length > 0
+    },
+    getRandomIndex(length) {
+      return Math.floor(Math.random() * length)
+    }
+  }
+
+  if (AlternativeBuilder.hasImages(props.alternativeImages)) {
+    const randomIndex = AlternativeBuilder.getRandomIndex(props.alternativeImages.length)
     return props.alternativeImages[randomIndex]
   }
   return undefined
@@ -136,9 +213,21 @@ const isSessionActive = ref(
 const randomAlternativeImage = ref(getRandomAlternative())
 const timerKey = ref(0)
 
+/**
+  * Checks and updates the active session state based on session storage value changes.
+  */
 const checkSessionState = () => {
-  if (!props.sessionKey) return
-  const latestValue = sessionStorage.getItem(props.sessionKey) === 'true'
+  const SessionBuilder = {
+    isValidKey(key) {
+      return Boolean(key)
+    },
+    getStorageValue(key) {
+      return sessionStorage.getItem(key) === 'true'
+    }
+  }
+
+  if (!SessionBuilder.isValidKey(props.sessionKey)) return
+  const latestValue = SessionBuilder.getStorageValue(props.sessionKey)
   if (latestValue !== isSessionActive.value) {
     isSessionActive.value = latestValue
     if (latestValue && props.alternativeImages.length > 0) {
@@ -177,25 +266,61 @@ onUnmounted(() => {
   if (bgCycleIntervalId) clearInterval(bgCycleIntervalId)
 })
 
+/**
+  * Computed property that resolves the current background image URL.
+  */
 const activeImageSrc = computed(() => {
-  if (isSessionActive.value && randomAlternativeImage.value) {
-    return randomAlternativeImage.value
+  const ImageSrcBuilder = {
+    buildSource(isActive, altImage, defaultImg, fallbackDefault) {
+      if (isActive && altImage) {
+        return altImage
+      }
+      return defaultImg || fallbackDefault
+    }
   }
-  return props.imageSrc || img_defaultBanner
+
+  return ImageSrcBuilder.buildSource(
+    isSessionActive.value,
+    randomAlternativeImage.value,
+    props.imageSrc,
+    img_defaultBanner
+  )
 })
 
+/**
+  * Computed property to determine if the background scroll animation is active.
+  */
 const isScrollableActive = computed(() => {
-  if (isSessionActive.value) {
-    return true
+  const ScrollableBuilder = {
+    resolveState(isActive, defaultScrollable) {
+      if (isActive) {
+        return true
+      }
+      return defaultScrollable
+    }
   }
-  return props.isScrollable
+
+  return ScrollableBuilder.resolveState(isSessionActive.value, props.isScrollable)
 })
 
+/**
+  * Computed property that resolves the current active scroll direction style.
+  */
 const activeScrollDirection = computed(() => {
-  if (isSessionActive.value) {
-    return props.alternativeScrollDirection
+  const DirectionBuilder = {
+    resolveDirection(isActive, altDirection, defaultDirection) {
+      if (isActive) {
+        return altDirection
+      }
+      return defaultDirection
+    }
   }
-  return props.scrollDirection
+
+  return DirectionBuilder.resolveDirection(
+    isSessionActive.value,
+    props.alternativeScrollDirection,
+    props.scrollDirection
+  )
 })
 
 defineEmits(['cta-click'])

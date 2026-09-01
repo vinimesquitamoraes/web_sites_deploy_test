@@ -19,22 +19,24 @@
         <PlatformButton platform="macos"   size="100px" :clickable="false"/>
     </div>
 
-    <div class="button-container">
-       <CustomButton 
-            text            ="" 
-            iconSize        ="100%" 
-            width           ="280px"
-            height          ="100px"
-            iconColor       =var(--color-itchio-button-icon)
-            bgColor         =var(--color-itchio-button-bg)
-            hoverIconColor  =var(--color-itchio-button-icon-hover)
-            hoverBgColor    =var(--color-itchio-button-bg-hover)
-            :iconSrc        ="iconItchio" 
-            externalUrl="https://mother-encore.itch.io/mother-encore"
-        />
+    <div class="download-action-group">
+        <h2 class="itchio-about-heading">{{ t('SITE_ABOUT_DL_ITCHIO') }}</h2>
+        <div class="button-container">
+            <CustomButton 
+                text            ="" 
+                iconSize        ="100%" 
+                width           ="280px"
+                height          ="100px"
+                iconColor       =var(--color-itchio-button-icon)
+                bgColor         =var(--color-itchio-button-bg)
+                hoverIconColor  =var(--color-itchio-button-icon-hover)
+                hoverBgColor    =var(--color-itchio-button-bg-hover)
+                :iconSrc        ="iconItchio" 
+                externalUrl="https://mother-encore.itch.io/mother-encore"
+            />
+        </div>
     </div>
 
-    
     <div class="page-character-container">
         <img :src="img_lloydDad" alt="Lloyd Dad" class="page-character" />
     </div>
@@ -57,8 +59,6 @@ const { t } = useI18n()
 </script>
 
 <style scoped>
-
-
 .platforms-grid {
     width             : 100%;
     display           : flex;
@@ -69,12 +69,30 @@ const { t } = useI18n()
     box-sizing        : border-box;
 }
 
+.download-action-group {
+    display           : flex;
+    flex-direction    : column;
+    align-items       : center;
+    gap               : 8px;
+    margin-top        : clamp(1.5rem, 3vw, 2rem);
+    box-sizing        : border-box;
+}
+
+.itchio-about-heading {
+    text-align        : center;
+    font-family       : var(--font-h2);
+    font-size         : var(--font-h2-size);
+    color             : var(--color-primary);
+    margin            : 0;
+    box-sizing        : border-box;
+}
+
 .button-container {
     width             : 100%;
     max-width         : 100%;
     display           : flex;
     justify-content   : center;
-    margin-top        : clamp(1.25rem, 3vw, 2rem); 
+    margin            : 0;
     box-sizing        : border-box;
 }
 

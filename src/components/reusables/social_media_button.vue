@@ -4,19 +4,14 @@
     target        ="_blank" 
     rel           ="noopener noreferrer" 
     class         ="social-link"
-    :class        ="[`variant-${variant}`, `hover-${hoverVariant}`]"
+    :style        ="customStyles"
     :aria-label   ="computedTooltipText"
     @mouseenter   ="handleMouseEnter"
     @mouseleave   ="handleMouseLeave"
     ref           ="linkRef"
   >
-    <img
-      :src        ="currentIcon"
-      :alt        ="`${platformInfo.label} Icon`"
-      :width      ="size"
-      :height     ="size"
-      class       ="social-icon"
-    />
+    <div class="social-icon"/>
+
     <ToolTip 
       :show       ="isTooltipVisible" 
       :target-ref ="linkRef" 
@@ -51,15 +46,13 @@ const props = defineProps({
     type: [Number, String],
     default: 48
   },
-  variant: {
+  color: {
     type: String,
-    default: 'colored',
-    validator: (value) => ['colored', 'white', 'black'].includes(value)
+    default: 'var(--color-social-icons-color, inherit)'
   },
-  hoverVariant: {
+  hoverColor: {
     type: String,
-    default: 'colored',
-    validator: (value) => ['colored', 'white', 'black'].includes(value)
+    default: 'var(--color-social-icons-hover-color, inherit)'
   }
 })
 
@@ -68,10 +61,11 @@ const key = props.platform.toLowerCase()
 
 const platforms = {
   twitter: { url: 'https://x.com/Mother_Encore', label: 'Twitter' },
-  discord: { url: 'https://discord.gg/NBR5qZsDw', label: 'Discord' },
+  discord: { url: 'https://discord.gg/SS4wBGDDGm', label: 'Discord' },
   youtube: { url: 'https://www.youtube.com/watch?v=6YN_okRykjw&list=PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63&index=2', label: 'YouTube' },
   github:  { url: 'https://github.com/motherencore/MOTHER-Encore-Demo-Source-Code', label: 'GitHub' },
-  bluesky: { url: 'https://bsky.app/profile/motherencore.bsky.social', label: 'Bluesky' }
+  bluesky: { url: 'https://bsky.app/profile/motherencore.bsky.social', label: 'Bluesky' },
+  itchio:  { url: 'https://mother-encore.itch.io/mother-encore', label: 'Itch.io' }
 }
 
 const platformInfo = platforms[key] || {
@@ -81,30 +75,24 @@ const platformInfo = platforms[key] || {
 
 const computedTooltipText = computed(() => props.tooltipText || platformInfo.label)
 
-const monochromeIcons = import.meta.glob('/src/assets/svg/social_media_icons_monochrome/*.svg', {
+const socialIcons = import.meta.glob('/src/assets/svg/social_media_icons/*.svg', {
   eager: true,
   import: 'default',
 })
 
-const coloredIcons = import.meta.glob('/src/assets/svg/social_media_icons_colored/*.svg', {
-  eager: true,
-  import: 'default',
-})
+const customStyles = computed(() => {
+  const numericSize = typeof props.size === 'number' ? `${props.size}px` : props.size
+  const fullPath = `/src/assets/svg/social_media_icons/${key}.svg`
+  const iconUrl = socialIcons[fullPath] || ''
 
-const getIconPath = (v, iconKey) => {
-  if (v === 'white' || v === 'black') {
-    const fullPath = `/src/assets/svg/social_media_icons_monochrome/${iconKey}.svg`
-    return monochromeIcons[fullPath] || ''
-  } else {
-    const fullPath = `/src/assets/svg/social_media_icons_colored/${iconKey}.svg`
-    return coloredIcons[fullPath] || ''
+  return {
+    '--icon-size'       : numericSize,
+    '--icon-mask'       : `url("${iconUrl}")`,
+    '--icon-color'      : props.color,
+    '--icon-hover-color': props.hoverColor
   }
-}
+})
 
-const defaultIcon = getIconPath(props.variant, key)
-const hoverIcon   = getIconPath(props.hoverVariant, key)
-
-const currentIcon  = ref(defaultIcon)
 const internalShow = ref(false)
 let   tooltipTimer = null
 
@@ -114,7 +102,6 @@ const isTooltipVisible = computed(() => {
 })
 
 const handleMouseEnter = () => {
-  currentIcon.value = hoverIcon
   if (tooltipTimer) clearTimeout(tooltipTimer)
   
   tooltipTimer = setTimeout(() => {
@@ -123,7 +110,6 @@ const handleMouseEnter = () => {
 }
 
 const handleMouseLeave = () => {
-  currentIcon.value  = defaultIcon
   if (tooltipTimer) clearTimeout(tooltipTimer)
   internalShow.value = false
 }
@@ -140,21 +126,28 @@ onUnmounted(() => {
 	align-items      : center;
 	justify-content  : center;
 	text-decoration  : none;
-	transition       : transform 0.15s ease;
+	transition       : transform 0.15s ease, color 0.3s ease;
+	color            : var(--icon-color);
 }
 
 .social-link:hover {
 	transform        : translateY(-3px);
+	color            : var(--icon-hover-color);
 }
 
 .social-icon {
+	width            : var(--icon-size);
+	height           : var(--icon-size);
+	background-color : currentColor;
 	display          : block;
-	object-fit       : contain;
-	transition       : filter 0.3s ease;
-}
-
-.variant-black .social-icon,
-.hover-black:hover .social-icon {
-	filter           : brightness(0);
+	
+	-webkit-mask-image     : var(--icon-mask);
+	mask-image             : var(--icon-mask);
+	-webkit-mask-repeat    : no-repeat;
+	mask-repeat            : no-repeat;
+	-webkit-mask-position  : center;
+	mask-position          : center;
+	-webkit-mask-size      : contain;
+	mask-size              : contain;
 }
 </style>

@@ -1,7 +1,7 @@
-key,Translation Key,ALL ACTS,ACT 1,ACT 2
+,Translation Key,ALL ACTS,ACT 1,ACT 2
 Project Creator,CREDITS_CREATOR,Sam the Salmon,Sam the Salmon,
 Director,CREDITS_DIRECTOR,Pkdotts,Pkdotts,Pkdotts
-Programmer,CREDITS_PROGRAMMERS,"Artem “Inqurity” N.; benichi; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher",benichi; Danionel; Pkdotts; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher,"Artem “Inqurity” N.; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; JumpmanFR"
+Programmer,CREDITS_PROGRAMMERS,Artem “Inqurity” N.; benichi; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher",benichi; Danionel; Pkdotts; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher,Artem “Inqurity” N.; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; JumpmanFR"
 NPC Sprite Artist,CREDITS_ARTISTS_NPC,Anderp40; benichi; Destroyer120; Megadrivesonic; Pkdotts; Shachi Welt; Tessa; Bassya; Bndi; Clipbrick; FlintMother3; Nicolás Romero; Retro64; Sam the Salmon; Yahav,benichi; Megadrivesonic; Pkdotts; Bassya; Clipbrick; FlintMother3; Nicolás Romero; Retro64; Sam the Salmon; Yahav,Anderp40; Destroyer120; Megadrivesonic; Pkdotts; Shachi Welt; Tessa; Bndi; Sam the Salmon
 Character Animator,CREDITS_ANIM_CHARA,benichi; CartMart; Cosmocha; GeraFierro; MP64; Pkdotts; pkgalaxia; VentesTheFloof; Castor28; Clipbrick; Corblan; deebits; dianesaur; Mallow; Maxbound; Sam the Salmon; SuperSquidoodle; Remie_REM_Sleep,benichi; CartMart; MP64; Pkdotts; Castor28; Clipbrick; Corblan; dianesaur; Mallow; Maxbound; Sam the Salmon; Remie_REM_Sleep,CartMart; Cosmocha; GeraFierro; MP64; Pkdotts; pkgalaxia; VentesTheFloof; Castor28; deebits; SuperSquidoodle
 Object Animator,CREDITS_ANIM_OBJECT,Cosmocha; MP64; Pkdotts; Vini; Clipbrick; SuperSquidoodle,Pkdotts; Clipbrick; SuperSquidoodle,Cosmocha; MP64; Pkdotts; Vini

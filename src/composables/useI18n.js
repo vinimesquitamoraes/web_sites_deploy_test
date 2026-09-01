@@ -10,11 +10,11 @@ const excelUrls = [
 ]
 
 const translations = ref({})
-const currentLang = ref('new')
-const isLoaded = ref(false)
+const currentLang = ref('en')
+const isLoaded  = ref(false)
 
 const ignored_langs    = new Set(['es_ES'])
-const toggle_debug_log = true
+const toggle_debug_log = false
 
 const debugLog = (...args) => {
   if (toggle_debug_log) {

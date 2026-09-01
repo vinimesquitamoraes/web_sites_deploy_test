@@ -1,8 +1,12 @@
 <template>
-  <div class="external-side-volume" :class="`layout-${volumeLayout}`">
-    <div class="volume-control-container">
-      <span class="control-label">VOL</span>
-      
+  <div 
+    class="external-side-volume" 
+    :class="[`layout-${volumeLayout}`, `orientation-${orientation}`]"
+  >
+    <span class="control-label">VOL</span>
+
+    <!-- Vertical / Standard Layout Elements Container -->
+    <div v-if="!isCurrentHorizontal" class="volume-control-container">
       <div v-if="volumeLayout === 'wheel'" class="thumbwheel" @wheel.prevent="$emit('wheelVolume', $event)">
         <div class="wheel-ridges"></div>
       </div>
@@ -19,19 +23,20 @@
           :style        ="{ '--volume-percent': volume + '%' }"
         />
       </div>
+    </div>
 
-      <div class="mobile-slider-track">
-        <input 
-          type          ="range" 
-          min           ="0" 
-          max           ="100" 
-          step          ="1"
-          :value        ="volume" 
-          @input        ="$emit('volumeChange', $event)"
-          class         ="mobile-range-input"
-          :style        ="{ '--volume-percent': volume + '%' }"
-        />
-      </div>
+    <!-- Horizontal Layout Slider Track (Collinear) -->
+    <div v-if="isCurrentHorizontal" class="mobile-slider-track">
+      <input 
+        type          ="range" 
+        min           ="0" 
+        max           ="100" 
+        step          ="1"
+        :value        ="volume" 
+        @input        ="$emit('volumeChange', $event)"
+        class         ="mobile-range-input"
+        :style        ="{ '--volume-percent': volume + '%' }"
+      />
     </div>
 
     <button 
@@ -47,20 +52,29 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   volumeLayout : String,
   volume       : Number,
-  isMuted      : Boolean
+  isMuted      : Boolean,
+  orientation  : {
+    type       : String,
+    default    : 'horizontal',
+    validator  : (value) => ['horizontal', 'vertical', 'horizontal-flipped', 'vertical-flipped'].includes(value)
+  }
 })
 
 defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
+
+const isCurrentHorizontal = computed(() => {
+  return props.orientation.includes('horizontal')
+})
 </script>
 
 <style scoped>
 .external-side-volume {
   display               : flex;
-  flex-direction        : column;
-  align-items           : center;
   background            : var(--music-player-color-bg-main);
   border                : var(--music-player-border);
   border-radius         : var(--music-player-border-radius);
@@ -70,27 +84,108 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   gap                   : 4px;
 }
 
-.external-side-volume.layout-wheel {
+.external-side-volume.orientation-vertical {
+  flex-direction        : column;
+  align-items           : center;
+}
+
+.external-side-volume.orientation-vertical-flipped {
+  flex-direction        : column-reverse;
+  align-items           : center;
+}
+
+.external-side-volume.orientation-vertical.layout-wheel,
+.external-side-volume.orientation-vertical-flipped.layout-wheel {
   height                : 88px;
 }
 
-.external-side-volume.layout-bar {
+.external-side-volume.orientation-vertical.layout-bar,
+.external-side-volume.orientation-vertical-flipped.layout-bar {
   height                : 150px;
 }
 
-.volume-control-container {
-  display               : flex;
+.external-side-volume.orientation-vertical .volume-control-container,
+.external-side-volume.orientation-vertical-flipped .volume-control-container {
   flex-direction        : column;
   align-items           : center;
   gap                   : 2px;
   flex                  : 1;
 }
 
+/* --- HORIZONTAL ORIENTATIONS (COLLINEAR) --- */
+.external-side-volume.orientation-horizontal,
+.external-side-volume.orientation-horizontal-flipped {
+  width                 : 100%;
+  height                : auto !important;
+  flex-direction        : row;
+  align-items           : center;
+  padding               : 8px 12px;
+  gap                   : 10px;
+}
+
+.external-side-volume.orientation-horizontal-flipped {
+  flex-direction        : row-reverse;
+}
+
+.external-side-volume.orientation-horizontal .mobile-slider-track,
+.external-side-volume.orientation-horizontal-flipped .mobile-slider-track {
+  display               : flex;
+  flex                  : 1;
+  height                : 26px;
+  background            : var(--music-player-color-surface);
+  border                : var(--music-player-border);
+  border-radius         : 6px;
+  align-items           : center;
+  padding               : 0 8px;
+  box-sizing            : border-box;
+}
+
+.external-side-volume.orientation-horizontal .mobile-range-input,
+.external-side-volume.orientation-horizontal-flipped .mobile-range-input {
+  -webkit-appearance    : none;
+  appearance            : none;
+  width                 : 100%;
+  height                : 6px;
+  background            : linear-gradient(to right, var(--music-player-color-accent) var(--volume-percent, 0%), var(--music-player-color-bg-dark) var(--volume-percent, 0%));
+  border-radius         : 3px;
+  outline               : none;
+  cursor                : pointer;
+}
+
+.external-side-volume.orientation-horizontal .mobile-range-input::-webkit-slider-thumb,
+.external-side-volume.orientation-horizontal-flipped .mobile-range-input::-webkit-slider-thumb {
+  -webkit-appearance    : none;
+  appearance            : none;
+  width                 : 14px;
+  height                : 14px;
+  border-radius         : 3px;
+  background            : var(--music-player-color-accent);
+  border                : var(--music-player-border);
+}
+
+.external-side-volume.orientation-horizontal .mobile-range-input::-moz-range-thumb,
+.external-side-volume.orientation-horizontal-flipped .mobile-range-input::-moz-range-thumb {
+  width                 : 14px;
+  height                : 14px;
+  border                : var(--music-player-border);
+  border-radius         : var(--music-player-border-radius);
+  background            : var(--music-player-color-accent);
+}
+
+.external-side-volume.orientation-horizontal .mute-btn,
+.external-side-volume.orientation-horizontal-flipped .mute-btn {
+  width                 : 60px;
+  height                : 28px;
+  margin-top            : 0;
+}
+
+/* --- SHARED SUB-COMPONENT STYLES --- */
 .control-label {
   font-size             : 0.55rem;
   font-weight           : 700;
   color                 : var(--music-player-color-accent-light);
   letter-spacing        : 0.5px;
+  flex-shrink           : 0;
 }
 
 .thumbwheel {
@@ -156,10 +251,6 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   border                : var(--music-player-border);
 }
 
-.mobile-slider-track {
-  display               : none;
-}
-
 .mute-btn {
   background            : var(--music-player-color-surface);
   border                : var(--music-player-border);
@@ -175,6 +266,7 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
   justify-content       : center;
   align-items           : center;
   margin-top            : auto;
+  flex-shrink           : 0;
 }
 
 .mute-btn:active {
@@ -187,73 +279,14 @@ defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
 }
 
 @media (max-width: 480px) {
-  .external-side-volume {
+  .external-side-volume:not([class*="orientation-"]) {
     width               : 100%;
     height              : auto !important;
     flex-direction      : row;
-    justify-content     : space-between;
     align-items         : center;
     padding             : 8px 12px;
     box-sizing          : border-box;
-  }
-
-  .volume-control-container {
-    flex-direction      : row;
-    align-items         : center;
     gap                 : 10px;
-    flex                : 1;
-    margin-right        : 12px;
-  }
-
-  .thumbwheel, .vertical-slider-track {
-    display             : none !important;
-  }
-
-  .mobile-slider-track {
-    display             : flex;
-    flex                : 1;
-    height              : 26px;
-    background          : var(--music-player-color-surface);
-    border              : var(--music-player-border);
-    border-radius       : 6px;
-    align-items         : center;
-    padding             : 0 8px;
-    box-sizing          : border-box;
-  }
-
-  .mobile-range-input {
-    -webkit-appearance  : none;
-    appearance          : none;
-    width               : 100%;
-    height              : 6px;
-    background          : linear-gradient(to right, var(--music-player-color-accent) var(--volume-percent, 0%), var(--music-player-color-bg-dark) var(--volume-percent, 0%));
-    border-radius       : 3px;
-    outline             : none;
-    cursor              : pointer;
-  }
-
-  .mobile-range-input::-webkit-slider-thumb {
-    -webkit-appearance  : none;
-    appearance          : none;
-    width               : 14px;
-    height              : 14px;
-    border-radius       : 3px;
-    background          : var(--music-player-color-accent);
-    border              : var(--music-player-border);
-  }
-
-  .mobile-range-input::-moz-range-thumb {
-    width               : 14px;
-    height              : 14px;
-    border              : var(--music-player-border);
-    border-radius       : var(--music-player-border-radius);
-    background          : var(--music-player-color-accent);
-  }
-
-  .mute-btn {
-    width               : 60px;
-    height              : 28px;
-    margin-top          : 0;
   }
 }
 </style>

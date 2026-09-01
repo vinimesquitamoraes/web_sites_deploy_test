@@ -48,7 +48,7 @@
       </Transition>
 
       <Transition name="slide-out-left" @after-leave="onPlayerHiddenComplete">
-        <div v-if="!isPlayerHiddenAction" class="player-outer-layout">
+        <div v-if="!isPlayerHiddenAction" class="player-outer-layout" :class="[`player-orientation-${orientation}`]">
           <div class="player-card">
             <div class="player-control-bar">
               <div class="control-bar-buttons">
@@ -70,6 +70,7 @@
               </div>
 
               <PlayerControls 
+                :playlistId   = "playlistId"
                 :isPlaying    = "isPlaying" 
                 :isRecording  = "isRecording"
                 @prev         = "prevTrack"
@@ -82,6 +83,7 @@
 
             <div class="player-collapsible-content">
               <WalkmanDevice 
+                class="mobile-hidden-walkman"
                 :isPlaying            = "isPlaying"
                 :hasSpecialTapeAccess = "hasSpecialTapeAccess"
                 :showImageTape        = "showImageTape"
@@ -100,7 +102,6 @@
                 :currentTrackIndex = "currentTrackIndex"
                 :currentPage       = "currentPage"
                 :totalPages        = "totalPages"
-                tooltipText       = "Listen to the full OST here!"
                 :getGlobalIndex    = "getGlobalIndex"
                 @playTrack         = "playTrack"
                 @updatePage        = "(val) => currentPage = val"
@@ -112,6 +113,7 @@
             :volumeLayout  = "volumeLayout"
             :volume        = "volume"
             :isMuted       = "isMuted"
+            :orientation   = "orientation"
             @wheelVolume   = "onWheelVolume"
             @volumeChange  = "onVolumeChange"
             @toggleMute    = "toggleMute"
@@ -160,7 +162,7 @@ const props = defineProps({
   },
   pageSize: {
     type    : Number,
-    default : 5
+    default : 7
   },
   footerBehavior: {
     type    : String,
@@ -176,6 +178,11 @@ const props = defineProps({
     type    : String,
     default : 'default',
     validator: (value) => ['default', 'compact'].includes(value)
+  },
+  orientation: {
+    type    : String,
+    default : 'horizontal',
+    validator: (value) => ['horizontal', 'vertical', 'horizontal-flipped', 'vertical-flipped'].includes(value)
   }
 })
 
@@ -675,6 +682,30 @@ const onCompactLeave = (el) => {
   overflow    : visible;
 }
 
+/* --- ORIENTATION CONFIGURATIONS FOR OUTER LAYOUT --- */
+.player-outer-layout.player-orientation-vertical {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.player-outer-layout.player-orientation-vertical-flipped {
+  flex-direction: row-reverse;
+  align-items: flex-start;
+}
+
+.player-outer-layout.player-orientation-horizontal,
+.player-outer-layout.player-orientation-horizontal-flipped {
+  width         : 100%;
+  flex-direction: column;
+  align-items   : stretch;
+  gap           : 8px;
+  box-sizing    : border-box;
+}
+
+.player-outer-layout.player-orientation-horizontal-flipped .player-card {
+  flex-direction: column-reverse;
+}
+
 .player-card {
   display        : flex;
   flex-direction : column;
@@ -711,7 +742,7 @@ const onCompactLeave = (el) => {
   grid-template-columns: 1fr auto 1fr;
   align-items     : center;
   width           : 100%;
-  padding         : 2px 4px;
+  padding         : -4px 4px;
 }
 
 .secondary-action-btn {
@@ -807,38 +838,18 @@ const onCompactLeave = (el) => {
 
 @media (max-width: 480px) {
   .music-player-wrapper {
-    bottom: 20px ;
-  }
-  .player-outer-layout {
-    width         : 100%;
-    flex-direction: column;
-    align-items   : stretch;
-    gap           : 8px;
-    padding-bottom: 14px;
-    box-sizing    : border-box;
+    bottom: 16px !important;
+    position: fixed !important;
   }
 
+  
   .player-card {
-    width         : 100%;
-    max-width     : 100%;
-    flex-direction: column-reverse;
+    display: flex;
+    flex-direction: column-reverse !important;
   }
 
-  .music-player-wrapper.is-open .player-collapsible-content {
-    padding       : 12px 12px 0 12px;
+  .mobile-hidden-walkman {
+    display: none !important;
   }
-
-  .player-collapsible-content > :first-child {
-    display: none;
-  }
-
-  .note {
-    --note-size          : 18px;  
-    --note-float-distance: -32px;  
-  }
-
-  .note-1 { left: 1%; }
-  .note-2 { left: 5%; }
-  .note-3 { left: 10%; }
 }
 </style>

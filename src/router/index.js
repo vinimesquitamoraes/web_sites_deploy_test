@@ -25,7 +25,6 @@ const routes = [
       image           :  LOGO_IMAGE_URL, 
       themeColor      : '#c24b49',
       twitterSite     : '@Mother_Encore',
-      hideMusicPlayer : true
     }
   },
   { 

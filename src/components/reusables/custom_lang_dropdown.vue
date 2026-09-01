@@ -31,7 +31,7 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
       @click="toggleDropdown" 
       class="lang-button"
     >
-      <span>{{ currentLang.toUpperCase() }}</span>
+      <span class="lang-text">{{ currentLang.toUpperCase() }}</span>
       <span class="arrow">▼</span>
     </button>
 
@@ -61,9 +61,9 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
 .lang-button {
   background        : transparent;
   color             : inherit;
-  border            : 1px solid currentColor;
+  border            : 3px solid currentColor;
   padding           : 4px 8px;
-  border-radius     : 4px;
+  border-radius     : var(--default-border-radius);
   cursor            : pointer;
   font-family       : var(--font-navbar);
   font-size         : var(--font-navbar-size);
@@ -74,8 +74,16 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   white-space       : nowrap;
 }
 
+.lang-text {
+  display           : inline-flex;
+  align-items       : center;
+  margin-top        : 3px;
+}
+
 .arrow {
   font-size         : 0.7em;
+  display           : inline-flex;
+  align-items       : center;
 }
 
 .lang-menu {

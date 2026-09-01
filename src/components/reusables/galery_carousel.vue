@@ -3,27 +3,27 @@
     <h2 class="gallery-title">{{ t('SITE_HOME_GALLERY') }}</h2>
 
     <div class="carousel-main-row">
-      <CustomButton
-        class          = "nav-arrow left"
-        text           = ""
-        iconSize       = "var(--gallery-button-icon-size)"
-        width          = "var(--gallery-button-size)"
-        height         = "var(--gallery-button-size)"
-        iconColor      = "var(--gallery-button-icon)"
-        bgColor        = "var(--gallery-button-bg)"
-        hoverIconColor = "var(--gallery-button-icon-hover)"
-        hoverBgColor   = "var(--gallery-button-bg-hover)"
-        pressAnimation = "scale"
-        :iconSrc       = "img_left_arrow"
-        @click         = "prevSlide(true)"
-      />
-
       <div 
         class         = "main-viewport" 
         tabindex      = "-1"
         @touchstart   = "handleTouchStart"
         @touchend     = "handleTouchEnd"
       >
+        <CustomButton
+          class          = "nav-arrow left"
+          text           = ""
+          iconSize       = "var(--gallery-button-icon-size)"
+          width          = "var(--gallery-button-size)"
+          height         = "var(--gallery-button-size)"
+          iconColor      = "var(--gallery-button-icon)"
+          bgColor        = "var(--gallery-button-bg)"
+          hoverIconColor = "var(--gallery-button-icon-hover)"
+          hoverBgColor   = "var(--gallery-button-bg-hover)"
+          pressAnimation = "none"
+          :iconSrc       = "img_left_arrow"
+          @click         = "prevSlide(true)"
+        />
+
         <div 
           class       = "slides-track" 
           :style      = "{ transform: `translateX(-${currentIndex * 100}%)` }"
@@ -43,6 +43,21 @@
           </div>
         </div>
 
+        <CustomButton
+          class          = "nav-arrow right"
+          text           = ""
+          iconSize       = "var(--gallery-button-icon-size)"
+          width          = "var(--gallery-button-size)"
+          height         = "var(--gallery-button-size)"
+          iconColor      = "var(--gallery-button-icon)"
+          bgColor        = "var(--gallery-button-bg)"
+          hoverIconColor = "var(--gallery-button-icon-hover)"
+          hoverBgColor   = "var(--gallery-button-bg-hover)"
+          pressAnimation = "none"
+          :iconSrc       = "img_right_arrow"
+          @click         = "nextSlide(true)"
+        />
+
         <div class="pagination-dots">
           <span 
             v-for     = "(slide, index) in slides" 
@@ -53,21 +68,6 @@
           ></span>
         </div>
       </div>
-
-      <CustomButton
-        class          = "nav-arrow right"
-        text           = ""
-        iconSize       = "var(--gallery-button-icon-size)"
-        width          = "var(--gallery-button-size)"
-        height         = "var(--gallery-button-size)"
-        iconColor      = "var(--gallery-button-icon)"
-        bgColor        = "var(--gallery-button-bg)"
-        hoverIconColor = "var(--gallery-button-icon-hover)"
-        hoverBgColor   = "var(--gallery-button-bg-hover)"
-        pressAnimation = "scale"
-        :iconSrc       = "img_right_arrow"
-        @click         = "nextSlide(true)"
-      />
     </div>
 
     <div class="timer-bar-wrapper" v-if="!isModalOpen">
@@ -89,7 +89,7 @@
         bgColor        = "var(--gallery-button-bg)"
         hoverIconColor = "var(--gallery-button-icon-hover)"
         hoverBgColor   = "var(--gallery-button-bg-hover)"
-        pressAnimation = "scale"
+        pressAnimation = "none"
         :iconSrc       = "img_left_arrow"
         @click         = "scrollThumbnails('left')"
       />
@@ -149,13 +149,26 @@ import CustomButton from './custom_button.vue'
 import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 
+/**
+  * Interactive image gallery component supporting automatic rotation, animated GIFs,
+  * touch gestures, static frame capturing, and modal view.
+  * 
+  * @displayName Gallery Carousel
+  */
+
 const { t } = useI18n()
 
 const props = defineProps({
+  /**
+    * Time in milliseconds before advancing to the next slide.
+    */
   intervalTime: {
     type: Number,
     default: 1000
   },
+  /**
+    * Object Dictionary esque of imported image/GIF source URLs.
+    */
   imageModules: {
     type: Object,
     required: true,
@@ -182,91 +195,231 @@ let slideInterval = null
 const touchStartX = ref(0)
 const touchEndX = ref(0)
 
+/**
+  * Captures initial touch horizontal coordinate on touch start.
+  * 
+  * @param {TouchEvent} e Native touch event object.
+  * @private
+  */
 const handleTouchStart = (e) => {
-  touchStartX.value = e.changedTouches[0].screenX
+  const TouchStartBuilder = {
+    extractX(event) {
+      return event.changedTouches[0].screenX
+    }
+  }
+
+  touchStartX.value = TouchStartBuilder.extractX(e)
 }
 
+/**
+  * Captures ending touch coordinate on touch end and triggers swipe check.
+  * 
+  * @param {TouchEvent} e Native touch event object.
+  * @private
+  */
 const handleTouchEnd = (e) => {
-  touchEndX.value = e.changedTouches[0].screenX
+  const TouchEndBuilder = {
+    extractX(event) {
+      return event.changedTouches[0].screenX
+    }
+  }
+
+  touchEndX.value = TouchEndBuilder.extractX(e)
   handleSwipe()
 }
 
+/**
+  * Evaluates touch displacement against a threshold to determine swipe direction.
+  * 
+  * @private
+  */
 const handleSwipe = () => {
-  const swipeThreshold = 40
-  if (touchStartX.value - touchEndX.value > swipeThreshold) {
+  const SwipeActionBuilder = {
+    getThreshold() {
+      return 40
+    },
+    evaluate(startX, endX, threshold) {
+      if (startX - endX > threshold) return 'next'
+      if (endX - startX > threshold) return 'prev'
+      return null
+    }
+  }
+
+  const action = SwipeActionBuilder.evaluate(touchStartX.value, touchEndX.value, SwipeActionBuilder.getThreshold())
+  if (action === 'next') {
     nextSlide(true)
-  } else if (touchEndX.value - touchStartX.value > swipeThreshold) {
+  } else if (action === 'prev') {
     prevSlide(true)
   }
 }
 
+/**
+  * Computed property providing the current media/medias for the modal.
+  * 
+  * @returns {Object} Media payload object.
+  * @private
+  */
 const currentModalMediaItem = computed(() => {
-  if (slides.value.length === 0) return { type: 'image', src: '' }
-  return {
-    type: 'image',
-    src: slides.value[currentIndex.value].img,
-    alt: `Gallery Image ${currentIndex.value + 1}`
+  const ModalMediaBuilder = {
+    build(list, index) {
+      if (list.length === 0) return { type: 'image', src: '' }
+      return {
+        type: 'image',
+        src: list[index].img,
+        alt: `Gallery Image ${index + 1}`
+      }
+    }
   }
+
+  return ModalMediaBuilder.build(slides.value, currentIndex.value)
 })
 
+/**
+  * Renders the first frame of an animated GIF onto a canvas and extracts a static data URL.
+  * 
+  * @param {string} url Target GIF image source URL.
+  * @returns {Promise<string>} Resolved static image data URL or fallback source.
+  * @private
+  */
 const captureFirstFrame = (url) => {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.src = url
-    img.onload = () => {
-      const canvas = document.createElement('canvas')
-      canvas.width = img.naturalWidth
-      canvas.height = img.naturalHeight
-      const ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0)
-      resolve(canvas.toDataURL('image/png'))
+  const FrameCaptureBuilder = {
+    createPromise(targetUrl) {
+      return new Promise((resolve) => {
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.src = targetUrl
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          canvas.width = img.naturalWidth
+          canvas.height = img.naturalHeight
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0)
+          resolve(canvas.toDataURL('image/png'))
+        }
+        img.onerror = () => resolve(targetUrl)
+      })
     }
-    img.onerror = () => resolve(url)
-  })
+  }
+
+  return FrameCaptureBuilder.createPromise(url)
 }
 
+/**
+  * Restarts the auto-advance timer.
+  * 
+  * @private
+  */
 const resetTimer = () => {
-  if (slideInterval) clearInterval(slideInterval)
+  const TimerBuilder = {
+    clear(interval) {
+      if (interval) clearInterval(interval)
+    },
+    setupInterval(callback, time) {
+      return setInterval(callback, time)
+    }
+  }
+
+  TimerBuilder.clear(slideInterval)
   timerKey.value++
   
-  slideInterval = setInterval(() => {
+  slideInterval = TimerBuilder.setupInterval(() => {
     if (!isModalOpen.value && slides.value.length > 0) {
       nextSlide(false)
     }
   }, props.intervalTime)
 }
 
+/**
+  * Advances the carousel forward to the next slide.
+  * 
+  * @param {boolean} [isUserAction=true] Indicates whether the action was triggered manually by a user.
+  * @private
+  */
 const nextSlide = (isUserAction = true) => {
+  const NextSlideBuilder = {
+    calculateIndex(current, length) {
+      if (length === 0) return current
+      return (current + 1) % length
+    }
+  }
+
   if (slides.value.length === 0) return
-  currentIndex.value = (currentIndex.value + 1) % slides.value.length
+  currentIndex.value = NextSlideBuilder.calculateIndex(currentIndex.value, slides.value.length)
   if (isUserAction) resetTimer()
 }
 
+/**
+  * Navigates the carousel backward to the previous slide.
+  * 
+  * @param {boolean} [isUserAction=true] Indicates whether the action was triggered manually by a user.
+  * @private
+  */
 const prevSlide = (isUserAction = true) => {
+  const PrevSlideBuilder = {
+    calculateIndex(current, length) {
+      if (length === 0) return current
+      return (current - 1 + length) % length
+    }
+  }
+
   if (slides.value.length === 0) return
-  currentIndex.value = (currentIndex.value - 1 + slides.value.length) % slides.value.length
+  currentIndex.value = PrevSlideBuilder.calculateIndex(currentIndex.value, slides.value.length)
   if (isUserAction) resetTimer()
 }
 
+/**
+  * Explicitly selects a slide index based on user selection or pagination interaction.
+  * 
+  * @param {number} index Target slide index.
+  * @private
+  */
 const selectSlide = (index) => {
-  if (currentIndex.value === index) {
+  const SelectSlideBuilder = {
+    resolve(current, target) {
+      return current === target ? 'reset' : 'update'
+    }
+  }
+
+  const action = SelectSlideBuilder.resolve(currentIndex.value, index)
+  if (action === 'reset') {
     resetTimer()
   } else {
     currentIndex.value = index
   }
 }
 
+/**
+  * Smoothly scrolls the thumbnail strip container horizontally in a given direction.
+  * 
+  * @param {string} direction Scroll direction ('left' or 'right').
+  * @private
+  */
 const scrollThumbnails = (direction) => {
+  const ThumbnailScrollBuilder = {
+    getAmount(track) {
+      return track ? track.clientWidth : 0
+    },
+    getTargetScroll(track, dir) {
+      const amount = this.getAmount(track)
+      return dir === 'left' ? -amount : amount
+    }
+  }
+
   if (!thumbnailsTrackRef.value) return
-  const scrollAmount = thumbnailsTrackRef.value.clientWidth
+  const scrollAmount = ThumbnailScrollBuilder.getTargetScroll(thumbnailsTrackRef.value, direction)
   thumbnailsTrackRef.value.scrollBy({
-    left: direction === 'left' ? -scrollAmount : scrollAmount,
+    left: scrollAmount,
     behavior: 'smooth'
   })
   resetTimer()
 }
 
+/**
+  * Watches index changes to reset timers and align active thumbnail positions smoothly.
+  * 
+  * @param {number} newIndex Current active slide index.
+  * @private
+  */
 watch(currentIndex, (newIndex) => {
   resetTimer()
   if (!thumbnailsTrackRef.value) return
@@ -285,16 +438,39 @@ watch(currentIndex, (newIndex) => {
   }
 })
 
+/**
+  * Opens the modal view for a given slide index and locks page scrolling.
+  * 
+  * @param {number} index Target slide index to display in modal.
+  * @private
+  */
 const openModal = (index) => {
+  const ModalOpenBuilder = {
+    applyBodyStyles() {
+      document.body.style.overflow = 'hidden'
+    }
+  }
+
   currentIndex.value = index
   isModalOpen.value = true
-  document.body.style.overflow = 'hidden'
+  ModalOpenBuilder.applyBodyStyles()
   resetTimer()
 }
 
+/**
+  * Closes the modal view and restores page scrolling.
+  * 
+  * @private
+  */
 const closeModal = () => {
+  const ModalCloseBuilder = {
+    clearBodyStyles() {
+      document.body.style.overflow = ''
+    }
+  }
+
   isModalOpen.value = false
-  document.body.style.overflow = ''
+  ModalCloseBuilder.clearBodyStyles()
   resetTimer()
 }
 
@@ -316,40 +492,35 @@ onUnmounted(() => {
 <style scoped>
 .gallery-container {
   width          : 100%;
-  max-width      : 100%;
-  height         : auto;
   display        : flex;
   flex-direction : column;
   align-items    : center;
   gap            : 15px;
-  padding        : clamp(10px, 3vw, 20px) clamp(8px, 2.5vw, 15px);
+  padding        : clamp(10px, 3vw, 20px) clamp(12px, 3vw, 20px);
   box-sizing     : border-box;
   margin         : 10px auto;
   overflow-x     : hidden;
 }
 
 .gallery-title {
-  width          : 100%;
-  margin         : 0 0 10px 0;
-  text-align     : center;
-  color          : var(--gallery-title-color);
-  font-size      : clamp(1.25rem, 4vw, var(--gallery-title-size));
-  font-family    : var(--gallery-title-font);
-  word-break     : break-word;
-  overflow-wrap  : break-word;
+  width         : 100%;
+  margin        : 0 0 10px 0;
+  text-align    : center;
+  color         : var(--gallery-title-color);
+  font-size     : var(--gallery-title-size);
+  font-family   : var(--gallery-title-font);
+  word-break    : break-word;
+  overflow-wrap : break-word;
 }
 
 .carousel-main-row {
-  width       : 100%;
-  display     : flex;
-  align-items : center;
-  gap         : clamp(6px, 2vw, 12px);
-  box-sizing  : border-box;
-  max-width   : 1240px;
+  width      : 100%;
+  max-width  : 1240px;
+  box-sizing : border-box;
 }
 
 .main-viewport {
-  flex          : 1;
+  width         : 100%;
   aspect-ratio  : 16 / 9;
   max-height    : 611px;
   background    : var(--gallery-viewport-bg);
@@ -360,7 +531,6 @@ onUnmounted(() => {
   border-radius : 14px;
   border        : var(--gallery-border);
   touch-action  : pan-y;
-  min-width     : 0;
 }
 
 .slides-track {
@@ -406,13 +576,43 @@ onUnmounted(() => {
 }
 
 @keyframes progress-anim {
-  0% { width: 0%; }
+  0%   { width: 0%; }
   100% { width: 100%; }
 }
 
 .nav-arrow,
-.thumb-arrow {
-  flex-shrink : 0;
+.thumb-arrow,
+:deep(.nav-arrow),
+:deep(.thumb-arrow) {
+  transform: none !important;
+  transition: background-color 0.2s, color 0.2s, opacity 0.2s !important;
+}
+
+.nav-arrow,
+:deep(.nav-arrow) {
+  position  : absolute !important;
+  top       : 50% !important;
+  margin-top: calc(var(--gallery-button-size, 32px) / -2) !important;
+  z-index   : 1 !important;
+}
+
+.nav-arrow.left,
+:deep(.nav-arrow.left)  { left  : 12px !important; }
+
+.nav-arrow.right,
+:deep(.nav-arrow.right) { right : 12px !important; }
+
+.nav-arrow:active,
+.thumb-arrow:active,
+.nav-arrow:focus,
+.thumb-arrow:focus,
+:deep(.nav-arrow:active),
+:deep(.thumb-arrow:active),
+:deep(.nav-arrow:focus),
+:deep(.thumb-arrow:focus),
+:deep(button:active),
+:deep(button:focus) {
+  transform: none !important;
 }
 
 .pagination-dots {
@@ -422,7 +622,7 @@ onUnmounted(() => {
   transform : translateX(-50%);
   display   : flex;
   gap       : 6px;
-  z-index   : 10;
+  
 }
 
 .dot {
@@ -448,15 +648,15 @@ onUnmounted(() => {
   justify-content : space-between;
   gap             : clamp(6px, 2vw, 12px);
   position        : relative;
-  padding         : 5px 0 0 0;
+  padding-top     : 5px;
   box-sizing      : border-box;
 }
 
 .thumbnails-track-wrapper {
-  position : relative;
-  flex     : 1;
-  overflow : hidden;
-  min-width: 0;
+  position  : relative;
+  flex      : 1;
+  overflow  : hidden;
+  min-width : 0;
 }
 
 .thumbnails-track {
@@ -471,29 +671,26 @@ onUnmounted(() => {
 }
 
 .thumbnails-track::-webkit-scrollbar {
-  display : none;
+  display: none;
 }
 
 .thumbnail-item {
-  position        : relative;
-  flex            : 0 0 calc(20% - 8px);
-  aspect-ratio    : 16 / 9;
-  opacity         : 0.75;
-  cursor          : pointer;
-  transition      : opacity 0.2s, transform 0.2s;
-  overflow        : hidden;
-  box-sizing      : border-box;
-  border-radius   : 8px;
-  border          : 2px solid var(--gallery-border-color);
-  background      : var(--gallery-thumb-bg);
+  position      : relative;
+  flex          : 0 0 calc(20% - 8px);
+  aspect-ratio  : 16 / 9;
+  opacity       : 0.75;
+  cursor        : pointer;
+  transition    : opacity 0.2s, transform 0.2s;
+  overflow      : hidden;
+  box-sizing    : border-box;
+  border-radius : 8px;
+  border        : 2px solid var(--gallery-border-color);
+  background    : var(--gallery-thumb-bg);
 }
 
 .red-tint-overlay {
   position         : absolute;
-  top              : 0;
-  left             : 0;
-  width            : 100%;
-  height           : 100%;
+  inset            : 0;
   background-color : var(--gallery-thumb-tint-bg);
   pointer-events   : none;
   opacity          : 0;
@@ -506,8 +703,8 @@ onUnmounted(() => {
 }
 
 .thumbnail-item.thumb-active {
-  opacity   : 1;
-  border    : 3px solid var(--gallery-accent-color);
+  opacity : 1;
+  border  : 3px solid var(--gallery-accent-color);
 }
 
 .thumbnail-item.thumb-active .red-tint-overlay {
@@ -534,45 +731,28 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .gallery-container {
-    padding : 0.75rem 0.5rem;
+    padding : 0.5rem 12px; 
     gap     : 10px;
   }
 
-  .carousel-main-row {
-    gap: 6px;
-  }
+  .nav-arrow.left,
+  :deep(.nav-arrow.left)  { left  : 8px !important; }
 
-  .main-viewport {
-    border-width  : 2px;
-    border-radius : 10px;
-  }
+  .nav-arrow.right,
+  :deep(.nav-arrow.right) { right : 8px !important; }
 
   .thumbnail-item {
-    flex         : 0 0 calc(33.333% - 7px);
-    border-width : 2px;
+    flex: 0 0 calc(33.333% - 7px);
   }
-  
-  .thumbnail-item.thumb-active {
-    border-width : 2px;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel-main-row {
-    gap: 4px;
+  .gallery-container {
+    padding : 0.5rem 1rem;
   }
 
-  .thumbnails-container {
-    gap: 6px;
-  }
+  .nav-arrow.left,
+  :deep(.nav-arrow.left)  { left  : 4px !important; }
 
-  .thumbnail-item {
-    flex: 0 0 calc(50% - 5px);
-  }
-
-  .pagination-dots {
-    bottom: 8px;
-  }
+  .nav-arrow.right,
+  :deep(.nav-arrow.right) { right : 4px !important; }
 
   .dot {
     width  : 6px;

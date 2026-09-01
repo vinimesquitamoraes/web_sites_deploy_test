@@ -19,21 +19,12 @@
               v-for="(person, nameIndex) in group.names" 
               :key="nameIndex" 
               class="credits-name"
+              @mouseenter="activeTooltipIndex = `${sIndex}-${index}-${nameIndex}`"
+              @mouseleave="activeTooltipIndex = null"
             >
               <a 
-                v-if="typeof person === 'object' && person !== null && person.link" 
-                :href="person.link" 
-                target="_blank" 
-                rel="noopener" 
-                class="credit-link" 
-                :style="{ color: textColor }"
-              >
-                {{ person.name }}
-              </a>
-              
-              <a 
-                v-else-if="resolveLink(person)" 
-                :href="resolveLink(person)" 
+                v-if="getPersonLink(person)" 
+                :href="getPersonLink(person)" 
                 target="_blank" 
                 rel="noopener" 
                 class="credit-link" 
@@ -45,9 +36,16 @@
               <span 
                 v-else 
                 :style="{ color: textColor }"
+                class="credit-text-fallback"
               >
                 {{ resolveName(person) }}
               </span>
+
+              <CustomTooltip 
+                :show="activeTooltipIndex === `${sIndex}-${index}-${nameIndex}`"
+                :text="getPersonLink(person) || 'No link available'"
+                position="top"
+              />
             </li>
           </ul>
         </div>
@@ -57,6 +55,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import CustomTooltip from '@/components/reusables/tooltip.vue'
+
 const props = defineProps({
   credits: {
     type: Array,
@@ -88,6 +89,8 @@ const props = defineProps({
   },
 })
 
+const activeTooltipIndex = ref(null)
+
 const resolveName = (person) => {
   if (typeof person === 'object' && person !== null) {
     return person.name
@@ -98,8 +101,20 @@ const resolveName = (person) => {
 const resolveLink = (person) => {
   const nameStr = resolveName(person)
   if (!nameStr) return null
-  const key = nameStr.trim().toLowerCase()
-  return props.linksMap[key] || null
+  const targetKey = nameStr.trim().toLowerCase()
+  
+  // Case-insensitive search through linksMap keys
+  const foundKey = Object.keys(props.linksMap).find(
+    k => k.trim().toLowerCase() === targetKey
+  )
+  return foundKey ? props.linksMap[foundKey] : null
+}
+
+const getPersonLink = (person) => {
+  if (typeof person === 'object' && person !== null && person.link) {
+    return person.link
+  }
+  return resolveLink(person)
 }
 </script>
 
@@ -172,27 +187,31 @@ const resolveLink = (person) => {
   margin            : 0;
   font-family       : var(--font-body), sans-serif;
   font-size         : var(--font-p-size);
-  white-space       : nowrap;
-  overflow          : hidden;
-  text-overflow     : ellipsis;
+  overflow          : visible;
   text-align        : v-bind(textAlign);
   justify-content   : v-bind(textAlign);
   display           : flex;
-  
+  position          : relative;
+  width             : fit-content;
+  max-width         : 100%;
 }
 
 .credit-link {
   text-decoration   : none;
   transition        : color 0.2s;
-  display           : block;
-  width             : 100%;
+  display           : inline-block;
   pointer-events    : auto;
   cursor            : pointer;
 }
 
 .credit-link:hover {
-  color             : var(--color-hover) !important;
+  color             : var(--color-secondary) !important;
   text-decoration   : underline;
+}
+
+.credit-text-fallback {
+  display           : inline-block;
+  cursor            : not-allowed;
 }
 
 @media (max-width: 768px) {
