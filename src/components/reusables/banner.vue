@@ -11,13 +11,10 @@
           role="img"
         ></div>
       </transition>
-      <div class="hero-overlay"></div>
+      <div class="hero-overlay" :style="{ background: resolvedVignette }"></div>
     </div>
 
     <div class="hero-content center">
-      <!-- 
-        @slot content - Custom content slot for replacing or extending the default hero inner content blocks.
-      -->
       <slot name="content">
         <div class="hero-logo-wrapper" v-if="showLogo">
           <img :src="logoSrc" alt="Game Logo" class="hero-logo-image" />
@@ -61,7 +58,7 @@ import { useI18n }  from '@/composables/useI18n'
 import CustomButton from '@/components/reusables/custom_button.vue'
 
 import img_gameLogo       from '@/assets/img/logos/Encore_Logo.png'
-import img_defaultBanner  from '@/assets/img/funny/ninten_Dough.png'
+import img_defaultBanner  from '@/assets/img/art/chinese_plus_japanese.png'
 import dowload_icon       from '@/assets/svg/download.svg'
 
 /**
@@ -73,6 +70,13 @@ import dowload_icon       from '@/assets/svg/download.svg'
 const { t } = useI18n()
 
 const logoSrc = img_gameLogo
+
+const VIGNETTE_STYLES = {
+  style_1: 'radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)',
+  style_2: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%)',
+  style_3: 'radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%)',
+  style_4: 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.7) 100%)'
+}
 
 const props = defineProps({
   /**
@@ -181,6 +185,15 @@ const props = defineProps({
     type    : String,
     required: false,
     default : '/download'
+  },
+  /**
+    * Predefined vignette style key or custom CSS background value.
+    * @values style_1, style_2, style_3, style_4
+    */
+  vignetteStyle: {
+    type    : String,
+    required: false,
+    default : 'style_1'
   }
 })
 
@@ -323,6 +336,13 @@ const activeScrollDirection = computed(() => {
   )
 })
 
+/**
+  * Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS.
+  */
+const resolvedVignette = computed(() => {
+  return VIGNETTE_STYLES[props.vignetteStyle] || props.vignetteStyle
+})
+
 defineEmits(['cta-click'])
 </script>
 
@@ -330,7 +350,7 @@ defineEmits(['cta-click'])
 .hero-banner {
   position            : relative;
   width               : 100vw;
-  height              : 500px;
+  height              : clamp(450px, 55vh, 650px);
   left                : 50%;
   right               : 50%;
   margin-left         : -50vw;
@@ -349,6 +369,7 @@ defineEmits(['cta-click'])
   width               : 100%;
   height              : 100%;
   z-index             : 1;
+  transform           : scale(1.02);
 }
 
 .hero-bg-image {
@@ -358,7 +379,7 @@ defineEmits(['cta-click'])
   width               : 100%;
   height              : 100%;
   background-size     : cover;
-  background-position : center;
+  background-position : center center;
   background-repeat   : no-repeat;
 }
 
@@ -426,8 +447,6 @@ defineEmits(['cta-click'])
   left                : 0;
   width               : 100%;
   height              : 100%;
-  background-color    : #000000;
-  opacity             : 0.4;
   z-index             : 2;
 }
 
@@ -457,10 +476,11 @@ defineEmits(['cta-click'])
 }
 
 .hero-logo-image {
-  max-width           : 400px;
+  max-width           : 450px;
   width               : 100%;
   height              : auto;
   object-fit          : contain;
+  filter              : drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.6));
 }
 
 .hero-subtitle {
@@ -470,7 +490,7 @@ defineEmits(['cta-click'])
   max-width           : min(100%, 800px);
   width               : 100%;
   margin-bottom       : 2rem;
-  opacity             : 0.9;
+  opacity             : 0.95;
   box-sizing          : border-box;
   display             : block !important;
   word-break          : normal;
@@ -479,6 +499,7 @@ defineEmits(['cta-click'])
   font-size           : var(--font-h2-size)!important;
   font-weight         : bold;
   color               : var(--color-default-text-color);
+  text-shadow         : 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .timer-bar-wrapper {
@@ -503,12 +524,16 @@ defineEmits(['cta-click'])
 }
 
 @media (max-width: 768px) {
+  .hero-banner {
+    height            : 400px;
+  }
+
   .hero-content {
     padding           : 0 1rem;
   }
 
   .hero-logo-image {
-    max-width         : 250px;
+    max-width         : 280px;
   }
   
   .hero-subtitle {

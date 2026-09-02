@@ -51,7 +51,6 @@ const { t } = useI18n()
   align-items       : center;
   flex-direction    : row;
   gap               : 40px;
-
 }
 
 .nav-link {
@@ -62,16 +61,38 @@ const { t } = useI18n()
   cursor            : pointer;
   opacity           : 0.7;
   position          : relative; 
-  padding-left      : 0;
-  transition        : padding 0.2s ease;
+  padding-left      : 25px;
+  transition        : color 0.2s ease, opacity 0.2s ease;
   text-decoration   : none;
+}
+
+.nav-link:hover {
+  opacity           : 1;
+  color             : #ffffff;
+}
+
+.nav-link:hover::before {
+  content             : '';
+  position            : absolute;
+  left                : 0;
+  top                 : 45%;
+  transform           : translateY(-50%);
+  width               : 18px; 
+  height              : 20px; 
+  background-color    : #ffffff; 
+  -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
+  mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');
+  -webkit-mask-size   : contain;
+  mask-size           : contain;
+  -webkit-mask-repeat : no-repeat;
+  mask-repeat         : no-repeat;
+  animation         : choppy-horizontal 0.6s steps(3, end) infinite alternate;
 }
 
 .nav-link.router-link-exact-active {
   opacity           : 1;
   font-weight       : bold;
-  padding-left      : 25px;
-  fill:var(--color-place_holder-green);
+  color             : var(--color-secondary);
 }
 
 .nav-link.router-link-exact-active::before {
@@ -82,15 +103,13 @@ const { t } = useI18n()
   transform           : translateY(-50%);
   width               : 18px; 
   height              : 20px; 
-  
-  background-color    : var(--color-default-text-color); 
+  background-color    : var(--color-secondary); 
   -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
   mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');
   -webkit-mask-size   : contain;
   mask-size           : contain;
   -webkit-mask-repeat : no-repeat;
   mask-repeat         : no-repeat;
-
   animation         : choppy-horizontal 0.6s steps(3, end) infinite alternate;
 }
 
