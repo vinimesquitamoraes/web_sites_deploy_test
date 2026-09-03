@@ -60,6 +60,7 @@
   /*Default Styles ==========================================================================================================================================================*/
   --color-primary             : #E50012;
   --color-secondary           : #fdd268;
+  --color-tertiary            : #b425e1;
   --color-black               : #000000;
   --color-place-holder-green  : #25D366;
   --color-default-text-color  : #FFFFFF;
@@ -273,7 +274,7 @@
 
 
   /* Dropdown Stuff ======================================================================================================== */
-  --color-dropdown-border             : 3px solid #000000;
+  --color-dropdown-border             : 3px solid currentColor;
   --color-dropdown-trigger-bg         : #ff9900;
   --color-dropdown-trigger-text       : #000000;
   --color-dropdown-trigger-hover-bg   : #E50012;
@@ -288,6 +289,21 @@
   --color-dropdown-option-active-bg   : #E50012;
   --color-dropdown-option-active-text : #ffffff;
   --color-dropdown-active-arrow       : #ffffff;
+
+  --color-lang-dropdown-border             : 3px solid currentColor;
+  --color-lang-dropdown-trigger-text       : var(--color-default-text-color);
+  --color-lang-dropdown-trigger-bg         : #000000;
+  --color-lang-dropdown-trigger-hover-bg   : var(--color-tertiary);
+  --color-lang-dropdown-arrow              : #ffffff;
+  --color-lang-dropdown-arrow-hover        : #ffffff;
+  --color-lang-dropdown-list-bg            : #000000;
+  --color-lang-dropdown-list-border        : 6px double  #000000;
+  --color-lang-dropdown-option-text        : #ffffff;
+  --color-lang-dropdown-option-hover-bg    : var(--color-tertiary);
+  --color-lang-dropdown-option-hover-text  : #ffffff;
+  --color-lang-dropdown-option-active-bg   : var(--color-tertiary);
+  --color-lang-dropdown-option-active-text : #ffffff;
+  --color-lang-dropdown-active-arrow       : #ffffff;  
 
   
   /* Foldable Stuff ===================================================================================================*/
@@ -324,7 +340,15 @@
 --media-modal-arrow-icon       : var(--color-primary);
 --media-modal-arrow-icon-hover : var(--media-modal-button-bg);
 --media-modal-arrow-offset     : -60px;
+
+/*Banner stuff ===============================================================================================================*/
+--color-banner-button-border             : 6px double var(--color-default-text-color);
+--color-banner-button-bg                 : #000000;
+--color-banner-button-hover-bg           : var(--color-tertiary);
+--color-banner-button-icon               : #ffffff;
+--color-banner-text                      : #ffffff; 
 }
+
 
 body {
   margin                : 0;

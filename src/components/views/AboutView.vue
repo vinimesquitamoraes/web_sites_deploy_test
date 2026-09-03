@@ -24,14 +24,6 @@
       />          
     </div>    
 
-    <div class="godot_foot_note">
-      <SocialMediaButton 
-        platform     ="github" 
-        variant      ="black" 
-        hoverVariant ="colored" 
-        tooltipText  ="MOTHER-Encore-Demo-Source-Code"
-      />
-    </div>
 
   </div>
 </template>
@@ -49,7 +41,7 @@ import storyImage   from '@/assets/img/screenshots/sc2.png'
 import visualImage  from '@/assets/img/screenshots/sc3.png'
 import musicImage   from '@/assets/img/screenshots/sc5.png'
 
-import imgGodotLogo from '@/assets/img/logos/goto_logo_large_color_light.png'
+import imgGodotLogo from '@/assets/img/logos/logo_large_monochrome_light.png'
 
 const { t } = useI18n()
 
@@ -126,15 +118,6 @@ const infoSections = computed(() => [
   box-sizing        : border-box;
 }
 
-.godot_foot_note {
-  width             : 100%;
-  box-sizing        : border-box;
-  display           : flex;
-  flex-direction    : column;
-  align-items       : center;
-  margin-bottom     : 30px;
-  z-index           : 99;
-}
 
 @media screen and (max-width: 768px) {
   .main-content {

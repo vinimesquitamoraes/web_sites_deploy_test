@@ -7,16 +7,7 @@
             mediaType   ="text" 
         />
 
-        <ContentSection 
-            :text       ="t('SITE_DOWNLOAD_P2')" 
-            mediaType   ="text" 
-        />
-
-        <div class="platforms-grid">
-            <PlatformButton platform="windows" size="100px" :clickable="false"/>
-            <PlatformButton platform="linux"   size="100px" :clickable="false"/>
-            <PlatformButton platform="macos"   size="100px" :clickable="false"/>
-        </div>
+       
 
         <div class="download-action-group">
             <h2 class="itchio-about-heading">{{ t('SITE_ABOUT_DL_ITCHIO') }}</h2>
@@ -34,6 +25,24 @@
                     externalUrl="https://mother-encore.itch.io/mother-encore"
                 />
             </div>
+        </div>
+        
+        <div class="platforms-grid">
+            <PlatformButton platform="windows" 
+                size        ="50px" 
+                :clickable  ="false"
+                color       ="var(--color-black)"
+            />
+            <PlatformButton platform="linux" 
+                size        ="50px" 
+                :clickable  ="false"
+                color       ="var(--color-black)"
+            />
+            <PlatformButton platform="macos" 
+                size        ="50px" 
+                :clickable  ="false"
+                color       ="var(--color-black)"
+            />
         </div>
 
         <div class="page-character-container">
@@ -69,9 +78,10 @@ const { t } = useI18n()
     display           : flex;
     justify-content   : center;
     align-items       : center;
-    gap               : clamp(12px, 2.5vw, 24px); 
+    gap               : clamp(10px, 2.5vw, 10px); 
     flex-wrap         : wrap;
     box-sizing        : border-box;
+    margin-top        : 10px;
 }
 
 .download-action-group {

@@ -6,13 +6,13 @@
       iconSize       = "25px"
       width          = "auto"
       height         = "auto"
-      bgColor        = "transparent"
-      hoverBgColor   = "transparent"
+      bgColor        = "var(--color-lang-dropdown-trigger-bg)"
+      hoverBgColor   = "var(--color-lang-dropdown-trigger-hover-bg)"
       pressAnimation = "push"
-      iconColor      = "var(--color-default-background)"
-      textColor      = "var(--color-default-text-color)"
+      iconColor      = "var(--color-lang-dropdown-arrow )"
+      textColor      = "var(--color-lang-dropdown-trigger-text)"
       :iconSrc       = "img_triangle_down"
-      border         = "2px solid var(--color-default-text-color)"
+      border         = "var(--color-lang-dropdown-border)"
       iconPosition   = "right"
       @click         = "toggleDropdown"
     />
@@ -101,9 +101,8 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
 }
 
 .lang-button {
-  background        : transparent;
   color             : inherit;
-  border            : 3px solid currentColor;
+  overflow          : hidden;
   padding           : 4px 8px;
   border-radius     : var(--default-border-radius);
   cursor            : pointer;
@@ -122,16 +121,17 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   right               : 0;
   width               : max-content;
   min-width           : 100%;
-  background-color    : var(--color-dropdown-list-bg);
-  border              : var(--default-border);
+  background-color    : var(--color-lang-dropdown-option-text);
+  border              : var(--color-lang-dropdown-list-border);
   border-radius       : var(--default-border-radius);
   box-sizing          : border-box;
   overflow            : hidden;
 }
 
 .dropdown-option {
+  background-color:    var(--color-lang-dropdown-list-bg);
   padding             : 0.6rem 1rem 0.6rem 2.4rem;
-  color               : var(--color-dropdown-option-text);
+  color               : var(--color-lang-dropdown-option-text);
   cursor              : pointer;
   text-transform      : uppercase;
   position            : relative;
@@ -142,8 +142,8 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
 }
 
 .dropdown-option:hover {
-  background-color    : var(--color-dropdown-option-hover-bg);
-  color               : var(--color-dropdown-option-hover-text);
+  background-color    : var(--color-lang-dropdown-option-hover-bg);
+  color               : var(--color-lang-dropdown-option-hover-text);
 }
 
 .dropdown-option .option-arrow {
@@ -175,12 +175,12 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
 }
 
 .dropdown-option.active {
-  background-color    : var(--color-dropdown-option-active-bg);
-  color               : var(--color-dropdown-option-active-text);
+  background-color    : var(--color-lang-dropdown-option-active-bg);
+  color               : var(--color-lang-dropdown-option-active-text);
 }
 
 .dropdown-option.active .option-arrow {
-  background-color    : var(--color-dropdown-active-arrow);
+  background-color    : var(--color-lang-dropdown-active-arrow);
 }
 
 @keyframes choppy-horizontal {
