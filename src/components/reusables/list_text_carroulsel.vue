@@ -1,14 +1,23 @@
 <script setup>
+/**
+  * @file        list_text_carroulsel.vue
+  * @brief       A text list carousel component featuring slides of feature lists, custom pagination indicators, and custom navigation buttons.
+  * @displayName List Text Carousel
+*/
+
 import { ref } from 'vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
 
 import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 
 const props = defineProps({
+  /** Title header text displayed above the carousel. */
   title: {
     type: String,
     default: 'GAME FEATURES'
   },
+  /** Array of feature lists displayed across carousel slides. */
   features: {
     type: Array,
     required: true,
@@ -16,18 +25,35 @@ const props = defineProps({
   }
 })
 
+/**
+  * Tracks the active slide index of the carousel.
+  * @private
+  */
 const currentIndex = ref(0)
 
+/**
+  * Advances the carousel to the next slide.
+  * @private
+  */
 const nextSlide = () => {
   if (props.features.length === 0) return
   currentIndex.value = (currentIndex.value + 1) % props.features.length
 }
 
+/**
+  * Moves the carousel to the previous slide.
+  * @private
+  */
 const prevSlide = () => {
   if (props.features.length === 0) return
   currentIndex.value = (currentIndex.value - 1 + props.features.length) % props.features.length
 }
 
+/**
+  * Directly navigates the carousel to a specific slide index.
+  * @param {number} index Target slide index.
+  * @private
+  */
 const goToSlide = (index) => {
   currentIndex.value = index
 }
@@ -60,13 +86,21 @@ const goToSlide = (index) => {
     </div>
 
     <div v-if="props.features.length > 1" class="carousel-nav">
-      <button
-        class="nav-btn"
-        @click="prevSlide"
-        aria-label="Previous slide"
-      >
-        <img :src="img_left_arrow" alt="Previous" class="arrow-icon" />
-      </button>
+      <CustomButton
+        class          = "nav-btn"
+        text           = ""
+        iconSize       = "14px"
+        width          = "45px"
+        height         = "45px"
+        iconColor      = "#ffffff"
+        bgColor        = "#8c8c8c"
+        hoverIconColor = "#ffffff"
+        hoverBgColor   = "var(--color-primary)"
+        pressAnimation = "push"
+        :iconSrc       = "img_left_arrow"
+        @click         = "prevSlide"
+        aria-label     = "Previous slide"
+      />
 
       <div class="indicators">
         <span
@@ -78,13 +112,21 @@ const goToSlide = (index) => {
         ></span>
       </div>
 
-      <button
-        class="nav-btn"
-        @click="nextSlide"
-        aria-label="Next slide"
-      >
-        <img :src="img_right_arrow" alt="Next" class="arrow-icon" />
-      </button>
+      <CustomButton
+        class          = "nav-btn"
+        text           = ""
+        iconSize       = "14px"
+        width          = "45px"
+        height         = "45px"
+        iconColor      = "#ffffff"
+        bgColor        = "#8c8c8c"
+        hoverIconColor = "#ffffff"
+        hoverBgColor   = "var(--color-primary)"
+        pressAnimation = "push"
+        :iconSrc       = "img_right_arrow"
+        @click         = "nextSlide"
+        aria-label     = "Next slide"
+      />
     </div>
   </div>
 </template>
@@ -146,7 +188,7 @@ const goToSlide = (index) => {
 .bullet {
   width            : 8px;
   height           : 8px;
-  background-color : #8c8c8c;
+  background-color : var(--color-black);
   border-radius    : 50%;
   margin-top       : 8px;
   flex-shrink      : 0;
@@ -161,30 +203,7 @@ const goToSlide = (index) => {
 }
 
 .nav-btn {
-  background      : #8c8c8c;
-  border          : none;
-  border-radius   : 8px;
-  width           : 45px;
-  height          : 45px;
-  display         : flex;
-  align-items     : center;
-  justify-content : center;
-  cursor          : pointer;
-  transition      : background-color 0.2s ease;
-}
-
-.nav-btn:hover {
-  background-color : var(--color-primary);
-}
-
-.nav-btn:hover .arrow-icon {
-  filter : brightness(0) invert(1);
-}
-
-.arrow-icon {
-  width      : 14px;
-  height     : 14px;
-  transition : filter 0.2s ease; 
+  border-radius   : 8px !important;
 }
 
 .indicators {

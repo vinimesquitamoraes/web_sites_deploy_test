@@ -42,6 +42,12 @@
 </template>
 
 <script setup>
+/**
+  * @file        DogtenView.vue
+  * @brief       Gallery view component displaying the worst of Encore
+  * @displayName Dogten View
+*/
+
 import { ref, onMounted, computed} from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
@@ -53,17 +59,29 @@ import OptionsModal    from '@/components/reusables/options_modal.vue'
 
 const { t } = useI18n()
 
+/**
+  * Glob loader for funny media assets.
+  * @private
+  */
 const funnyModules = import.meta.glob('@/assets/img/funny/*.{png,jpg,jpeg,svg,webp,gif,mp4}', {
   eager: true,
   import: 'default'
 })
 
+/**
+  * Glob loader for map render background images.
+  * @private
+  */
 const mapRenderImagesGlob = import.meta.glob('@/assets/img/map_renders/*.{png,jpg,jpeg,svg,webp,gif}', { 
   eager: true, 
   import: 'default' 
 })
 const mapRenderImagesArray = Object.values(mapRenderImagesGlob)
 
+/**
+  * Static media order and metadata configurations.
+  * @private
+  */
 const mediaOrderConfig = [
   {
     fileName: 'dogten.jpg',
@@ -128,18 +146,26 @@ const mediaOrderConfig = [
     visible: true
   },
   {
-  fileName: 'ferris_special_mixtape.png',
-  alt: '???',
-  caption: '???',
-  visible: true
-}
+    fileName: 'ferris_special_mixtape.png',
+    alt: '???',
+    caption: '???',
+    visible: true
+  }
 ]
 
+/**
+  * Computed list of options for the options modal.
+  * @private
+  */
 const modalOptions = computed(() => [
   { key: "replace_banner_for_map_renders", label: t('SITE_DOGTEN_OPTIONS_OP1') },
   { key: "unlocked_special_tape"         , label: t('SITE_DOGTEN_OPTIONS_OP2') }
 ])
 
+/**
+  * Filtered and mapped collection of active media items.
+  * @private
+  */
 const sampleMediaItems = ref(
   mediaOrderConfig
     .map(config => {
@@ -161,10 +187,20 @@ const sampleMediaItems = ref(
     })
     .filter(item => item !== null && item.visible)
 )
+
+/**
+  * Tracks visibility states for modals and carousel active indices.
+  * @private
+  */
 const isOptionsModalOpen = ref(false)
 const isMediaModalOpen = ref(false)
 const currentIndex = ref(0)
 
+/**
+  * Opens the media viewer modal for a specified media item.
+  * @param {Object} item The selected media item object.
+  * @private
+  */
 const openModal = (item) => {
   const index = sampleMediaItems.value.findIndex(m => m.src === item.src)
   if (index !== -1) {
@@ -173,18 +209,35 @@ const openModal = (item) => {
   }
 }
 
+/**
+  * Closes the media viewer modal.
+  * @private
+  */
 const closeModal = () => {
   isMediaModalOpen.value = false
 }
 
+/**
+  * Advances the media viewer to the next item.
+  * @private
+  */
 const nextMedia = () => {
   currentIndex.value = (currentIndex.value + 1) % sampleMediaItems.value.length
 }
 
+/**
+  * Moves the media viewer back to the previous item.
+  * @private
+  */
 const prevMedia = () => {
   currentIndex.value = (currentIndex.value - 1 + sampleMediaItems.value.length) % sampleMediaItems.value.length
 }
 
+/**
+  * Handles changes made within the options modal.
+  * @param {Object} payload Event payload containing key and value updates.
+  * @private
+  */
 const handleModalChange = ({ key, value }) => {
   if (key === 'unlocked_dogten') {
     sessionStorage.setItem('unlocked_dogten', value ? 'true' : 'false')

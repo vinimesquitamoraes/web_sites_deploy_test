@@ -24,22 +24,28 @@
   </nav>
 </template>
 
-
 <script setup>
+/**
+  * @file        navigation_component.vue
+  * @brief       The primary site navigation bar component containing route links and an optional language dropdown selector.
+  * @displayName Navigation Component
+*/
+
 import { useI18n }            from '@/composables/useI18n'
 import CustomLanguageDropdown from '@/components/reusables/custom_lang_dropdown.vue'
 
 defineProps({
+  /** Controls whether the mobile navigation menu overlay is open or closed. */
   isMenuOpen: {
     type    : Boolean,
     default : false
   },
+  /** Controls whether the language selection dropdown is visible in the navigation bar. */
   showLanguageDropdown: {
     type    : Boolean,
     default : true
   }
 })
-
 
 const { t } = useI18n()
 </script>

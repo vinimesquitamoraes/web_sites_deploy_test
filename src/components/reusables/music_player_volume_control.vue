@@ -39,26 +39,45 @@
       />
     </div>
 
-    <button 
-      class         ="mute-btn" 
-      @click        ="$emit('toggleMute')" 
-      :class        ="{ active: isMuted }" 
-      :title        ="isMuted ? 'Unmute' : 'Mute'" 
-      :aria-label   ="isMuted ? 'Unmute' : 'Mute'"
-    >
-      {{ isMuted ? 'OFF' : 'MUT' }}
-    </button>
+    <CustomButton
+      class         = "mute-btn" 
+      :class        = "{ active: isMuted }"
+      :text         = "isMuted ? 'OFF' : 'MUT'"
+      font-size     = "0.55rem"
+      padding       = "0"
+      @click        = "$emit('toggleMute')"
+    />
   </div>
 </template>
 
 <script setup>
+/**
+  * @file        music_player_volume_control.vue
+  * @brief       Music player volume control component supporting horizontal/vertical layouts, thumbwheels, slider bars, and mute state toggling.
+  * @displayName Music Player Volume Control
+*/
+
 import { computed } from 'vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
 
 const props = defineProps({
-  volumeLayout : String,
-  volume       : Number,
-  isMuted      : Boolean,
-  orientation  : {
+  /** Layout style of the volume control (e.g., 'wheel', 'bar'). */
+  volumeLayout: {
+    type: String,
+    default: 'bar'
+  },
+  /** Current volume level percentage (0 to 100). */
+  volume: {
+    type: Number,
+    default: 100
+  },
+  /** Indicates whether audio is currently muted. */
+  isMuted: {
+    type: Boolean,
+    default: false
+  },
+  /** Orientation and layout direction of the volume control panel. */
+  orientation: {
     type       : String,
     default    : 'horizontal',
     validator  : (value) => ['horizontal', 'vertical', 'horizontal-flipped', 'vertical-flipped'].includes(value)
@@ -67,6 +86,7 @@ const props = defineProps({
 
 defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
 
+/** Checks if the current orientation is horizontal. */
 const isCurrentHorizontal = computed(() => {
   return props.orientation.includes('horizontal')
 })
@@ -252,30 +272,19 @@ const isCurrentHorizontal = computed(() => {
 }
 
 .mute-btn {
-  background            : var(--music-player-color-surface);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
-  color                 : var(--music-player-color-bg-secondary);
-  font-size             : 0.55rem;
-  font-weight           : 700;
-  font-family           : monospace;
-  width                 : 32px;
-  height                : 22px;
-  cursor                : pointer;
-  display               : flex;
-  justify-content       : center;
-  align-items           : center;
   margin-top            : auto;
   flex-shrink           : 0;
-}
-
-.mute-btn:active {
-  transform             : translateY(2px);
+  width                 : 32px;
+  height                : 22px;
+  font-family           : monospace;
+  font-weight           : 700;
+  --color-custom-button-background: var(--music-player-color-surface);
+  --color-custom-button-text: var(--music-player-color-bg-secondary);
 }
 
 .mute-btn.active {
-  background            : var(--music-player-color-accent);
-  color                 : var(--music-player-color-white);
+  --color-custom-button-background: var(--music-player-color-accent);
+  --color-custom-button-text: var(--music-player-color-white);
 }
 
 @media (max-width: 480px) {

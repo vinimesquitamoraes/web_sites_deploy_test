@@ -1,21 +1,88 @@
+<template>
+  <div class="lang-selector-container" ref="dropdownRef">
+    <CustomButton
+      class          = "lang-button"
+      :text          = "currentLang.toUpperCase()"
+      iconSize       = "25px"
+      width          = "auto"
+      height         = "auto"
+      bgColor        = "transparent"
+      hoverBgColor   = "transparent"
+      pressAnimation = "push"
+      iconColor      = "var(--color-default-background)"
+      textColor      = "var(--color-default-text-color)"
+      :iconSrc       = "img_triangle_down"
+      border         = "2px solid var(--color-default-text-color)"
+      iconPosition   = "right"
+      @click         = "toggleDropdown"
+    />
+
+    <div v-if="isOpen" class="dropdown-options-list">
+      <div 
+        v-for="(label, code) in availableLanguages" 
+        :key="code" 
+        @click="selectLanguage(code)"
+        class="dropdown-option"
+        :class="{ active: currentLang === code }"
+      >
+        <span class="option-arrow"></span>
+        {{ label }}
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
+/**
+  * @file        custom_lang_dropdown.vue
+  * @brief       A language selector dropdown component utilizing i18n composables, toggling language options, and handling click-outside dismissals.
+  * @displayName Custom Language Dropdown
+*/
+
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from '@/composables/useI18n'
+import CustomButton from '@/components/reusables/custom_button.vue'
+import img_triangle_down from '@/assets/svg/triangle-down-filled.svg'
 
 const { currentLang, setLanguage, availableLanguages } = useI18n()
+
+/**
+  * Tracks whether the language options menu is open.
+  * @private
+  */
 const isOpen = ref(false)
 
+/**
+  * Reference to the root container DOM element for click-outside tracking.
+  * @private
+  */
+const dropdownRef = ref(null)
+
+/**
+  * Toggles the visibility state of the language dropdown menu.
+  * @private
+  */
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
 }
 
+/**
+  * Selects a new language code and closes the dropdown.
+  * @param {string} code The language code to switch to.
+  * @private
+  */
 const selectLanguage = (code) => {
   setLanguage(code)
   isOpen.value = false
 }
 
+/**
+  * Closes the dropdown menu if a click occurs outside the language selector container.
+  * @param {MouseEvent} event The native click event.
+  * @private
+  */
 const closeOnClickOutside = (event) => {
-  if (!event.target.closest('.lang-selector-container')) {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
     isOpen.value = false
   }
 }
@@ -23,31 +90,6 @@ const closeOnClickOutside = (event) => {
 onMounted(() => document.addEventListener('click', closeOnClickOutside))
 onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
 </script>
-
-<template>
-  <div class="lang-selector-container">
-    <button 
-      type="button"
-      @click="toggleDropdown" 
-      class="lang-button"
-    >
-      <span class="lang-text">{{ currentLang.toUpperCase() }}</span>
-      <span class="arrow">▼</span>
-    </button>
-
-    <ul v-if="isOpen" class="lang-menu">
-      <li 
-        v-for="(label, code) in availableLanguages" 
-        :key="code" 
-        @click="selectLanguage(code)"
-        :class="{ active: currentLang === code }"
-        class="lang-option"
-      >
-        {{ label }}
-      </li>
-    </ul>
-  </div>
-</template>
 
 <style scoped>
 .lang-selector-container {
@@ -74,48 +116,80 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   white-space       : nowrap;
 }
 
-.lang-text {
-  display           : inline-flex;
-  align-items       : center;
-  margin-top        : 3px;
+.dropdown-options-list {
+  position            : absolute;
+  top                 : calc(100% + 6px);
+  right               : 0;
+  width               : max-content;
+  min-width           : 100%;
+  background-color    : var(--color-dropdown-list-bg);
+  border              : var(--default-border);
+  border-radius       : var(--default-border-radius);
+  box-sizing          : border-box;
+  overflow            : hidden;
 }
 
-.arrow {
-  font-size         : 0.7em;
-  display           : inline-flex;
-  align-items       : center;
+.dropdown-option {
+  padding             : 0.6rem 1rem 0.6rem 2.4rem;
+  color               : var(--color-dropdown-option-text);
+  cursor              : pointer;
+  text-transform      : uppercase;
+  position            : relative;
+  transition          : background-color 0.15s ease;
+  white-space         : nowrap;
+  font-family         : var(--font-navbar);
+  font-size           : var(--font-navbar-size);
 }
 
-.lang-menu {
-  position          : absolute;
-  top               : 100%;
-  right             : 0;
-  margin            : 4px 0 0 0;
-  padding           : 0;
-  list-style        : none;
-  background        : #222;
-  border            : 1px solid currentColor;
-  border-radius     : 4px;
-  z-index           : 10;
-  min-width         : max-content;
-  white-space       : nowrap;
+.dropdown-option:hover {
+  background-color    : var(--color-dropdown-option-hover-bg);
+  color               : var(--color-dropdown-option-hover-text);
 }
 
-.lang-option {
-  padding           : 6px 12px;
-  color             : #fff;
-  cursor            : pointer;
-  font-family       : var(--font-navbar);
-  font-size         : var(--font-navbar-size);
+.dropdown-option .option-arrow {
+  display             : none;
 }
 
-.lang-option:hover {
-  background        : rgba(255, 255, 255, 0.1);
+.dropdown-option:hover .option-arrow,
+.dropdown-option.active .option-arrow {
+  display             : block;
+  position            : absolute;
+  left                : 12px;
+  top                 : 50%;
+  transform           : translateY(-50%);
+  width               : 14px;
+  height              : 16px;
+  
+  -webkit-mask-image  : url('@/assets/svg/triangle-right-12-filled.svg');
+  mask-image          : url('@/assets/svg/triangle-right-12-filled.svg');
+  -webkit-mask-size   : contain;
+  mask-size           : contain;
+  -webkit-mask-repeat : no-repeat;
+  mask-repeat         : no-repeat;
+  
+  animation           : choppy-horizontal 0.6s steps(3, end) infinite alternate;
 }
 
-.lang-option.active {
-  background        : #007bff;
-  color             : #fff;
+.dropdown-option:hover .option-arrow {
+  background-color    : var(--color-dropdown-arrow-hover);
+}
+
+.dropdown-option.active {
+  background-color    : var(--color-dropdown-option-active-bg);
+  color               : var(--color-dropdown-option-active-text);
+}
+
+.dropdown-option.active .option-arrow {
+  background-color    : var(--color-dropdown-active-arrow);
+}
+
+@keyframes choppy-horizontal {
+  0% {
+    transform: translateY(-50%) translateX(0px);
+  }
+  100% {
+    transform: translateY(-50%) translateX(3px);
+  }
 }
 
 @media (max-width: 900px) {
@@ -124,7 +198,7 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
     justify-content : flex-end;
   }
   
-  .lang-menu {
+  .dropdown-options-list {
     top             : 100%;
     right           : 0;
   }

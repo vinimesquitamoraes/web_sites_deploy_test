@@ -2,7 +2,7 @@
   <div class="credits-container">
     <div class="credits-body">
       <div v-for="(section, sIndex) in credits" :key="sIndex" class="credits-section-block">
-        <h2 v-if="section.title" class="credits-main-title" :style="{ color: titleColor }">
+        <h2 v-if="section.title" class="credits-main-title">
           {{ section.title }}
         </h2>
         
@@ -11,10 +11,10 @@
           :key="index" 
           class="credits-group"
         >
-          <h3 v-if="group.subtitle" class="credits-role" :style="{ color: subtitleColor }">
+          <h3 v-if="group.subtitle" class="credits-role">
             {{ group.subtitle }}
           </h3>
-          <ul class="credits-names-list" :style="{ justifyItems: computedAlign }">
+          <ul class="credits-names-list">
             <li 
               v-for="(person, nameIndex) in group.names" 
               :key="nameIndex" 
@@ -27,15 +27,14 @@
                 :href="getPersonLink(person)" 
                 target="_blank" 
                 rel="noopener" 
-                class="credit-link" 
-                :style="{ color: textColor }"
+                class="credit-link"
               >
                 {{ resolveName(person) }}
               </a>
               
               <span 
                 v-else 
-                :style="{ color: textColor, cursor: isTooltipAllowed(section, group, person) ? 'not-allowed' : 'default' }"
+                :style="{ cursor: isTooltipAllowed(section, group, person) ? 'not-allowed' : 'default' }"
                 class="credit-text-fallback"
               >
                 {{ resolveName(person) }}
@@ -56,34 +55,47 @@
 </template>
 
 <script setup>
+/**
+  * @file        credits_section.vue
+  * @brief       A customizable credits section component featuring grouped roles, names, grid layout columns, dynamic links, and tooltip integrations.
+  * @displayName Credits Section
+*/
+
 import { ref, computed } from 'vue'
 import CustomTooltip from '@/components/reusables/tooltip.vue'
 
 const props = defineProps({
+  /** Array of credit sections containing titles and grouped role lists. */
   credits: {
     type: Array,
     required: true,
   },
+  /** Mapping dictionary matching names to external links. */
   linksMap: {
     type: Object,
     default: () => ({})
   },
+  /** Text color for main section titles. */
   titleColor: {
     type: String,
     default: 'var(--color-credits-title)'
   },
+  /** Text color for group roles/subtitles. */
   subtitleColor: {
     type: String,
     default: 'var(--color-credits-role)'
   },
+  /** Text color for individual names. */
   textColor: {
     type: String,
     default: 'var(--color-credits-name)'
   },
+  /** Number of grid columns for the names list. */
   columns: {
     type: [Number, String],
     default: 2
   },
+  /** Text alignment orientation ('left', 'center', 'right'). */
   textAlign: {
     type: String,
     default: 'left'
@@ -92,12 +104,14 @@ const props = defineProps({
 
 const activeTooltipIndex = ref(null)
 
+/** Computes grid justification based on text alignment configuration. * @private */
 const computedAlign = computed(() => {
   if (props.textAlign === 'center') return 'center'
   if (props.textAlign === 'right') return 'end'
   return 'start'
 })
 
+/** Extracts string name from string or object person entries. * @private */
 const resolveName = (person) => {
   if (typeof person === 'object' && person !== null) {
     return person.name
@@ -105,6 +119,7 @@ const resolveName = (person) => {
   return person
 }
 
+/** Resolves link mapping for a person string. * @private */
 const resolveLink = (person) => {
   const nameStr = resolveName(person)
   if (!nameStr) return null
@@ -116,6 +131,7 @@ const resolveLink = (person) => {
   return foundKey ? props.linksMap[foundKey] : null
 }
 
+/** Gets specific link or fallback resolved link for a person. * @private */
 const getPersonLink = (person) => {
   if (typeof person === 'object' && person !== null && person.link) {
     return person.link
@@ -123,6 +139,7 @@ const getPersonLink = (person) => {
   return resolveLink(person)
 }
 
+/** Determines if tooltips are permitted based on config hierarchy. * @private */
 const isTooltipAllowed = (section, group, person) => {
   if (section.showTooltip === false) return false
   if (group.showTooltip === false) return false
@@ -171,6 +188,7 @@ const isTooltipAllowed = (section, group, person) => {
   margin            : 0;
   text-transform    : uppercase;
   padding-bottom    : 4px;
+  color             : v-bind('props.titleColor');
 }
 
 .credits-group {
@@ -186,6 +204,7 @@ const isTooltipAllowed = (section, group, person) => {
   font-size         : var(--font-h4-size);
   text-transform    : uppercase;
   letter-spacing    : 1px;
+  color             : v-bind('props.subtitleColor');
 }
 
 .credits-names-list {
@@ -196,6 +215,7 @@ const isTooltipAllowed = (section, group, person) => {
   display           : grid;
   grid-template-columns: repeat(v-bind(columns), 1fr);
   gap               : 0.25rem 2rem;
+  justify-items     : v-bind(computedAlign);
 }
 
 .credits-name {
@@ -217,6 +237,7 @@ const isTooltipAllowed = (section, group, person) => {
   display           : inline-block;
   pointer-events    : auto;
   cursor            : pointer;
+  color             : v-bind('props.textColor');
 }
 
 .credit-link:hover {
@@ -226,6 +247,7 @@ const isTooltipAllowed = (section, group, person) => {
 
 .credit-text-fallback {
   display           : inline-block;
+  color             : v-bind('props.textColor');
 }
 
 @media (max-width: 768px) {

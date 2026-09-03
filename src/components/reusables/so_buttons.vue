@@ -10,7 +10,6 @@
       'is-clickable': isClickable,
       'not-clickable': !isClickable
     }"
-    :style        ="customStyles"
     :aria-label   ="platformInfo.label"
     @click        ="handleClick"
   >
@@ -19,35 +18,51 @@
 </template>
 
 <script setup>
+/**
+  * @file        so_buttons.vue
+  * @brief       An operating system platform link/icon button component supporting custom masking, sizing, and clickability states.
+  * @displayName Platform Button
+*/
+
 import { computed } from 'vue'
 
 const props = defineProps({
+  /** Target operating system platform identifier (e.g. windows, linux, mac). */
   platform: {
     type: String,
     required: true
   },
+  /** Dimension size for the platform icon. */
   size: {
     type: [Number, String],
     default: 48
   },
+  /** Default fill color for the icon. */
   color: {
     type: String,
-    default: 'var(--color-operational-system-icons-color, inherit)'
+    default: 'var(--color-operational-system-icons-color)'
   },
+  /** Hover state fill color for the icon. */
   hoverColor: {
     type: String,
-    default: 'var(--color-operational-system-icons-hover-color, inherit)'
+    default: 'var(--color-operational-system-icons-hover-color)'
   },
+  /** Custom override URL for the platform link. */
   url: {
     type: String,
     default: ''
   },
+  /** Controls whether the button behaves as an interactive link. */
   clickable: {
     type: [Boolean, String],
     default: true
   }
 })
 
+/**
+  * Determines if the platform link is active/clickable.
+  * @private
+  */
 const isClickable = computed(() => {
   if (typeof props.clickable === 'string') {
     return props.clickable.toLowerCase() !== 'false'
@@ -78,6 +93,10 @@ const platformInfo = platforms[key] || {
   label: props.platform
 }
 
+/**
+  * Resolves final target URL based on props and defaults.
+  * @private
+  */
 const resolvedUrl = computed(() => props.url || platformInfo.url)
 
 const soIcons = import.meta.glob('/src/assets/svg/so_icons/*.svg', {
@@ -85,19 +104,26 @@ const soIcons = import.meta.glob('/src/assets/svg/so_icons/*.svg', {
   import: 'default',
 })
 
-const customStyles = computed(() => {
-  const numericSize = typeof props.size === 'number' ? `${props.size}px` : props.size
+/**
+  * Formats size value into pixel string if numeric.
+  * @private
+  */
+const iconSize = computed(() => (typeof props.size === 'number' ? `${props.size}px` : props.size))
+
+/**
+  * Computes the SVG icon URL for CSS masking.
+  * @private
+  */
+const iconMask = computed(() => {
   const fullPath = `/src/assets/svg/so_icons/${key}.svg`
   const iconUrl = soIcons[fullPath] || ''
-
-  return {
-    '--icon-size'       : numericSize,
-    '--icon-mask'       : `url("${iconUrl}")`,
-    '--icon-color'      : props.color,
-    '--icon-hover-color': props.hoverColor
-  }
+  return `url("${iconUrl}")`
 })
 
+/**
+  * Prevents default navigation behavior if the button is marked unclickable.
+  * @private
+  */
 const handleClick = (e) => {
   if (!isClickable.value) {
     e.preventDefault()
@@ -113,7 +139,7 @@ const handleClick = (e) => {
   align-items                  : center;
   justify-content              : center;
   text-decoration              : none;
-  color                        : var(--icon-color);
+  color                        : v-bind('props.color');
   transition                   : color 0.3s ease;
 }
 
@@ -131,17 +157,17 @@ const handleClick = (e) => {
 .platform-link.is-clickable:hover {
   transform                    : translateY(-3px);
   opacity                      : 0.85;
-  color                        : var(--icon-hover-color);
+  color                        : v-bind('props.hoverColor');
 }
 
 .platform-icon {
-  width                        : var(--icon-size);
-  height                       : var(--icon-size);
+  width                        : v-bind(iconSize);
+  height                       : v-bind(iconSize);
   background-color             : currentColor;
   display                      : block;
   
-  -webkit-mask-image           : var(--icon-mask);
-  mask-image                   : var(--icon-mask);
+  -webkit-mask-image           : v-bind(iconMask);
+  mask-image                   : v-bind(iconMask);
   -webkit-mask-repeat          : no-repeat;
   mask-repeat                  : no-repeat;
   -webkit-mask-position        : center;

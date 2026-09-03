@@ -7,27 +7,25 @@
         { 'auto-adapt': autoAdaptSize },
         `press-${pressAnimation}`
       ]"
-      :style="buttonStyles"
       :disabled="disabled"
       @click="handleClick"
     >
-      <div v-if="iconSrc" class="icon-wrapper" :style="iconWrapperStyles">
+      <div v-if="iconSrc" class="icon-wrapper">
       
         <div 
           v-if="hasValidColor"
           class="button-icon-masked"
-          :style="maskedIconStyles"
         ></div>
 
         <img 
           v-else
           :src="processedIconSrc" 
-          class="button-icon" 
+          class="button-image" 
           alt="" 
         />
       </div>
       
-      <span v-if="text" class="button-text" :style="textStyles">
+      <span v-if="text" class="button-text">
         <!-- 
           @slot Override the default button text content is ignored if the text prop is empty.
         -->
@@ -38,166 +36,133 @@
 </template>
 
 <script setup>
+/**
+  * @file        custom_button.vue
+  * @brief       Customizable button component supporting icons, dynamic coloring, Vue Router navigation, external links, and press animations.
+  * @displayName Custom Button
+*/
+
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-/**
-  * Customizable button component supporting icons, dynamic coloring, Vue Router navigation, external links, and press animations.
-  * 
-  * @displayName Custom Button
-  */
-
 const props = defineProps({
-  /**
-    * Disables interactions and reduces opacity when set to true.
-    */
+  /** Disables interactions and reduces opacity when set to true. */
   disabled: {
-    type                       : Boolean,
-    default                    : false
+    type    : Boolean,
+    default : false
   },
-  /**
-    * Automatically adapts the button size to wrap or fit text when it becomes long.
-    */
+  /** Automatically adapts the button size to wrap or fit text when it becomes long. */
   autoAdaptSize: {
-    type                       : Boolean,
-    default                    : false
+    type    : Boolean,
+    default : false
   },
-  /**
-    * Label text displayed inside the button.
-    */
+  /** Label text displayed inside the button. */
   text: {
-    type                       : String,
-    default                    : ''
+    type    : String,
+    default : ''
   },
-  /**
-    * Image URL or raw inline SVG string for the button icon.
-    */
+  /** Image URL or raw inline SVG string for the button icon. */
   iconSrc: {
-    type                       : String,
-    default                    : '' 
+    type    : String,
+    default : '' 
   },
-  /**
+  /** 
     * Position of the icon relative to the text.
     * @values left, right, top, bottom
-    */
+  */
   iconPosition: {
-    type                       : String,
-    default                    : 'left',
-    validator                  : (value) => ['left', 'right', 'top', 'bottom'].includes(value)
+    type    : String,
+    default : 'left',
+    validator: (value) => ['left', 'right', 'top', 'bottom'].includes(value)
   },
-  /**
-    * Custom margin/spacing applied specifically to the icon (e.g., '0 10px 0 0', '5px').
-    */
+  /** Custom margin/spacing applied specifically to the icon (e.g., '0 10px 0 0', '5px'). */
   iconMargin: {
-    type                       : [Number, String],
-    default                    : null
+    type    : [Number, String],
+    default : null
   },
-  /**
-    * Custom margin/spacing applied specifically to the text (e.g., '0 0 0 5px', '2px').
-    */
+  /** Custom margin/spacing applied specifically to the text (e.g., '0 0 0 5px', '2px'). */
   textMargin: {
-    type                       : [Number, String],
-    default                    : null
+    type    : [Number, String],
+    default : null
   },
-  /**
-    * Width and height dimension for the icon container (e.g., `24`, `'2rem'`, `'var(--icon-size)'`).
-    */
+  /** Width and height dimension for the icon container (e.g., `24`, `'2rem'`, `'var(--icon-size)'`). */
   iconSize: {
-    type                       : [Number, String],
-    default                    : null
+    type    : [Number, String],
+    default : null
   },
-  /**
-    * Fill color for CSS mask-based icons.
-    */
+  /** Fill color for CSS mask-based icons. */
   iconColor: {
-    type                       : String,
-    default                    : "var(--color-custom-icon)"
+    type    : String,
+    default : "var(--color-custom-icon)"
   },
-  /**
-    * Hover fill color for CSS mask-based icons.
-    */
+  /** Hover fill color for CSS mask-based icons. */
   hoverIconColor: {
-    type                       : String,
-    default                    : "var(--color-custom-icon-hover)"
+    type    : String,
+    default : "var(--color-custom-icon-hover)"
   },
-  /**
-    * Inner padding spacing for the button container.
-    */
+  /** CSS border applied to the button layout. */
+  border: {
+    type    : String,
+    default : 'var(--custom-button-border)'
+  },
+  /** Inner padding spacing for the button container. */
   padding: {
-    type                       : String,
-    default                    : 'clamp(0.35rem, 1vw, 0.5rem)'
+    type    : String,
+    default : 'clamp(0.35rem, 1vw, 0.5rem)'
   },
-  /**
-    * Custom width applied to the button layout.
-    */
+  /** Custom width applied to the button layout. */
   width: {
-    type                       : [Number, String],
-    default                    : 'fit-content'
+    type    : [Number, String],
+    default : 'fit-content'
   },
-  /**
-    * Custom height applied to the button layout.
-    */
+  /** Custom height applied to the button layout. */
   height: {
-    type                       : [Number, String],
-    default                    : 'auto'
+    type    : [Number, String],
+    default : 'auto'
   },
-  /**
-    * Font size applied to the text string inside the button.
-    */
+  /** Font size applied to the text string inside the button. */
   fontSize: {
-    type                       : [Number, String],
-    default                    : 'var(--custom-button-font-size)'
+    type    : [Number, String],
+    default : 'var(--custom-button-font-size)'
   },
-  /**
-    * Background color of the button in default state.
-    */
+  /** Background color of the button in default state. */
   bgColor: {
-    type                       : String,
-    default                    : 'var(--color-custom-button-background)'
+    type    : String,
+    default : 'var(--color-custom-button-background)'
   },
-  /**
-    * Background color when hovering over the button.
-    */
+  /** Background color when hovering over the button. */
   hoverBgColor: {
-    type                       : String,
-    default                    : 'var(--color-custom-button-hover)'
+    type    : String,
+    default : 'var(--color-custom-button-hover)'
   },
-  /**
-    * Text color of the button in default state.
-    */
+  /** Text color of the button in default state. */
   textColor: {
-    type                       : String,
-    default                    : 'var(--color-custom-button-text)'
+    type    : String,
+    default : 'var(--color-custom-button-text)'
   },
-  /**
-    * Text color when hovering over the button.
-    */
+  /** Text color when hovering over the button. */
   hoverTextColor: {
-    type                       : String,
-    default                    : 'var(--color-custom-button-text-hover)'
+    type    : String,
+    default : 'var(--color-custom-button-text-hover)'
   },
-  /**
-    * Vue Router target location for internal SPA navigation.
-    */
+  /** Vue Router target location for internal SPA navigation. */
   to: {
-    type                       : [String, Object],
-    default                    : null
+    type    : [String, Object],
+    default : null
   },
-  /**
-    * External URL to navigate to via window location.
-    */
+  /** External URL to navigate to via window location. */
   externalUrl: {
-    type                       : String,
-    default                    : null
+    type    : String,
+    default : null
   },
-  /**
+  /** 
     * Active press animation transform style.
     * @values scale, lift, push, none
-    */
+  */
   pressAnimation: {
-    type                       : String,
-    default                    : 'push',
-    validator                  : (value) => ['scale', 'lift', 'push', 'none'].includes(value)
+    type    : String,
+    default : 'push',
+    validator: (value) => ['scale', 'lift', 'push', 'none'].includes(value)
   },
 })
 
@@ -252,113 +217,40 @@ const hasValidColor = computed(() => {
   return ColorBuilder.isValid(props.iconColor) || ColorBuilder.isValid(props.hoverIconColor)
 })
 
-/**
-  * Dynamic CSS variables and style properties bound to the root element.
-  * @private
-*/
-const buttonStyles = computed(() => {
-  const ButtonStyleBuilder = {
-    formatValue(val) {
-      return typeof val === 'number' ? `${val}px` : val
-    },
-    getFlexDirection(position) {
-      if (position === 'right')  return 'row-reverse'
-      if (position === 'top')    return 'column'
-      if (position === 'bottom') return 'column-reverse'
-      return 'row'
-    },
-    buildStyles(props) {
-      const styles = {}
+/** Helper to format value (number to px string). */
+const formatValue = (val) => (typeof val === 'number' ? `${val}px` : val)
 
-      styles['--local-bg']           = props.bgColor
-      styles['--local-hover-bg']     = props.hoverBgColor
-      styles['--local-text']         = props.textColor
-      styles['--local-hover-text']   = props.hoverTextColor
-      styles['--local-icon-color']   = props.iconColor
-      styles['--local-hover-icon-color'] = props.hoverIconColor
-      styles.padding                 = props.padding
-      styles.height                  = this.formatValue(props.height)
-      styles.flexDirection           = this.getFlexDirection(props.iconPosition)
-      styles.width                   = props.autoAdaptSize ? 'fit-content' : this.formatValue(props.width)
-
-      return styles
-    }
-  }
-
-  return ButtonStyleBuilder.buildStyles(props)
+/** Computed flex direction mapping based on icon position. */
+const computedFlexDirection = computed(() => {
+  if (props.iconPosition === 'right')  return 'row-reverse'
+  if (props.iconPosition === 'top')    return 'column'
+  if (props.iconPosition === 'bottom') return 'column-reverse'
+  return 'row'
 })
 
-/**
-  * Calculated dimensions and margins applied to the icon wrapper container.
-  * @private
-*/
-const iconWrapperStyles = computed(() => {
-  const IconLayoutBuilder = {
-    formatValue(val) {
-      return typeof val === 'number' ? `${val}px` : val
-    },
+/** Computed width mapping based on autoAdaptSize and width prop. */
+const computedWidth = computed(() => props.autoAdaptSize ? 'fit-content' : formatValue(props.width))
 
-    buildStyles(iconSize, hasText, rawMargin) {
-      const styles = {}
+/** Computed height mapping. */
+const computedHeight = computed(() => formatValue(props.height))
 
-      if (iconSize) {
-        const size        = this.formatValue(iconSize)
-        styles.width      = size
-        styles.height     = size
-        styles.maxWidth   = '100%'
-        styles.maxHeight  = '100%'
-      } else {
-        styles.height     = hasText ? '1.2em' : '80%'
-        styles.width      = hasText ? 'auto' : '80%'
-      }
+/** Computed icon size dimension mapping. */
+const cssIconSize = computed(() => props.iconSize ? formatValue(props.iconSize) : (Boolean(props.text) ? '1.2em' : '80%'))
 
-      if (rawMargin) {
-        styles.margin     = this.formatValue(rawMargin)
-      }
+/** Computed icon container width/height mapping. */
+const cssIconWidth = computed(() => props.iconSize ? formatValue(props.iconSize) : (Boolean(props.text) ? 'auto' : '80%'))
 
-      return styles
-    }
-  }
+/** Computed icon margin mapping. */
+const cssIconMargin = computed(() => props.iconMargin ? formatValue(props.iconMargin) : null)
 
-  return IconLayoutBuilder.buildStyles(props.iconSize, Boolean(props.text), props.iconMargin)
-})
+/** Computed text font size mapping. */
+const cssFontSize = computed(() => formatValue(props.fontSize))
 
+/** Computed text margin mapping. */
+const cssTextMargin = computed(() => props.textMargin ? formatValue(props.textMargin) : null)
 
-/**
-  * Computed CSS mask styles for recoloring SVG icons.
-  * @private
-  */
-const maskedIconStyles = computed(() => {
-  return {
-    maskImage                  : `url("${processedIconSrc.value}")`,
-    WebkitMaskImage            : `url("${processedIconSrc.value}")`
-  }
-})
-
-/**
-  * Computed typography styles and margins for text block.
-  * @private
-*/
-const textStyles = computed(() => {
-  const TextStyleBuilder = {
-    formatValue(val) {
-      return typeof val === 'number' ? `${val}px` : val
-    },
-
-    buildStyles(fontSize, rawMargin) {
-      const styles = {}
-
-      styles.fontSize = this.formatValue(fontSize)
-      if (rawMargin) {
-        styles.margin   = this.formatValue(rawMargin)
-      }
-
-      return styles
-    }
-  }
-
-  return TextStyleBuilder.buildStyles(props.fontSize, props.textMargin)
-})
+/** Computed CSS mask URL for SVG icons. */
+const cssMaskImage = computed(() => `url("${processedIconSrc.value}")`)
 
 /**
   * Handles button click, emits event, and executes internal or external routing.
@@ -400,12 +292,17 @@ const handleClick = (event) => {
   text-align                   : center;
   box-sizing                   : border-box;
 
-  background-color             : var(--local-bg);
-  color                        : var(--local-text);
-  border                       : var(--custom-button-border);
+  background-color             : v-bind('props.bgColor');
+  color                        : v-bind('props.textColor');
+  border                       : v-bind('props.border');
   border-radius                : var(--custom-button-border-radius);
   cursor                       : pointer;
   
+  padding                      : v-bind('props.padding');
+  width                        : v-bind(computedWidth);
+  height                       : v-bind(computedHeight);
+  flex-direction               : v-bind(computedFlexDirection);
+
   transition                   : background-color 0.4s ease, 
                                  color 0.4s ease,
                                  transform 0.1s ease,
@@ -437,8 +334,8 @@ const handleClick = (event) => {
 }
 
 .custom-btn:not(:disabled):hover {
-  background-color             : var(--local-hover-bg);
-  color                        : var(--local-hover-text);
+  background-color             : v-bind('props.hoverBgColor');
+  color                        : v-bind('props.hoverTextColor');
 }
 
 .custom-btn:disabled {
@@ -454,9 +351,15 @@ const handleClick = (event) => {
   flex-shrink                  : 0;
   overflow                     : hidden;
   pointer-events               : none;
+
+  width                        : v-bind(cssIconWidth);
+  height                       : v-bind(cssIconSize);
+  max-width                    : 100%;
+  max-height                   : 100%;
+  margin                       : v-bind(cssIconMargin);
 }
 
-.button-icon {
+.button-image {
   width                        : 100%;
   height                       : 100%;
   max-width                    : 100%;
@@ -468,7 +371,9 @@ const handleClick = (event) => {
 .button-icon-masked {
   width                        : 100%;
   height                       : 100%;
-  background-color             : var(--local-icon-color);
+  background-color             : v-bind('props.iconColor');
+  mask-image                   : v-bind(cssMaskImage);
+  -webkit-mask-image           : v-bind(cssMaskImage);
   mask-repeat                  : no-repeat;
   -webkit-mask-repeat          : no-repeat;
   mask-position                : center;
@@ -480,7 +385,7 @@ const handleClick = (event) => {
 }
 
 .custom-btn:not(:disabled):hover .button-icon-masked {
-  background-color             : var(--local-hover-icon-color);
+  background-color             : v-bind('props.hoverIconColor');
 }
 
 .fade-bounce-enter-active {
@@ -508,11 +413,8 @@ const handleClick = (event) => {
   word-wrap                    : break-word;
   text-align                   : center; 
   display                      : inline-block; 
-}
 
-@media screen and (max-width: 768px) {
-  .custom-btn {
-    width                      : 100%;
-  }
+  font-size                    : v-bind(cssFontSize);
+  margin                       : v-bind(cssTextMargin);
 }
 </style>

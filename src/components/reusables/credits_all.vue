@@ -1,19 +1,23 @@
 <template>
-  
   <CreditsComponent 
-  :credits="formattedCredits" 
-  :linksMap="linksMap" 
+    :credits="formattedCredits" 
+    :linksMap="linksMap" 
   />
   <CreditsComponent 
-  :credits="specialCredits" 
-  :linksMap={} 
-  columns="1"
-  textAlign="center"
+    :credits="specialCredits" 
+    :linksMap="{}" 
+    columns="1"
+    textAlign="center"
   />
-
 </template>
 
 <script setup>
+/**
+  * @file        credits_all.vue
+  * @brief       The master credits container component that parses CSV files for roles and links, formatting localized credit lists for display.
+  * @displayName All Credits View
+*/
+
 import { computed } from 'vue'
 import { useI18n } from '@/composables/useI18n'
 import CreditsComponent from '@/components/reusables/credits_section.vue'
@@ -25,6 +29,10 @@ const { t } = useI18n()
 
 const toggle_debug_log = true 
 
+/**
+  * Logs debug messages to the console if debugging is toggled on.
+  * @private
+  */
 const debugLog = (...args) => {
   if (toggle_debug_log) {
     console.log(...args)
@@ -32,12 +40,17 @@ const debugLog = (...args) => {
 }
 
 const props = defineProps({
+  /** The act filter string ('all' or specific act number). */
   act: {
     type: String,
     default: 'all'
   }
 })
 
+/**
+  * Special static credits block for thanks, community, and contributor notices.
+  * @private
+  */
 const specialCredits = computed(() => [
   {
     title: t('CREDITS_THANKS_VERY'),
@@ -54,14 +67,20 @@ const specialCredits = computed(() => [
   },
 ])
 
-
+/**
+  * Optional player thank you block configuration.
+  * @private
+  */
 const playerThanks = computed(() => [
   {
     title: t('CREDITS_PLAYER_THANK_YOU'),
   },
-]
-)
+])
 
+/**
+  * Parses raw CSV text into structured JavaScript objects.
+  * @private
+  */
 const parseCSV = (text) => {
   debugLog('[parseCSV] Started parsing text of length:', text?.length)
   if (!text) return []
@@ -88,6 +107,10 @@ const parseCSV = (text) => {
   return parsedData
 }
 
+/**
+  * Generates a lookup dictionary mapping names to external links from the parsed links CSV.
+  * @private
+  */
 const linksMap = computed(() => {
   debugLog('[linksMap] Generating dictionary from links CSV...')
   const map = {}
@@ -106,6 +129,10 @@ const linksMap = computed(() => {
   return map
 })
 
+/**
+  * Formats the raw CSV role data and links into structured credit groups based on the active act filter.
+  * @private
+  */
 const formattedCredits = computed(() => {
   debugLog(`[formattedCredits] Building credits for ACT: ${props.act}`)
   const rawRoles = parseCSV(rolesCSVText)

@@ -12,11 +12,18 @@
 </template>
 
 <script setup>
+/**
+  * @file        requeriments.vue
+  * @brief       A system requirements display component using a responsive localized tabular layout.
+  * @displayName Requirements Table
+*/
+
 import { ref } from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
 const { t } = useI18n()
 
+/** List of system requirements keys mapping to internationalization labels. * @private */
 const requirements = ref([
   { key: 'SITE_DOWNLOAD_REQ_OS',        value: 'SITE_DOWNLOAD_REQ_OS_DETAILS' },
   { key: 'SITE_DOWNLOAD_REQ_RAM',       value: 'SITE_DOWNLOAD_REQ_RAM_DETAILS' },

@@ -9,8 +9,6 @@
       padding          = "0"
       width            = "100%"
       height           = "34px"
-      title            = "Rewind"
-      aria-label       = "Rewind"
       @click           = "$emit('prev')"
     />
 
@@ -24,8 +22,6 @@
       padding          = "0"
       width            = "100%"
       height           = "34px"
-      :title           = "isPlaying ? 'Pause' : 'Play'"
-      :aria-label      = "isPlaying ? 'Pause' : 'Play'"
       @click           = "$emit('togglePlay')"
     />
 
@@ -38,8 +34,6 @@
       padding          = "0"
       width            = "100%"
       height           = "34px"
-      title            = "Stop"
-      aria-label       = "Stop"
       @click           = "$emit('stop')"
     />
 
@@ -52,8 +46,6 @@
       padding          = "0"
       width            = "100%"
       height           = "34px"
-      title            = "Load / Next"
-      aria-label       = "Load / Next"
       @click           = "$emit('next')"
     />
 
@@ -67,14 +59,18 @@
       padding          = "0"
       width            = "100%"
       height           = "34px"
-      title            = "Record"
-      aria-label       = "Record"
       @click           = "$emit('record')"
     />
   </div>
 </template>
 
 <script setup>
+/**
+  * @file        music_player_controls.vue
+  * @brief       Music player control panel component featuring mechanical-style buttons for playback navigation, recording, and state management.
+  * @displayName Music Player Controls
+*/
+
 import CustomButton from '@/components/reusables/custom_button.vue'
 
 import prevSvg      from '@/assets/svg/player-prev.svg'
@@ -85,8 +81,16 @@ import nextSvg      from '@/assets/svg/player-next.svg'
 import recSvg       from '@/assets/svg/player-rec.svg'
 
 defineProps({
-  isPlaying   : Boolean,
-  isRecording : Boolean
+  /** Indicates whether the player is currently active and playing media. */
+  isPlaying: {
+    type: Boolean,
+    default: false
+  },
+  /** Indicates whether the player is currently recording. */
+  isRecording: {
+    type: Boolean,
+    default: false
+  }
 })
 
 defineEmits(['prev', 'togglePlay', 'stop', 'next', 'record'])

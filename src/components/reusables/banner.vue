@@ -6,12 +6,11 @@
           class       ="hero-bg-image"
           :key        ="activeImageSrc"
           :class      ="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
-          :style      ="{ backgroundImage: `url(${activeImageSrc})` }"
           :aria-label ="imageAlt"
           role="img"
         ></div>
       </transition>
-      <div class="hero-overlay" :style="{ background: resolvedVignette }"></div>
+      <div class="hero-overlay"></div>
     </div>
 
     <div class="hero-content center">
@@ -52,6 +51,12 @@
 </template>
 
 <script setup>
+/**
+ * @file banner.vue
+ * @brief Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable.
+ * @displayName Hero Banner
+ */
+
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
 
@@ -61,135 +66,107 @@ import img_gameLogo       from '@/assets/img/logos/Encore_Logo.png'
 import img_defaultBanner  from '@/assets/img/art/chinese_plus_japanese.png'
 import dowload_icon       from '@/assets/svg/download.svg'
 
-/**
-  * Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable.
-  * 
-  * @displayName Hero Banner
-  */
-
 const { t } = useI18n()
 
 const logoSrc = img_gameLogo
 
 const VIGNETTE_STYLES = {
-  style_1: 'radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)',
-  style_2: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%)',
-  style_3: 'radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%)',
-  style_4: 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.7) 100%)'
+  style_1: 'radial-gradient(circle    , rgba(0,0,0,0.2) 0% , rgba(0,0,0,0.6 ) 100%)',
+  style_2: 'linear-gradient(to bottom , rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.8 ) 100%)',
+  style_3: 'radial-gradient(circle    , rgba(0,0,0,0  ) 40%, rgba(0,0,0,0.85) 100%)',
+  style_4: 'linear-gradient(90deg     , rgba(0,0,0,0.7) 0% , rgba(0,0,0,0.1 ) 50%   , rgba(0,0,0,0.7) 100%)'
 }
 
 const props = defineProps({
-  /**
-    * Default background image source URL.
-    */
+  /** Default background image source URL. */
   imageSrc: {
     type    : String,
     required: false,
     default : ''
   },
-  /**
-    * Accessibility description text for the background image.
-    */
+  /** Accessibility description text for the background image. */
   imageAlt: {
     type    : String,
     required: false,
     default : 'Hero banner background'
   },
-  /**
-    * Subtitle tha appears below logo.
-    */
+  /** Subtitle tha appears below logo. */
   subtitle: {
     type    : String,
     required: false,
     default : '[Default Banner Text]'
   },
-  /**
-    * Determine if scrolling background animations are enabled.
-    */
+  /** Determine if scrolling background animations are enabled. */
   isScrollable: {
     type    : [Boolean, String],
     required: false,
     default : false
   },
-  /**
+  /** 
     * Direction trajectory for background scrolling animation.
     * @values none, horizontal, vertical, both
-    */
+  */
   scrollDirection: {
     type    : String,
     required: false,
     default : 'horizontal',
     validator: (value) => ['none', 'horizontal', 'vertical', 'both'].includes(value)
   },
-  /**
-    * Browser session storage lookup key for conditional alternative asset displays.
-    */
+  /** Browser session storage lookup key for conditional alternative asset displays. */
   sessionKey: {
     type    : String,
     required: false,
     default : ''
   },
-  /**
+  /** 
     * List of alternative background images for active session rotation.
     * @default []
-    */
+  */
   alternativeImages: {
     type    : Array,
     required: false,
     default : () => []
   },
-  /**
-    * Scroll animation direction when an alternative session state is active.
-    */
+  /** Scroll animation direction when an alternative session state is active. */
   alternativeScrollDirection: {
     type    : String,
     required: false,
     default : 'both'
   },
-  /**
-    * Time interval in milliseconds between background image transitions.
-    */
+  /** Time interval in milliseconds between background image transitions. */
   imageChangeInterval: {
     type    : Number,
     required: false,
     default : 25000
   },
-  /**
-    * Controls whether the brand logo image container is visible.
-    */
+  /** Controls whether the brand logo image container is visible. */
   showLogo: {
     type    : Boolean,
     required: false,
     default : true
   },
-  /**
-    * Controls whether the call-to-action button element is visible.
-    */
+  /** Controls whether the call-to-action button element is visible. */
   showCtaButton: {
     type    : Boolean,
     required: false,
     default : true
   },
-  /**
-    * Custom text label override string for the call-to-action button.
-    */
+  /** Custom text label override string for the call-to-action button. */
   ctaText: {
     type    : String,
     required: false,
     default : ''
   },
-  /**
-    * Target routing link destination path for the call-to-action button.
-    */
+  /** Target routing link destination path for the call-to-action button. */
   ctaLink: {
     type    : String,
     required: false,
     default : '/download'
   },
-  /**
+  /** 
     * Predefined vignette style key or custom CSS background value.
     * @values style_1, style_2, style_3, style_4
-    */
+  */
   vignetteStyle: {
     type    : String,
     required: false,
@@ -197,11 +174,7 @@ const props = defineProps({
   }
 })
 
-/**
-  * Selects a random alternative background image from the configured array.
-  * 
-  * @returns {string|undefined} The selected alternative image source URL or undefined.
-  */
+/** Selects a random alternative background image from the configured array. */
 const getRandomAlternative = () => {
   const AlternativeBuilder = {
     hasImages(images) {
@@ -226,9 +199,7 @@ const isSessionActive = ref(
 const randomAlternativeImage = ref(getRandomAlternative())
 const timerKey = ref(0)
 
-/**
-  * Checks and updates the active session state based on session storage value changes.
-  */
+/** Checks and updates the active session state based on session storage value changes. */
 const checkSessionState = () => {
   const SessionBuilder = {
     isValidKey(key) {
@@ -279,9 +250,7 @@ onUnmounted(() => {
   if (bgCycleIntervalId) clearInterval(bgCycleIntervalId)
 })
 
-/**
-  * Computed property that resolves the current background image URL.
-  */
+/** Computed property that resolves the current background image URL. */
 const activeImageSrc = computed(() => {
   const ImageSrcBuilder = {
     buildSource(isActive, altImage, defaultImg, fallbackDefault) {
@@ -300,9 +269,7 @@ const activeImageSrc = computed(() => {
   )
 })
 
-/**
-  * Computed property to determine if the background scroll animation is active.
-  */
+/** Computed property to determine if the background scroll animation is active. */
 const isScrollableActive = computed(() => {
   const ScrollableBuilder = {
     resolveState(isActive, defaultScrollable) {
@@ -316,9 +283,7 @@ const isScrollableActive = computed(() => {
   return ScrollableBuilder.resolveState(isSessionActive.value, props.isScrollable)
 })
 
-/**
-  * Computed property that resolves the current active scroll direction style.
-  */
+/** Computed property that resolves the current active scroll direction style. */
 const activeScrollDirection = computed(() => {
   const DirectionBuilder = {
     resolveDirection(isActive, altDirection, defaultDirection) {
@@ -336,12 +301,16 @@ const activeScrollDirection = computed(() => {
   )
 })
 
-/**
-  * Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS.
-  */
+/** Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS. */
 const resolvedVignette = computed(() => {
   return VIGNETTE_STYLES[props.vignetteStyle] || props.vignetteStyle
 })
+
+/** Resolved CSS background image URL computed from activeImageSrc. */
+const cssBackgroundImage = computed(() => `url(${activeImageSrc.value})`)
+
+/** Resolved vignette background style computed from resolvedVignette. */
+const cssVignetteBackground = computed(() => resolvedVignette.value)
 
 defineEmits(['cta-click'])
 </script>
@@ -381,6 +350,7 @@ defineEmits(['cta-click'])
   background-size     : cover;
   background-position : center center;
   background-repeat   : no-repeat;
+  background-image    : v-bind(cssBackgroundImage);
 }
 
 .bg-fade-enter-active,
@@ -448,6 +418,7 @@ defineEmits(['cta-click'])
   width               : 100%;
   height              : 100%;
   z-index             : 2;
+  background          : v-bind(cssVignetteBackground);
 }
 
 .hero-content {

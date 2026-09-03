@@ -1,14 +1,3 @@
-<script setup>
-import { useI18n } from '@/composables/useI18n'
-
-import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
-
-import NavigationComponent  from '@/components/reusables/navigation_component.vue'
-import SocialMediaButton    from '@/components/reusables/social_media_button.vue'
-
-const { t } = useI18n()
-</script>
-
 <template>
   <footer class="footer-outer">
     <div class="footer-container">
@@ -25,27 +14,32 @@ const { t } = useI18n()
             <SocialMediaButton 
               platform   ="twitter" 
               color      ="#ffffff" 
-              hoverColor ="#1da1f2" 
+              hoverColor ="#1da1f2"
+              :size       = 35
             />
             <SocialMediaButton 
               platform   ="discord" 
               color      ="#ffffff" 
               hoverColor ="#5865f2" 
+              :size       = 35
             />
             <SocialMediaButton 
               platform   ="bluesky" 
               color      ="#ffffff" 
               hoverColor ="#0085ff" 
+              :size       = 35
             />
             <SocialMediaButton 
               platform   ="github" 
               color      ="#ffffff" 
               hoverColor ="#00000" 
+              :size       = 35
             />
             <SocialMediaButton 
               platform   ="itchio" 
               color      ="#ffffff" 
               hoverColor ="var(--color-secondary)" 
+              :size       = 35
             />
           </div>
         </div>
@@ -69,6 +63,24 @@ const { t } = useI18n()
   </footer>
 </template>
 
+<script setup>
+/**
+  * @file         app_footer.vue
+  * @brief        Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts.
+  * @displayName  AppFooter
+*/
+
+import { useI18n } from '@/composables/useI18n'
+
+import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
+
+import NavigationComponent  from '@/components/reusables/navigation_component.vue'
+import SocialMediaButton    from '@/components/reusables/social_media_button.vue'
+
+/** Localization translation hook instance. */
+const { t } = useI18n()
+</script>
+
 <style scoped>
 
 .logo-container {
@@ -83,7 +95,6 @@ const { t } = useI18n()
   display           : block;
   max-height        : 50px;
 }
-
 
 .footer-outer {
   width             : 100%;
@@ -109,6 +120,7 @@ const { t } = useI18n()
   border-top-left-radius  : 45px;
   border-top-right-radius : 45px;
   box-sizing              : border-box;
+  overflow                : hidden;
 }
 
 .footer-content {
@@ -127,6 +139,7 @@ const { t } = useI18n()
   align-items       : center;
   flex-direction    : row;
   gap               : 42px;
+  flex-wrap         : wrap;
 }
 
 .footer-logo img {

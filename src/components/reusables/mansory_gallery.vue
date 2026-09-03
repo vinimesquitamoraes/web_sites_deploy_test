@@ -31,14 +31,24 @@
 </template>
 
 <script setup>
+/**
+  * @file        mansory_gallery.vue
+  * @brief       A responsive masonry grid gallery component supporting images, background-looped videos, and captions.
+  * @displayName Masonry Gallery
+*/
+
 defineProps({
+  /** Array of media item objects (images or videos) to display in the gallery grid. */
   items: {
     type: Array,
     required: true,
   }
 })
 
-defineEmits(['select'])
+defineEmits([
+  /** Emitted when an individual gallery item is selected/clicked. */
+  'select'
+])
 </script>
 
 <style scoped>

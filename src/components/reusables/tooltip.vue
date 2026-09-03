@@ -5,7 +5,6 @@
       class="custom-tooltip"
       :class="`position-${position}`"
       role="tooltip"
-      :style="tooltipStyles"
     >
       <slot>{{ text }}</slot>
       <img
@@ -18,163 +17,173 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+/**
+  * @file        tooltip.vue
+  * @brief       A customizable tooltip component supporting multiple positions, transition durations, and custom styling.
+  * @displayName Tooltip
+*/
+
 import tooltipArrow from '@/assets/svg/triangle-down-filled.svg'
 
-const props = defineProps({
+defineProps({
+  /** Controls whether the tooltip is visible. */
   show: {
     type: Boolean,
     default: false
   },
+  /** Text content displayed inside the tooltip when slot is empty. */
   text: {
     type: String,
     default: ''
   },
+  /** Position of the tooltip relative to the target element ('top', 'bottom', 'left', 'right'). */
   position: {
     type: String,
     default: 'top',
     validator: (value) => ['top', 'bottom', 'left', 'right'].includes(value)
   },
+  /** Transition animation duration in milliseconds. */
   duration: {
     type: Number,
     default: 300 
   },
+  /** Background color of the tooltip container. */
   backgroundColor: {
     type: String,
     default: '#ffffff'
   },
+  /** Border color of the tooltip container. */
   borderColor: {
     type: String,
     default: '#000000'
   },
+  /** Border width of the tooltip container. */
   borderWidth: {
     type: String,
     default: '3px'
   },
+  /** Text color of the tooltip. */
   textColor: {
     type: String,
     default: 'var(--color-primary)'
   }
 })
-
-const tooltipStyles = computed(() => ({
-  backgroundColor: props.backgroundColor,
-  borderColor: props.borderColor,
-  borderWidth: props.borderWidth,
-  borderStyle: 'solid',
-  color: props.textColor,
-  '--transition-duration': `${props.duration}ms`
-}))
 </script>
 
 <style scoped>
 .custom-tooltip {
-	position         : absolute;
-	border-radius    : 12px;
-	font-family      : var(--font-p, sans-serif);
-	font-weight      : bold;
-	font-size        : 14px;
-	padding          : 8px 16px;
-	white-space      : nowrap;
-	pointer-events   : none;
-	z-index          : 9999;
-  pointer-events   : none;
+	position             : absolute;
+	border-radius        : 12px;
+	font-family          : var(--font-p, sans-serif);
+	font-weight          : bold;
+	font-size            : 14px;
+	padding              : 8px 16px;
+	white-space          : nowrap;
+	pointer-events       : none;
+	z-index              : 9999;
+  
+	background-color     : v-bind('backgroundColor');
+	border-color         : v-bind('borderColor');
+	border-width         : v-bind('borderWidth');
+	border-style         : solid;
+	color                : v-bind('textColor');
 }
 
 .position-top {
-	bottom           : calc(100% + 12px);
-	left             : 50%;
-	transform        : translateX(-50%);
+	bottom               : calc(100% + 12px);
+	left                 : 50%;
+	transform            : translateX(-50%);
 }
 
 .position-bottom {
-	top              : calc(100% + 12px);
-	left             : 50%;
-	transform        : translateX(-50%);
+	top                  : calc(100% + 12px);
+	left                 : 50%;
+	transform            : translateX(-50%);
 }
 
 .position-left {
-	right            : calc(100% + 12px);
-	top              : 50%;
-	transform        : translateY(-50%);
+	right                : calc(100% + 12px);
+	top                  : 50%;
+	transform            : translateY(-50%);
 }
 
 .position-right {
-	left             : calc(100% + 12px);
-	top              : 50%;
-	transform        : translateY(-50%);
+	left                 : calc(100% + 12px);
+	top                  : 50%;
+	transform            : translateY(-50%);
 }
 
 /* Arrow Orientations */
 .position-top .tooltip-arrow {
-	top              : 100%;
-	left             : 50%;
-	transform        : translateX(-50%) translateY(-2px);
+	top                  : 100%;
+	left                 : 50%;
+	transform            : translateX(-50%) translateY(-2px);
 }
 
 .position-bottom .tooltip-arrow {
-	bottom           : 100%;
-	left             : 50%;
-	transform        : translateX(-50%) translateY(2px) rotate(180deg);
+	bottom               : 100%;
+	left                 : 50%;
+	transform            : translateX(-50%) translateY(2px) rotate(180deg);
 }
 
 .position-left .tooltip-arrow {
-	left             : 100%;
-	top              : 50%;
-	transform        : translateY(-50%) translateX(-2px) rotate(-90deg);
+	left                 : 100%;
+	top                  : 50%;
+	transform            : translateY(-50%) translateX(-2px) rotate(-90deg);
 }
 
 .position-right .tooltip-arrow {
-	right            : 100%;
-	top              : 50%;
-	transform        : translateY(-50%) translateX(2px) rotate(90deg);
+	right                : 100%;
+	top                  : 50%;
+	transform            : translateY(-50%) translateX(2px) rotate(90deg);
 }
 
 .tooltip-arrow {
-	position         : absolute;
-	width            : 14px;
-	height           : auto;
-	pointer-events   : none;
+	position             : absolute;
+	width                : 14px;
+	height               : auto;
+	pointer-events       : none;
 }
 
 .tooltip-fade-enter-active,
 .tooltip-fade-leave-active {
-	transition       : opacity var(--transition-duration) ease, transform var(--transition-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transition           : opacity calc(v-bind('duration') * 1ms) ease, 
+	                       transform calc(v-bind('duration') * 1ms) cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .position-top.tooltip-fade-enter-from,
 .position-top.tooltip-fade-leave-to {
-	opacity          : 0;
-	transform        : translateX(-50%) translateY(8px) scale(0.95);
+	opacity              : 0;
+	transform            : translateX(-50%) translateY(8px) scale(0.95);
 }
 
 .position-bottom.tooltip-fade-enter-from,
 .position-bottom.tooltip-fade-leave-to {
-	opacity          : 0;
-	transform        : translateX(-50%) translateY(-8px) scale(0.95);
+	opacity              : 0;
+	transform            : translateX(-50%) translateY(-8px) scale(0.95);
 }
 
 .position-left.tooltip-fade-enter-from,
 .position-left.tooltip-fade-leave-to {
-	opacity          : 0;
-	transform        : translateY(-50%) translateX(8px) scale(0.95);
+	opacity              : 0;
+	transform            : translateY(-50%) translateX(8px) scale(0.95);
 }
 
 .position-right.tooltip-fade-enter-from,
 .position-right.tooltip-fade-leave-to {
-	opacity          : 0;
-	transform        : translateY(-50%) translateX(-8px) scale(0.95);
+	opacity              : 0;
+	transform            : translateY(-50%) translateX(-8px) scale(0.95);
 }
 
 @media (max-width: 768px) {
 	.custom-tooltip {
-		font-size     : 12px;
-		padding       : 6px 12px;
-		border-radius : 8px;
+		font-size        : 12px;
+		padding          : 6px 12px;
+		border-radius    : 8px;
 	}
 
 	.tooltip-arrow {
-		width         : 10px;
+		width            : 10px;
 	}
 }
 </style>

@@ -52,6 +52,12 @@
 </template>
 
 <script setup>
+/**
+  * @file        cast_list.vue
+  * @brief       Displays a showcase list or tabbed view of characters with portrait navigation and transition support.
+  * @displayName Cast List
+*/
+
 import { ref, onMounted, computed } from 'vue'
 import { useI18n }    from '@/composables/useI18n'
 import CharacterCard  from './character_card.vue'
@@ -71,11 +77,16 @@ import imgTeddy           from '@/assets/img/characters/teddy.png'
 import svgTriangle from '@/assets/svg/triangle-right-12-filled.svg'
 
 const props = defineProps({
+  /** 
+    * Layout display mode for characters.
+    * @values list, tab
+  */
   viewType: { 
     type: String, 
     default: 'list', 
     validator: (val) => ['list', 'tab'].includes(val) 
   },
+  /** Animation transition type used when switching tabs. */
   transitionType: { 
     type: String, 
     default: 'fade'
@@ -85,13 +96,25 @@ const props = defineProps({
 const { t } = useI18n()
 const activeIndex = ref(0)
 
+/**
+  * Computes the active transition effect name.
+  * @private
+*/
 const computedTransition = computed(() => {
   const mode = props.transitionType;
   return mode === 'immediate' ? 'immediate' : 'fade';
 });
 
+/**
+  * Formats the triangle SVG path for CSS mask usage.
+  * @private
+*/
 const triangleUrl = computed(() => `url(${svgTriangle})`)
 
+/**
+  * Reactive collection of game characters with localized text and assets.
+  * @private
+*/
 const characters = computed(() => [
   {
     name        : t('SITE_HOME_NINTEN_TITLE'),

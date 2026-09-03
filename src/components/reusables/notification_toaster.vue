@@ -18,9 +18,23 @@
             <p class="toaster-message">{{ message }}</p>
           </slot>
         </div>
-        <button v-if="dismissible" class="toaster-dismiss-btn" @click="closeToast" aria-label="Close Notification">
-          &times;
-        </button>
+        <div v-if="dismissible" class="toaster-dismiss-wrapper">
+          <CustomButton
+            class          = "toaster-dismiss-btn"
+            text           = ""
+            iconSize       = "1.25rem"
+            width          = "28px"
+            height         = "28px"
+            iconColor      = "var(--toaster-text-color)"
+            bgColor        = "transparent"
+            hoverIconColor = "var(--toaster-text-color)"
+            hoverBgColor   = "rgba(0, 0, 0, 0.05)"
+            pressAnimation = "scale"
+            :iconSrc       = "img_close"
+            @click         = "closeToast"
+            aria-label     = "Close Notification"
+          />
+        </div>
       </div>
       <div v-if="showProgressBar" class="toaster-progress-bar">
         <div class="toaster-progress-fill"></div>
@@ -30,39 +44,55 @@
 </template>
 
 <script setup>
+/**
+  * @file        notification_toaster.vue
+  * @brief       A customizable toast notification component supporting multiple positions, types, auto-dismiss timers, progress bars, and custom buttons.
+  * @displayName Notification Toaster
+*/
+
 import { computed, watch } from 'vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
+import img_close from '@/assets/svg/close-svgrepo-com.svg'
 
 const props = defineProps({
+  /** Controls the visibility state of the notification toast (v-model). */
   modelValue: {
     type    : Boolean,
     required: true
   },
+  /** Text message to display inside the notification. */
   message: {
     type    : String,
     default : 'Default toaster notification!'
   },
+  /** Source path or URL for the notification icon. */
   icon: {
     type    : String,
     default : '@/assets/img/characters/ninten_head_sprite.png'
   },
+  /** Screen position where the toaster appears. */
   position: {
     type    : String,
     default : 'top-right',
     validator: (val) => ['top-right', 'top-left', 'top-center', 'bottom-right', 'bottom-left', 'bottom-center'].includes(val)
   },
+  /** Visual type/theme of the notification. */
   type: {
     type    : String,
     default : 'info',
     validator: (val) => ['info', 'success', 'warning', 'error'].includes(val)
   },
+  /** Duration in milliseconds before the toast automatically dismisses. */
   duration: {
     type    : Number,
     default : 4000
   },
+  /** Controls whether the animated countdown progress bar is visible. */
   showProgressBar: {
     type    : Boolean,
     default : true
   },
+  /** Controls whether the manual close/dismiss button is displayed. */
   dismissible: {
     type    : Boolean,
     default : true
@@ -71,6 +101,10 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'close'])
 
+/**
+  * Computed wrapper for v-model visibility binding.
+  * @private
+  */
 const visible = computed({
   get: () => props.modelValue,
   set: (val) => emit('update:modelValue', val)
@@ -78,6 +112,10 @@ const visible = computed({
 
 let timer = null
 
+/**
+  * Starts the auto-dismiss timer based on the configured duration.
+  * @private
+  */
 const startTimer = () => {
   if (props.duration > 0) {
     clearTimeout(timer)
@@ -87,6 +125,10 @@ const startTimer = () => {
   }
 }
 
+/**
+  * Closes the toast notification and triggers cleanup events.
+  * @private
+  */
 const closeToast = () => {
   clearTimeout(timer)
   visible.value = false
@@ -99,9 +141,22 @@ watch(() => props.modelValue, (newVal) => {
   }
 }, { immediate: true })
 
+/**
+  * Computes the CSS position class name.
+  * @private
+  */
 const positionClass = computed(() => `toaster-${props.position}`)
+
+/**
+  * Computes the CSS theme type class name.
+  * @private
+  */
 const typeClass     = computed(() => `toaster-${props.type}`)
 
+/**
+  * Computes the transition animation name based on screen position.
+  * @private
+  */
 const transitionName = computed(() => {
   if (props.position.includes('top')) return 'slide-down'
   return 'slide-up'
@@ -114,8 +169,8 @@ const transitionName = computed(() => {
   z-index               : 9999;
   display               : flex;
   flex-direction        : column;
-  background            : var(--toaster-bg-main, #ffffff);
-  border                : 2px solid var(--toaster-border-color, #000000);
+  background            : var(--toaster-bg-main);
+  border                : 2px solid var(--toaster-border-color);
   border-radius         : 10px;
   padding               : 12px 16px;
   max-width             : 380px;
@@ -154,29 +209,23 @@ const transitionName = computed(() => {
 
 .toaster-message {
   margin                : 0;
-  font-size             : var(--toaster-font-size, 0.85rem);
+  font-size             : var(--toaster-font-size);
   font-weight           : 600;
-  color                 : var(--toaster-text-color, #000000);
+  color                 : var(--toaster-text-color);
   word-break            : break-word;
 }
 
-.toaster-dismiss-btn {
-  background            : transparent;
-  border                : none;
-  font-size             : 1.25rem;
-  font-weight           : 700;
-  line-height           : 1;
-  cursor                : pointer;
-  color                 : var(--toaster-text-color, #000000);
-  opacity               : 0.6;
-  padding               : 0;
-  margin-left           : 4px;
+.toaster-dismiss-wrapper {
+  display               : flex;
+  align-items           : center;
+  justify-content       : center;
   flex-shrink           : 0;
-  transition            : opacity 0.15s ease;
+  margin-left           : 4px;
 }
 
-.toaster-dismiss-btn:hover {
-  opacity               : 1;
+.toaster-dismiss-btn {
+  border                : none !important;
+  border-radius         : 6px !important;
 }
 
 .toaster-progress-bar {
@@ -185,13 +234,13 @@ const transitionName = computed(() => {
   left                  : 0;
   width                 : 100%;
   height                : 3px;
-  background            : var(--toaster-progress-bg, rgba(0, 0, 0, 0.1));
+  background            : var(--toaster-progress-bg);
 }
 
 .toaster-progress-fill {
   height                : 100%;
   width                 : 100%;
-  background            : var(--toaster-accent, #ff6b6b);
+  background            : var(--toaster-accent);
   animation             : progress-shrink linear var(--toaster-duration) forwards;
 }
 
@@ -233,30 +282,30 @@ const transitionName = computed(() => {
 }
 
 .toaster-success {
-  background            : var(--toaster-success-bg, #e8f8f5);
-  border-color          : var(--toaster-success-border, #27ae60);
+  background            : var(--toaster-success-bg);
+  border-color          : var(--toaster-success-border);
 }
 
 .toaster-success .toaster-progress-fill {
-  background            : var(--toaster-success-border, #27ae60);
+  background            : var(--toaster-success-border);
 }
 
 .toaster-warning {
-  background            : var(--toaster-warning-bg, #fef9e7);
-  border-color          : var(--toaster-warning-border, #f39c12);
+  background            : var(--toaster-warning-bg);
+  border-color          : var(--toaster-warning-border);
 }
 
 .toaster-warning .toaster-progress-fill {
-  background            : var(--toaster-warning-border, #f39c12);
+  background            : var(--toaster-warning-border);
 }
 
 .toaster-error {
-  background            : var(--toaster-error-bg, #f5b7b1);
-  border-color          : var(--toaster-error-border, #c0392b);
+  background            : var(--toaster-error-bg);
+  border-color          : var(--toaster-error-border);
 }
 
 .toaster-error .toaster-progress-fill {
-  background            : var(--toaster-error-border, #c0392b);
+  background            : var(--toaster-error-border);
 }
 
 .slide-down-enter-active,

@@ -73,17 +73,17 @@
 </template>
 
 <script setup>
+/**
+  * @file media_modal.vue
+  * @brief Media modal component for displaying enlarged images or videos with custom navigation buttons.
+  * @displayName Media Modal
+*/
+
 import CustomButton from './custom_button.vue'
 
 import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 import img_close        from '@/assets/svg/close-svgrepo-com.svg'
-
-/**
-  * Media modal component for displaying enlarged images or videos with custom navigation buttons.
-  * 
-  * @displayName Media Modal 2
-*/
 
 defineProps({
   /** Controls whether the modal overlay is active and visible. */

@@ -119,14 +119,14 @@
 </template>
 
 <script setup>
+/**
+ * @file content_section.vue
+ * @brief Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts.
+ * @displayName Content Section
+ */
+
 import { ref, computed, watch } from 'vue'
 import MediaModal from './media_modal.vue'
-
-/**
-  * Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts.
-  * 
-  * @displayName Content Section
-*/
 
 const props = defineProps({
   /** Section heading text content. */
@@ -271,9 +271,7 @@ const props = defineProps({
 const isModalOpen = ref(false)
 const hasError = ref(false)
 
-/**
-  * Filters and formats raw input text into a valid array of paragraph string blocks.
-*/
+/** Filters and formats raw input text into a valid array of paragraph string blocks. */
 const textParagraphs = computed(() => {
   const ParagraphBuilder = {
     normalizeText(rawText) {
@@ -287,9 +285,7 @@ const textParagraphs = computed(() => {
   return ParagraphBuilder.normalizeText(props.text)
 })
 
-/**
-  * Evaluates whether the header title should render based on availability of text and heading properties.
-*/
+/** Evaluates whether the header title should render based on availability of text and heading properties. */
 const shouldShowHeader = computed(() => {
   const HeaderBuilder = {
     evaluate(headingText, paragraphsCount) {
@@ -304,9 +300,7 @@ watch(() => props.mediaSrc, () => {
   hasError.value = false
 })
 
-/**
-  * Intercepts clicks to trigger and display the image expansion modal when valid.
-*/
+/** Intercepts clicks to trigger and display the image expansion modal when valid. */
 const openImageModal = () => {
   const ModalOpenBuilder = {
     canOpen(type, src, openable, errorState) {
@@ -320,9 +314,7 @@ const openImageModal = () => {
   }
 }
 
-/**
-  * Closes the image modal view.
-*/
+/** Closes the image modal view. */
 const closeImageModal = () => {
   const ModalCloseBuilder = {
     reset() {

@@ -14,6 +14,12 @@
 </template>
 
 <script setup>
+/**
+  * @file        CreditsView.vue
+  * @brief       Credits view component use Credits Section component to display credits for the selected act.
+  * @displayName Credits View
+*/
+
 import { ref, computed, onMounted, onUnmounted} from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
@@ -22,8 +28,16 @@ import CustomDropdown from '@/components/reusables/custom_dropdown.vue'
 
 const { t } = useI18n()
 
+/**
+  * Tracks the currently selected act identifier for the credits filter.
+  * @private
+  */
 const currentAct = ref('all')
 
+/**
+  * Computes the list of available act options for the dropdown selector.
+  * @private
+  */
 const availableActs = computed(() => [
   { id: 'all', label: t('SITE_CREDITS_ALL_LABEL') },
   { id: '1',   label: t('SITE_CREDITS_ACT_LABEL') + ' 1' },

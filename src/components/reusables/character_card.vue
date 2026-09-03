@@ -8,15 +8,15 @@
   >
     <div 
       class="image-wrapper"
-      :class="imageShapeClass"
       :style="{ 
-        backgroundColor: imageBgColor, 
-        width     : imageSize, 
-        height    : imageSize,
-        minWidth  : imageSize,
-        minHeight : imageSize,
-        maxWidth  : imageSize,
-        maxHeight : imageSize,
+        backgroundColor : imageBgColor, 
+        width           : imageSize, 
+        height          : imageSize,
+        minWidth        : imageSize,
+        minHeight       : imageSize,
+        maxWidth        : imageSize,
+        maxHeight       : imageSize,
+        borderRadius    : imageShape === 'circle' ? '50%' : '20px'
       }"
     >
       <img 
@@ -40,23 +40,67 @@
 </template>
 
 <script setup>
+/**
+ * @file character_card.vue
+ * @brief Character card component supporting image customization, description paragraphs, and flexible orientations.
+ * @displayName Character Card
+ */
+
 import { computed } from 'vue';
 
 const props = defineProps({
-  name        : { type: String, required: true },
-  description : { type: [String, Array], required: true },
-  image       : { type: String, required: true },
-  isReversed  : { type: Boolean, default: false },
-  orientation : { type: String, default: 'horizontal', validator: (val) => ['horizontal', 'vertical'].includes(val) },
-  imageShape  : { type: String, default: 'circle', validator: (val) => ['circle', 'square'].includes(val) },
-  imageBgColor: { type: String, default: 'transparent' },
-  imageSize   : { type: String, default: '340px' },
-  imageScale  : { type: [Number, String], default: 1},
-  imagePadding: { type: String, default: "0 0 70px 0"},
-});
-
-const imageShapeClass = computed(() => {
-  return `shape-${props.imageShape}`;
+  /** Character name text content. */
+  name: {
+    type    : String,
+    required: true
+  },
+  /** Description text string or an array of description paragraphs. */
+  description: {
+    type    : [String, Array],
+    required: true
+  },
+  /** Source URL for the character image asset. */
+  image: {
+    type    : String,
+    required: true
+  },
+  /** Controls whether the card layout direction is reversed. */
+  isReversed: {
+    type    : Boolean,
+    default : false
+  },
+  /** Layout orientation of the character card (horizontal, vertical). */
+  orientation: {
+    type    : String,
+    default : 'horizontal',
+    validator: (val) => ['horizontal', 'vertical'].includes(val)
+  },
+  /** Shape style of the character image wrapper (circle, square). */
+  imageShape: {
+    type    : String,
+    default : 'circle',
+    validator: (val) => ['circle', 'square'].includes(val)
+  },
+  /** Background color for the image wrapper container. */
+  imageBgColor: {
+    type    : String,
+    default : 'transparent'
+  },
+  /** Custom CSS size width and height for the image wrapper. */
+  imageSize: {
+    type    : String,
+    default : '340px'
+  },
+  /** Scale factor transformation applied to the character image. */
+  imageScale: {
+    type    : [Number, String],
+    default : 1
+  },
+  /** Inner padding spacing applied to the character image. */
+  imagePadding: {
+    type    : String,
+    default : "0 0 70px 0"
+  },
 });
 
 const descriptionParagraphs = computed(() => {
@@ -97,17 +141,7 @@ const descriptionParagraphs = computed(() => {
   justify-content: center;
   align-items    : center;
   overflow       : visible; 
-}
-
-.image-wrapper.shape-circle {
   aspect-ratio   : 1 / 1;
-  border-radius  : 50%;
-  margin         : 0 auto;
-}
-
-.image-wrapper.shape-square {
-  aspect-ratio   : 1 / 1;
-  border-radius  : 20px;
   margin         : 0 auto;
 }
 
@@ -141,28 +175,28 @@ const descriptionParagraphs = computed(() => {
 }
 
 .character-info h3 {
-  color          : var(--character-card-title-color, var(--color-default-text-color));
-  font-family    : var(--character-card-title-font, var(--font-h3, var(--font-h1)));
-  font-size      : var(--character-card-title-size, var(--font-h3-size, var(--font-h1-size)));
-  font-weight    : var(--character-card-title-weight, 600);
+  color          : var(--character-card-title-color);
+  font-family    : var(--character-card-title-font);
+  font-size      : var(--character-card-title-size);
+  font-weight    : var(--character-card-title-weight);
   margin         : 0;
   text-align     : center;
 }
 
 .separator-line {
   width          : 100%;
-  height         : var(--character-card-separator-height, 3px);
-  background     : var(--character-card-separator-color, #ffffff);
+  height         : var(--character-card-separator-height);
+  background     : var(--character-card-separator-color);
   border-radius  : 2px;
   margin-bottom  : 3px;
 }
 
 .character-info p {
-  color          : var(--character-card-body-color, var(--color-default-text-color));
-  font-family    : var(--character-card-body-font, var(--font-p, var(--font-body-family)));
-  font-size      : var(--character-card-body-size, var(--font-p-size));
-  font-weight    : var(--character-card-body-weight, 500);
-  line-height    : var(--character-card-body-line-height, 1.5);
+  color          : var(--character-card-body-color);
+  font-family    : var(--character-card-body-font);
+  font-size      : var(--character-card-body-size);
+  font-weight    : var(--character-card-body-weight);
+  line-height    : var(--character-card-body-line-height);
   margin         : 0;
   text-align     : left;
   width          : 100%;
@@ -194,7 +228,7 @@ const descriptionParagraphs = computed(() => {
   }
 
   .character-info h3 {
-    font-size      : var(--character-card-title-size-mobile, var(--font-mobile-h3-size, var(--character-card-title-size)));
+    font-size      : var(--character-card-title-size-mobile);
   }
 
   .character-info p {

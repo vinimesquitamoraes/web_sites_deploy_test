@@ -1,50 +1,56 @@
 <template>
-  <div class="main-content">
+    <div class="main-content">
 
-    <ContentSection 
-        :heading    ="t('SITE_DOWNLOAD_TITLE')"
-        :text       ="t('SITE_DOWNLOAD_P1')" 
-        mediaType   ="text" 
-    />
-    
-    <ContentSection 
-        :text       ="t('SITE_DOWNLOAD_P2')" 
-        mediaType   ="text" 
-    />
-    
-    <div class="platforms-grid">
-        <PlatformButton platform="windows" size="100px" :clickable="false"/>
-        <PlatformButton platform="linux"   size="100px" :clickable="false"/>
-        <PlatformButton platform="macos"   size="100px" :clickable="false"/>
-    </div>
+        <ContentSection 
+            :heading    ="t('SITE_DOWNLOAD_TITLE')"
+            :text       ="t('SITE_DOWNLOAD_P1')" 
+            mediaType   ="text" 
+        />
 
-    <div class="download-action-group">
-        <h2 class="itchio-about-heading">{{ t('SITE_ABOUT_DL_ITCHIO') }}</h2>
-        <div class="button-container">
-            <CustomButton 
-                text            ="" 
-                iconSize        ="100%" 
-                width           ="280px"
-                height          ="100px"
-                iconColor       =var(--color-itchio-button-icon)
-                bgColor         =var(--color-itchio-button-bg)
-                hoverIconColor  =var(--color-itchio-button-icon-hover)
-                hoverBgColor    =var(--color-itchio-button-bg-hover)
-                :iconSrc        ="iconItchio" 
-                externalUrl="https://mother-encore.itch.io/mother-encore"
-            />
+        <ContentSection 
+            :text       ="t('SITE_DOWNLOAD_P2')" 
+            mediaType   ="text" 
+        />
+
+        <div class="platforms-grid">
+            <PlatformButton platform="windows" size="100px" :clickable="false"/>
+            <PlatformButton platform="linux"   size="100px" :clickable="false"/>
+            <PlatformButton platform="macos"   size="100px" :clickable="false"/>
         </div>
-    </div>
 
-    <div class="page-character-container">
-        <img :src="img_lloydDad" alt="Lloyd Dad" class="page-character" />
-    </div>
-    <Requirements />
+        <div class="download-action-group">
+            <h2 class="itchio-about-heading">{{ t('SITE_ABOUT_DL_ITCHIO') }}</h2>
+            <div class="button-container">
+                <CustomButton 
+                    text            ="" 
+                    iconSize        ="100%" 
+                    width           ="280px"
+                    height          ="100px"
+                    iconColor       =var(--color-itchio-button-icon)
+                    bgColor         =var(--color-itchio-button-bg)
+                    hoverIconColor  =var(--color-itchio-button-icon-hover)
+                    hoverBgColor    =var(--color-itchio-button-bg-hover)
+                    :iconSrc        ="iconItchio" 
+                    externalUrl="https://mother-encore.itch.io/mother-encore"
+                />
+            </div>
+        </div>
 
-  </div>
+        <div class="page-character-container">
+            <img :src="img_lloydDad" alt="Lloyd Dad" class="page-character" />
+        </div>
+        <Requirements />
+
+    </div>
 </template>
 
 <script setup>
+/**
+    * @file        DownloadView.vue
+    * @brief       The download view page displaying download info text, unclickable OS platform icons, Itch.io action button, character illustration, and system requirements.
+    * @displayName Download View
+*/
+
 import { ref } from 'vue'
 import { useI18n } from '@/composables/useI18n'
 import ContentSection   from '@/components/reusables/content_section.vue'
@@ -81,7 +87,7 @@ const { t } = useI18n()
     text-align        : center;
     font-family       : var(--font-h2);
     font-size         : var(--font-h2-size);
-    color             : var(--color-primary);
+    color             : 'var(--color-primary)';
     margin            : 0;
     box-sizing        : border-box;
 }

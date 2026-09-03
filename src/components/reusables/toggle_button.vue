@@ -14,18 +14,16 @@
         readonly
       />
       
-      <span class="slider" :style="sliderStyles">
-        <span class="handle" :style="handleStyles">
+      <span class="slider">
+        <span class="handle">
           <span 
             v-if="processedIcon && iconColor" 
             class="switch-icon-masked" 
-            :style="iconStyles"
           ></span>
           <img 
             v-else-if="processedIcon" 
             :src="processedIcon" 
             class="switch-icon" 
-            :style="{ width: `${iconSize}px`, height: `${iconSize}px` }"
             alt="" 
           />
         </span>
@@ -35,53 +33,71 @@
 </template>
 
 <script setup>
+/**
+  * @file        toggle_button.vue
+  * @brief       A customizable switch toggle component supporting active/inactive icons, masked colorization, and custom dimensions.
+  * @displayName Toggle Button
+*/
+
 import { computed, ref } from 'vue'
 
 const props = defineProps({
+  /** Binds the switch checked state externally via v-model. */
   modelValue: {
     type    : Boolean,
     default : false
   },
+  /** Default source URL or SVG string for the icon. */
   iconSrc: {
     type    : String,
     default : '' 
   },
+  /** Icon source used specifically when the toggle is active. */
   activeIconSrc: {
     type    : String,
     default : ''
   },
+  /** Icon source used specifically when the toggle is inactive. */
   inactiveIconSrc: {
     type    : String,
     default : ''
   },
+  /** Width and height dimension for the icon. */
   iconSize: {
     type    : [Number, String],
     default : 24 
   },
+  /** Fill color for CSS mask-based switch icons. */
   iconColor: {
     type    : String,
     default : '#ffffff'
   },
+  /** Background color of the internal draggable/sliding handle. */
   handleBgColor: {
     type    : String,
     default : 'var(--color-black)'
   },
+  /** Width dimension applied to the slider track. */
   width: {
     type    : [Number, String],
     default : 80
   },
+  /** Height dimension applied to the slider track. */
   height: {
     type    : [Number, String],
     default : 44
   },
+  /** Background color of the slider in default inactive state. */
   bgColor: {
     type    : String,
     default : 'var(--color-custom-button-background)'
   },
+  /** Background color of the slider when hovered. */
   hoverBgColor: {
     type    : String,
     default : 'var(--color-custom-button-hover)'
   },
+  /** Background color of the slider when active. */
   activeBgColor: {
     type    : String,
     default : 'var(--color-hover)'
@@ -91,6 +107,35 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change'])
 const isHovered = ref(false)
 
+/** Helper to format value (number to px string). */
+const formatValue = (val) => (typeof val === 'number' ? `${val}px` : val)
+
+/** Computed width style for the slider track. */
+const cssWidth = computed(() => formatValue(props.width))
+
+/** Computed height style for the slider track. */
+const cssHeight = computed(() => formatValue(props.height))
+
+/** Computed dynamic background color for the slider depending on state. */
+const cssSliderBg = computed(() => {
+  if (props.modelValue) return props.activeBgColor
+  if (isHovered.value) return props.hoverBgColor
+  return props.bgColor
+})
+
+/** Computed size for the handle based on slider height. */
+const handleSizeValue = computed(() => {
+  const h = typeof props.height === 'number' ? props.height : parseInt(props.height) || 44
+  return h - 12
+})
+
+/** Computed width/height style for the handle element. */
+const cssHandleSize = computed(() => `${handleSizeValue.value}px`)
+
+/** Computed size style for the icon element. */
+const cssIconSize = computed(() => formatValue(props.iconSize))
+
+/** Computed raw icon string depending on active/inactive states. * @private */
 const rawIcon = computed(() => {
   if (props.modelValue) {
     return props.activeIconSrc || props.iconSrc || props.inactiveIconSrc || ''
@@ -98,6 +143,7 @@ const rawIcon = computed(() => {
   return props.inactiveIconSrc || props.iconSrc || props.activeIconSrc || ''
 })
 
+/** Processes raw SVG strings into data URIs or passes through image paths. * @private */
 const processedIcon = computed(() => {
   const icon = rawIcon.value
   if (!icon) return ''
@@ -108,42 +154,13 @@ const processedIcon = computed(() => {
   return icon
 })
 
-const sliderStyles = computed(() => {
-  let bg = props.bgColor
-  if (props.modelValue) {
-    bg = props.activeBgColor
-  } else if (isHovered.value) {
-    bg = props.hoverBgColor
-  }
+/** Computed CSS mask URL for SVG icons. * @private */
+const cssMaskImage = computed(() => `url("${processedIcon.value}")`)
 
-  return {
-    backgroundColor: bg,
-    width: typeof props.width === 'number' ? `${props.width}px` : props.width,
-    height: typeof props.height === 'number' ? `${props.height}px` : props.height
-  }
-})
-
-const handleStyles = computed(() => {
-  const h = typeof props.height === 'number' ? props.height : parseInt(props.height) || 44
-  const size = h - 12
-  return {
-    width: `${size}px`,
-    height: `${size}px`,
-    backgroundColor: props.handleBgColor
-  }
-})
-
-const iconStyles = computed(() => {
-  const size = typeof props.iconSize === 'number' ? `${props.iconSize}px` : props.iconSize
-  return {
-    width: size,
-    height: size,
-    backgroundColor: props.iconColor,
-    maskImage: `url("${processedIcon.value}")`,
-    WebkitMaskImage: `url("${processedIcon.value}")`
-  }
-})
-
+/** 
+  * Handles the click action to toggle states and emit events.
+  * @private
+*/
 const handleClick = (event) => {
   event.preventDefault()
   const nextValue = !props.modelValue
@@ -177,6 +194,11 @@ const handleClick = (event) => {
   box-sizing                  : border-box;
   border                      : 2px solid #000000;
   border-radius               : var(--default-border-radius);
+
+  width                       : v-bind(cssWidth);
+  height                      : v-bind(cssHeight);
+  background-color            : v-bind(cssSliderBg);
+
   transition                  : background-color 0.4s ease, 
                                 color 0.4s ease;
 }
@@ -190,13 +212,17 @@ const handleClick = (event) => {
   justify-content             : center;
   box-sizing                  : border-box;
   
+  width                       : v-bind(cssHandleSize);
+  height                      : v-bind(cssHandleSize);
+  background-color            : v-bind('props.handleBgColor');
+
   transition                  : transform 0.4s cubic-bezier(0.1, 1, 0.2, 1), 
                                 background-color 0.4s ease;
 }
 
 .custom-switch.is-active .slider,
 label.custom-switch.is-active span.slider {
-  background-color            : var(--color-hover) !important;
+  background-color            : v-bind('props.activeBgColor') !important;
 }
 
 .custom-switch.is-active .handle {
@@ -212,12 +238,19 @@ label.custom-switch.is-active span.slider {
 }
 
 .switch-icon {
+  width                       : v-bind(cssIconSize);
+  height                      : v-bind(cssIconSize);
   object-fit                  : contain;
   pointer-events              : none;
 }
 
 .switch-icon-masked {
   display                     : inline-block;
+  width                       : v-bind(cssIconSize);
+  height                      : v-bind(cssIconSize);
+  background-color            : v-bind('props.iconColor');
+  mask-image                  : v-bind(cssMaskImage);
+  -webkit-mask-image          : v-bind(cssMaskImage);
   mask-repeat                 : no-repeat;
   -webkit-mask-repeat         : no-repeat;
   mask-position               : center;

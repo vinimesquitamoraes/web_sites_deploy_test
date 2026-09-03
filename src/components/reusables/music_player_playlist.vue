@@ -66,6 +66,12 @@
 </template>
 
 <script setup>
+/**
+  * @file        music_player_playlist.vue
+  * @brief       Music player playlist component displaying paginated track listings, current track states, loading indicators, and pagination navigation controls.
+  * @displayName Music Player Playlist
+*/
+
 import { useI18n }  from '@/composables/useI18n'
 
 import SocialMediaButton from '@/components/reusables/social_media_button.vue'
@@ -75,15 +81,40 @@ import previous_icon from '@/assets/svg/triangle-left-12-filled.svg'
 import next_icon     from '@/assets/svg/triangle-right-12-filled.svg'
 
 defineProps({
-  isLoadingTracks   : Boolean,
-  paginatedTracks   : Array,
-  currentTrackIndex : Number,
-  currentPage       : Number,
-  totalPages        : Number,
-  getGlobalIndex    : Function,
-  pageSize          : {
-    type            : Number,
-    default         : 7
+  /** Indicates whether the track list is currently in a loading state. */
+  isLoadingTracks: {
+    type: Boolean,
+    default: false
+  },
+  /** Array of tracks to display for the current page view. */
+  paginatedTracks: {
+    type: Array,
+    default: () => []
+  },
+  /** Index of the track that is currently playing globally. */
+  currentTrackIndex: {
+    type: Number,
+    default: -1
+  },
+  /** The current active pagination page number. */
+  currentPage: {
+    type: Number,
+    default: 1
+  },
+  /** Total number of available pages. */
+  totalPages: {
+    type: Number,
+    default: 1
+  },
+  /** Helper function to calculate the global track index from a local page index. */
+  getGlobalIndex: {
+    type: Function,
+    required: true
+  },
+  /** Number of items to display per page, controlling container height dynamically. */
+  pageSize: {
+    type: Number,
+    default: 7
   }
 })
 

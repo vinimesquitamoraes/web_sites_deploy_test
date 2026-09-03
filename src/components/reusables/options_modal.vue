@@ -1,7 +1,7 @@
 <template>
   <Transition name="fade-bounce" appear>
     <div v-if="modelValue" class="modal-backdrop" @click.self="closeModal">
-      <div class="modal-panel" :style="panelStyles">
+      <div class="modal-panel">
         <div class="modal-header">
           <h3 class="modal-title">{{ title }}</h3>
           <CustomButton
@@ -35,6 +35,12 @@
 </template>
 
 <script setup>
+/**
+  * @file        options_modal.vue
+  * @brief       A modal dialog component that manages and persists toggleable options via sessionStorage with cross-tab sync support.
+  * @displayName Options Modal
+*/
+
 import { reactive, computed, onMounted, onUnmounted } from 'vue'
 import ToggleSwitch from './toggle_button.vue'
 import CustomButton from './custom_button.vue'
@@ -42,34 +48,42 @@ import CustomButton from './custom_button.vue'
 import closeIcon from '@/assets/svg/close-svgrepo-com.svg'
 
 const props = defineProps({
+  /** Controls the visibility state of the modal externally via v-model. */
   modelValue: {
     type    : Boolean,
     default : false
   },
+  /** Header title text displayed inside the modal window. */
   title: {
     type    : String,
     default : 'Settings / Options'
   },
+  /** Array of option configuration objects containing keys and labels. */
   options: {
     type    : Array,
     required: true,
   },
+  /** Width dimension configuration for the modal panel. */
   width: {
     type    : [Number, String],
     default : 400
   },
+  /** Background color of the modal panel. */
   bgColor: {
     type    : String,
     default : 'var(--color-custom-button-background)'
   },
+  /** Hover background color configuration (reserved for potential panel states). */
   hoverBgColor: {
     type    : String,
     default : 'var(--color-custom-button-hover)'
   },
+  /** Active background color configuration (reserved for potential panel states). */
   activeBgColor: {
     type    : String,
     default : 'var(--color-hover)'
   },
+  /** Text color applied inside the modal panel. */
   textColor: {
     type    : String,
     default : 'var(--color-custom-button-text)'
@@ -80,6 +94,13 @@ const emit = defineEmits(['update:modelValue', 'change'])
 
 const sessionState = reactive({})
 
+/** Formats width value into pixel string if numeric. * @private */
+const widthVal = computed(() => {
+  const w = props.width
+  return typeof w === 'number' ? `${w}px` : w
+})
+
+/** Synchronizes reactive session state with current sessionStorage values. * @private */
 const syncSessionState = () => {
   props.options.forEach(opt => {
     sessionState[opt.key] = sessionStorage.getItem(opt.key) === 'true'
@@ -88,17 +109,10 @@ const syncSessionState = () => {
 
 syncSessionState()
 
-const panelStyles = computed(() => {
-  const w = props.width
-  const widthVal = typeof w === 'number' ? `${w}px` : w
-  return {
-    width           : widthVal,
-    maxWidth        : 'calc(100vw - 2rem)',
-    backgroundColor : props.bgColor,
-    color           : props.textColor
-  }
-})
-
+/** 
+  * Updates option state, persists to sessionStorage, dispatches update events, and emits changes.
+  * @private
+*/
 const toggleOption = (key, nextValue) => {
   sessionState[key] = nextValue
   sessionStorage.setItem(key, nextValue ? 'true' : 'false')
@@ -108,6 +122,7 @@ const toggleOption = (key, nextValue) => {
   emit('change', { key, value: nextValue, allState: sessionState })
 }
 
+/** Closes the modal by updating v-model state. * @private */
 const closeModal = () => {
   emit('update:modelValue', false)
 }
@@ -147,6 +162,11 @@ onUnmounted(() => {
   box-sizing                  : border-box;
   overflow                    : hidden;
   max-height                  : calc(100vh - 2rem);
+
+  width                       : v-bind(widthVal);
+  max-width                   : calc(100vw - 2rem);
+  background-color            : v-bind('props.bgColor');
+  color                       : v-bind('props.textColor');
 }
 
 .modal-header {

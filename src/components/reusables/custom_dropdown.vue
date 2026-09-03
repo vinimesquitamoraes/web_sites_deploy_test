@@ -23,13 +23,21 @@
 </template>
 
 <script setup>
+/**
+  * @file        custom_dropdown.vue
+  * @brief       A customizable dropdown component supporting v-model selection, click-outside closing behavior, and animated arrow icons.
+  * @displayName Custom Dropdown
+*/
+
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
+  /** Current selected value bound via v-model. */
   modelValue: {
     type: [String, Number],
     required: true
   },
+  /** List of selectable options containing id and label properties. */
   options: {
     type: Array,
     required: true,
@@ -39,19 +47,42 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+/**
+  * Tracks whether the dropdown option list is expanded.
+  * @private
+  */
 const isOpen = ref(false)
+
+/**
+  * Reference to the root dropdown container DOM element.
+  * @private
+  */
 const dropdownRef = ref(null)
 
+/**
+  * Computes the display label for the currently selected option.
+  * @private
+  */
 const selectedLabel = computed(() => {
   const current = props.options.find(opt => opt.id === props.modelValue)
   return current ? current.label : ''
 })
 
+/**
+  * Handles selection of an option and closes the dropdown.
+  * @param {string|number} id The unique identifier of the selected option.
+  * @private
+  */
 const selectOption = (id) => {
   emit('update:modelValue', id)
   isOpen.value = false
 }
 
+/**
+  * Closes the dropdown if a click event occurs outside of the component.
+  * @param {MouseEvent} e The native click event.
+  * @private
+  */
 const closeDropdown = (e) => {
   if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
     isOpen.value = false

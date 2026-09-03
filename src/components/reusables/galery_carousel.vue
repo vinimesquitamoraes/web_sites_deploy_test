@@ -140,6 +140,13 @@
 </template>
 
 <script setup>
+/**
+ * @file galery_carousel.vue
+ * @brief Interactive image gallery component supporting automatic rotation, animated GIFs,
+ *        touch gestures, static frame capturing, and modal view.
+ * @displayName Gallery Carousel
+ */
+
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n }    from '@/composables/useI18n'
 
@@ -149,26 +156,15 @@ import CustomButton from './custom_button.vue'
 import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 
-/**
-  * Interactive image gallery component supporting automatic rotation, animated GIFs,
-  * touch gestures, static frame capturing, and modal view.
-  * 
-  * @displayName Gallery Carousel
-  */
-
 const { t } = useI18n()
 
 const props = defineProps({
-  /**
-    * Time in milliseconds before advancing to the next slide.
-    */
+  /** Time in milliseconds before advancing to the next slide. */
   intervalTime: {
     type: Number,
     default: 1000
   },
-  /**
-    * Object Dictionary esque of imported image/GIF source URLs.
-    */
+  /** Object Dictionary esque of imported image/GIF source URLs. */
   imageModules: {
     type: Object,
     required: true,
@@ -195,12 +191,7 @@ let slideInterval = null
 const touchStartX = ref(0)
 const touchEndX = ref(0)
 
-/**
-  * Captures initial touch horizontal coordinate on touch start.
-  * 
-  * @param {TouchEvent} e Native touch event object.
-  * @private
-  */
+/** Captures initial touch horizontal coordinate on touch start. */
 const handleTouchStart = (e) => {
   const TouchStartBuilder = {
     extractX(event) {
@@ -211,12 +202,7 @@ const handleTouchStart = (e) => {
   touchStartX.value = TouchStartBuilder.extractX(e)
 }
 
-/**
-  * Captures ending touch coordinate on touch end and triggers swipe check.
-  * 
-  * @param {TouchEvent} e Native touch event object.
-  * @private
-  */
+/** Captures ending touch coordinate on touch end and triggers swipe check. */
 const handleTouchEnd = (e) => {
   const TouchEndBuilder = {
     extractX(event) {
@@ -228,11 +214,7 @@ const handleTouchEnd = (e) => {
   handleSwipe()
 }
 
-/**
-  * Evaluates touch displacement against a threshold to determine swipe direction.
-  * 
-  * @private
-  */
+/** Evaluates touch displacement against a threshold to determine swipe direction. */
 const handleSwipe = () => {
   const SwipeActionBuilder = {
     getThreshold() {
@@ -253,12 +235,7 @@ const handleSwipe = () => {
   }
 }
 
-/**
-  * Computed property providing the current media/medias for the modal.
-  * 
-  * @returns {Object} Media payload object.
-  * @private
-  */
+/** Computed property providing the current media/medias for the modal. */
 const currentModalMediaItem = computed(() => {
   const ModalMediaBuilder = {
     build(list, index) {
@@ -274,13 +251,7 @@ const currentModalMediaItem = computed(() => {
   return ModalMediaBuilder.build(slides.value, currentIndex.value)
 })
 
-/**
-  * Renders the first frame of an animated GIF onto a canvas and extracts a static data URL.
-  * 
-  * @param {string} url Target GIF image source URL.
-  * @returns {Promise<string>} Resolved static image data URL or fallback source.
-  * @private
-  */
+/** Renders the first frame of an animated GIF onto a canvas and extracts a static data URL. */
 const captureFirstFrame = (url) => {
   const FrameCaptureBuilder = {
     createPromise(targetUrl) {
@@ -304,11 +275,7 @@ const captureFirstFrame = (url) => {
   return FrameCaptureBuilder.createPromise(url)
 }
 
-/**
-  * Restarts the auto-advance timer.
-  * 
-  * @private
-  */
+/** Restarts the auto-advance timer. */
 const resetTimer = () => {
   const TimerBuilder = {
     clear(interval) {
@@ -329,12 +296,7 @@ const resetTimer = () => {
   }, props.intervalTime)
 }
 
-/**
-  * Advances the carousel forward to the next slide.
-  * 
-  * @param {boolean} [isUserAction=true] Indicates whether the action was triggered manually by a user.
-  * @private
-  */
+/** Advances the carousel forward to the next slide. */
 const nextSlide = (isUserAction = true) => {
   const NextSlideBuilder = {
     calculateIndex(current, length) {
@@ -348,12 +310,7 @@ const nextSlide = (isUserAction = true) => {
   if (isUserAction) resetTimer()
 }
 
-/**
-  * Navigates the carousel backward to the previous slide.
-  * 
-  * @param {boolean} [isUserAction=true] Indicates whether the action was triggered manually by a user.
-  * @private
-  */
+/** Navigates the carousel backward to the previous slide. */
 const prevSlide = (isUserAction = true) => {
   const PrevSlideBuilder = {
     calculateIndex(current, length) {
@@ -367,12 +324,7 @@ const prevSlide = (isUserAction = true) => {
   if (isUserAction) resetTimer()
 }
 
-/**
-  * Explicitly selects a slide index based on user selection or pagination interaction.
-  * 
-  * @param {number} index Target slide index.
-  * @private
-  */
+/** Explicitly selects a slide index based on user selection or pagination interaction. */
 const selectSlide = (index) => {
   const SelectSlideBuilder = {
     resolve(current, target) {
@@ -388,12 +340,7 @@ const selectSlide = (index) => {
   }
 }
 
-/**
-  * Smoothly scrolls the thumbnail strip container horizontally in a given direction.
-  * 
-  * @param {string} direction Scroll direction ('left' or 'right').
-  * @private
-  */
+/** Smoothly scrolls the thumbnail strip container horizontally in a given direction. */
 const scrollThumbnails = (direction) => {
   const ThumbnailScrollBuilder = {
     getAmount(track) {
@@ -414,12 +361,7 @@ const scrollThumbnails = (direction) => {
   resetTimer()
 }
 
-/**
-  * Watches index changes to reset timers and align active thumbnail positions smoothly.
-  * 
-  * @param {number} newIndex Current active slide index.
-  * @private
-  */
+/** Watches index changes to reset timers and align active thumbnail positions smoothly. */
 watch(currentIndex, (newIndex) => {
   resetTimer()
   if (!thumbnailsTrackRef.value) return
@@ -438,12 +380,7 @@ watch(currentIndex, (newIndex) => {
   }
 })
 
-/**
-  * Opens the modal view for a given slide index and locks page scrolling.
-  * 
-  * @param {number} index Target slide index to display in modal.
-  * @private
-  */
+/** Opens the modal view for a given slide index and locks page scrolling. */
 const openModal = (index) => {
   const ModalOpenBuilder = {
     applyBodyStyles() {
@@ -457,11 +394,7 @@ const openModal = (index) => {
   resetTimer()
 }
 
-/**
-  * Closes the modal view and restores page scrolling.
-  * 
-  * @private
-  */
+/** Closes the modal view and restores page scrolling. */
 const closeModal = () => {
   const ModalCloseBuilder = {
     clearBodyStyles() {

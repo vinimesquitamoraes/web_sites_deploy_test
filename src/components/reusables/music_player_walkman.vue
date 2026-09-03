@@ -61,23 +61,59 @@
 </template>
 
 <script setup>
+/**
+  * @file        music_player_walkman.vue
+  * @brief       Walkman-style music player component featuring an LCD screen, track progress scrubber, custom cassette display toggle, and animated tape reels.
+  * @displayName Music Player Walkman
+*/
+
 import { ref, onMounted, onUnmounted } from 'vue'
 import CustomButton from '@/components/reusables/custom_button.vue'
 
 defineProps({
-  isPlaying         : Boolean,
-  showImageTape     : Boolean,
-  currentTrackIndex : Number,
-  currentTime       : Number,
-  duration          : Number,
-  specialTapeImg    : String,
-  formatTime        : Function
+  /** Indicates whether media is currently playing. */
+  isPlaying: {
+    type: Boolean,
+    default: false
+  },
+  /** Controls whether to display the custom image cassette instead of the default shell. */
+  showImageTape: {
+    type: Boolean,
+    default: false
+  },
+  /** Index of the currently playing track. */
+  currentTrackIndex: {
+    type: Number,
+    default: 0
+  },
+  /** Current playback time in seconds. */
+  currentTime: {
+    type: Number,
+    default: 0
+  },
+  /** Total duration of the current track in seconds. */
+  duration: {
+    type: Number,
+    default: 0
+  },
+  /** Image URL for the special custom tape design. */
+  specialTapeImg: {
+    type: String,
+    default: ''
+  },
+  /** Utility function to format timestamp numbers into displayable time strings. */
+  formatTime: {
+    type: Function,
+    required: true
+  }
 })
 
 defineEmits(['toggleTapeStyle', 'seek'])
 
+/** Tracks whether the user has unlocked special tape access in session storage. */
 const hasSpecialTapeAccess = ref(false)
 
+/** Checks session storage for special tape access permissions. */
 const checkSessionAccess = () => {
   hasSpecialTapeAccess.value = sessionStorage.getItem('unlocked_special_tape') === 'true'
 }
@@ -140,8 +176,8 @@ onUnmounted(() => {
 }
 
 .tape-toggle-btn {
-  background-color      : var(--music-player-color-surface);
-  color                 : var(--music-player-color-bg-secondary);
+  --color-custom-button-background: var(--music-player-color-surface);
+  --color-custom-button-text: var(--music-player-color-bg-secondary);
   padding               : 2px 6px;
   font-weight           : 700;
 }

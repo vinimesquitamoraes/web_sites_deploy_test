@@ -1,7 +1,7 @@
 <template>
   <div class="faq-container">
     
-    <h1 class="heading" :style="{ color: headingColor }">{{ t('SITE_FAQ_TITLE') }}</h1>
+    <h1 class="heading">{{ t('SITE_FAQ_TITLE') }}</h1>
 
     <FoldableSection 
       v-for="(section, index) in infoSections" 
@@ -21,24 +21,25 @@
 </template>
 
 <script setup>
+/**
+  * @file        FaqView.vue
+  * @brief       The FAQ view component displaying a list of localized collapsible/foldable questions and answers.
+  * @displayName FAQ View
+*/
+
 import { computed } from 'vue'
 import { useI18n }   from '@/composables/useI18n'
 import FoldableSection  from '@/components/reusables/foldable_section.vue'
 
-defineProps({
-  headingColor: {
-    type: String,
-    default: ''
-  }
-})
-
 const { currentLang, t } = useI18n()
 
+/** Glob import for funny IDK images (retained for layout compatibility). * @private */
 const idkImages = import.meta.glob('/src/assets/img/funny/idk_*.jpeg', {
   eager: true,
   import: 'default'
 })
 
+/** Computes the list of FAQ info sections containing titles and localized text content. * @private */
 const infoSections = computed(() => [
   {
     title         : t('SITE_FAQ_Q1'),
@@ -74,7 +75,6 @@ const infoSections = computed(() => [
     title         : t('SITE_FAQ_Q7'),
     text          : t('SITE_FAQ_A7'),
     content_type  : "text",
-  
   },
   {
     title         : t('SITE_FAQ_Q8'),
@@ -122,9 +122,9 @@ const infoSections = computed(() => [
 <style scoped>
 .heading {
   align-self            : stretch;
-  font-size             : clamp(1.5rem, 4vw, var(--font-h1-size));
+  font-size             : var(--font-h1-size);
   font-family           : var(--font-h1);
-  color                 : var(--color-h1, #1F1F1F);
+  color                 : var(--color-primary);
   text-align            : center;
   font-weight           : 500;
   margin                : 0 0 clamp(10px, 2vw, 15px) 0;

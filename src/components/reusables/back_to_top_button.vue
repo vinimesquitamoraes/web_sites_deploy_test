@@ -14,11 +14,18 @@
 </template>
 
 <script setup>
+/**
+  * @file        back_to_top_button.vue
+  * @brief       A floating back-to-top button component with dynamic footer overlap handling and smooth scrolling behavior.
+  * @displayName Back To Top Button
+*/
+
 import { ref, onMounted, onUnmounted } from 'vue'
 import CustomButton from '@/components/reusables/custom_button.vue'
 import triangleIcon from '@/assets/svg/triangle-up-12-filled.svg'
 
 const props = defineProps({
+  /** Defines how the button behaves when overlapping with the page footer ('center', 'stay', 'hide', 'overlap'). */
   footerBehavior: {
     type    : String,
     default : 'stay',
@@ -26,16 +33,38 @@ const props = defineProps({
   }
 })
 
+/**
+  * Controls button visibility based on vertical scroll offset.
+  * @private
+  */
 const isVisible = ref(false)
+
+/**
+  * Controls button hidden state during footer collision/overlap.
+  * @private
+  */
 const isHidden = ref(false)
+
+/**
+  * Dynamic bottom spacing value in pixels.
+  * @private
+  */
 const buttonBottom = ref(30)
 
+/**
+  * Handles window scroll events to toggle visibility and check footer overlap.
+  * @private
+  */
 const handleScroll = () => {
   const scrollY = window.scrollY
   isVisible.value = scrollY > 300
   handleFooterOverlap()
 }
 
+/**
+  * Computes footer bounding rectangles to adjust position when overlapping the footer.
+  * @private
+  */
 const handleFooterOverlap = () => {
   const footerEl = document.querySelector('.footer-container')
   const baseBottom = window.innerWidth <= 768 ? 20 : 30
@@ -67,6 +96,11 @@ const handleFooterOverlap = () => {
     }
   }
 }
+
+/**
+  * Smoothly scrolls the window back to the top.
+  * @private
+  */
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
