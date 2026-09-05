@@ -1,13 +1,10 @@
 <template>
     <div class="main-content">
-
         <ContentSection 
             :heading    ="t('SITE_DOWNLOAD_TITLE')"
             :text       ="t('SITE_DOWNLOAD_P1')" 
             mediaType   ="text" 
         />
-
-       
 
         <div class="download-action-group">
             <h2 class="itchio-about-heading">{{ t('SITE_ABOUT_DL_ITCHIO') }}</h2>
@@ -48,11 +45,11 @@
         <div class="page-character-container">
             <img :src="img_lloydDad" alt="Lloyd Dad" class="page-character" />
         </div>
+        
         <Requirements />
 
     </div>
 </template>
-
 <script setup>
 /**
     * @file        DownloadView.vue
@@ -115,14 +112,13 @@ const { t } = useI18n()
     width             : 100%;
     display           : flex;
     justify-content   : center;
-    margin-top        : clamp(30px, 6vw, 60px);
-    margin-bottom     : -20px;
+    margin-bottom     : -150px;
     pointer-events    : none;
     box-sizing        : border-box;
 }
 
 .page-character {
-    width             : clamp(140px, 20vw, 240px);
+    width             : 500px;
     height            : auto;
     object-fit        : contain;
     display           : block;

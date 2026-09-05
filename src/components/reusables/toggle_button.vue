@@ -126,11 +126,21 @@ const cssSliderBg = computed(() => {
 /** Computed size for the handle based on slider height. */
 const handleSizeValue = computed(() => {
   const h = typeof props.height === 'number' ? props.height : parseInt(props.height) || 44
-  return h - 12
+  return h - 8
 })
 
 /** Computed width/height style for the handle element. */
 const cssHandleSize = computed(() => `${handleSizeValue.value}px`)
+
+/** Computed translation distance for the active state based on width, handle size, borders, and margins. */
+const activeTranslateX = computed(() => {
+  const w = typeof props.width === 'number' ? props.width : parseInt(props.width) || 80
+  const h = handleSizeValue.value
+  return w - h - 8
+})
+
+/** Formatted translation distance string for CSS binding. */
+const cssTranslateX = computed(() => `${activeTranslateX.value}px`)
 
 /** Computed size style for the icon element. */
 const cssIconSize = computed(() => formatValue(props.iconSize))
@@ -138,9 +148,9 @@ const cssIconSize = computed(() => formatValue(props.iconSize))
 /** Computed raw icon string depending on active/inactive states. * @private */
 const rawIcon = computed(() => {
   if (props.modelValue) {
-    return props.activeIconSrc || props.iconSrc || props.inactiveIconSrc || ''
+    return props.inactiveIconSrc || props.iconSrc || props.activeIconSrc || ''
   }
-  return props.inactiveIconSrc || props.iconSrc || props.activeIconSrc || ''
+  return props.activeIconSrc || props.iconSrc || props.inactiveIconSrc || ''
 })
 
 /** Processes raw SVG strings into data URIs or passes through image paths. * @private */
@@ -205,7 +215,7 @@ const handleClick = (event) => {
  
 .handle {
   position                    : absolute;
-  left                        : 4px;
+  left                        : 2px;
   border-radius               : 50%;
   display                     : flex;
   align-items                 : center;
@@ -226,7 +236,7 @@ label.custom-switch.is-active span.slider {
 }
 
 .custom-switch.is-active .handle {
-  transform                   : translateX(36px);
+  transform                   : translateX(v-bind(cssTranslateX));
 }
 
 .custom-switch:active .handle {
@@ -234,7 +244,7 @@ label.custom-switch.is-active span.slider {
 }
 
 .custom-switch.is-active:active .handle {
-  transform                   : translateX(36px) scale(0.9);
+  transform                   : translateX(v-bind(cssTranslateX)) scale(0.9);
 }
 
 .switch-icon {

@@ -40,7 +40,7 @@
                 {{ resolveName(person) }}
               </span>
 
-              <CustomTooltip 
+              <ToolTip 
                 v-if="isTooltipAllowed(section, group, person)"
                 :show="activeTooltipIndex === `${sIndex}-${index}-${nameIndex}`"
                 :text="getPersonLink(person) || 'No link available'"
@@ -62,7 +62,7 @@
 */
 
 import { ref, computed } from 'vue'
-import CustomTooltip from '@/components/reusables/tooltip.vue'
+import ToolTip from '@/components/reusables/tooltip.vue'
 
 const props = defineProps({
   /** Array of credit sections containing titles and grouped role lists. */

@@ -5,6 +5,7 @@
         <div 
           class       ="hero-bg-image"
           :key        ="activeImageSrc"
+          :style      ="{ backgroundImage: `url(${activeImageSrc})` }"
           :class      ="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
           :aria-label ="imageAlt"
           role="img"
@@ -56,10 +57,10 @@
 
 <script setup>
 /**
- * @file banner.vue
- * @brief Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable.
- * @displayName Hero Banner
- */
+  * @file banner.vue
+  * @brief Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable.
+  * @displayName Hero Banner
+*/
 
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
@@ -310,9 +311,6 @@ const resolvedVignette = computed(() => {
   return VIGNETTE_STYLES[props.vignetteStyle] || props.vignetteStyle
 })
 
-/** Resolved CSS background image URL computed from activeImageSrc. */
-const cssBackgroundImage = computed(() => `url(${activeImageSrc.value})`)
-
 /** Resolved vignette background style computed from resolvedVignette. */
 const cssVignetteBackground = computed(() => resolvedVignette.value)
 
@@ -354,12 +352,14 @@ defineEmits(['cta-click'])
   background-size     : cover;
   background-position : center center;
   background-repeat   : no-repeat;
-  background-image    : v-bind(cssBackgroundImage);
 }
 
 .bg-fade-enter-active,
 .bg-fade-leave-active {
   transition          : opacity 1s ease-in-out;
+  position            : absolute;
+  width               : 100%;
+  height              : 100%;
 }
 
 .bg-fade-enter-from,
@@ -423,6 +423,7 @@ defineEmits(['cta-click'])
   height              : 100%;
   z-index             : 2;
   background          : v-bind(cssVignetteBackground);
+  pointer-events      : none;
 }
 
 .hero-content {

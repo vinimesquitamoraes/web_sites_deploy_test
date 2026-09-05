@@ -5,16 +5,27 @@
 
   <div v-else class="app-container">
     <AppHeader />
-    
+
+    <div class="animation-toggle-bar">
+      <span class="toggle-label">{{t('SITE_REDUCED_MOTION')}}</span>
+      <ToggleButton 
+        :modelValue="!animationsEnabled" 
+        @change="handleAnimationToggle"
+        :width  = "40"
+        :height = "20"
+        activeBgColor = "var(--color-secondary)"
+        hoverBgColor = "var(--color-primary)"
+      />
+    </div>
+
     <div class="content-wrapper">
       <router-view v-slot="{ Component }">
-        <Transition name="page-fade" mode="out-in">
+        <Transition :name="animationsEnabled ? 'page-fade' : ''" mode="out-in">
           <component :is="Component" />
         </Transition>
       </router-view>
     </div>
 
-  
     <BackToTop 
       footerBehavior="stay" 
     />
@@ -32,32 +43,55 @@
     </div>
   </div>
 </template>
-
 <script setup>
+  /**
+    * @file        App.vue
+    * @brief       Main application root component managing routing, layout, and global features like motion toggles.
+  */
   import { onMounted } from 'vue'
   import { useRoute } from 'vue-router'
   import { useI18n } from '@/composables/useI18n'
+  import { useAnimations } from '@/composables/reduced_motion_check'
 
   import AppHeader      from '@/components/reusables/app_header.vue'
   import AppFooter      from '@/components/reusables/app_footer.vue'
   import BackToTop      from '@/components/reusables/back_to_top_button.vue'
   import MusicPlayer    from '@/components/reusables/music_player.vue'
+  import ToggleButton   from '@/components/reusables/toggle_button.vue'
   
   const route = useRoute()
   const { loadTranslations, isLoaded } = useI18n()
+  const { animationsEnabled, setAnimationsEnabled } = useAnimations()
 
   onMounted(() => {
     loadTranslations()
+    if (!animationsEnabled.value && typeof document !== 'undefined') {
+      document.body.classList.add('reduce-motion')
+    }
   })
+
+  const handleAnimationToggle = (value) => {
+    setAnimationsEnabled(!value)
+  }
+
+  const { t } = useI18n()
+
 </script>
 
 <style>
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
 @font-face {
   font-family: "Motherish";
   src: url('/src/assets/fonts/Motherish/Motherish-Regular.otf');
 }
 :root {
-  /*Default Styles ==========================================================================================================================================================*/
   --color-primary             : #E50012;
   --color-secondary           : #fdd268;
   --color-tertiary            : #b425e1;
@@ -97,7 +131,8 @@
   --font-body-size            : 16px;
 
   --font-dropdown-size        : 20px;
-  
+  --font-reduce-motion-size   : 15px;
+
   --font-credits-title-size   : 24px;
   --font-credits-role-size    : 20px;
   --font-credits-name-size    : 16px;
@@ -120,7 +155,6 @@
   --font-mobile-button-size   : 16px;
   --font-mobile-p-size        : 16px;
 
-  /*Foorter Syles =========================================================================================================*/
   --color-footer-bg                   : var(--color-primary);
   --color-footer-text                 : var(--color-default-text-color);
   --color-footer-divider              : var(--color-default-background);
@@ -129,7 +163,6 @@
   --color-footer-hyperlink            : var(--color-hyperlinks);
   --color-footer-vue-link             : #42b883;
 
-  /* Custom Button Stuff ===================================================================================================*/
   --color-custom-button-background    : var(--color-default-background);
   --color-custom-button-hover         : var(--color-primary);
   
@@ -145,14 +178,12 @@
   --custom-button-font                : var(--font-default);
   --custom-button-font-size           : 16px;
 
-  /* Itch.io Button Stuff ================================================================================================== */
-    --color-itchio-button-icon             : var(--color-black);
-    --color-itchio-button-bg               : var(--color-default-background);
-    
-    --color-itchio-button-icon-hover       : #ffffff;
-    --color-itchio-button-bg-hover         : var(--color-primary);
+  --color-itchio-button-icon             : var(--color-black);
+  --color-itchio-button-bg               : var(--color-default-background);
+  
+  --color-itchio-button-icon-hover       : #ffffff;
+  --color-itchio-button-bg-hover         : var(--color-primary);
 
-  /* Back to Top Button Stuff ==============================================================================================*/
   --back-to-top-button-bg-color              : var(--color-default-background);
   --back-to-top-button-icon-color            : var(--color-primary);
   --back-to-top-button-bg-color-hover        : var(--color-primary);
@@ -162,8 +193,6 @@
   --back-to-top-button-size                  : 56px;
   --back-to-top-button-icon-size             : 95%;
 
-
-  /* Character Card Stuff ==================================================================================================*/
   --character-card-title-color      : var(--color-default-text-color);
   --character-card-title-font       : var(--font-h3, var(--font-h1));
   --character-card-title-size       : 60px;
@@ -179,7 +208,6 @@
   --character-card-separator-color  : var(--color-default-background);
   --character-card-separator-height : 4px;
   
-/* Gallery Stuff ========================================================================================================= */
   --gallery-title-color         : var(--color-h2);
   --gallery-title-size          : var(--font-h2-size);
   --gallery-title-font          : var(--font-h2);
@@ -200,8 +228,6 @@
   
   --gallery-button-icon-size    : 95%;
   --gallery-button-size         : 50px;
-
-  /* Music Player Stuff ====================================================================================================*/
 
   --music-player-color-bg-main                 : #272526;
   --music-player-color-bg-secondary            : var(--color-default-background);
@@ -237,7 +263,6 @@
   --music_player-font-p-size                   : var(--font-p-size);
   --music_player-font-track-names-size         : 15px;
 
-  /* Toaster Stuff ========================================================================================================= */
   --toaster-bg-main           : #ffffff;
   --toaster-border-color      : #000000;
   --toaster-font-size         : 0.85rem;
@@ -252,17 +277,14 @@
   --toaster-error-bg          : #f5b7b1;
   --toaster-error-border      : #c0392b;
 
-  /* Credits Stuff ========================================================================================================= */
   --color-credits-background  : #000000;
   --color-credits-title       : #e67e22; 
   --color-credits-role        : #e67e22;
   --color-credits-name        : #ffffff;
 
-  /* Operational System Icons Stuff ======================================================================================== */
   --color-operational-system-icons-color       : #E50012;
   --color-operational-system-icons-hover-color : #E50012;
 
-  /* Requirements Stuff =====================================================================================================*/
   --color-requiriments-key-background           : #E50012;
   --color-requiriments-value-background         : #ffffff;
   --color-requiriments-key-text                 : #ffffff;
@@ -272,8 +294,6 @@
   --color-requiriments-value-border-bottom      : 3px solid #E50012;
   --color-requiriments-mobile-row-border-bottom : 3px solid #E50012;
 
-
-  /* Dropdown Stuff ======================================================================================================== */
   --color-dropdown-border             : 3px solid currentColor;
   --color-dropdown-trigger-bg         : #ff9900;
   --color-dropdown-trigger-text       : #000000;
@@ -304,9 +324,7 @@
   --color-lang-dropdown-option-active-bg   : var(--color-tertiary);
   --color-lang-dropdown-option-active-text : #ffffff;
   --color-lang-dropdown-active-arrow       : #ffffff;  
-
   
-  /* Foldable Stuff ===================================================================================================*/
   --foldable-header-bg     : transparent;
   --foldable-title-color   : #202020;
   --foldable-body-bg       : #ffffff;
@@ -316,7 +334,6 @@
   --foldable-icon-bg       : transparent;
   --foldable-body-border   : 3px solid #202020;
 
-  /* Content Section Stuff ===================================================================================================*/
   --content-section-font-h2             : var(--font-default);
   --content-section-font-h2-size        : var(--font-h2-size);
   --content-section-color-h2            : var(--color-primary);
@@ -326,27 +343,25 @@
   --content-section-media-border        : var(--default-border);
   --content-section-media-radius        : var(--default-border-radius);
 
-/* Media Modal Cstuff ========================================================================================== */
---media-modal-overlay-bg       : rgba(68, 9, 9, 0.534);
---media-modal-border           : var(--default-border);
---media-modal-border-radius    : var(--default-border-radius);
---media-modal-media-bg         : var(--color-black);
---media-modal-button-size      : 40px;
---media-modal-button-bg        : var(--color-default-background);
---media-modal-button-bg-hover  : var(--color-primary);
---media-modal-button-icon-size : 95%;
---media-modal-close-top        : -50px;
---media-modal-close-right      : 0;
---media-modal-arrow-icon       : var(--color-primary);
---media-modal-arrow-icon-hover : var(--media-modal-button-bg);
---media-modal-arrow-offset     : -60px;
+  --media-modal-overlay-bg       : rgba(68, 9, 9, 0.534);
+  --media-modal-border           : var(--default-border);
+  --media-modal-border-radius    : var(--default-border-radius);
+  --media-modal-media-bg         : var(--color-black);
+  --media-modal-button-size      : 40px;
+  --media-modal-button-bg        : var(--color-default-background);
+  --media-modal-button-bg-hover  : var(--color-primary);
+  --media-modal-button-icon-size : 95%;
+  --media-modal-close-top        : -50px;
+  --media-modal-close-right      : 0;
+  --media-modal-arrow-icon       : var(--color-primary);
+  --media-modal-arrow-icon-hover : var(--media-modal-button-bg);
+  --media-modal-arrow-offset     : -60px;
 
-/*Banner stuff ===============================================================================================================*/
---color-banner-button-border             : 6px double var(--color-default-text-color);
---color-banner-button-bg                 : #000000;
---color-banner-button-hover-bg           : var(--color-tertiary);
---color-banner-button-icon               : #ffffff;
---color-banner-text                      : #ffffff; 
+  --color-banner-button-border             : 6px double var(--color-default-text-color);
+  --color-banner-button-bg                 : #000000;
+  --color-banner-button-hover-bg           : var(--color-tertiary);
+  --color-banner-button-icon               : #ffffff;
+  --color-banner-text                      : #ffffff; 
 }
 
 
@@ -375,6 +390,7 @@ body {
 }
 
 .content-wrapper {
+  position              : relative;
   flex                  : 1;
   display               : flex;
   flex-direction        : column;
@@ -383,13 +399,31 @@ body {
   margin-bottom         : 140px;
 }
 
+.animation-toggle-bar {
+  width                 : 100%;
+  display               : flex;
+  flex-direction        : row;     
+  justify-content       : center;  
+  align-items           : center;  
+  gap                   : 15px;    
+  background            : var(--color-black);
+  padding               : 10px 20px;
+  box-sizing            : border-box;
+  border-bottom         : var(--default-border);
+}
+.toggle-label {
+  padding-top           : 5px;
+  font-family           : var(--font-default);
+  font-size             : var(--font-reduce-motion-size);
+  color                 : var(--color-default-background);
+}
+
 .footer-container {
   width                 : 100%;
   display               : flex;
   flex-direction        : column;
   align-items           : center;
   margin-top            : auto;
-
 }
 
 .main-content {
@@ -397,7 +431,6 @@ body {
   max-width             : 1240px;
   display               : flex;
   flex-direction        : column;  
-  
 }
 
 .section-title {

@@ -17,7 +17,7 @@
           <div v-for="option in options" :key="option.key" class="option-row">
             <span class="option-label">{{ option.label }}</span>
             
-            <ToggleSwitch
+            <ToggleButtom
               :modelValue         ="sessionState[option.key]"
               @update:modelValue  ="(val) => toggleOption(option.key, val)"
               :activeIconSrc="closeIcon"
@@ -42,7 +42,7 @@
 */
 
 import { reactive, computed, onMounted, onUnmounted } from 'vue'
-import ToggleSwitch from './toggle_button.vue'
+import ToggleButtom from './toggle_button.vue'
 import CustomButton from './custom_button.vue'
 
 import closeIcon from '@/assets/svg/close-svgrepo-com.svg'

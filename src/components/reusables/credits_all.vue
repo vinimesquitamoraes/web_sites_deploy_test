@@ -1,9 +1,9 @@
 <template>
-  <CreditsComponent 
+  <CreditsSection 
     :credits="formattedCredits" 
     :linksMap="linksMap" 
   />
-  <CreditsComponent 
+  <CreditsSection 
     :credits="specialCredits" 
     :linksMap="{}" 
     columns="1"
@@ -20,7 +20,7 @@
 
 import { computed } from 'vue'
 import { useI18n } from '@/composables/useI18n'
-import CreditsComponent from '@/components/reusables/credits_section.vue'
+import CreditsSection from '@/components/reusables/credits_section.vue'
 
 import rolesCSVText from '@/assets/csv/credits_roles.csv?raw'
 import linksCSVText from '@/assets/csv/credits_links.csv?raw'

@@ -29,6 +29,12 @@
 </template>
 
 <script setup>
+/**
+  * @file        AboutView.vue
+  * @brief       About page view component displaying structured informational content sections with alternating media layouts.
+  * @displayName About View
+*/
+
 import { computed } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
 
@@ -45,6 +51,10 @@ import imgGodotLogo from '@/assets/img/logos/logo_large_monochrome_light.png'
 
 const { t } = useI18n()
 
+/**
+  * Computes the list of information sections displayed sequentially across the about page.
+  * @private
+  */
 const infoSections = computed(() => [
   {
     title       : t('SITE_ABOUT_OVERVIEW_TITLE'),
