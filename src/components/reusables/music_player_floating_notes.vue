@@ -19,34 +19,52 @@
 import { ref, computed, watch } from 'vue'
 
 const props = defineProps({
-  /** Controls the visibility and active state of the floating notes animation. */
+  /**
+    * Controls the visibility and active state of the floating notes animation.
+    * @public
+    */
   active: {
     type: Boolean,
     default: true
   },
-  /** Determines whether notes pick a random color from the provided palette array. */
+  /**
+    * Determines whether notes pick a random color from the provided palette array.
+    * @public
+    */
   isRandomColor: {
     type: Boolean,
     default: true
   },
-  /** Array of available color strings for the floating notes. */
+  /**
+    * Array of available color strings for the floating notes.
+    * @public
+    */
   colors: {
     type: Array,
     default: () => [
       'var(--color-place-holder-green)'
     ]
   },
-  /** Fallback color used when random coloring is disabled or the palette is empty. */
+  /**
+    * Fallback color used when random coloring is disabled or the palette is empty.
+    * @public
+    */
   fallbackColor: {
     type: String,
     default: 'var(--color-place-holder-green)'
   },
-  /** Vertical float travel distance for the animation trajectory. */
+  /**
+    * Vertical float travel distance for the animation trajectory.
+    * @public
+    */
   distance: {
     type: [String, Number],
     default: '-50px'
   },
-  /** Duration or speed of the floating animation cycle. */
+  /**
+    * Duration or speed of the floating animation cycle.
+    * @public
+    */
   speed: {
     type: [String, Number],
     default: '2s'

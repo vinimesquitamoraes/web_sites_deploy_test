@@ -48,42 +48,66 @@ import CustomButton from './custom_button.vue'
 import closeIcon from '@/assets/svg/close-svgrepo-com.svg'
 
 const props = defineProps({
-  /** Controls the visibility state of the modal externally via v-model. */
+  /**
+    * Controls the visibility state of the modal externally via v-model.
+    * @public
+    */
   modelValue: {
     type    : Boolean,
     default : false
   },
-  /** Header title text displayed inside the modal window. */
+  /**
+    * Header title text displayed inside the modal window.
+    * @public
+    */
   title: {
     type    : String,
     default : 'Settings / Options'
   },
-  /** Array of option configuration objects containing keys and labels. */
+  /**
+    * Array of option configuration objects containing keys and labels.
+    * @public
+    */
   options: {
     type    : Array,
     required: true,
   },
-  /** Width dimension configuration for the modal panel. */
+  /**
+    * Width dimension configuration for the modal panel.
+    * @public
+    */
   width: {
     type    : [Number, String],
     default : 400
   },
-  /** Background color of the modal panel. */
+  /**
+    * Background color of the modal panel.
+    * @public
+    */
   bgColor: {
     type    : String,
     default : 'var(--color-custom-button-background)'
   },
-  /** Hover background color configuration (reserved for potential panel states). */
+  /**
+    * Hover background color configuration (reserved for potential panel states).
+    * @public
+    */
   hoverBgColor: {
     type    : String,
     default : 'var(--color-custom-button-hover)'
   },
-  /** Active background color configuration (reserved for potential panel states). */
+  /**
+    * Active background color configuration (reserved for potential panel states).
+    * @public
+    */
   activeBgColor: {
     type    : String,
     default : 'var(--color-hover)'
   },
-  /** Text color applied inside the modal panel. */
+  /**
+    * Text color applied inside the modal panel.
+    * @public
+    */
   textColor: {
     type    : String,
     default : 'var(--color-custom-button-text)'
@@ -94,13 +118,19 @@ const emit = defineEmits(['update:modelValue', 'change'])
 
 const sessionState = reactive({})
 
-/** Formats width value into pixel string if numeric. * @private */
+/**
+  * Formats width value into pixel string if numeric.
+  * @private
+  */
 const widthVal = computed(() => {
   const w = props.width
   return typeof w === 'number' ? `${w}px` : w
 })
 
-/** Synchronizes reactive session state with current sessionStorage values. * @private */
+/**
+  * Synchronizes reactive session state with current sessionStorage values.
+  * @private
+  */
 const syncSessionState = () => {
   props.options.forEach(opt => {
     sessionState[opt.key] = sessionStorage.getItem(opt.key) === 'true'
@@ -122,7 +152,10 @@ const toggleOption = (key, nextValue) => {
   emit('change', { key, value: nextValue, allState: sessionState })
 }
 
-/** Closes the modal by updating v-model state. * @private */
+/**
+  * Closes the modal by updating v-model state.
+  * @private
+  */
 const closeModal = () => {
   emit('update:modelValue', false)
 }

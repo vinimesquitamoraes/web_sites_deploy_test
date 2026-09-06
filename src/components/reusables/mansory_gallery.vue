@@ -4,6 +4,7 @@
       v-for="(item, index) in items" 
       :key="item.id || index" 
       class="masonry-item"
+      :class="{ 'no-motion': !animationsEnabled }"
       @click="$emit('select', item)"
     >
       <img 
@@ -36,6 +37,10 @@
   * @brief       A responsive masonry grid gallery component supporting images, background-looped videos, and captions.
   * @displayName Masonry Gallery
 */
+
+import { useAnimations } from '@/composables/reduced_motion_check'
+
+const { animationsEnabled } = useAnimations()
 
 defineProps({
   /** Array of media item objects (images or videos) to display in the gallery grid. */
@@ -79,10 +84,15 @@ defineEmits([
   cursor            : pointer;
   background-color  : #ffffff;
   border            : 3px solid #000000;
+  transition        : transform 0.2s ease;
 }
 
 .masonry-item:hover {
   transform     : translateY(-3px) translateX(-3px);
+}
+
+.masonry-item.no-motion:hover {
+  transform     : none;
 }
 
 .masonry-item img,
@@ -102,6 +112,10 @@ defineEmits([
   padding           : 20px 16px 12px;
   opacity           : 0;
   transition        : opacity 0.3s ease;
+}
+
+.masonry-item.no-motion .masonry-overlay {
+  transition        : none;
 }
 
 .masonry-item:hover .masonry-overlay {

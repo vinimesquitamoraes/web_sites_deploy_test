@@ -26,43 +26,67 @@
 import tooltipArrow from '@/assets/svg/triangle-down-filled.svg'
 
 defineProps({
-  /** Controls whether the tooltip is visible. */
+  /**
+    * Controls whether the tooltip is visible.
+    * @public
+    */
   show: {
     type: Boolean,
     default: false
   },
-  /** Text content displayed inside the tooltip when slot is empty. */
+  /**
+    * Text content displayed inside the tooltip when slot is empty.
+    * @public
+    */
   text: {
     type: String,
     default: ''
   },
-  /** Position of the tooltip relative to the target element ('top', 'bottom', 'left', 'right'). */
+  /**
+    * Position of the tooltip relative to the target element ('top', 'bottom', 'left', 'right').
+    * @public
+    */
   position: {
     type: String,
     default: 'top',
     validator: (value) => ['top', 'bottom', 'left', 'right'].includes(value)
   },
-  /** Transition animation duration in milliseconds. */
+  /**
+    * Transition animation duration in milliseconds.
+    * @public
+    */
   duration: {
     type: Number,
     default: 300 
   },
-  /** Background color of the tooltip container. */
+  /**
+    * Background color of the tooltip container.
+    * @public
+    */
   backgroundColor: {
     type: String,
     default: '#ffffff'
   },
-  /** Border color of the tooltip container. */
+  /**
+    * Border color of the tooltip container.
+    * @public
+    */
   borderColor: {
     type: String,
     default: '#000000'
   },
-  /** Border width of the tooltip container. */
+  /**
+    * Border width of the tooltip container.
+    * @public
+    */
   borderWidth: {
     type: String,
     default: '3px'
   },
-  /** Text color of the tooltip. */
+  /**
+    * Text color of the tooltip.
+    * @public
+    */
   textColor: {
     type: String,
     default: 'var(--color-primary)'
@@ -80,7 +104,7 @@ defineProps({
 	padding              : 8px 16px;
 	white-space          : nowrap;
 	pointer-events       : none;
-	z-index              : 9999;
+	z-index              : 100;
   
 	background-color     : v-bind('backgroundColor');
 	border-color         : v-bind('borderColor');

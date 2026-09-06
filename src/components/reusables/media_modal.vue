@@ -86,19 +86,28 @@ import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 import img_close        from '@/assets/svg/close-svgrepo-com.svg'
 
 defineProps({
-  /** Controls whether the modal overlay is active and visible. */
+  /**
+    * Controls whether the modal overlay is active and visible.
+    * @public
+    */
   isOpen: {
     type    : Boolean,
     required: false,
     default : false
   },
-  /** Object containing the type, source URL, and alternative description text of the media asset. */
+  /**
+    * Object containing the type, source URL, and alternative description text of the media asset.
+    * @public
+    */
   mediaItem: {
     type    : Object,
     required: false,
     default : () => ({})
   },
-  /** Controls whether the left and right navigation arrows are visible. */
+  /**
+    * Controls whether the left and right navigation arrows are visible.
+    * @public
+    */
   showNav: {
     type    : Boolean,
     default : true
@@ -106,11 +115,20 @@ defineProps({
 })
 
 defineEmits([
-  /** Triggered when the user clicks the overlay background or the close button. */
+  /**
+    * Triggered when the user clicks the overlay background or the close button.
+    * @public
+    */
   'close', 
-  /** Triggered when the user clicks the right navigation arrow button. */
+  /**
+    * Triggered when the user clicks the right navigation arrow button.
+    * @public
+    */
   'next', 
-  /** Triggered when the user clicks the left navigation arrow button. */
+  /**
+    * Triggered when the user clicks the left navigation arrow button.
+    * @public
+    */
   'prev'
 ])
 </script>

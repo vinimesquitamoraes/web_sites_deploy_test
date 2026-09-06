@@ -1,64 +1,3 @@
-<script setup>
-/**
-  * @file        list_text_carroulsel.vue
-  * @brief       A text list carousel component featuring slides of feature lists, custom pagination indicators, and custom navigation buttons.
-  * @displayName List Text Carousel
-*/
-
-import { ref } from 'vue'
-import CustomButton from '@/components/reusables/custom_button.vue'
-
-import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
-import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
-
-const props = defineProps({
-  /** Title header text displayed above the carousel. */
-  title: {
-    type: String,
-    default: 'GAME FEATURES'
-  },
-  /** Array of feature lists displayed across carousel slides. */
-  features: {
-    type: Array,
-    required: true,
-    default: () => []
-  }
-})
-
-/**
-  * Tracks the active slide index of the carousel.
-  * @private
-  */
-const currentIndex = ref(0)
-
-/**
-  * Advances the carousel to the next slide.
-  * @private
-  */
-const nextSlide = () => {
-  if (props.features.length === 0) return
-  currentIndex.value = (currentIndex.value + 1) % props.features.length
-}
-
-/**
-  * Moves the carousel to the previous slide.
-  * @private
-  */
-const prevSlide = () => {
-  if (props.features.length === 0) return
-  currentIndex.value = (currentIndex.value - 1 + props.features.length) % props.features.length
-}
-
-/**
-  * Directly navigates the carousel to a specific slide index.
-  * @param {number} index Target slide index.
-  * @private
-  */
-const goToSlide = (index) => {
-  currentIndex.value = index
-}
-</script>
-
 <template>
   <div class="game-features-container">
     <h2 class="title">{{ props.title }}</h2>
@@ -130,6 +69,67 @@ const goToSlide = (index) => {
     </div>
   </div>
 </template>
+
+<script setup>
+/**
+  * @file        list_text_carroulsel.vue
+  * @brief       A text list carousel component featuring slides of feature lists, custom pagination indicators, and custom navigation buttons.
+  * @displayName List Text Carousel
+*/
+
+import { ref } from 'vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
+
+import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
+import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
+
+const props = defineProps({
+  /** Title header text displayed above the carousel. */
+  title: {
+    type: String,
+    default: 'GAME FEATURES'
+  },
+  /** Array of feature lists displayed across carousel slides. */
+  features: {
+    type: Array,
+    required: true,
+    default: () => []
+  }
+})
+
+/**
+  * Tracks the active slide index of the carousel.
+  * @private
+  */
+const currentIndex = ref(0)
+
+/**
+  * Advances the carousel to the next slide.
+  * @private
+  */
+const nextSlide = () => {
+  if (props.features.length === 0) return
+  currentIndex.value = (currentIndex.value + 1) % props.features.length
+}
+
+/**
+  * Moves the carousel to the previous slide.
+  * @private
+  */
+const prevSlide = () => {
+  if (props.features.length === 0) return
+  currentIndex.value = (currentIndex.value - 1 + props.features.length) % props.features.length
+}
+
+/**
+  * Directly navigates the carousel to a specific slide index.
+  * @param {number} index Target slide index.
+  * @private
+  */
+const goToSlide = (index) => {
+  currentIndex.value = index
+}
+</script>
 
 <style scoped>
 .game-features-container {

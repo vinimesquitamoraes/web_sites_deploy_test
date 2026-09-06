@@ -3,9 +3,19 @@
     class="external-side-volume" 
     :class="[`layout-${volumeLayout}`, `orientation-${orientation}`]"
   >
-    <span class="control-label">VOL</span>
+    <CustomButton
+      class               = "mute-toggle-btn" 
+      :class              = "{ active: isMuted }"
+      :icon-src           = "isMuted ? imgVolumeMute : imgVolume"
+      padding             = "4px"
+      icon-size           = "1.3em"
+      :bg-color           = "isMuted ? muteActiveBg : muteBg"
+      :hover-bg-color     = "isMuted ? muteActiveHoverBg : muteHoverBg"
+      :icon-color         = "isMuted ? muteActiveIconColor : muteIconColor"
+      :hover-icon-color   = "isMuted ? muteActiveHoverIconColor : muteHoverIconColor"
+      @click              = "$emit('toggleMute')"
+    />
 
-    <!-- Vertical / Standard Layout Elements Container -->
     <div v-if="!isCurrentHorizontal" class="volume-control-container">
       <div v-if="volumeLayout === 'wheel'" class="thumbwheel" @wheel.prevent="$emit('wheelVolume', $event)">
         <div class="wheel-ridges"></div>
@@ -25,7 +35,6 @@
       </div>
     </div>
 
-    <!-- Horizontal Layout Slider Track (Collinear) -->
     <div v-if="isCurrentHorizontal" class="mobile-slider-track">
       <input 
         type          ="range" 
@@ -38,15 +47,6 @@
         :style        ="{ '--volume-percent': volume + '%' }"
       />
     </div>
-
-    <CustomButton
-      class         = "mute-btn" 
-      :class        = "{ active: isMuted }"
-      :text         = "isMuted ? 'OFF' : 'MUT'"
-      font-size     = "0.55rem"
-      padding       = "0"
-      @click        = "$emit('toggleMute')"
-    />
   </div>
 </template>
 
@@ -60,33 +60,180 @@
 import { computed } from 'vue'
 import CustomButton from '@/components/reusables/custom_button.vue'
 
+import imgVolume      from '@/assets/svg/volume-fill.svg'
+import imgVolumeMute  from '@/assets/svg/volume-mute-fill.svg'
+
 const props = defineProps({
-  /** Layout style of the volume control (e.g., 'wheel', 'bar'). */
+  /**
+    * Layout style of the volume control.
+    * @public
+    */
   volumeLayout: {
     type: String,
     default: 'bar'
   },
-  /** Current volume level percentage (0 to 100). */
+  /**
+    * Current volume level percentage.
+    * @public
+    */
   volume: {
     type: Number,
-    default: 100
+    default: 50
   },
-  /** Indicates whether audio is currently muted. */
+  /**
+    * Indicates whether audio is currently muted.
+    * @public
+    */
   isMuted: {
     type: Boolean,
     default: false
   },
-  /** Orientation and layout direction of the volume control panel. */
+  /**
+    * Orientation and layout direction of the volume control panel.
+    * @public
+    */
   orientation: {
     type       : String,
-    default    : 'horizontal',
+    default    : 'vertical',
     validator  : (value) => ['horizontal', 'vertical', 'horizontal-flipped', 'vertical-flipped'].includes(value)
+  },
+  /**
+    * Background color of the main volume container.
+    * @public
+    */
+  bgColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-bg)'
+  },
+  /**
+    * Border color of the volume container and tracks.
+    * @public
+    */
+  borderColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-border)'
+  },
+  /**
+    * Border radius for components.
+    * @public
+    */
+  borderRadius: {
+    type: String,
+    default: 'var(--music-player-border-radius)'
+  },
+  /**
+    * Slider color used for active fills and ranges.
+    * @public
+    */
+  sliderColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-slider)'
+  },
+  /**
+    * Text color used for labels and secondary elements.
+    * @public
+    */
+  textColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-text)'
+  },
+  /**
+    * Container background color used for tracks and thumbs.
+    * @public
+    */
+  containerColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-container)'
+  },
+  /**
+    * Track color used for inactive slider ranges.
+    * @public
+    */
+  trackColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-track)'
+  },
+  /**
+    * Highlight color used for active states.
+    * @public
+    */
+  highlightColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-highlight)'
+  },
+  /**
+    * Background color of the mute button.
+    * @public
+    */
+  muteBg: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-bg)'
+  },
+  /**
+    * Hover background color of the mute button.
+    * @public
+    */
+  muteHoverBg: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-hover-bg)'
+  },
+  /**
+    * Active background color of the mute button.
+    * @public
+    */
+  muteActiveBg: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-active-bg)'
+  },
+  /**
+    * Active hover background color of the mute button.
+    * @public
+    */
+  muteActiveHoverBg: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-active-hover-bg)'
+  },
+  /**
+    * Icon color of the mute button.
+    * @public
+    */
+  muteIconColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-icon-color)'
+  },
+  /**
+    * Hover icon color of the mute button.
+    * @public
+    */
+  muteHoverIconColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-hover-icon-color)'
+  },
+  /**
+    * Active icon color of the mute button.
+    * @public
+    */
+  muteActiveIconColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-active-icon-color)'
+  },
+  /**
+    * Active hover icon color of the mute button.
+    * @public
+    */
+  muteActiveHoverIconColor: {
+    type: String,
+    default: 'var(--music-player-volume-controls-mute-active-hover-icon-color)'
   }
 })
 
 defineEmits(['wheelVolume', 'volumeChange', 'toggleMute'])
 
-/** Checks if the current orientation is horizontal. */
+/**
+  * Evaluates whether the current orientation includes a horizontal format.
+  * @private
+  * @returns {boolean} True if horizontal layout is active.
+  */
 const isCurrentHorizontal = computed(() => {
   return props.orientation.includes('horizontal')
 })
@@ -95,9 +242,9 @@ const isCurrentHorizontal = computed(() => {
 <style scoped>
 .external-side-volume {
   display               : flex;
-  background            : var(--music-player-color-bg-main);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(bgColor);
+  border                : v-bind(borderColor);
+  border-radius         : v-bind(borderRadius);
   padding               : 6px;
   box-sizing            : border-box;
   flex-shrink           : 0;
@@ -132,7 +279,6 @@ const isCurrentHorizontal = computed(() => {
   flex                  : 1;
 }
 
-/* --- HORIZONTAL ORIENTATIONS (COLLINEAR) --- */
 .external-side-volume.orientation-horizontal,
 .external-side-volume.orientation-horizontal-flipped {
   width                 : 100%;
@@ -152,8 +298,8 @@ const isCurrentHorizontal = computed(() => {
   display               : flex;
   flex                  : 1;
   height                : 26px;
-  background            : var(--music-player-color-surface);
-  border                : var(--music-player-border);
+  background            : v-bind(containerColor);
+  border                : v-bind(borderColor);
   border-radius         : 6px;
   align-items           : center;
   padding               : 0 8px;
@@ -166,7 +312,7 @@ const isCurrentHorizontal = computed(() => {
   appearance            : none;
   width                 : 100%;
   height                : 6px;
-  background            : linear-gradient(to right, var(--music-player-color-accent) var(--volume-percent, 0%), var(--music-player-color-bg-dark) var(--volume-percent, 0%));
+  background            : linear-gradient(to right, v-bind(sliderColor) var(--volume-percent, 0%), v-bind(trackColor) var(--volume-percent, 0%));
   border-radius         : 3px;
   outline               : none;
   cursor                : pointer;
@@ -179,41 +325,25 @@ const isCurrentHorizontal = computed(() => {
   width                 : 14px;
   height                : 14px;
   border-radius         : 3px;
-  background            : var(--music-player-color-accent);
-  border                : var(--music-player-border);
+  background            : v-bind(sliderColor);
+  border                : v-bind(borderColor);
 }
 
 .external-side-volume.orientation-horizontal .mobile-range-input::-moz-range-thumb,
 .external-side-volume.orientation-horizontal-flipped .mobile-range-input::-moz-range-thumb {
   width                 : 14px;
   height                : 14px;
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
-  background            : var(--music-player-color-accent);
-}
-
-.external-side-volume.orientation-horizontal .mute-btn,
-.external-side-volume.orientation-horizontal-flipped .mute-btn {
-  width                 : 60px;
-  height                : 28px;
-  margin-top            : 0;
-}
-
-/* --- SHARED SUB-COMPONENT STYLES --- */
-.control-label {
-  font-size             : 0.55rem;
-  font-weight           : 700;
-  color                 : var(--music-player-color-accent-light);
-  letter-spacing        : 0.5px;
-  flex-shrink           : 0;
+  border                : v-bind(borderColor);
+  border-radius         : v-bind(borderRadius);
+  background            : v-bind(sliderColor);
 }
 
 .thumbwheel {
   width                 : 26px;
   height                : 36px;
-  background            : var(--music-player-color-surface);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(containerColor);
+  border                : v-bind(borderColor);
+  border-radius         : v-bind(borderRadius);
   cursor                : ns-resize;
   position              : relative;
   overflow              : hidden;
@@ -225,15 +355,15 @@ const isCurrentHorizontal = computed(() => {
   bottom                : 0;
   left                  : 0;
   right                 : 0;
-  background            : repeating-linear-gradient(0deg, var(--music-player-color-bg-main), var(--music-player-color-bg-main) 2px, var(--music-player-border-color) 3px, var(--music-player-color-bg-main) 4px);
+  background            : repeating-linear-gradient(0deg, v-bind(bgColor), v-bind(bgColor) 2px, v-bind(borderColor) 3px, v-bind(bgColor) 4px);
 }
 
 .vertical-slider-track {
   width                 : 24px;
   height                : 90px;
-  background            : var(--music-player-color-surface);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(containerColor);
+  border                : v-bind(borderColor);
+  border-radius         : v-bind(borderRadius);
   position              : relative;
   display               : flex;
   justify-content       : center;
@@ -246,7 +376,7 @@ const isCurrentHorizontal = computed(() => {
   appearance            : none;
   width                 : 86px;
   height                : 6px;
-  background            : linear-gradient(to right, var(--music-player-color-accent) var(--volume-percent, 0%), var(--music-player-color-bg-dark) var(--volume-percent, 0%));
+  background            : linear-gradient(to right, v-bind(sliderColor) var(--volume-percent, 0%), v-bind(trackColor) var(--volume-percent, 0%));
   border-radius         : 3px;
   transform             : rotate(-90deg);
   cursor                : pointer;
@@ -259,32 +389,22 @@ const isCurrentHorizontal = computed(() => {
   width                 : 14px;
   height                : 14px;
   border-radius         : 3px;
-  background            : var(--music-player-color-accent);
-  border                : var(--music-player-border);
+  background            : v-bind(sliderColor);
+  border                : v-bind(borderColor);
 }
 
 .vertical-range-input::-moz-range-thumb {
   width                 : 14px;
   height                : 14px;
   border-radius         : 3px;
-  background            : var(--music-player-color-accent);
-  border                : var(--music-player-border);
+  background            : v-bind(sliderColor);
+  border                : v-bind(borderColor);
 }
 
-.mute-btn {
-  margin-top            : auto;
+.mute-toggle-btn {
   flex-shrink           : 0;
-  width                 : 32px;
-  height                : 22px;
-  font-family           : monospace;
-  font-weight           : 700;
-  --color-custom-button-background: var(--music-player-color-surface);
-  --color-custom-button-text: var(--music-player-color-bg-secondary);
-}
-
-.mute-btn.active {
-  --color-custom-button-background: var(--music-player-color-accent);
-  --color-custom-button-text: var(--music-player-color-white);
+  width                 : 28px;
+  height                : 28px;
 }
 
 @media (max-width: 480px) {

@@ -77,7 +77,6 @@ import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
 import NavigationComponent  from '@/components/reusables/navigation_component.vue'
 import SocialMediaButton    from '@/components/reusables/social_media_button.vue'
 
-/** Localization translation hook instance. */
 const { t } = useI18n()
 </script>
 

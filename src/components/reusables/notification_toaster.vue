@@ -55,44 +55,68 @@ import CustomButton from '@/components/reusables/custom_button.vue'
 import img_close from '@/assets/svg/close-svgrepo-com.svg'
 
 const props = defineProps({
-  /** Controls the visibility state of the notification toast (v-model). */
+  /**
+    * Controls the visibility state of the notification toast (v-model).
+    * @public
+    */
   modelValue: {
     type    : Boolean,
     required: true
   },
-  /** Text message to display inside the notification. */
+  /**
+    * Text message to display inside the notification.
+    * @public
+    */
   message: {
     type    : String,
     default : 'Default toaster notification!'
   },
-  /** Source path or URL for the notification icon. */
+  /**
+    * Source path or URL for the notification icon.
+    * @public
+    */
   icon: {
     type    : String,
     default : '@/assets/img/characters/ninten_head_sprite.png'
   },
-  /** Screen position where the toaster appears. */
+  /**
+    * Screen position where the toaster appears.
+    * @public
+    */
   position: {
     type    : String,
     default : 'top-right',
     validator: (val) => ['top-right', 'top-left', 'top-center', 'bottom-right', 'bottom-left', 'bottom-center'].includes(val)
   },
-  /** Visual type/theme of the notification. */
+  /**
+    * Visual type/theme of the notification.
+    * @public
+    */
   type: {
     type    : String,
     default : 'info',
     validator: (val) => ['info', 'success', 'warning', 'error'].includes(val)
   },
-  /** Duration in milliseconds before the toast automatically dismisses. */
+  /**
+    * Duration in milliseconds before the toast automatically dismisses.
+    * @public
+    */
   duration: {
     type    : Number,
     default : 4000
   },
-  /** Controls whether the animated countdown progress bar is visible. */
+  /**
+    * Controls whether the animated countdown progress bar is visible.
+    * @public
+    */
   showProgressBar: {
     type    : Boolean,
     default : true
   },
-  /** Controls whether the manual close/dismiss button is displayed. */
+  /**
+    * Controls whether the manual close/dismiss button is displayed.
+    * @public
+    */
   dismissible: {
     type    : Boolean,
     default : true

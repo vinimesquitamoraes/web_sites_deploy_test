@@ -27,32 +27,50 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  /** Target operating system platform identifier (e.g. windows, linux, mac). */
+  /**
+    * Target operating system platform identifier (e.g. windows, linux, mac).
+    * @public
+    */
   platform: {
     type: String,
     required: true
   },
-  /** Dimension size for the platform icon. */
+  /**
+    * Dimension size for the platform icon.
+    * @public
+    */
   size: {
     type: [Number, String],
     default: 48
   },
-  /** Default fill color for the icon. */
+  /**
+    * Default fill color for the icon.
+    * @public
+    */
   color: {
     type: String,
     default: 'var(--color-operational-system-icons-color)'
   },
-  /** Hover state fill color for the icon. */
+  /**
+    * Hover state fill color for the icon.
+    * @public
+    */
   hoverColor: {
     type: String,
     default: 'var(--color-operational-system-icons-hover-color)'
   },
-  /** Custom override URL for the platform link. */
+  /**
+    * Custom override URL for the platform link.
+    * @public
+    */
   url: {
     type: String,
     default: ''
   },
-  /** Controls whether the button behaves as an interactive link. */
+  /**
+    * Controls whether the button behaves as an interactive link.
+    * @public
+    */
   clickable: {
     type: [Boolean, String],
     default: true

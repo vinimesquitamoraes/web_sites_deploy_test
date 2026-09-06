@@ -81,37 +81,58 @@ import previous_icon from '@/assets/svg/triangle-left-12-filled.svg'
 import next_icon     from '@/assets/svg/triangle-right-12-filled.svg'
 
 defineProps({
-  /** Indicates whether the track list is currently in a loading state. */
+  /**
+    * Indicates whether the track list is currently in a loading state.
+    * @public
+    */
   isLoadingTracks: {
     type: Boolean,
     default: false
   },
-  /** Array of tracks to display for the current page view. */
+  /**
+    * Array of tracks to display for the current page view.
+    * @public
+    */
   paginatedTracks: {
     type: Array,
     default: () => []
   },
-  /** Index of the track that is currently playing globally. */
+  /**
+    * Index of the track that is currently playing globally.
+    * @public
+    */
   currentTrackIndex: {
     type: Number,
     default: -1
   },
-  /** The current active pagination page number. */
+  /**
+    * The current active pagination page number.
+    * @public
+    */
   currentPage: {
     type: Number,
     default: 1
   },
-  /** Total number of available pages. */
+  /**
+    * Total number of available pages.
+    * @public
+    */
   totalPages: {
     type: Number,
     default: 1
   },
-  /** Helper function to calculate the global track index from a local page index. */
+  /**
+    * Helper function to calculate the global track index from a local page index.
+    * @public
+    */
   getGlobalIndex: {
     type: Function,
     required: true
   },
-  /** Number of items to display per page, controlling container height dynamically. */
+  /**
+    * Number of items to display per page, controlling container height dynamically.
+    * @public
+    */
   pageSize: {
     type: Number,
     default: 7
@@ -155,12 +176,10 @@ const { t } = useI18n()
   color                 : var(--music-player-color-bg-secondary);
 }
 
-/* Dynamically scales container height based on how many tracks (pageSize) are rendered */
 .playlist-content {
   display               : flex;
   flex-direction        : column;
   gap                   : 6px;
-  /* Calculates height dynamically: approx 35px per track item + gaps + padding + footer space */
   height                : calc(var(--page-size, 7) * 36px + 45px);
   max-height            : 60vh; /* Safety bound for smaller screens */
   justify-content       : space-between;

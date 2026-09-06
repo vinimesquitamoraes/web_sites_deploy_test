@@ -4,6 +4,7 @@
     target        ="_blank" 
     rel           ="noopener noreferrer" 
     class         ="social-link"
+    :class        ="{ 'no-motion': !animationsEnabled }"
     :aria-label   ="computedTooltipText"
     @mouseenter   ="handleMouseEnter"
     @mouseleave   ="handleMouseLeave"
@@ -28,6 +29,9 @@
 
 import { ref, computed, onUnmounted } from 'vue'
 import ToolTip from '@/components/reusables/tooltip.vue'
+import { useAnimations } from '@/composables/reduced_motion_check'
+
+const { animationsEnabled } = useAnimations()
 
 /**
  * Component props definition.
@@ -157,6 +161,10 @@ onUnmounted(() => {
 .social-link:hover {
 	transform        : translateY(-3px);
 	color            : v-bind('props.hoverColor');
+}
+
+.social-link.no-motion:hover {
+	transform        : none;
 }
 
 .social-icon {

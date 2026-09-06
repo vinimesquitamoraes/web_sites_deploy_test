@@ -42,62 +42,98 @@
 import { computed, ref } from 'vue'
 
 const props = defineProps({
-  /** Binds the switch checked state externally via v-model. */
+  /**
+    * Binds the switch checked state externally via v-model.
+    * @public
+    */
   modelValue: {
     type    : Boolean,
     default : false
   },
-  /** Default source URL or SVG string for the icon. */
+  /**
+    * Default source URL or SVG string for the icon.
+    * @public
+    */
   iconSrc: {
     type    : String,
     default : '' 
   },
-  /** Icon source used specifically when the toggle is active. */
+  /**
+    * Icon source used specifically when the toggle is active.
+    * @public
+    */
   activeIconSrc: {
     type    : String,
     default : ''
   },
-  /** Icon source used specifically when the toggle is inactive. */
+  /**
+    * Icon source used specifically when the toggle is inactive.
+    * @public
+    */
   inactiveIconSrc: {
     type    : String,
     default : ''
   },
-  /** Width and height dimension for the icon. */
+  /**
+    * Width and height dimension for the icon.
+    * @public
+    */
   iconSize: {
     type    : [Number, String],
     default : 24 
   },
-  /** Fill color for CSS mask-based switch icons. */
+  /**
+    * Fill color for CSS mask-based switch icons.
+    * @public
+    */
   iconColor: {
     type    : String,
     default : '#ffffff'
   },
-  /** Background color of the internal draggable/sliding handle. */
+  /**
+    * Background color of the internal draggable/sliding handle.
+    * @public
+    */
   handleBgColor: {
     type    : String,
     default : 'var(--color-black)'
   },
-  /** Width dimension applied to the slider track. */
+  /**
+    * Width dimension applied to the slider track.
+    * @public
+    */
   width: {
     type    : [Number, String],
     default : 80
   },
-  /** Height dimension applied to the slider track. */
+  /**
+    * Height dimension applied to the slider track.
+    * @public
+    */
   height: {
     type    : [Number, String],
     default : 44
   },
-  /** Background color of the slider in default inactive state. */
+  /**
+    * Background color of the slider in default inactive state.
+    * @public
+    */
   bgColor: {
     type    : String,
     default : 'var(--color-custom-button-background)'
   },
-  /** Background color of the slider when hovered. */
+  /**
+    * Background color of the slider when hovered.
+    * @public
+    */
   hoverBgColor: {
     type    : String,
     default : 'var(--color-custom-button-hover)'
   },
-  /** Background color of the slider when active. */
+  /**
+    * Background color of the slider when active.
+    * @public
+    */
   activeBgColor: {
     type    : String,
     default : 'var(--color-hover)'
@@ -107,45 +143,75 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change'])
 const isHovered = ref(false)
 
-/** Helper to format value (number to px string). */
+/**
+  * Helper to format value (number to px string).
+  * @private
+  */
 const formatValue = (val) => (typeof val === 'number' ? `${val}px` : val)
 
-/** Computed width style for the slider track. */
+/**
+  * Computed width style for the slider track.
+  * @private
+  */
 const cssWidth = computed(() => formatValue(props.width))
 
-/** Computed height style for the slider track. */
+/**
+  * Computed height style for the slider track.
+  * @private
+  */
 const cssHeight = computed(() => formatValue(props.height))
 
-/** Computed dynamic background color for the slider depending on state. */
+/**
+  * Computed dynamic background color for the slider depending on state.
+  * @private
+  */
 const cssSliderBg = computed(() => {
   if (props.modelValue) return props.activeBgColor
   if (isHovered.value) return props.hoverBgColor
   return props.bgColor
 })
 
-/** Computed size for the handle based on slider height. */
+/**
+  * Computed size for the handle based on slider height.
+  * @private
+  */
 const handleSizeValue = computed(() => {
   const h = typeof props.height === 'number' ? props.height : parseInt(props.height) || 44
   return h - 8
 })
 
-/** Computed width/height style for the handle element. */
+/**
+  * Computed width/height style for the handle element.
+  * @private
+  */
 const cssHandleSize = computed(() => `${handleSizeValue.value}px`)
 
-/** Computed translation distance for the active state based on width, handle size, borders, and margins. */
+/**
+  * Computed translation distance for the active state based on width, handle size, borders, and margins.
+  * @private
+  */
 const activeTranslateX = computed(() => {
   const w = typeof props.width === 'number' ? props.width : parseInt(props.width) || 80
   const h = handleSizeValue.value
   return w - h - 8
 })
 
-/** Formatted translation distance string for CSS binding. */
+/**
+  * Formatted translation distance string for CSS binding.
+  * @private
+  */
 const cssTranslateX = computed(() => `${activeTranslateX.value}px`)
 
-/** Computed size style for the icon element. */
+/**
+  * Computed size style for the icon element.
+  * @private
+  */
 const cssIconSize = computed(() => formatValue(props.iconSize))
 
-/** Computed raw icon string depending on active/inactive states. * @private */
+/**
+  * Computed raw icon string depending on active/inactive states.
+  * @private
+  */
 const rawIcon = computed(() => {
   if (props.modelValue) {
     return props.inactiveIconSrc || props.iconSrc || props.activeIconSrc || ''
@@ -153,7 +219,10 @@ const rawIcon = computed(() => {
   return props.activeIconSrc || props.iconSrc || props.inactiveIconSrc || ''
 })
 
-/** Processes raw SVG strings into data URIs or passes through image paths. * @private */
+/**
+  * Processes raw SVG strings into data URIs or passes through image paths.
+  * @private
+  */
 const processedIcon = computed(() => {
   const icon = rawIcon.value
   if (!icon) return ''
@@ -164,7 +233,10 @@ const processedIcon = computed(() => {
   return icon
 })
 
-/** Computed CSS mask URL for SVG icons. * @private */
+/**
+  * Computed CSS mask URL for SVG icons.
+  * @private
+  */
 const cssMaskImage = computed(() => `url("${processedIcon.value}")`)
 
 /** 

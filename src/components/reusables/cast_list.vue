@@ -80,13 +80,17 @@ const props = defineProps({
   /** 
     * Layout display mode for characters.
     * @values list, tab
+    * @public
   */
   viewType: { 
     type: String, 
     default: 'list', 
     validator: (val) => ['list', 'tab'].includes(val) 
   },
-  /** Animation transition type used when switching tabs. */
+  /**
+    * Animation transition type used when switching tabs.
+    * @public
+  */
   transitionType: { 
     type: String, 
     default: 'fade'

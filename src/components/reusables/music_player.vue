@@ -1,14 +1,13 @@
 <template>
   <div class="music-player-container">
     <div 
-      class         = "music-player-wrapper" 
-      :class        = "{ 
+      class     = "music-player-wrapper" 
+      :class    = "{ 
         'is-open'       : isOpen, 
         'is-ready'      : isReady, 
-        'special-theme' : showImageTape && hasSpecialTapeAccess,
         'compact-mode'  : isPlayerHidden 
       }"
-      :style        = "{ 
+      :style    = "{ 
         bottom     : playerBottom + 'px',
         left       : (isCentered || footerBehavior === 'center') ? '50%' : '16px',
         right      : 'auto',
@@ -24,24 +23,23 @@
       <Transition name="compact-pop" @leave="onCompactLeave">
         <div v-if="isPlayerHidden" class="compact-button-wrapper">
           <CustomButton 
-            :iconSrc        = "musicNoteSvg"
-            class           = 'compact-button'
-            iconSize        = 'var(--music_player-compact-button-icon-size)'
-            width           = 'var(--music_player-compact-button-size)'
-            height          = 'var(--music_player-compact-button-size)'
-            bg-color        = 'var(--music_player-compact-button-color-bg)'
-            hover-bg-color  = 'var(--music_player-compact-button-color-bg-hover)'
-            icon-color      = 'var(--music_player-compact-button-color-icon)'
-            hover-icon-color= 'var(--music_player-compact-button-color-icon-hover)'
-            aria-label      = "Expand Music Player"
-            @click          = "isPlayerHidden = false; isPlayerHiddenAction = false"
+            class            = "compact-button"
+            width            = "var(--music_player-compact-button-size)"
+            height           = "var(--music_player-compact-button-size)"
+            iconSize         = "var(--music_player-compact-button-icon-size)"
+            bgColor          = "var(--music_player-compact-button-color-bg)"
+            hoverBgColor     = "var(--music_player-compact-button-color-bg-hover)"
+            iconColor        = "var(--music_player-compact-button-color-icon)"
+            hoverIconColor   = "var(--music_player-compact-button-color-icon-hover)"
+            :iconSrc         = "musicNoteSvg"
+            @click           = "isPlayerHidden = false; isPlayerHiddenAction = false"
           />
 
           <FloatingNotes 
-            :active = "isPlaying" 
-            :colors = "['#00cec9', '#fd79a8', '#ffeaa7']"
-            speed   = "1.2s"
-            distance= "-60px"            
+            speed            = "1.2s"
+            distance         = "-60px"            
+            :active          = "isPlaying" 
+            :colors          = "['#00cec9', '#fd79a8', '#ffeaa7']"
           />
         </div>
       </Transition>
@@ -51,32 +49,59 @@
           <div class="player-card">
             <div class="player-control-bar">
               <div class="control-bar-buttons">
-                <button 
-                  class       = "secondary-action-btn"
-                  @click      = "isPlayerHiddenAction = true; isOpen = false"
-                  aria-label  = "Minimize Player"
-                >
-                  <span class="secondary-icon-span"></span>
-                </button>
+                <CustomButton 
+                  class            = "secondary-action-btn"
+                  aria-label       = "Minimize Player"
+                  width            = "auto"
+                  height           = "auto"
+                  padding          = "2px 8px"
+                  bgColor          = "transparent"
+                  hoverBgColor     = "transparent"
+                  border           = "none"
+                  :iconSrc         = "triangleLeftSvg"
+                  iconSize         = "22px"
+                  :iconColor       = "currentIconColor"
+                  :hoverIconColor  = "currentHoverIconColor"
+                  @click           = "isPlayerHiddenAction = true; isOpen = false"
+                />
 
-                <button 
-                  class       = "expand-toggle-btn" 
-                  @click      = "isOpen = !isOpen" 
-                  :aria-label = "isOpen ? 'Collapse Player' : 'Expand Player'"
-                >
-                  <span class="expand-icon-span" :class="{ 'is-expanded': isOpen }"></span>
-                </button>
+                <CustomButton 
+                  class            = "expand-toggle-btn" 
+                  :aria-label      = "isOpen ? 'Collapse Player' : 'Expand Player'"
+                  width            = "auto"
+                  height           = "auto"
+                  padding          = "2px 8px"
+                  bgColor          = "transparent"
+                  hoverBgColor     = "transparent"
+                  border           = "none"
+                  :iconSrc         = "triangleUpSvg"
+                  iconSize         = "22px"
+                  :iconColor       = "currentIconColor"
+                  :hoverIconColor  = "currentHoverIconColor"
+                  :style           = "{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }"
+                  @click           = "isOpen = !isOpen" 
+                />
               </div>
 
               <PlayerControls 
-                :playlistId  = "playlistId"
-                :isPlaying   = "isPlaying" 
-                :isRecording = "isRecording"
-                @prev        = "changeTrack(-1)"
-                @togglePlay  = "togglePlay"
-                @stop        = "stopPlayer"
-                @next        = "changeTrack(1)"
-                @record      = "handleRecClick"
+                :playlistId         = "playlistId"
+                :isPlaying          = "isPlaying" 
+                :isRecording        = "isRecording"
+                :prevIconColor      = "currentIconColor"
+                :prevHoverIconColor = "currentHoverIconColor"
+                :playIconColor      = "currentIconColor"
+                :playHoverIconColor = "currentHoverIconColor"
+                :stopIconColor      = "currentIconColor"
+                :stopHoverIconColor = "currentHoverIconColor"
+                :nextIconColor      = "currentIconColor"
+                :nextHoverIconColor = "currentHoverIconColor"
+                :recIconColor       = "currentIconColor"
+                :recHoverIconColor  = "currentHoverIconColor"
+                @prev               = "changeTrack(-1)"
+                @togglePlay         = "togglePlay"
+                @stop               = "stopPlayer"
+                @next               = "changeTrack(1)"
+                @record             = "handleRecClick"
               />
             </div>
 
@@ -96,111 +121,170 @@
               />
 
               <PlaylistView 
-                :isLoadingTracks   = "isLoadingTracks"
-                :paginatedTracks   = "paginatedTracks"
-                :currentTrackIndex = "currentTrackIndex"
-                :currentPage       = "currentPage"
-                :totalPages        = "totalPages"
-                :getGlobalIndex    = "(i) => (currentPage - 1) * pageSize + i"
-                @playTrack         = "playTrack"
-                @updatePage        = "(val) => currentPage = val"
+                :isLoadingTracks    = "isLoadingTracks"
+                :paginatedTracks    = "paginatedTracks"
+                :currentTrackIndex  = "currentTrackIndex"
+                :currentPage        = "currentPage"
+                :totalPages         = "totalPages"
+                :getGlobalIndex     = "(i) => (currentPage - 1) * pageSize + i"
+                @playTrack          = "playTrack"
+                @updatePage         = "(val) => currentPage = val"
               />
             </div>
           </div>
 
           <VolumeControl 
-            :volumeLayout = "volumeLayout"
-            :volume       = "volume"
-            :isMuted      = "isMuted"
-            :orientation  = "orientation"
-            @wheelVolume  = "onWheelVolume"
-            @volumeChange = "onVolumeChange"
-            @toggleMute   = "toggleMute"
+            :volumeLayout       = "volumeLayout"
+            :volume             = "volume"
+            :isMuted            = "isMuted"
+            :orientation        = "orientation"
+            @wheelVolume        = "onWheelVolume"
+            @volumeChange       = "onVolumeChange"
+            @toggleMute         = "toggleMute"
           />
         </div>
       </Transition>
     </div>
 
     <ToasterNotification 
-      v-model   = "showToast"
-      :message  = "toastMessage"
-      :icon     = "toastIcon"
       type      = "info"
       position  = "top-left"
       :duration = "4000"
+      v-model   = "showToast"
+      :message  = "toastMessage"
+      :icon     = "toastIcon"
       @close    = "toastIcon = defaultToastIcon"
     />
   </div>
 </template>
 
 <script setup>
+/**
+  * @file        music_player_2.vue
+  * @brief       Main music player component handling YouTube playback, state management, layouts, and subcomponent coordination.
+  * @displayName Music Player 2
+*/
+
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useI18n }  from '@/composables/useI18n'
+import { useI18n } from '@/composables/useI18n'
 import { useRouter } from 'vue-router'
 
-import ToasterNotification  from '@/components/reusables/notification_toaster.vue'
-import CustomButton         from '@/components/reusables/custom_button.vue'
-import PlayerControls       from '@/components/reusables/music_player_controls.vue'
-import WalkmanDevice        from '@/components/reusables/music_player_walkman.vue'
-import PlaylistView         from '@/components/reusables/music_player_playlist.vue'
-import VolumeControl        from '@/components/reusables/music_player_volume_control.vue'
-import FloatingNotes        from '@/components/reusables/music_player_floating_notes.vue'
+import ToasterNotification from '@/components/reusables/notification_toaster.vue'
+import CustomButton from '@/components/reusables/custom_button.vue'
+import PlayerControls from '@/components/reusables/music_player_controls.vue'
+import WalkmanDevice from '@/components/reusables/music_player_walkman.vue'
+import PlaylistView from '@/components/reusables/music_player_playlist.vue'
+import VolumeControl from '@/components/reusables/music_player_volume_control.vue'
+import FloatingNotes from '@/components/reusables/music_player_floating_notes.vue'
 
-import musicNoteSvg         from '@/assets/svg/music-note-4-svgrepo-com.svg'
-import nintenBoppinIcon     from '@/assets/img/characters/Ninten_Boppin.gif'
-import ninten67Icon         from '@/assets/img/funny/Ninten_67.gif'
-import ferris_special_tape  from '@/assets/img/funny/ferris_special_mixtape.png'
+import musicNoteSvg from '@/assets/svg/music-note-4-svgrepo-com.svg'
+import triangleLeftSvg from '@/assets/svg/triangle-left-12-filled.svg'
+import triangleUpSvg from '@/assets/svg/triangle-up-12-filled.svg'
+import nintenBoppinIcon from '@/assets/img/characters/Ninten_Boppin.gif'
+import ninten67Icon from '@/assets/img/funny/Ninten_67.gif'
+import ferris_special_tape from '@/assets/img/funny/ferris_special_mixtape.png'
 
 const router = useRouter()
 const { t } = useI18n()
+
 const props = defineProps({
-  playlistId        : { type: String, required: true },
-  pageSize          : { type: Number, default: 7 },
-  footerBehavior    : { type: String, default: 'center' },
-  volumeLayout      : { type: String, default: 'wheel' },
-  minimizedBehavior : { type: String, default: 'default' },
-  orientation       : { type: String, default: 'horizontal' }
+  /**
+    * The YouTube playlist ID or full playlist URL.
+    * @public
+    */
+  playlistId: { 
+    type     : String, 
+    required : true 
+  },
+  /**
+    * The number of tracks to display per page in the playlist view.
+    * @public
+    */
+  pageSize: { 
+    type    : Number, 
+    default : 7 
+  },
+  /**
+    * Determines how the player reacts when overlapping the page footer.
+    * @public
+    */
+  footerBehavior: { 
+    type    : String, 
+    default : 'center' 
+  },
+  /**
+    * The layout style used for the volume control component.
+    * @public
+    */
+  volumeLayout: { 
+    type    : String, 
+    default : 'wheel' 
+  },
+  /**
+    * Defines the behavior style when the player is minimized.
+    * @public
+    */
+  minimizedBehavior: { 
+    type    : String, 
+    default : 'default' 
+  },
+  /**
+    * Sets the outer layout orientation of the player.
+    * @public
+    */
+  orientation: { 
+    type    : String, 
+    default : 'horizontal' 
+  }
 })
 
-const isOpen                 = ref(false)
-const isPlayerHidden         = ref(true)
-const isPlayerHiddenAction   = ref(true)
-const isPlaying              = ref(false)
-const isRecording            = ref(false)
-const recClickCount          = ref(0)
-const currentTrackIndex      = ref(0)
-const currentTime            = ref(0)
-const duration               = ref(0)
-const volume                 = ref(20)
-const isMuted                = ref(false)
-const tracks                 = ref([])
-const currentPage            = ref(1)
-const isLoadingTracks        = ref(true)
-const showImageTape          = ref(false)
-const hasSpecialTapeAccess   = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
+const isOpen = ref(false)
+const isPlayerHidden = ref(true)
+const isPlayerHiddenAction = ref(true)
+const isPlaying = ref(false)
+const isRecording = ref(false)
+const recClickCount = ref(0)
+const currentTrackIndex = ref(0)
+const currentTime = ref(0)
+const duration = ref(0)
+const volume = ref(20)
+const isMuted = ref(false)
+const tracks = ref([])
+const currentPage = ref(1)
+const isLoadingTracks = ref(true)
+const showImageTape = ref(false)
+const hasSpecialTapeAccess = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
 
-const playerBottom           = ref(16)
-const isCentered             = ref(false)
-const isHidden               = ref(false)
-const isReady                = ref(false)
+const playerBottom = ref(16)
+const isCentered = ref(false)
+const isHidden = ref(false)
+const isReady = ref(false)
 
-const showToast              = ref(false)
-const toastMessage           = ref('')
-const defaultToastIcon       = ref(nintenBoppinIcon)
-const toastIcon              = ref(nintenBoppinIcon)
+const showToast = ref(false)
+const toastMessage = ref('')
+const defaultToastIcon = ref(nintenBoppinIcon)
+const toastIcon = ref(nintenBoppinIcon)
 
-let player           = null
+let player = null
 let progressInterval = null
-let lastVolume       = 80
+let lastVolume = 80
 
-const totalPages     = computed(() => tracks.value.length ? Math.ceil(tracks.value.length / props.pageSize) : 1)
-const paginatedTracks= computed(() => tracks.value.slice((currentPage.value - 1) * props.pageSize, currentPage.value * props.pageSize))
+const totalPages = computed(() => tracks.value.length ? Math.ceil(tracks.value.length / props.pageSize) : 1)
+const paginatedTracks = computed(() => tracks.value.slice((currentPage.value - 1) * props.pageSize, currentPage.value * props.pageSize))
 
-/** Formats track duration seconds using a Builder Pattern */
+const currentIconColor = computed(() => 'var(--music-player-color-bg-secondary)')
+const currentHoverIconColor = computed(() => 'var(--music-player-color-bg-secondary)')
+
+/**
+  * Formats track duration seconds into a human-readable mm:ss string.
+  * @private
+  * @param {number} secs - The track duration or current time in seconds.
+  * @returns {string} The formatted time string (e.g., '3:45').
+  */
 const formatTime = (secs) => {
   const TimeBuilder = {
     isInvalid(s) { return isNaN(s) || s <= 0 },
-    build(s)     {
+    build(s) {
       const m = Math.floor(s / 60)
       const r = Math.floor(s % 60)
       return `${m}:${r < 10 ? '0' : ''}${r}`
@@ -209,12 +293,17 @@ const formatTime = (secs) => {
   return TimeBuilder.isInvalid(secs) ? '0:00' : TimeBuilder.build(secs)
 }
 
-/** Extracts valid YouTube playlist ID using a Builder Pattern */
+/**
+  * Extracts a clean YouTube playlist identifier or URL string.
+  * @private
+  * @param {string} val - The raw playlist identifier or URL prop value.
+  * @returns {string} The isolated playlist ID string.
+  */
 const extractPlaylistId = (val) => {
   const IdBuilder = {
     isEmpty(v) { return !v },
     isPlain(v) { return !v.includes('http') },
-    clean(v)   { return v.trim() },
+    clean(v) { return v.trim() },
     fromUrl(v) {
       try { return new URL(v).searchParams.get('list') || v } catch { return v }
     }
@@ -224,7 +313,10 @@ const extractPlaylistId = (val) => {
   return IdBuilder.fromUrl(val)
 }
 
-/** Calculates footer overlap & positioning via a Builder Pattern */
+/**
+  * Calculates footer overlap and updates player positioning dynamically on scroll.
+  * @private
+  */
 const updateFooterPosition = () => {
   const FooterBuilder = {
     getElement() { return document.querySelector('.footer-container') },
@@ -234,13 +326,13 @@ const updateFooterPosition = () => {
   const footer = FooterBuilder.getElement()
   if (!footer) {
     playerBottom.value = 30
-    isReady.value      = true
+    isReady.value = true
     return
   }
 
-  const overlap      = FooterBuilder.getOverlap(footer)
-  isCentered.value   = false
-  isHidden.value     = false
+  const overlap = FooterBuilder.getOverlap(footer)
+  isCentered.value = false
+  isHidden.value = false
   playerBottom.value = 16
 
   if (overlap > 0) {
@@ -251,10 +343,14 @@ const updateFooterPosition = () => {
   isReady.value = true
 }
 
+/**
+  * Injects the YouTube iframe API script into the document if missing.
+  * @private
+  */
 const initPlayer = () => {
   if (!window.YT) {
     const tag = document.createElement('script')
-    tag.src   = 'https://www.youtube.com/iframe_api'
+    tag.src = 'https://www.youtube.com/iframe_api'
     document.getElementsByTagName('script')[0].parentNode.insertBefore(tag, document.getElementsByTagName('script')[0])
     window.onYouTubeIframeAPIReady = createPlayer
   } else {
@@ -262,6 +358,10 @@ const initPlayer = () => {
   }
 }
 
+/**
+  * Instantiates the YouTube player object and registers event handlers.
+  * @private
+  */
 const createPlayer = () => {
   player = new window.YT.Player('youtube-player', {
     height     : '200', 
@@ -277,14 +377,14 @@ const createPlayer = () => {
       },
       onStateChange: (e) => {
         if (e.data === window.YT.PlayerState.PLAYING) {
-          isPlaying.value    = true
+          isPlaying.value = true
           startInterval()
           syncState()
           toastMessage.value = `${t('SITE_MUSIC_PLAYER_TOASTER_NOTIF')}: ${tracks.value[currentTrackIndex.value]?.title || 'Track'}`
-          showToast.value    = true
+          showToast.value = true
         } else if (e.data === window.YT.PlayerState.PAUSED || e.data === window.YT.PlayerState.ENDED) {
-          showToast.value    = false
-          isPlaying.value    = false
+          showToast.value = false
+          isPlaying.value = false
           stopInterval()
           if (e.data === window.YT.PlayerState.ENDED) changeTrack(1)
         }
@@ -293,14 +393,16 @@ const createPlayer = () => {
   })
 }
 
-/** Syncs state and fetches track details with bulletproof batching and request retries */
+/**
+  * Syncs the player state and asynchronously fetches track metadata titles in batches.
+  * @private
+  */
 const syncState = async () => {
   if (!player?.getPlaylist) return
   const ids = player.getPlaylist()
   if (ids?.length && tracks.value.length !== ids.length) {
-    tracks.value          = ids.map((id, idx) => ({ id, title: `Track ${idx + 1}` }))
+    tracks.value = ids.map((id, idx) => ({ id, title: `Track ${idx + 1}` }))
     isLoadingTracks.value = true
-    //essa bosta diabo cacete
     const batchSize = 2
     for (let i = 0; i < ids.length; i += batchSize) {
       const batch = ids.slice(i, i + batchSize)
@@ -311,7 +413,7 @@ const syncState = async () => {
 
           for (let attempt = 0; attempt < 2 && !titleFound; attempt++) {
             try {
-              const res  = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}&format=json`)
+              const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${id}&format=json`)
               const data = await res.json()
               if (data?.title) {
                 tracks.value[actualIdx].title = data.title
@@ -319,7 +421,6 @@ const syncState = async () => {
               }
             } catch {}
             if (!titleFound) {
-              
               await new Promise(r => setTimeout(r, 200))
             }
           }
@@ -345,61 +446,101 @@ const syncState = async () => {
   const index = player.getPlaylistIndex()
   if (index >= 0) {
     currentTrackIndex.value = index
-    currentPage.value       = Math.floor(index / props.pageSize) + 1
+    currentPage.value = Math.floor(index / props.pageSize) + 1
   }
   duration.value = player.getDuration() || 0
 }
 
+/**
+  * Starts an interval timer to update playback progress tracking metrics.
+  * @private
+  */
 const startInterval = () => {
   stopInterval()
   progressInterval = setInterval(() => {
     if (player?.getCurrentTime && isPlaying.value) {
       currentTime.value = player.getCurrentTime()
-      duration.value    = player.getDuration() || duration.value
+      duration.value = player.getDuration() || duration.value
     }
   }, 200)
 }
 
+/**
+  * Clears the active progress tracking interval timer.
+  * @private
+  */
 const stopInterval = () => clearInterval(progressInterval)
 
+/**
+  * Toggles playback state between playing and paused.
+  * @private
+  */
 const togglePlay = () => {
   if (!player) return
   player.getPlayerState() === window.YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo()
 }
 
+/**
+  * Stops playback completely and resets current seek positions.
+  * @private
+  */
 const stopPlayer = () => {
   if (!player) return
   player.stopVideo?.() || (player.pauseVideo(), player.seekTo?.(0, true))
-  isPlaying.value   = false
+  isPlaying.value = false
   currentTime.value = 0
   stopInterval()
 }
 
+/**
+  * Changes to the next or previous track in the playlist index.
+  * @private
+  * @param {number} direction - Positive value for next track, negative for previous.
+  */
 const changeTrack = (direction) => {
   if (!player) return
   direction > 0 ? player.nextVideo?.() : player.previousVideo?.()
   setTimeout(syncState, 400)
 }
 
+/**
+  * Jumps to and plays a specific track index within the playlist.
+  * @private
+  * @param {number} index - The target track index.
+  */
 const playTrack = (index) => {
-  const globalIdx         = (currentPage.value - 1) * props.pageSize + index
+  const globalIdx = (currentPage.value - 1) * props.pageSize + index
   currentTrackIndex.value = globalIdx
   player?.playVideoAt?.(globalIdx)
   setTimeout(syncState, 400)
 }
 
+/**
+  * Seeks playback to a specific timestamp based on input events.
+  * @private
+  * @param {Event} e - The input change event containing target values.
+  */
 const onSeek = (e) => {
   currentTime.value = parseFloat(e.target.value)
   player?.seekTo?.(currentTime.value, true)
 }
 
+/**
+  * Updates the audio player volume level from slider inputs.
+  * @private
+  * @param {Event} e - The input change event containing volume values.
+  */
 const onVolumeChange = (e) => {
   volume.value = parseFloat(e.target.value)
   if (isMuted.value) { isMuted.value = false; player?.unMute?.() }
   player?.setVolume?.(volume.value)
 }
 
-/** Calculates volume changes via mouse wheel using a Builder Pattern */
+/**
+  * Adjusts volume levels incrementally using mouse scroll wheel delta values.
+  * @private
+  * @param {WheelEvent} e - The mouse wheel scroll event.
+  */
 const onWheelVolume = (e) => {
   const VolumeBuilder = {
     calculate(cur, delta) {
@@ -412,29 +553,37 @@ const onWheelVolume = (e) => {
   player?.setVolume?.(volume.value)
 }
 
+/**
+  * Toggles audio muting state and retains previous active volume levels.
+  * @private
+  */
 const toggleMute = () => {
   if (!player) return
   if (isMuted.value) {
     isMuted.value = false
-    volume.value  = lastVolume
+    volume.value = lastVolume
     player.unMute?.()
     player.setVolume?.(volume.value)
   } else {
     isMuted.value = true
-    lastVolume    = volume.value
-    volume.value  = 0
+    lastVolume = volume.value
+    volume.value = 0
     player.mute?.()
     player.setVolume?.(0)
   }
 }
 
+/**
+  * Handles recording button interactions and triggers secret easter eggs upon threshold hits.
+  * @private
+  */
 const handleRecClick = () => {
   isRecording.value = !isRecording.value
   if (++recClickCount.value >= 5) {
     recClickCount.value = 0
-    toastMessage.value  = '67'
-    showToast.value     = true
-    toastIcon.value     = ninten67Icon
+    toastMessage.value = '67'
+    showToast.value = true
+    toastIcon.value = ninten67Icon
     sessionStorage.setItem('unlocked_dogten', 'true')
     setTimeout(() => router.push('/dogten'), 1500)
   }
@@ -451,6 +600,11 @@ onUnmounted(() => {
   window.removeEventListener('scroll', updateFooterPosition)
 })
 
+/**
+  * Resets inline element transition styles when closing the compact player button.
+  * @private
+  * @param {HTMLElement} el - The DOM element leaving view.
+  */
 const onCompactLeave = (el) => {
   el.style.opacity    = '0'
   el.style.visibility = 'hidden'
@@ -470,6 +624,16 @@ const onCompactLeave = (el) => {
   100% { opacity: 0; transform: translateY(var(--note-float-distance, -50px)) translateX(12px) scale(1.1) rotate(15deg); }
 }
 
+:root {
+  --music-player-volume-controls-bg       : #1a1a1a;
+  --music-player-volume-controls-border   : 1px solid #333333;
+  --music-player-volume-controls-slider   : #00cec9;
+  --music-player-volume-controls-text     : #ffffff;
+  --music-player-volume-controls-container: #2d2d2d;
+  --music-player-volume-controls-track    : #444444;
+  --music-player-volume-controls-highlight: #ffffff;
+}
+
 .music-player-container {
   box-sizing  : border-box;
   max-width   : 100vw;
@@ -477,175 +641,172 @@ const onCompactLeave = (el) => {
 }
 
 .music-player-wrapper {
-  position        : fixed;
-  max-width       : calc(100vw - 24px);
-  z-index         : 21;
-  display         : flex;
-  flex-direction  : column;
-  width           : auto;
-  box-sizing      : border-box;
-  pointer-events  : none;
-  opacity         : 0;
-  visibility      : hidden;
-  transition      : left 0.2s ease-out, right 0.2s ease-out, bottom 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
-}
-
-.music-player-wrapper.special-theme {
-  --music-player-color-accent             : #9d4edd;
-  --music-player-color-accent-light       : #c77dff;
-  --music-player-color-primary            : #5a189a;
-  --music-player-color-playbt-playing     : #7b2cbf;
-  --music-player-color-playbt-playing-pressed : #5a189a;
-  --music-player-color-playbt-paused      : #3c096c;
-  --music-player-color-playbt-paused-pressed : #240046;
+  position    : fixed;
+  max-width   : calc(100vw - 24px);
+  z-index     : 21;
+  display     : flex;
+  flex-direction: column;
+  width       : auto;
+  box-sizing  : border-box;
+  pointer-events: none;
+  opacity     : 0;
+  visibility  : hidden;
+  transition  : left 0.2s ease-out, right 0.2s ease-out, bottom 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
 .music-player-wrapper.is-ready {
-  visibility : visible;
-  animation  : playerEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  visibility  : visible;
+  animation   : playerEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.compact-pop-enter-active { transition : all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.compact-pop-enter-from, .compact-pop-leave-to { opacity : 0; transform : scale(0.4) translateY(20px); }
+.compact-pop-enter-active { 
+  transition  : all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); 
+}
 
-.slide-out-left-enter-active { transition : all 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-.slide-out-left-leave-active { transition : all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-.slide-out-left-enter-from   { opacity : 0; transform : translateX(-50px); }
-.slide-out-left-leave-to     { opacity : 0; transform : translateX(-120%); }
+.compact-pop-enter-from, 
+.compact-pop-leave-to { 
+  opacity     : 0; 
+  transform   : scale(0.4) translateY(20px); 
+}
 
-.compact-button-wrapper { pointer-events : auto; }
-.compact-button         { margin-bottom  : 0; }
+.slide-out-left-enter-active { 
+  transition  : all 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+}
+
+.slide-out-left-leave-active { 
+  transition  : all 0.35s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+.slide-out-left-enter-from { 
+  opacity     : 0; 
+  transform   : translateX(-50px); 
+}
+
+.slide-out-left-leave-to { 
+  opacity     : 0; 
+  transform   : translateX(-120%); 
+}
+
+.compact-button-wrapper { 
+  pointer-events: auto; 
+  width       : fit-content;
+  align-self  : flex-start; 
+}
+
+.compact-button { 
+  margin-bottom : 0; 
+}
 
 .player-outer-layout {
-  pointer-events : auto;
-  display        : flex;
-  align-items    : flex-start;
-  gap            : 12px;
-  width          : 100%;
-  box-sizing     : border-box;
-  overflow       : visible;
+  pointer-events: auto;
+  display     : flex;
+  align-items : flex-start;
+  gap         : 12px;
+  width       : 100%;
+  box-sizing  : border-box;
+  overflow    : visible;
 }
 
-.player-outer-layout.player-orientation-vertical          { flex-direction : row; align-items : flex-start; }
-.player-outer-layout.player-orientation-vertical-flipped  { flex-direction : row-reverse; align-items : flex-start; }
+.player-outer-layout.player-orientation-vertical { 
+  flex-direction: row; 
+  align-items : flex-start; 
+}
+
+.player-outer-layout.player-orientation-vertical-flipped { 
+  flex-direction: row-reverse; 
+  align-items : flex-start; 
+}
+
 .player-outer-layout.player-orientation-horizontal,
 .player-outer-layout.player-orientation-horizontal-flipped {
-  width          : 100%;
-  flex-direction : column;
-  align-items    : stretch;
-  gap            : 8px;
-  box-sizing     : border-box;
+  width       : 100%;
+  flex-direction: column;
+  align-items : stretch;
+  gap         : 8px;
+  box-sizing  : border-box;
 }
 
-.player-outer-layout.player-orientation-horizontal-flipped .player-card { flex-direction : column-reverse; }
+.player-outer-layout.player-orientation-horizontal-flipped .player-card { 
+  flex-direction: column-reverse; 
+}
 
 .player-card {
-  display        : flex;
-  flex-direction : column;
-  background     : var(--music-player-color-bg-main);
-  border         : var(--music-player-border);
-  border-radius  : var(--music-player-border-radius);
-  overflow       : hidden;
-  width          : 360px;
-  max-width      : 100%;
-  box-sizing     : border-box;
-  max-height     : calc(100vh - 80px);
-  transition     : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  display     : flex;
+  flex-direction: column;
+  background  : var(--music-player-color-bg-main);
+  border      : var(--music-player-border);
+  border-radius: var(--music-player-border-radius);
+  overflow    : hidden;
+  width       : 360px;
+  max-width   : 100%;
+  box-sizing  : border-box;
+  max-height  : calc(100vh - 80px);
+  transition  : max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .music-player-wrapper.is-open .player-card { 
-  max-height : calc(100vh - 80px); 
+  max-height  : calc(100vh - 80px); 
 }
 
 .player-control-bar {
-  display        : flex;
-  flex-direction : column;
-  align-items    : center;
-  background     : var(--music-player-color-bg-main);
-  padding        : 6px 8px 10px 8px;
-  gap            : 4px;
-  z-index        : 2;
-  box-sizing     : border-box;
-  flex-shrink    : 0;
-  overflow       : hidden;
+  display     : flex;
+  flex-direction: column;
+  align-items : center;
+  background  : var(--music-player-color-bg-main);
+  padding     : 6px 8px 10px 8px;
+  gap         : 4px;
+  z-index     : 2;
+  box-sizing  : border-box;
+  flex-shrink : 0;
+  overflow    : hidden;
 }
 
 .control-bar-buttons {
-  display               : grid;
-  grid-template-columns : 1fr auto 1fr;
-  align-items           : center;
-  width                 : 100%;
-  padding               : -4px 4px;
-}
-
-.secondary-action-btn, .expand-toggle-btn {
-  background  : transparent;
-  border      : none;
-  cursor      : pointer;
-  padding     : 2px 8px;
-  display     : flex;
+  display     : grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items : center;
-}
-.secondary-action-btn { justify-self : start; }
-.expand-toggle-btn    { justify-self : center; }
-
-.expand-icon-span {
-  width            : 22px;
-  height           : 22px;
-  background-color : var(--music-player-color-accent-light);
-  mask-image       : url('@/assets/svg/triangle-up-12-filled.svg');
-  mask-size        : contain;
-  mask-repeat      : no-repeat;
-  mask-position    : center;
-  transition       : transform 0.3s ease, background-color 0.15s;
+  width       : 100%;
+  padding     : -4px 4px;
 }
 
-.expand-icon-span.is-expanded              { transform : rotate(180deg); }
-.expand-toggle-btn:hover .expand-icon-span { background-color : var(--music-player-color-white, #ffffff); }
-
-.secondary-icon-span {
-  width            : 22px;
-  height           : 22px;
-  background-color : var(--music-player-color-accent-light);
-  mask-image       : url('@/assets/svg/triangle-left-12-filled.svg');
-  mask-size        : contain;
-  mask-repeat      : no-repeat;
-  mask-position    : center;
-  transition       : background-color 0.15s;
+.secondary-action-btn { 
+  justify-self: start; 
 }
 
-.secondary-action-btn:hover .secondary-icon-span { background-color : var(--music-player-color-white, #ffffff); }
+.expand-toggle-btn { 
+  justify-self: center; 
+}
 
 .player-collapsible-content {
-  display        : flex;
-  flex-direction : column;
-  gap            : 12px;
-  opacity        : 0;
-  overflow-y     : auto;
-  overflow-x     : hidden;
-  max-height     : 0;
-  padding        : 0 12px;
-  pointer-events : none;
-  box-sizing     : border-box;
-  width          : 100%;
-  transition     : opacity 0.3s ease, padding 0.4s ease, max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  display     : flex;
+  flex-direction: column;
+  gap         : 12px;
+  opacity     : 0;
+  overflow-y  : auto;
+  overflow-x  : hidden;
+  max-height  : 0;
+  padding     : 0 12px;
+  pointer-events: none;
+  box-sizing  : border-box;
+  width       : 100%;
+  transition  : opacity 0.3s ease, padding 0.4s ease, max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .music-player-wrapper.is-open .player-collapsible-content {
-  opacity        : 1;
-  max-height     : calc(100vh - 180px);
-  padding        : 0 12px 12px 12px;
-  pointer-events : auto;
+  opacity     : 1;
+  max-height  : calc(100vh - 180px);
+  padding     : 0 12px 12px 12px;
+  pointer-events: auto;
 }
 
 .hidden-player {
-  position       : absolute;
-  width          : 1px;
-  height         : 1px;
-  overflow       : hidden;
-  left           : -9999px;
-  opacity        : 0;
-  pointer-events : none;
+  position    : absolute;
+  width       : 1px;
+  height      : 1px;
+  overflow    : hidden;
+  left        : -9999px;
+  opacity     : 0;
+  pointer-events: none;
 }
 
 @media (max-width: 480px) {
@@ -657,29 +818,29 @@ const onCompactLeave = (el) => {
   }
 
   .player-outer-layout {
-    flex-direction : column !important;
-    align-items    : stretch !important;
+    flex-direction: column !important;
+    align-items : stretch !important;
   }
 
   .player-card {
-    width      : 100% !important;
-    max-height : calc(100vh - 60px);
+    width     : 100% !important;
+    max-height: calc(100vh - 60px);
   }
 
   .music-player-wrapper.is-open .player-card {
-    max-height : calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
   }
   
   .music-player-wrapper.is-open .player-collapsible-content {
-    max-height : calc(100vh - 140px);
+    max-height: calc(100vh - 140px);
   }
 
   .player-control-bar {
-    padding : 4px 6px 8px 6px;
+    padding   : 4px 6px 8px 6px;
   }
 
   .mobile-hidden-walkman {
-    display : none !important;
+    display   : none !important;
   }
 }
 </style>

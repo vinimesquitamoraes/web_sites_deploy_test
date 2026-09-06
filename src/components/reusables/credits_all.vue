@@ -40,7 +40,10 @@ const debugLog = (...args) => {
 }
 
 const props = defineProps({
-  /** The act filter string ('all' or specific act number). */
+  /**
+    * The act filter string ('all' or specific act number).
+    * @public
+  */
   act: {
     type: String,
     default: 'all'

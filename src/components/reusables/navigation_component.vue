@@ -35,12 +35,18 @@ import { useI18n }            from '@/composables/useI18n'
 import CustomLanguageDropdown from '@/components/reusables/custom_lang_dropdown.vue'
 
 defineProps({
-  /** Controls whether the mobile navigation menu overlay is open or closed. */
+  /**
+    * Controls whether the mobile navigation menu overlay is open or closed.
+    * @public
+    */
   isMenuOpen: {
     type    : Boolean,
     default : false
   },
-  /** Controls whether the language selection dropdown is visible in the navigation bar. */
+  /**
+    * Controls whether the language selection dropdown is visible in the navigation bar.
+    * @public
+    */
   showLanguageDropdown: {
     type    : Boolean,
     default : true

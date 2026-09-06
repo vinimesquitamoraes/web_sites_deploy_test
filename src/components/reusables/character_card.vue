@@ -49,60 +49,96 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-  /** Character name text content. */
+  /**
+    * Character name text content.
+    * @public
+    */
   name: {
     type    : String,
     required: true
   },
-  /** Description text string or an array of description paragraphs. */
+  /**
+    * Description text string or an array of description paragraphs.
+    * @public
+    */
   description: {
     type    : [String, Array],
     required: true
   },
-  /** Source URL for the character image asset. */
+  /**
+    * Source URL for the character image asset.
+    * @public
+    */
   image: {
     type    : String,
     required: true
   },
-  /** Controls whether the card layout direction is reversed. */
+  /**
+    * Controls whether the card layout direction is reversed.
+    * @public
+    */
   isReversed: {
     type    : Boolean,
     default : false
   },
-  /** Layout orientation of the character card (horizontal, vertical). */
+  /**
+    * Layout orientation of the character card (horizontal, vertical).
+    * @values horizontal, vertical
+    * @public
+    */
   orientation: {
     type    : String,
     default : 'horizontal',
     validator: (val) => ['horizontal', 'vertical'].includes(val)
   },
-  /** Shape style of the character image wrapper (circle, square). */
+  /**
+    * Shape style of the character image wrapper (circle, square).
+    * @values circle, square
+    * @public
+    */
   imageShape: {
     type    : String,
     default : 'circle',
     validator: (val) => ['circle', 'square'].includes(val)
   },
-  /** Background color for the image wrapper container. */
+  /**
+    * Background color for the image wrapper container.
+    * @public
+    */
   imageBgColor: {
     type    : String,
     default : 'transparent'
   },
-  /** Custom CSS size width and height for the image wrapper. */
+  /**
+    * Custom CSS size width and height for the image wrapper.
+    * @public
+    */
   imageSize: {
     type    : String,
     default : '340px'
   },
-  /** Scale factor transformation applied to the character image. */
+  /**
+    * Scale factor transformation applied to the character image.
+    * @public
+    */
   imageScale: {
     type    : [Number, String],
     default : 1
   },
-  /** Inner padding spacing applied to the character image. */
+  /**
+    * Inner padding spacing applied to the character image.
+    * @public
+    */
   imagePadding: {
     type    : String,
     default : "0 0 70px 0"
   },
 });
 
+/**
+  * Computed property that normalizes description text or arrays into paragraphs.
+  * @private
+*/
 const descriptionParagraphs = computed(() => {
   if (Array.isArray(props.description)) {
     return props.description.filter(p => Boolean(p));

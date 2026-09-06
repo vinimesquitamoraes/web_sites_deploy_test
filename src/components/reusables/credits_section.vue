@@ -65,37 +65,59 @@ import { ref, computed } from 'vue'
 import ToolTip from '@/components/reusables/tooltip.vue'
 
 const props = defineProps({
-  /** Array of credit sections containing titles and grouped role lists. */
+  /**
+    * Array of credit sections containing titles and grouped role lists.
+    * @public
+  */
   credits: {
     type: Array,
     required: true,
   },
-  /** Mapping dictionary matching names to external links. */
+  /**
+    * Mapping dictionary matching names to external links.
+    * @public
+  */
   linksMap: {
     type: Object,
     default: () => ({})
   },
-  /** Text color for main section titles. */
+  /**
+    * Text color for main section titles.
+    * @public
+  */
   titleColor: {
     type: String,
     default: 'var(--color-credits-title)'
   },
-  /** Text color for group roles/subtitles. */
+  /**
+    * Text color for group roles/subtitles.
+    * @public
+  */
   subtitleColor: {
     type: String,
     default: 'var(--color-credits-role)'
   },
-  /** Text color for individual names. */
+  /**
+    * Text color for individual names.
+    * @public
+  */
   textColor: {
     type: String,
     default: 'var(--color-credits-name)'
   },
-  /** Number of grid columns for the names list. */
+  /**
+    * Number of grid columns for the names list.
+    * @public
+  */
   columns: {
     type: [Number, String],
     default: 2
   },
-  /** Text alignment orientation ('left', 'center', 'right'). */
+  /**
+    * Text alignment orientation ('left', 'center', 'right').
+    * @values left, center, right
+    * @public
+  */
   textAlign: {
     type: String,
     default: 'left'
@@ -104,14 +126,20 @@ const props = defineProps({
 
 const activeTooltipIndex = ref(null)
 
-/** Computes grid justification based on text alignment configuration. * @private */
+/**
+  * Computes grid justification based on text alignment configuration.
+  * @private
+*/
 const computedAlign = computed(() => {
   if (props.textAlign === 'center') return 'center'
   if (props.textAlign === 'right') return 'end'
   return 'start'
 })
 
-/** Extracts string name from string or object person entries. * @private */
+/**
+  * Extracts string name from string or object person entries.
+  * @private
+*/
 const resolveName = (person) => {
   if (typeof person === 'object' && person !== null) {
     return person.name
@@ -119,7 +147,10 @@ const resolveName = (person) => {
   return person
 }
 
-/** Resolves link mapping for a person string. * @private */
+/**
+  * Resolves link mapping for a person string.
+  * @private
+*/
 const resolveLink = (person) => {
   const nameStr = resolveName(person)
   if (!nameStr) return null
@@ -131,7 +162,10 @@ const resolveLink = (person) => {
   return foundKey ? props.linksMap[foundKey] : null
 }
 
-/** Gets specific link or fallback resolved link for a person. * @private */
+/**
+  * Gets specific link or fallback resolved link for a person.
+  * @private
+*/
 const getPersonLink = (person) => {
   if (typeof person === 'object' && person !== null && person.link) {
     return person.link
@@ -139,7 +173,10 @@ const getPersonLink = (person) => {
   return resolveLink(person)
 }
 
-/** Determines if tooltips are permitted based on config hierarchy. * @private */
+/**
+  * Determines if tooltips are permitted based on config hierarchy.
+  * @private
+*/
 const isTooltipAllowed = (section, group, person) => {
   if (section.showTooltip === false) return false
   if (group.showTooltip === false) return false

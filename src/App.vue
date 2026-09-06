@@ -263,6 +263,24 @@ body.reduce-motion *::after {
   --music_player-font-p-size                   : var(--font-p-size);
   --music_player-font-track-names-size         : 15px;
 
+  --music-player-volume-controls-bg         : #1a1a1a;
+  --music-player-volume-controls-border     : var(--default-border);
+  --music-player-volume-controls-slider     : var(--music-player-color-accent);
+  --music-player-volume-controls-text       : var(--color-default-text-color);
+  --music-player-volume-controls-container  : var(--music-player-color-surface);
+  --music-player-volume-controls-track      : var(--color-black);
+  --music-player-volume-controls-highlight  : #ffffff;
+
+  --music-player-volume-controls-mute-bg                      : var(--music-player-volume-controls-bg);
+  --music-player-volume-controls-mute-hover-bg                : var(--color-primary);
+  --music-player-volume-controls-mute-icon-color              : #ffffff;
+  --music-player-volume-controls-mute-hover-icon-color        : var(--music-player-volume-controls-mute-bg);
+
+  --music-player-volume-controls-mute-active-bg               : var(--music-player-color-accent);
+  --music-player-volume-controls-mute-active-hover-bg         : var(--color-secondary);
+  --music-player-volume-controls-mute-active-icon-color       : #ffffff;
+  --music-player-volume-controls-mute-active-hover-icon-color : var(--color-black);
+
   --toaster-bg-main           : #ffffff;
   --toaster-border-color      : #000000;
   --toaster-font-size         : 0.85rem;
@@ -317,7 +335,7 @@ body.reduce-motion *::after {
   --color-lang-dropdown-arrow              : #ffffff;
   --color-lang-dropdown-arrow-hover        : #ffffff;
   --color-lang-dropdown-list-bg            : #000000;
-  --color-lang-dropdown-list-border        : 6px double  #000000;
+  --color-lang-dropdown-list-border        : 3px solid #ffffff;
   --color-lang-dropdown-option-text        : #ffffff;
   --color-lang-dropdown-option-hover-bg    : var(--color-tertiary);
   --color-lang-dropdown-option-hover-text  : #ffffff;
@@ -334,14 +352,14 @@ body.reduce-motion *::after {
   --foldable-icon-bg       : transparent;
   --foldable-body-border   : 3px solid #202020;
 
-  --content-section-font-h2             : var(--font-default);
-  --content-section-font-h2-size        : var(--font-h2-size);
-  --content-section-color-h2            : var(--color-primary);
-  --content-section-font-p              : var(--font-default);
-  --content-section-font-p-size         : var(--font-p-size);
-  --content-section-color-p             : var(--color-black);
-  --content-section-media-border        : var(--default-border);
-  --content-section-media-radius        : var(--default-border-radius);
+  --content-section-font-h2      : var(--font-default);
+  --content-section-font-h2-size : var(--font-h2-size);
+  --content-section-color-h2     : var(--color-primary);
+  --content-section-font-p       : var(--font-default);
+  --content-section-font-p-size  : var(--font-p-size);
+  --content-section-color-p      : var(--color-black);
+  --content-section-media-border : var(--default-border);
+  --content-section-media-radius : var(--default-border-radius);
 
   --media-modal-overlay-bg       : rgba(68, 9, 9, 0.534);
   --media-modal-border           : var(--default-border);
@@ -357,13 +375,21 @@ body.reduce-motion *::after {
   --media-modal-arrow-icon-hover : var(--media-modal-button-bg);
   --media-modal-arrow-offset     : -60px;
 
-  --color-banner-button-border             : 6px double var(--color-default-text-color);
-  --color-banner-button-bg                 : #000000;
-  --color-banner-button-hover-bg           : var(--color-tertiary);
-  --color-banner-button-icon               : #ffffff;
-  --color-banner-text                      : #ffffff; 
+  --color-banner-button-border             : var(--default-border);
+  --color-banner-button-bg                 : var(--color-default-background);
+  --color-banner-button-hover-bg           : var(--color-primary);
+  --color-banner-button-icon               : var(--color-black);
+  --color-banner-button-text               : var(--color-black); 
 }
-
+.music-player-wrapper.special-theme {
+  --music-player-color-accent                 : #9d4edd;
+  --music-player-color-accent-light           : #c77dff;
+  --music-player-color-primary                : #5a189a;
+  --music-player-color-playbt-playing         : #7b2cbf;
+  --music-player-color-playbt-playing-pressed : #5a189a;
+  --music-player-color-playbt-paused          : #3c096c;
+  --music-player-color-playbt-paused-pressed  : #240046;
+}
 
 body {
   margin                : 0;

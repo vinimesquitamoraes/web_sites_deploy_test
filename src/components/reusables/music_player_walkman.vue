@@ -71,37 +71,58 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import CustomButton from '@/components/reusables/custom_button.vue'
 
 defineProps({
-  /** Indicates whether media is currently playing. */
+  /**
+    * Indicates whether media is currently playing.
+    * @public
+    */
   isPlaying: {
     type: Boolean,
     default: false
   },
-  /** Controls whether to display the custom image cassette instead of the default shell. */
+  /**
+    * Controls whether to display the custom image cassette instead of the default shell.
+    * @public
+    */
   showImageTape: {
     type: Boolean,
     default: false
   },
-  /** Index of the currently playing track. */
+  /**
+    * Index of the currently playing track.
+    * @public
+    */
   currentTrackIndex: {
     type: Number,
     default: 0
   },
-  /** Current playback time in seconds. */
+  /**
+    * Current playback time in seconds.
+    * @public
+    */
   currentTime: {
     type: Number,
     default: 0
   },
-  /** Total duration of the current track in seconds. */
+  /**
+    * Total duration of the current track in seconds.
+    * @public
+    */
   duration: {
     type: Number,
     default: 0
   },
-  /** Image URL for the special custom tape design. */
+  /**
+    * Image URL for the special custom tape design.
+    * @public
+    */
   specialTapeImg: {
     type: String,
     default: ''
   },
-  /** Utility function to format timestamp numbers into displayable time strings. */
+  /**
+    * Utility function to format timestamp numbers into displayable time strings.
+    * @public
+    */
   formatTime: {
     type: Function,
     required: true
@@ -110,10 +131,16 @@ defineProps({
 
 defineEmits(['toggleTapeStyle', 'seek'])
 
-/** Tracks whether the user has unlocked special tape access in session storage. */
+/**
+  * Tracks whether the user has unlocked special tape access in session storage.
+  * @private
+  */
 const hasSpecialTapeAccess = ref(false)
 
-/** Checks session storage for special tape access permissions. */
+/**
+  * Checks session storage for special tape access permissions.
+  * @private
+  */
 const checkSessionAccess = () => {
   hasSpecialTapeAccess.value = sessionStorage.getItem('unlocked_special_tape') === 'true'
 }

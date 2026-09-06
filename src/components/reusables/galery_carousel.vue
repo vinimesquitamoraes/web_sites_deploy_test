@@ -95,12 +95,16 @@
       />
       
       <div class="thumbnails-track-wrapper">
-        <div class="thumbnails-track" ref="thumbnailsTrackRef">
+        <div 
+          class="thumbnails-track" 
+          ref="thumbnailsTrackRef"
+          :style="{ scrollBehavior: animationsEnabled ? 'smooth' : 'auto' }"
+        >
           <div 
             v-for     = "(slide, index) in slides" 
             :key      = "slide.id" 
             class     = "thumbnail-item"
-            :class    = "{ 'thumb-active': index === currentIndex }"
+            :class    = "{ 'thumb-active': index === currentIndex, 'no-motion': !animationsEnabled }"
             @click    = "selectSlide(index)"
           >
             <img 
@@ -149,6 +153,7 @@
 
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n }    from '@/composables/useI18n'
+import { useAnimations } from '@/composables/reduced_motion_check'
 
 import MediaModal from './media_modal.vue'
 import CustomButton from './custom_button.vue'
@@ -157,6 +162,7 @@ import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 
 const { t } = useI18n()
+const { animationsEnabled } = useAnimations()
 
 const props = defineProps({
   /** Time in milliseconds before advancing to the next slide. */
@@ -340,7 +346,7 @@ const selectSlide = (index) => {
   }
 }
 
-/** Smoothly scrolls the thumbnail strip container horizontally in a given direction. */
+/** Smoothly or instantly scrolls the thumbnail strip container horizontally in a given direction. */
 const scrollThumbnails = (direction) => {
   const ThumbnailScrollBuilder = {
     getAmount(track) {
@@ -354,14 +360,16 @@ const scrollThumbnails = (direction) => {
 
   if (!thumbnailsTrackRef.value) return
   const scrollAmount = ThumbnailScrollBuilder.getTargetScroll(thumbnailsTrackRef.value, direction)
+  const scrollBehavior = animationsEnabled.value ? 'smooth' : 'auto'
+
   thumbnailsTrackRef.value.scrollBy({
     left: scrollAmount,
-    behavior: 'smooth'
+    behavior: scrollBehavior
   })
   resetTimer()
 }
 
-/** Watches index changes to reset timers and align active thumbnail positions smoothly. */
+/** Watches index changes to reset timers and align active thumbnail positions smoothly or instantly. */
 watch(currentIndex, (newIndex) => {
   resetTimer()
   if (!thumbnailsTrackRef.value) return
@@ -372,9 +380,10 @@ watch(currentIndex, (newIndex) => {
     const itemRect = activeItem.getBoundingClientRect()
     if (itemRect.left < trackRect.left || itemRect.right > trackRect.right) {
       const scrollLeftTarget = activeItem.offsetLeft - (track.clientWidth / 2) + (activeItem.clientWidth / 2)
+      const scrollBehavior = animationsEnabled.value ? 'smooth' : 'auto'
       track.scrollTo({
         left: scrollLeftTarget,
-        behavior: 'smooth'
+        behavior: scrollBehavior
       })
     }
   }
@@ -483,7 +492,7 @@ onUnmounted(() => {
 .slide-img {
   width         : 100%;
   height        : 100%;
-  object-fit    : cover;
+  object-fit    : contain;
   display       : block;
   border-radius : inherit;
 }
@@ -597,7 +606,6 @@ onUnmounted(() => {
   gap             : 10px;
   width           : 100%;
   overflow-x      : auto;
-  scroll-behavior : smooth;
   scrollbar-width : none;
   padding         : 4px 4px 6px 2px;
   box-sizing      : border-box;
@@ -635,6 +643,10 @@ onUnmounted(() => {
   transform : translate(-1px, -1px);
 }
 
+.thumbnail-item.no-motion:hover {
+  transform : none;
+}
+
 .thumbnail-item.thumb-active {
   opacity : 1;
   border  : 3px solid var(--gallery-accent-color);
@@ -647,7 +659,7 @@ onUnmounted(() => {
 .thumb-img {
   width      : 100%;
   height     : 100%;
-  object-fit : cover;
+  object-fit : contain;
   display    : block;
   transition : filter 0.2s ease;
 }

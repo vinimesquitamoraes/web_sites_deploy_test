@@ -1,10 +1,11 @@
 <template>
-  <Transition appear name="fade-bounce">
+  <Transition appear :name="animationsEnabled ? 'fade-bounce' : ''">
     <button 
       class="custom-btn" 
       :class="[
         { 'icon-only': !text }, 
         { 'auto-adapt': autoAdaptSize },
+        { 'no-motion': !animationsEnabled },
         `press-${pressAnimation}`
       ]"
       :disabled="disabled"
@@ -12,11 +13,16 @@
     >
       <div v-if="iconSrc" class="icon-wrapper">
       
+        <!-- 
+          Render a CSS-masked background div if an icon color is provided, 
+          allowing dynamic recoloring via CSS v-bind.
+        -->
         <div 
           v-if="hasValidColor"
           class="button-icon-masked"
         ></div>
 
+        <!-- Fallback to a standard <img> tag if no color mask is specified. -->
         <img 
           v-else
           :src="processedIconSrc" 
@@ -44,6 +50,9 @@
 
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAnimations } from '@/composables/reduced_motion_check'
+
+const { animationsEnabled } = useAnimations()
 
 const props = defineProps({
   /** Disables interactions and reduces opacity when set to true. */
@@ -330,6 +339,12 @@ const handleClick = (event) => {
 }
 
 .custom-btn.press-none:not(:disabled):active {
+  transform                    : none !important;
+}
+
+.custom-btn.no-motion.press-scale:not(:disabled):active,
+.custom-btn.no-motion.press-lift:not(:disabled):active,
+.custom-btn.no-motion.press-push:not(:disabled):active {
   transform                    : none !important;
 }
 

@@ -129,138 +129,223 @@ import { ref, computed, watch } from 'vue'
 import MediaModal from './media_modal.vue'
 
 const props = defineProps({
-  /** Section heading text content. */
+  /**
+    * Section heading text content.
+    * @public
+    */
   heading: {
     type    : String,
     default : ''
   },
-  /** Body text string or an array of text paragraphs. */
+  /**
+    * Body text string or an array of text paragraphs.
+    * @public
+    */
   text: {
     type    : [String, Array],
     default : () => []
   },
-  /** Position of the heading relative to the section content (top, inside). */
+  /**
+    * Position of the heading relative to the section content (top, inside).
+    * @values top, inside
+    * @public
+    */
   headerPosition: {
     type    : String,
     default : 'top',
     validator: (value) => ['top', 'inside'].includes(value)
   },
-  /** Custom text color for the heading. */
+  /**
+    * Custom text color for the heading.
+    * @public
+    */
   headingColor: {
     type    : String,
     default : ''
   },
-  /** Text alignment for the heading (left, center, right, justify). */
+  /**
+    * Text alignment for the heading (left, center, right, justify).
+    * @values left, center, right, justify
+    * @public
+    */
   headingAlign: {
     type    : String,
     default : 'center',
     validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
   },
-  /** Text color applied to text container block. */
+  /**
+    * Text color applied to text container block.
+    * @public
+    */
   textColor: {
     type    : String,
     default : ''
   },
-  /** Background color for the main section wrapper container. */
+  /**
+    * Background color for the main section wrapper container.
+    * @public
+    */
   contentBg: {
     type    : String,
     default : 'transparent'
   },
-  /** Border radius styling for the section container. */
+  /**
+    * Border radius styling for the section container.
+    * @public
+    */
   borderRadius: {
     type    : String,
     default : '0px'
   },
-  /** Border styling applied to the main section wrapper. */
+  /**
+    * Border styling applied to the main section wrapper.
+    * @public
+    */
   border: {
     type    : String,
     default : 'transparent'
   },
-  /** Border styling applied to the section header. */
+  /**
+    * Border styling applied to the section header.
+    * @public
+    */
   headerBorder: {
     type    : String,
     default : 'transparent'
   },
-  /** Border styling applied to the text container block. */
+  /**
+    * Border styling applied to the text container block.
+    * @public
+    */
   textBorder: {
     type    : String,
     default : 'none'
   },
-  /** Border styling applied around the inner media wrapper. */
+  /**
+    * Border styling applied around the inner media wrapper.
+    * @public
+    */
   mediaBorder: {
     type    : String,
     default : ''
   },
-  /** Border radius styling applied to the inner media inner media wrapper. */
+  /**
+    * Border radius styling applied to the inner media inner media wrapper.
+    * @public
+    */
   mediaBorderRadius: {
     type    : String,
     default : ''
   },
-  /** Text alignment for paragraphs (left, center, right, justify). */
+  /**
+    * Text alignment for paragraphs (left, center, right, justify).
+    * @values left, center, right, justify
+    * @public
+    */
   textAlign: {
     type    : String,
     default : 'center',
     validator: (value) => ['left', 'center', 'right', 'justify'].includes(value)
   },
-  /** Inner padding spacing applied to the section container wrapper. */
+  /**
+    * Inner padding spacing applied to the section container wrapper.
+    * @public
+    */
   sectionPadding: {
     type    : String,
     default : '0px'
   },
-  /** Inner padding spacing applied to the text content container block. */
+  /**
+    * Inner padding spacing applied to the text content container block.
+    * @public
+    */
   textPadding: {
     type    : String,
     default : '0px'
   },
-  /** Source URL for the media asset (image or video iframe). */
+  /**
+    * Source URL for the media asset (image or video iframe).
+    * @public
+    */
   mediaSrc: {
     type    : String,
     default : ''
   },
-  /** Alternative description text for the media asset. */
+  /**
+    * Alternative description text for the media asset.
+    * @public
+    */
   mediaAlt: {
     type    : String,
     default : ''
   },
-  /** Caption text displayed underneath the media wrapper. */
+  /**
+    * Caption text displayed underneath the media wrapper.
+    * @public
+    */
   mediaCaption: {
     type    : String,
     default : ''
   },
-  /** Custom CSS width for the media wrapper element. */
+  /**
+    * Custom CSS width for the media wrapper element.
+    * @public
+    */
   mediaWidth: {
     type    : String,
     default : '535px'
   },
-  /** Custom CSS height for the media display container. */
+  /**
+    * Custom CSS height for the media display container.
+    * @public
+    */
   mediaHeight: {
     type    : String,
     default : 'auto'
   },
-  /** Type of media asset to display (image, video, text). */
+  /**
+    * Type of media asset to display (image, video, text).
+    * @values image, video, text
+    * @public
+    */
   mediaType: {
     type    : String,
     default : 'image',
     validator: (value) => ['image', 'video', 'text'].includes(value)
   },
-  /** Alignment orientation of media relative to text (left, right). */
+  /**
+    * Alignment orientation of media relative to text (left, right).
+    * @values left, right
+    * @public
+    */
   mediaPosition: {
     type    : String,
     default : 'right',
     validator: (value) => ['left', 'right'].includes(value)
   },
-  /** Main structural flow layout configuration (horizontal, vertical). */
+  /**
+    * Main structural flow layout configuration (horizontal, vertical).
+    * @values horizontal, vertical
+    * @public
+    */
   layout: {
     type    : String,
     default : 'horizontal',
     validator: (value) => ['horizontal', 'vertical'].includes(value)
   },
-  /** Controls whether images expand into a modal view on click. */
+  /**
+    * Controls whether images expand into a modal view on click.
+    * @public
+    */
   imageOpenable: {
     type    : Boolean,
     default : true
   },
-  /** CSS object-fit rule for media images (cover, contain, fill, scale-down). */
+  /**
+    * CSS object-fit rule for media images (cover, contain, fill, scale-down).
+    * @values cover, contain, fill, scale-down
+    * @public
+    */
   mediaFit: {
     type    : String,
     default : 'contain',
@@ -271,7 +356,10 @@ const props = defineProps({
 const isModalOpen = ref(false)
 const hasError = ref(false)
 
-/** Filters and formats raw input text into a valid array of paragraph string blocks. */
+/**
+  * Filters and formats raw input text into a valid array of paragraph string blocks.
+  * @private
+*/
 const textParagraphs = computed(() => {
   const ParagraphBuilder = {
     normalizeText(rawText) {
@@ -285,7 +373,10 @@ const textParagraphs = computed(() => {
   return ParagraphBuilder.normalizeText(props.text)
 })
 
-/** Evaluates whether the header title should render based on availability of text and heading properties. */
+/**
+  * Evaluates whether the header title should render based on availability of text and heading properties.
+  * @private
+*/
 const shouldShowHeader = computed(() => {
   const HeaderBuilder = {
     evaluate(headingText, paragraphsCount) {
@@ -300,7 +391,10 @@ watch(() => props.mediaSrc, () => {
   hasError.value = false
 })
 
-/** Intercepts clicks to trigger and display the image expansion modal when valid. */
+/**
+  * Intercepts clicks to trigger and display the image expansion modal when valid.
+  * @private
+*/
 const openImageModal = () => {
   const ModalOpenBuilder = {
     canOpen(type, src, openable, errorState) {
@@ -314,7 +408,10 @@ const openImageModal = () => {
   }
 }
 
-/** Closes the image modal view. */
+/**
+  * Closes the image modal view.
+  * @private
+*/
 const closeImageModal = () => {
   const ModalCloseBuilder = {
     reset() {
