@@ -135,7 +135,7 @@ onUnmounted(() => {
 <style>
 .scroll-top-btn {
   position            : fixed;
-  right               : 98px; 
+  right               : 12px; 
   width               : var(--back-to-top-button-size);
   height              : var(--back-to-top-button-size);
   background-color    : var(--back-to-top-button-bg-color);
@@ -157,10 +157,4 @@ onUnmounted(() => {
   transform           : translateY(0px);
 }
 
-@media (max-width: 768px) {
-  .scroll-top-btn {
-    right             : 20px;
-    bottom            : 10px;
-  }
-}
 </style>
