@@ -228,15 +228,11 @@ defineEmits(['prev', 'togglePlay', 'stop', 'next', 'record'])
   background-color      : v-bind('playBgColor');
 }
 
-.play-mech-btn:not(:disabled):active {
-  --color-custom-button-background: var(--music-player-color-playbt-paused-pressed);
-}
+
 
 .play-mech-btn.is-playing {
   --color-custom-button-background: var(--music-player-color-playbt-playing); 
 }
 
-.play-mech-btn.is-playing:not(:disabled):active {
-  --color-custom-button-background: var(--music-player-color-playbt-playing-pressed); 
-}
+
 </style>

@@ -242,6 +242,11 @@ const handleModalChange = ({ key, value }) => {
   if (key === 'unlocked_dogten') {
     sessionStorage.setItem('unlocked_dogten', value ? 'true' : 'false')
   }
+  if (key === 'unlocked_special_tape') {
+    const stringVal = value ? 'true' : 'false'
+    sessionStorage.setItem('unlocked_special_tape', stringVal)
+    window.dispatchEvent(new CustomEvent('special-tape-updated', { detail: { value } }))
+  }
 }
 
 onMounted(() => {

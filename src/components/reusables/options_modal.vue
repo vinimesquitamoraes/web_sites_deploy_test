@@ -4,28 +4,32 @@
       <div class="modal-panel">
         <div class="modal-header">
           <h3 class="modal-title">{{ title }}</h3>
-          <CustomButton
-            :icon-src="closeIcon"
-            icon-size="30"
-            bg-color="transparent"
-            hover-bg-color="transparent"
-            @click="closeModal"
-          />
+          <div class="close-btn-wrapper">
+            <CustomButton
+              class          = "close-btn"
+              text           = ""
+              iconSize       = "20px"
+              width          = "-36px"
+              height         = "-36px"
+              iconColor      = "var(--color-primary)"
+              bgColor        = "var(--color-default-background)"
+              hoverIconColor = "var(--color-default-background)"
+              hoverBgColor   = "var(--color-primary)"
+              pressAnimation = "scale"
+              :iconSrc       = "closeIcon"
+              @click         = "closeModal"
+            />
+          </div>
         </div>
 
         <div class="modal-body">
           <div v-for="option in options" :key="option.key" class="option-row">
             <span class="option-label">{{ option.label }}</span>
-            
             <ToggleButtom
               :modelValue         ="sessionState[option.key]"
               @update:modelValue  ="(val) => toggleOption(option.key, val)"
-              :activeIconSrc="closeIcon"
-              icon-color="#FFD700"
-              handle-bg-color="#1A1A1A"
-              bg-color="#333333"
-              active-bg-color="#4A5568"
-              hover-bg-color="#2D3748"
+              activeBgColor = "var(--color-secondary)"
+              hoverBgColor = "var(--color-primary)"
             />
           </div>
         </div>
@@ -188,8 +192,8 @@ onUnmounted(() => {
 }
 
 .modal-panel {
-  border                      : 2px solid #000000;
-  border-radius               : 12px;
+  border                      : var(--default-border);
+  border-radius               : var(--default-border-radius);
   display                     : flex;
   flex-direction              : column;
   box-sizing                  : border-box;
@@ -207,7 +211,7 @@ onUnmounted(() => {
   align-items                 : center;
   justify-content             : space-between;
   padding                     : 1rem 1.5rem;
-  border-bottom               : 2px solid #000000;
+  border-bottom               : var(--default-border);
   flex-shrink                 : 0;
 }
 
@@ -225,6 +229,23 @@ onUnmounted(() => {
   gap                         : 1rem;
   overflow-y                  : auto;
   -webkit-overflow-scrolling  : touch;
+ 
+}
+
+.modal-header {
+  position                    : relative; 
+  display                     : flex;
+  align-items                 : center;
+  justify-content             : space-between;
+  padding                     : 1rem 1.5rem;
+  border-bottom               : 3px solid #000000;
+  flex-shrink                 : 0;
+}
+
+.close-btn-wrapper {
+  display                     : flex;
+  align-items                 : center;
+  justify-content             : center;
 }
 
 .option-row {

@@ -38,27 +38,31 @@
         :style       = "{ opacity: (!isLoadingTracks && totalPages > 1) ? 1 : 0, pointerEvents: (!isLoadingTracks && totalPages > 1) ? 'auto' : 'none' }"
       >
         <CustomButton
-          bg-color   = "var(--music-player-color-bg-secondary)"
-          :icon-src  = "previous_icon"
-          iconColor  = "var(--music-player-color-bg-dark)"
-          height     = "30px"  
-          width      = "30px"    
-          iconSize   = "20px"
-          padding    = "0"
-          :disabled  = "currentPage === 1"
-          @click     = "$emit('updatePage', currentPage - 1)"
+          :bg-color         = "playlistButtonBg"
+          :hover-bg-color   = "playlistButtonHoverBg"
+          :icon-src         = "previous_icon"
+          :icon-color       = "playlistButtonIconColor"
+          :hover-icon-color = "playlistButtonHoverIconColor"
+          height            = "30px"  
+          width             = "30px"    
+          iconSize          = "20px"
+          padding           = "0"
+          :disabled         = "currentPage === 1"
+          @click            = "$emit('updatePage', currentPage - 1)"
         />
         <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
         <CustomButton
-          bg-color   = "var(--music-player-color-bg-secondary)"
-          :icon-src  = "next_icon"
-          iconColor  = "var(--music-player-color-bg-dark)"
-          height     = "30px"  
-          width      = "30px"    
-          iconSize   = "20px"
-          padding    = "0"
-          :disabled  = "currentPage === totalPages"
-          @click     = "$emit('updatePage', currentPage + 1)"
+          :bg-color         = "playlistButtonBg"
+          :hover-bg-color   = "playlistButtonHoverBg"
+          :icon-src         = "next_icon"
+          :icon-color       = "playlistButtonIconColor"
+          :hover-icon-color = "playlistButtonHoverIconColor"
+          height            = "30px"  
+          width             = "30px"    
+          iconSize          = "20px"
+          padding           = "0"
+          :disabled         = "currentPage === totalPages"
+          @click            = "$emit('updatePage', currentPage + 1)"
         />
       </div>
     </div>
@@ -136,6 +140,150 @@ defineProps({
   pageSize: {
     type: Number,
     default: 7
+  },
+  /**
+    * Background color of the main playlist container.
+    * @public
+    */
+  bgColor: {
+    type: String,
+    default: 'var(--music-player-playlist-bg)'
+  },
+  /**
+    * Border style/color used for container elements and track rows.
+    * @public
+    */
+  borderColor: {
+    type: String,
+    default: 'var(--music-player-playlist-border)'
+  },
+  /**
+    * Border radius for rounded container corners.
+    * @public
+    */
+  borderRadius: {
+    type: String,
+    default: 'var(--music-player-playlist-border-radius)'
+  },
+  /**
+    * Background color of the header section.
+    * @public
+    */
+  headerBgColor: {
+    type: String,
+    default: 'var(--music-player-playlist-header-bg)'
+  },
+  /**
+    * Text/title color inside the header section.
+    * @public
+    */
+  headerTextColor: {
+    type: String,
+    default: 'var(--music-player-playlist-header-text)'
+  },
+  /**
+    * Default background color for list tracks.
+    * @public
+    */
+  itemBgColor: {
+    type: String,
+    default: 'var(--music-player-playlist-item-bg)'
+  },
+  /**
+    * Background color for the currently playing track.
+    * @public
+    */
+  itemActiveBgColor: {
+    type: String,
+    default: 'var(--music-player-playlist-item-active-bg)'
+  },
+  /**
+    * Text color for the currently playing track.
+    * @public
+    */
+  itemActiveTextColor: {
+    type: String,
+    default: 'var(--music-player-playlist-item-active-text)'
+  },
+  /**
+    * General text color inside track items.
+    * @public
+    */
+  textColor: {
+    type: String,
+    default: 'var(--music-player-playlist-text-color)'
+  },
+  /**
+    * Color for track numbers in normal state.
+    * @public
+    */
+  numberColor: {
+    type: String,
+    default: 'var(--music-player-playlist-number-color)'
+  },
+  /**
+    * Color for track numbers when active.
+    * @public
+    */
+  numberActiveColor: {
+    type: String,
+    default: 'var(--music-player-playlist-number-active-color)'
+  },
+  /**
+    * Background color of the loading state box.
+    * @public
+    */
+  loadingBgColor: {
+    type: String,
+    default: 'var(--music-player-playlist-loading-bg)'
+  },
+  /**
+    * Text color of the loading state message.
+    * @public
+    */
+  loadingTextColor: {
+    type: String,
+    default: 'var(--music-player-playlist-loading-text)'
+  },
+  /**
+    * Text color for the page pagination counter info.
+    * @public
+    */
+  pageInfoColor: {
+    type: String,
+    default: 'var(--music-player-playlist-page-info-color)'
+  },
+  /**
+    * Background color of pagination buttons.
+    * @public
+    */
+  playlistButtonBg: {
+    type: String,
+    default: 'var(--music-player-playlist-button-bg)'
+  },
+  /**
+    * Hover background color of pagination buttons.
+    * @public
+    */
+  playlistButtonHoverBg: {
+    type: String,
+    default: 'var(--music-player-playlist-button-hover-bg)'
+  },
+  /**
+    * Icon color of pagination buttons.
+    * @public
+    */
+  playlistButtonIconColor: {
+    type: String,
+    default: 'var(--music-player-playlist-button-icon-color)'
+  },
+  /**
+    * Hover icon color of pagination buttons.
+    * @public
+    */
+  playlistButtonHoverIconColor: {
+    type: String,
+    default: 'var(--music-player-playlist-button-hover-icon-color)'
   }
 })
 
@@ -149,10 +297,10 @@ const { t } = useI18n()
   display               : flex;
   flex-direction        : column;
   gap                   : 8px;
-  background            : var(--music-player-color-primary);
-  border                : var(--music-player-border);
+  background            : v-bind(bgColor);
+  border                : v-bind(borderColor);
   padding               : 10px;
-  border-radius         : var(--music-player-border-radius);
+  border-radius         : v-bind(borderRadius);
   box-sizing            : border-box;
   width                 : 100%;
   overflow              : visible;
@@ -162,9 +310,9 @@ const { t } = useI18n()
   display               : flex;
   justify-content       : space-between;
   align-items           : center;
-  background            : var(--music-player-color-bg-main);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(headerBgColor);
+  border                : v-bind(borderColor);
+  border-radius         : v-bind(borderRadius);
   padding               : 8px 12px;
   user-select           : none;
 }
@@ -173,7 +321,7 @@ const { t } = useI18n()
   font-size             : 0.8rem;
   margin                : 0;
   font-weight           : 700;
-  color                 : var(--music-player-color-bg-secondary);
+  color                 : v-bind(headerTextColor);
 }
 
 .playlist-content {
@@ -181,7 +329,7 @@ const { t } = useI18n()
   flex-direction        : column;
   gap                   : 6px;
   height                : calc(var(--page-size, 7) * 36px + 45px);
-  max-height            : 60vh; /* Safety bound for smaller screens */
+  max-height            : 60vh;
   justify-content       : space-between;
   overflow              : visible;
   box-sizing            : border-box;
@@ -200,9 +348,9 @@ const { t } = useI18n()
   justify-content       : center;
   align-items           : center;
   flex                  : 1;
-  color                 : var(--music-player-color-bg-main);
+  color                 : v-bind(loadingTextColor);
   font-size             : 0.8rem;
-  background            : var(--music-player-color-bg-secondary);
+  background            : v-bind(loadingBgColor);
   border-radius         : 6px;
   font-family           : monospace;
 }
@@ -247,13 +395,14 @@ const { t } = useI18n()
   align-items           : center;
   gap                   : 8px;
   padding               : 6px 8px;
-  background            : var(--music-player-color-bg-secondary);
-  border                : var(--music-player-border);
+  background            : v-bind(itemBgColor);
+  border                : v-bind(borderColor);
   border-radius         : 6px;
   cursor                : pointer;
   box-sizing            : border-box;
   width                 : 100%;
   max-width             : 100%;
+  color                 : v-bind(textColor);
 }
 
 .track-item:active {
@@ -261,22 +410,19 @@ const { t } = useI18n()
 }
 
 .track-item.active {
-  background            : var(--music-player-color-accent);
-  color                 : var(--music-player-color-white);
-  font-weight           : 700;
-  font                  : var(--music_player-font-p);
-  font-size             : var(--music_player-font-p-size);
+  background            : v-bind(itemActiveBgColor);
+  color                 : v-bind(itemActiveTextColor);
 }
 
 .track-number {
-  color                 : var(--music-player-color-primary);
+  color                 : v-bind(numberColor);
   font                  : var(--music_player-font-p);
   font-size             : var(--music_player-font-p-size);
   flex-shrink           : 0;
 }
 
 .track-item.active .track-number {
-  color                 : var(--music-player-color-accent-light);
+  color                 : v-bind(numberActiveColor);
 }
 
 .track-name {
@@ -306,7 +452,7 @@ const { t } = useI18n()
 
 .page-info {
   font-size             : 0.75rem;
-  color                 : var(--music-player-color-accent-light);
+  color                 : v-bind(pageInfoColor);
   font-family           : monospace;
 }
 </style>

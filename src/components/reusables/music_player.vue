@@ -1,5 +1,5 @@
 <template>
-  <div class="music-player-container">
+  <div class="music-player-container" :class="{ 'special-tape-palette': isSpecialStyle }">
     <div 
       class     = "music-player-wrapper" 
       :class    = "{ 
@@ -116,7 +116,7 @@
                 :duration             = "duration"
                 :specialTapeImg       = "ferris_special_tape"
                 :formatTime           = "formatTime"
-                @toggleTapeStyle      = "showImageTape = !showImageTape"
+                @toggleTapeStyle      = "toggleTapeStyle"
                 @seek                 = "onSeek"
               />
 
@@ -253,6 +253,7 @@ const tracks = ref([])
 const currentPage = ref(1)
 const isLoadingTracks = ref(true)
 const showImageTape = ref(false)
+const isSpecialStyle = ref(false)
 const hasSpecialTapeAccess = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
 
 const playerBottom = ref(16)
@@ -574,6 +575,15 @@ const toggleMute = () => {
 }
 
 /**
+  * Toggles tape image display state and special style palette.
+  * @private
+  */
+const toggleTapeStyle = () => {
+  showImageTape.value = !showImageTape.value
+  isSpecialStyle.value = !isSpecialStyle.value
+}
+
+/**
   * Handles recording button interactions and triggers secret easter eggs upon threshold hits.
   * @private
   */
@@ -589,17 +599,30 @@ const handleRecClick = () => {
   }
 }
 
+/**
+  * Handles real-time updates when the special tape option changes.
+  * @private
+  */
+const handleSpecialTapeUpdate = (e) => {
+  hasSpecialTapeAccess.value = e.detail.value
+  if (!e.detail.value) {
+    isSpecialStyle.value = false
+    showImageTape.value = false
+  }
+}
+
 onMounted(() => {
   initPlayer()
   window.addEventListener('scroll', updateFooterPosition, { passive: true })
+  window.addEventListener('special-tape-updated', handleSpecialTapeUpdate)
   setTimeout(updateFooterPosition, 50)
 })
 
 onUnmounted(() => {
   stopInterval()
   window.removeEventListener('scroll', updateFooterPosition)
+  window.removeEventListener('special-tape-updated', handleSpecialTapeUpdate)
 })
-
 /**
   * Resets inline element transition styles when closing the compact player button.
   * @private
@@ -622,16 +645,6 @@ const onCompactLeave = (el) => {
   0%   { opacity: 0; transform: translateY(0) scale(0.5) rotate(-10deg); }
   30%  { opacity: 1; }
   100% { opacity: 0; transform: translateY(var(--note-float-distance, -50px)) translateX(12px) scale(1.1) rotate(15deg); }
-}
-
-:root {
-  --music-player-volume-controls-bg       : #1a1a1a;
-  --music-player-volume-controls-border   : 1px solid #333333;
-  --music-player-volume-controls-slider   : #00cec9;
-  --music-player-volume-controls-text     : #ffffff;
-  --music-player-volume-controls-container: #2d2d2d;
-  --music-player-volume-controls-track    : #444444;
-  --music-player-volume-controls-highlight: #ffffff;
 }
 
 .music-player-container {
@@ -807,6 +820,35 @@ const onCompactLeave = (el) => {
   left        : -9999px;
   opacity     : 0;
   pointer-events: none;
+}
+
+.special-tape-palette {
+  --music-player-color-bg-main: var(--special-music-player-color-bg-main);
+  --music-player-color-bg-secondary: var(--special-music-player-color-bg-secondary);
+  --music-player-color-bg-dark: var(--special-music-player-color-bg-dark);
+  --music-player-color-surface: var(--special-music-player-color-surface);
+  --music-player-border: var(--special-music-player-border);
+  --music-player-border-radius: var(--special-music-player-border-radius);
+  --music-player-color-accent: var(--special-music-player-color-accent);
+  --music-player-color-accent-light: var(--special-music-player-color-accent-light);
+  --music-player-color-primary: var(--special-music-player-color-primary);
+  --music-player-color-playbt-playing: var(--special-music-player-color-playbt-playing);
+  --music-player-color-playbt-paused: var(--special-music-player-color-playbt-paused);
+  
+  --music-player-playlist-bg: var(--special-music-player-playlist-bg);
+  --music-player-playlist-header-bg: var(--special-music-player-playlist-header-bg);
+  --music-player-playlist-header-text: var(--special-music-player-playlist-header-text);
+  --music-player-playlist-item-bg: var(--special-music-player-playlist-item-bg);
+  --music-player-playlist-item-active-bg: var(--special-music-player-playlist-item-active-bg);
+  --music-player-playlist-item-active-text: var(--special-music-player-playlist-item-active-text);
+  --music-player-playlist-text-color: var(--special-music-player-playlist-text-color);
+  --music-player-playlist-number-color: var(--special-music-player-playlist-number-color);
+  --music-player-playlist-number-active-color: var(--special-music-player-playlist-number-active-color);
+
+  --music-player-volume-controls-bg: var(--special-music-player-volume-controls-bg);
+  --music-player-volume-controls-slider: var(--special-music-player-volume-controls-slider);
+  --music-player-volume-controls-container: var(--special-music-player-volume-controls-container);
+  --music-player-volume-controls-track: var(--special-music-player-volume-controls-track);
 }
 
 @media (max-width: 480px) {

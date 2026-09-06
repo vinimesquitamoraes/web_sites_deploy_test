@@ -659,7 +659,7 @@ onUnmounted(() => {
 .thumb-img {
   width      : 100%;
   height     : 100%;
-  object-fit : contain;
+  object-fit : cover;
   display    : block;
   transition : filter 0.2s ease;
 }

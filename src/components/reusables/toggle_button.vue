@@ -274,7 +274,7 @@ const handleClick = (event) => {
   display                     : inline-flex;
   align-items                 : center;
   box-sizing                  : border-box;
-  border                      : 2px solid #000000;
+  border                      : 3px solid #000000;
   border-radius               : var(--default-border-radius);
 
   width                       : v-bind(cssWidth);

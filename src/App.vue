@@ -96,8 +96,9 @@ body.reduce-motion *::after {
   --color-secondary           : #fdd268;
   --color-tertiary            : #b425e1;
   --color-black               : #000000;
+  --color-white               : #FFFFFF;
   --color-place-holder-green  : #25D366;
-  --color-default-text-color  : #FFFFFF;
+  --color-default-text-color  : var(--color-white);
 
   --color-h1                  : var(--color-primary);
   --color-h2                  : var(--color-primary);
@@ -105,7 +106,7 @@ body.reduce-motion *::after {
 
   --default-border            : 3px solid #000000;
   --default-border-radius     : 10px;
-  --color-default-background  : #FFFFFF;
+  --color-default-background  : var(--color-white);
 
   --font-default              : 'Motherish', sans-serif;
 
@@ -181,7 +182,7 @@ body.reduce-motion *::after {
   --color-itchio-button-icon             : var(--color-black);
   --color-itchio-button-bg               : var(--color-default-background);
   
-  --color-itchio-button-icon-hover       : #ffffff;
+  --color-itchio-button-icon-hover       : var(--color-white);
   --color-itchio-button-bg-hover         : var(--color-primary);
 
   --back-to-top-button-bg-color              : var(--color-default-background);
@@ -237,18 +238,15 @@ body.reduce-motion *::after {
   --music-player-border                        : var(--default-border);
   --music-player-border-radius                 : var(--default-border-radius);
     
-  --music-player-color-text-muted              : var(--color-text-muted);
-  --music-player-color-white                   : var(--color-white);
   --music-player-color-accent                  : #ef4444;
   --music-player-color-accent-light            : #fca5a5;
   
-  --music-player-color-accent-special          : #7729bb;
   --music-player-color-primary                 : var(--color-primary);
   
   --music-player-color-playbt-playing          : var(--color-primary);
-  --music-player-color-playbt-playing-pressed  : #8539d1;
+  
   --music-player-color-playbt-paused           : #ef4444;
-  --music-player-color-playbt-paused-pressed   : #240046;
+  
   --music-player-color-placeholder-green       : var(--color-placeholder-green);
 
   --music_player-compact-button-color-bg        : var(--color-default-background);
@@ -269,19 +267,156 @@ body.reduce-motion *::after {
   --music-player-volume-controls-text       : var(--color-default-text-color);
   --music-player-volume-controls-container  : var(--music-player-color-surface);
   --music-player-volume-controls-track      : var(--color-black);
-  --music-player-volume-controls-highlight  : #ffffff;
+  --music-player-volume-controls-highlight  : var(--color-white);
 
   --music-player-volume-controls-mute-bg                      : var(--music-player-volume-controls-bg);
   --music-player-volume-controls-mute-hover-bg                : var(--color-primary);
-  --music-player-volume-controls-mute-icon-color              : #ffffff;
+  --music-player-volume-controls-mute-icon-color              : var(--color-white);
   --music-player-volume-controls-mute-hover-icon-color        : var(--music-player-volume-controls-mute-bg);
 
   --music-player-volume-controls-mute-active-bg               : var(--music-player-color-accent);
   --music-player-volume-controls-mute-active-hover-bg         : var(--color-secondary);
-  --music-player-volume-controls-mute-active-icon-color       : #ffffff;
+  --music-player-volume-controls-mute-active-icon-color       : var(--color-white);
   --music-player-volume-controls-mute-active-hover-icon-color : var(--color-black);
 
-  --toaster-bg-main           : #ffffff;
+  --music-player-playlist-bg                        : var(--music-player-color-primary);
+  --music-player-playlist-border                    : var(--music-player-border);
+  --music-player-playlist-border-radius             : var(--music-player-border-radius);
+  --music-player-playlist-header-bg                 : var(--music-player-color-bg-main);
+  --music-player-playlist-header-text               : var(--music-player-color-bg-secondary);
+  --music-player-playlist-item-bg                   : var(--music-player-color-bg-secondary);
+  --music-player-playlist-item-active-bg            : var(--music-player-color-accent);
+  --music-player-playlist-item-active-text          : var(--color-default-text-color);
+  --music-player-playlist-text-color                : var(--color-black);
+  --music-player-playlist-number-color              : var(--music-player-color-primary);
+  --music-player-playlist-number-active-color       : var(--music-player-color-accent-light);
+  --music-player-playlist-loading-bg                : var(--music-player-color-bg-secondary);
+  --music-player-playlist-loading-text              : var(--music-player-color-bg-main);
+  --music-player-playlist-page-info-color           : var(--music-player-color-accent-light);
+
+  --music-player-playlist-button-bg                 : var(--music-player-color-bg-secondary);
+  --music-player-playlist-button-hover-bg           : var(--music-player-color-accent);
+  --music-player-playlist-button-icon-color         : var(--music-player-color-bg-dark);
+  --music-player-playlist-button-hover-icon-color   : var(--color-default-text-color);
+
+  --music-player-walkman-button-bg                      : var(--color-primary);
+  --music-player-walkman-button-hover-bg                : var(--color-tertiary);
+  --music-player-walkman-button-icon-color              : var(--color-white);
+  --music-player-walkman-button-hover-icon-color        : var(--music-player-volume-controls-mute-bg);
+
+  --music-player-walkman-button-active-bg               : var(--color-tertiary);
+  --music-player-walkman-button-active-hover-bg         : var(--color-primary);
+  --music-player-walkman-button-active-icon-color       : var(--color-white);
+  --music-player-walkman-button-active-hover-icon-color : var(--color-black);
+  
+  --music-player-walkman-bg-color                       : var(--music-player-color-primary);
+  --music-player-walkman-border                         : var(--music-player-border);
+  --music-player-walkman-border-radius                  : var(--music-player-border-radius);
+  --music-player-walkman-chassis-bg                     : var(--music-player-color-bg-main);
+  --music-player-walkman-brand-color                    : var(--music-player-color-accent-light);
+  --music-player-walkman-door-bg                        : var(--music-player-color-surface);
+  --music-player-walkman-shell-bg                       : var(--music-player-color-bg-secondary);
+  --music-player-walkman-label-color                    : var(--music-player-color-placeholder-green);
+  --music-player-walkman-window-bg                      : var(--music-player-color-bg-dark);
+  --music-player-walkman-reel-color                     : var(--music-player-color-accent-light);
+  --music-player-walkman-reel-hub-bg                    : var(--music-player-color-bg-main);
+  --music-player-walkman-lcd-bg                         : var(--music-player-color-bg-dark);
+  --music-player-walkman-lcd-color                      : var(--music-player-color-accent);
+
+
+  --special-music-player-color-bg-main                 : #331a4b;
+  --special-music-player-color-bg-secondary            : #ffffff;
+  --special-music-player-color-bg-dark                 : #0d0614;
+  --special-music-player-color-surface                 : #792664;
+
+  --special-music-player-border                        : var(--default-border);
+  --special-music-player-border-radius                 : var(--default-border-radius);
+    
+  --special-music-player-color-accent                  : #e26cd7;
+  --special-music-player-color-accent-light            : #f0abfc;
+  
+  --special-music-player-color-primary                 : #7e22ce;
+  
+  --special-music-player-color-playbt-playing          : #9333ea;
+  --special-music-player-color-playbt-paused           : #d946ef;
+  
+  --special-music-player-color-placeholder-green       : var(--color-placeholder-green);
+
+  --special-music_player-compact-button-color-bg        : #2c163b;
+  --special-music_player-compact-button-color-bg-hover  : #9333ea;
+  --special-music_player-compact-button-color-icon      : var(--special-music_player-compact-button-color-bg-hover);
+  --special-music_player-compact-button-color-icon-hover: var(--special-music_player-compact-button-color-bg);
+  --special-music_player-compact-button-size            : 56px;
+  --special-music_player-compact-button-icon-size       : 95%;
+
+  --special-music_player-font-h1                       : var(--font-h1);
+  --special-music_player-font-p                        : var(--font-p);
+  --special-music_player-font-p-size                   : var(--font-p-size);
+  --special-music_player-font-track-names-size         : 15px;
+
+  --special-music-player-volume-controls-bg         : #140a1f;
+  --special-music-player-volume-controls-border     : var(--default-border);
+  --special-music-player-volume-controls-slider     : var(--special-music-player-color-accent);
+  --special-music-player-volume-controls-text       : var(--color-default-text-color);
+  --special-music-player-volume-controls-container  : var(--special-music-player-color-surface);
+  --special-music-player-volume-controls-track      : #0d0614;
+  --special-music-player-volume-controls-highlight  : var(--color-white);
+
+  --special-music-player-volume-controls-mute-bg                      : var(--special-music-player-volume-controls-bg);
+  --special-music-player-volume-controls-mute-hover-bg                : #9333ea;
+  --special-music-player-volume-controls-mute-icon-color              : var(--color-white);
+  --special-music-player-volume-controls-mute-hover-icon-color        : var(--special-music-player-volume-controls-mute-bg);
+
+  --special-music-player-volume-controls-mute-active-bg               : var(--special-music-player-color-accent);
+  --special-music-player-volume-controls-mute-active-hover-bg         : #f0abfc;
+  --special-music-player-volume-controls-mute-active-icon-color       : var(--color-white);
+  --special-music-player-volume-controls-mute-active-hover-icon-color : #0d0614;
+
+  --special-music-player-playlist-bg                        : var(--special-music-player-color-primary);
+  --special-music-player-playlist-border                    : var(--special-music-player-border);
+  --special-music-player-playlist-border-radius             : var(--special-music-player-border-radius);
+  --special-music-player-playlist-header-bg                 : var(--special-music-player-color-bg-main);
+  --special-music-player-playlist-header-text               : var(--special-music-player-color-bg-secondary);
+  --special-music-player-playlist-item-bg                   : var(--special-music-player-color-bg-secondary);
+  --special-music-player-playlist-item-active-bg            : var(--special-music-player-color-accent);
+  --special-music-player-playlist-item-active-text          : var(--color-default-text-color);
+  --special-music-player-playlist-text-color                : var(--special-music-player-color-bg-main);
+  --special-music-player-playlist-number-color              : var(--special-music-player-color-accent-light);
+  --special-music-player-playlist-number-active-color       : var(--color-white);
+  --special-music-player-playlist-loading-bg                : var(--special-music-player-color-bg-secondary);
+  --special-music-player-playlist-loading-text              : var(--special-music-player-color-bg-main);
+  --special-music-player-playlist-page-info-color           : var(--special-music-player-color-accent-light);
+
+  --special-music-player-playlist-button-bg                 : var(--special-music-player-color-bg-secondary);
+  --special-music-player-playlist-button-hover-bg           : var(--special-music-player-color-accent);
+  --special-music-player-playlist-button-icon-color         : var(--color-white);
+  --special-music-player-playlist-button-hover-icon-color   : var(--color-default-text-color);
+
+  --special-music-player-walkman-button-bg                      : #7e22ce;
+  --special-music-player-walkman-button-hover-bg                : #a855f7;
+  --special-music-player-walkman-button-icon-color              : var(--color-white);
+  --special-music-player-walkman-button-hover-icon-color        : #140a1f;
+
+  --special-music-player-walkman-button-active-bg               : #a855f7;
+  --special-music-player-walkman-button-active-hover-bg         : #7e22ce;
+  --special-music-player-walkman-button-active-icon-color       : var(--color-white);
+  --special-music-player-walkman-button-active-hover-icon-color : #0d0614;
+
+  --special-music-player-walkman-bg-color               : var(--special-music-player-color-primary);
+  --special-music-player-walkman-border                 : var(--special-music-player-border);
+  --special-music-player-walkman-border-radius          : var(--special-music-player-border-radius);
+  --special-music-player-walkman-chassis-bg             : var(--special-music-player-color-bg-main);
+  --special-music-player-walkman-brand-color            : var(--special-music-player-color-accent-light);
+  --special-music-player-walkman-door-bg                : var(--special-music-player-color-surface);
+  --special-music-player-walkman-shell-bg               : var(--special-music-player-color-bg-secondary);
+  --special-music-player-walkman-label-color            : var(--special-music-player-color-placeholder-green);
+  --special-music-player-walkman-window-bg              : var(--special-music-player-color-bg-dark);
+  --special-music-player-walkman-reel-color             : var(--special-music-player-color-accent-light);
+  --special-music-player-walkman-reel-hub-bg            : var(--special-music-player-color-bg-main);
+  --special-music-player-walkman-lcd-bg                 : var(--special-music-player-color-bg-dark);
+  --special-music-player-walkman-lcd-color              : var(--special-music-player-color-accent);
+
+  --toaster-bg-main           : var(--color-white);
   --toaster-border-color      : #000000;
   --toaster-font-size         : 0.85rem;
   --toaster-icon-color        : #ff6b6b;
@@ -298,14 +433,14 @@ body.reduce-motion *::after {
   --color-credits-background  : #000000;
   --color-credits-title       : #e67e22; 
   --color-credits-role        : #e67e22;
-  --color-credits-name        : #ffffff;
+  --color-credits-name        : var(--color-white);
 
   --color-operational-system-icons-color       : #E50012;
   --color-operational-system-icons-hover-color : #E50012;
 
   --color-requiriments-key-background           : #E50012;
-  --color-requiriments-value-background         : #ffffff;
-  --color-requiriments-key-text                 : #ffffff;
+  --color-requiriments-value-background         : var(--color-white);
+  --color-requiriments-key-text                 : var(--color-white);
   --color-requiriments-value-text               : #000000;
   --color-requiriments-container-border         : 3px solid #000000;
   --color-requiriments-key-border-bottom        : 3px solid #000000;
@@ -316,38 +451,38 @@ body.reduce-motion *::after {
   --color-dropdown-trigger-bg         : #ff9900;
   --color-dropdown-trigger-text       : #000000;
   --color-dropdown-trigger-hover-bg   : #E50012;
-  --color-dropdown-trigger-hover-text : #ffffff;
+  --color-dropdown-trigger-hover-text : var(--color-white);
   --color-dropdown-arrow              : #000000;
-  --color-dropdown-arrow-hover        : #ffffff;
+  --color-dropdown-arrow-hover        : var(--color-white);
   --color-dropdown-list-bg            : #ff9900;
   --color-dropdown-list-border        : 2px solid #000000;
   --color-dropdown-option-text        : #000000;
   --color-dropdown-option-hover-bg    : #E50012;
-  --color-dropdown-option-hover-text  : #ffffff;
+  --color-dropdown-option-hover-text  : var(--color-white);
   --color-dropdown-option-active-bg   : #E50012;
-  --color-dropdown-option-active-text : #ffffff;
-  --color-dropdown-active-arrow       : #ffffff;
+  --color-dropdown-option-active-text : var(--color-white);
+  --color-dropdown-active-arrow       : var(--color-white);
 
   --color-lang-dropdown-border             : 3px solid currentColor;
   --color-lang-dropdown-trigger-text       : var(--color-default-text-color);
   --color-lang-dropdown-trigger-bg         : #000000;
   --color-lang-dropdown-trigger-hover-bg   : var(--color-tertiary);
-  --color-lang-dropdown-arrow              : #ffffff;
-  --color-lang-dropdown-arrow-hover        : #ffffff;
+  --color-lang-dropdown-arrow              : var(--color-white);
+  --color-lang-dropdown-arrow-hover        : var(--color-white);
   --color-lang-dropdown-list-bg            : #000000;
-  --color-lang-dropdown-list-border        : 3px solid #ffffff;
-  --color-lang-dropdown-option-text        : #ffffff;
+  --color-lang-dropdown-list-border        : 3px solid var(--color-white);
+  --color-lang-dropdown-option-text        : var(--color-white);
   --color-lang-dropdown-option-hover-bg    : var(--color-tertiary);
-  --color-lang-dropdown-option-hover-text  : #ffffff;
+  --color-lang-dropdown-option-hover-text  : var(--color-white);
   --color-lang-dropdown-option-active-bg   : var(--color-tertiary);
-  --color-lang-dropdown-option-active-text : #ffffff;
-  --color-lang-dropdown-active-arrow       : #ffffff;  
+  --color-lang-dropdown-option-active-text : var(--color-white);
+  --color-lang-dropdown-active-arrow       : var(--color-white);  
   
   --foldable-header-bg     : transparent;
   --foldable-title-color   : #202020;
-  --foldable-body-bg       : #ffffff;
-  --foldable-text-color    : #ffffff;
-  --foldable-icon-color    : #ffffff;
+  --foldable-body-bg       : var(--color-white);
+  --foldable-text-color    : var(--color-white);
+  --foldable-icon-color    : var(--color-white);
   --foldable-icon-outline  : #202020;
   --foldable-icon-bg       : transparent;
   --foldable-body-border   : 3px solid #202020;
@@ -381,15 +516,8 @@ body.reduce-motion *::after {
   --color-banner-button-icon               : var(--color-black);
   --color-banner-button-text               : var(--color-black); 
 }
-.music-player-wrapper.special-theme {
-  --music-player-color-accent                 : #9d4edd;
-  --music-player-color-accent-light           : #c77dff;
-  --music-player-color-primary                : #5a189a;
-  --music-player-color-playbt-playing         : #7b2cbf;
-  --music-player-color-playbt-playing-pressed : #5a189a;
-  --music-player-color-playbt-paused          : #3c096c;
-  --music-player-color-playbt-paused-pressed  : #240046;
-}
+
+
 
 body {
   margin                : 0;

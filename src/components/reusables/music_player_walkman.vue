@@ -6,12 +6,19 @@
           <span class="brand-name">WALKMAN</span>
         </div>
         <CustomButton 
-          v-if          ="hasSpecialTapeAccess" 
-          class         ="tape-toggle-btn" 
-          :text         ="showImageTape ? 'DEFAULT' : 'SPECIAL'"
-          height        ="20px"
-          font-size     ="0.55rem"
-          @click        ="$emit('toggleTapeStyle')"
+          v-if              = "hasSpecialTapeAccess" 
+          class             = "tape-toggle-btn" 
+          :class            = "{ active: showImageTape }"
+          :icon-src         = "starIcon"
+          :bg-color         = "showImageTape ? walkmanButtonActiveBg : walkmanButtonBg"
+          :hover-bg-color   = "showImageTape ? walkmanButtonActiveHoverBg : walkmanButtonHoverBg"
+          :icon-color       = "showImageTape ? walkmanButtonActiveIconColor : walkmanButtonIconColor"
+          :hover-icon-color = "showImageTape ? walkmanButtonActiveHoverIconColor : walkmanButtonHoverIconColor"
+          height            = "24px"
+          width             = "24px"
+          padding           = "2px"
+          icon-size         = "14px"
+          @click            = "$emit('toggleTapeStyle')"
         />
       </div>
 
@@ -24,13 +31,13 @@
               <span class="lcd-time-display">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
             </div>
             <input 
-              type          ="range" 
-              min           ="0" 
-              :max          ="duration || 0" 
-              step          ="0.1"
-              :value        ="currentTime" 
-              @input        ="$emit('seek', $event)"
-              class         ="lcd-progress-slider"
+              type          = "range" 
+              min           = "0" 
+              :max          = "duration || 0" 
+              step          = "0.1"
+              :value        = "currentTime" 
+              @input        = "$emit('seek', $event)"
+              class         = "lcd-progress-slider"
             />
           </div>
         </div>
@@ -63,12 +70,13 @@
 <script setup>
 /**
   * @file        music_player_walkman.vue
-  * @brief       Walkman-style music player component featuring an LCD screen, track progress scrubber, custom cassette display toggle, and animated tape reels.
+  * @brief       Walkman-style music player component featuring an LCD screen, track progress scrubber, custom cassette display toggle with an SVG icon, and animated tape reels.
   * @displayName Music Player Walkman
 */
 
 import { ref, onMounted, onUnmounted } from 'vue'
 import CustomButton from '@/components/reusables/custom_button.vue'
+import starIcon     from '@/assets/svg/star-rounded.svg'
 
 defineProps({
   /**
@@ -126,6 +134,174 @@ defineProps({
   formatTime: {
     type: Function,
     required: true
+  },
+  /**
+    * Background color of the walkman player container.
+    * @public
+    */
+  bgColor: {
+    type: String,
+    default: 'var(--music-player-color-primary)'
+  },
+  /**
+    * Border style of the walkman player.
+    * @public
+    */
+  border: {
+    type: String,
+    default: 'var(--music-player-border)'
+  },
+  /**
+    * Border radius for the walkman container and panels.
+    * @public
+    */
+  borderRadius: {
+    type: String,
+    default: 'var(--music-player-border-radius)'
+  },
+  /**
+    * Main chassis background color.
+    * @public
+    */
+  chassisBg: {
+    type: String,
+    default: 'var(--music-player-color-bg-main)'
+  },
+  /**
+    * Brand text accent color.
+    * @public
+    */
+  brandColor: {
+    type: String,
+    default: 'var(--music-player-color-accent-light)'
+  },
+  /**
+    * Cassette door background color.
+    * @public
+    */
+  doorBg: {
+    type: String,
+    default: 'var(--music-player-color-surface)'
+  },
+  /**
+    * Cassette shell background color.
+    * @public
+    */
+  shellBg: {
+    type: String,
+    default: 'var(--music-player-color-bg-secondary)'
+  },
+  /**
+    * Cassette label text color.
+    * @public
+    */
+  labelColor: {
+    type: String,
+    default: 'var(--music-player-color-placeholder-green)'
+  },
+  /**
+    * Cassette window background color.
+    * @public
+    */
+  windowBg: {
+    type: String,
+    default: 'var(--music-player-color-bg-dark)'
+  },
+  /**
+    * Reel dashed border color.
+    * @public
+    */
+  reelColor: {
+    type: String,
+    default: 'var(--music-player-color-accent-light)'
+  },
+  /**
+    * Reel hub background color.
+    * @public
+    */
+  reelHubBg: {
+    type: String,
+    default: 'var(--music-player-color-bg-main)'
+  },
+  /**
+    * LCD panel background color.
+    * @public
+    */
+  lcdBg: {
+    type: String,
+    default: 'var(--music-player-color-bg-dark)'
+  },
+  /**
+    * LCD text and accent color.
+    * @public
+    */
+  lcdColor: {
+    type: String,
+    default: 'var(--music-player-color-accent)'
+  },
+  /**
+    * Background color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonBg: {
+    type: String,
+    default: 'var(--music-player-walkman-button-bg)'
+  },
+  /**
+    * Hover background color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonHoverBg: {
+    type: String,
+    default: 'var(--music-player-walkman-button-hover-bg)'
+  },
+  /**
+    * Active background color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonActiveBg: {
+    type: String,
+    default: 'var(--music-player-walkman-button-active-bg)'
+  },
+  /**
+    * Active hover background color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonActiveHoverBg: {
+    type: String,
+    default: 'var(--music-player-walkman-button-active-hover-bg)'
+  },
+  /**
+    * Icon color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonIconColor: {
+    type: String,
+    default: 'var(--music-player-walkman-button-icon-color)'
+  },
+  /**
+    * Hover icon color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonHoverIconColor: {
+    type: String,
+    default: 'var(--music-player-walkman-button-hover-icon-color)'
+  },
+  /**
+    * Active icon color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonActiveIconColor: {
+    type: String,
+    default: 'var(--music-player-walkman-button-active-icon-color)'
+  },
+  /**
+    * Active hover icon color of the special tape toggle button.
+    * @public
+    */
+  walkmanButtonActiveHoverIconColor: {
+    type: String,
+    default: 'var(--music-player-walkman-button-active-hover-icon-color)'
   }
 })
 
@@ -162,9 +338,9 @@ onUnmounted(() => {
   display               : flex;
   flex-direction        : column;
   width                 : 100%;
-  background            : var(--music-player-color-primary);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(bgColor);
+  border                : v-bind(border);
+  border-radius         : v-bind(borderRadius);
   padding               : 12px;
   box-sizing            : border-box;
   color                 : var(--music-player-color-bg-dark);
@@ -173,9 +349,9 @@ onUnmounted(() => {
 }
 
 .walkman-chassis {
-  background            : var(--music-player-color-bg-main);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(chassisBg);
+  border                : v-bind(border);
+  border-radius         : v-bind(borderRadius);
   padding               : 12px;
   display               : flex;
   flex-direction        : column;
@@ -198,22 +374,19 @@ onUnmounted(() => {
   font-weight           : 900;
   font-size             : 0.75rem;
   letter-spacing        : 2px;
-  color                 : var(--music-player-color-accent-light);
+  color                 : v-bind(brandColor);
   font                  : var(--music_player-font-h1);
 }
 
 .tape-toggle-btn {
-  --color-custom-button-background: var(--music-player-color-surface);
-  --color-custom-button-text: var(--music-player-color-bg-secondary);
-  padding               : 2px 6px;
-  font-weight           : 700;
+  flex-shrink           : 0;
 }
 
 .cassette-door {
   position              : relative;
-  background            : var(--music-player-color-surface);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(doorBg);
+  border                : v-bind(border);
+  border-radius         : v-bind(borderRadius);
   padding               : 8px;
   display               : flex;
   justify-content       : center;
@@ -241,7 +414,7 @@ onUnmounted(() => {
 
 .cassette-shell {
   width                 : 100%;
-  background            : var(--music-player-color-bg-secondary);
+  background            : v-bind(shellBg);
   border-radius         : 4px;
   padding               : 8px;
   box-sizing            : border-box;
@@ -256,13 +429,13 @@ onUnmounted(() => {
   font                  : var(--music_player-font-p);
   font-size             : 0.5rem;
   font-weight           : 700;
-  color                 : var(--music-player-color-placeholder-green);
-  border-bottom         : 1px solid var(--music-player-color-accent-light);
+  color                 : v-bind(labelColor);
+  border-bottom         : 1px solid v-bind(brandColor);
   padding-bottom        : 2px;
 }
 
 .cassette-window {
-  background            : var(--music-player-color-bg-dark);
+  background            : v-bind(windowBg);
   height                : 42px;
   border-radius         : 4px;
   display               : flex;
@@ -275,7 +448,7 @@ onUnmounted(() => {
 .reel {
   width                 : 28px;
   height                : 28px;
-  border                : 3px dashed var(--music-player-color-accent-light);
+  border                : 3px dashed v-bind(reelColor);
   border-radius         : 50%;
   display               : flex;
   justify-content       : center;
@@ -291,7 +464,7 @@ onUnmounted(() => {
 .reel-hub {
   width                 : 8px;
   height                : 8px;
-  background            : var(--music-player-color-bg-main);
+  background            : v-bind(reelHubBg);
   border-radius         : 50%;
 }
 
@@ -306,9 +479,9 @@ onUnmounted(() => {
 }
 
 .lcd-panel {
-  background            : var(--music-player-color-bg-dark);
-  border                : var(--music-player-border);
-  border-radius         : var(--music-player-border-radius);
+  background            : v-bind(lcdBg);
+  border                : v-bind(border);
+  border-radius         : v-bind(borderRadius);
   padding               : 6px 10px;
 }
 
@@ -327,12 +500,12 @@ onUnmounted(() => {
 }
 
 .lcd-status-tag, .lcd-track-num, .lcd-time-display{
-  color                 : var(--music-player-color-accent);
+  color                 : v-bind(lcdColor);
 }
 
 .lcd-progress-slider {
   width                 : 100%;
-  accent-color          : var(--music-player-color-accent);
+  accent-color          : v-bind(lcdColor);
   cursor                : pointer;
   height                : 4px;
 }

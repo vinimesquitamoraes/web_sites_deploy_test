@@ -3,6 +3,7 @@
     <CustomButton
       class          = "lang-button"
       :text          = "currentLang.toUpperCase()"
+      textMargin     = "5px 0px 0px 0px"
       iconSize       = "25px"
       width          = "auto"
       height         = "auto"
@@ -15,6 +16,7 @@
       border         = "var(--color-lang-dropdown-border)"
       iconPosition   = "right"
       @click         = "toggleDropdown"
+
     />
 
     <div v-if="isOpen" class="dropdown-options-list">
@@ -98,6 +100,7 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   color             : var(--color-default-text-color);
   display           : inline-flex;
   position          : relative;
+  margin-bottom     : 10px;
 }
 
 .lang-button {

@@ -1,22 +1,23 @@
+name=navigation_component.vue
 <template>
   <nav class="nav-container" :class="{ 'nav-active': isMenuOpen }">
-    <router-link to="/" class="nav-link">
+    <router-link to="/" class="nav-link" @click="handleNavClick">
       {{ t('SITE_NAV_HOME') }}
     </router-link>
     
-    <router-link to="/about" class="nav-link">
+    <router-link to="/about" class="nav-link" @click="handleNavClick">
       {{ t('SITE_NAV_ABOUT') }}
     </router-link>
 
-    <router-link to="/faq" class="nav-link">
+    <router-link to="/faq" class="nav-link" @click="handleNavClick">
       {{ t('SITE_NAV_FAQ') }}
     </router-link>
 
-    <router-link to="/credits" class="nav-link">
+    <router-link to="/credits" class="nav-link" @click="handleNavClick">
       {{ t('SITE_NAV_CREDITS') }}
     </router-link>
     
-    <router-link to="/download" class="nav-link">
+    <router-link to="/download" class="nav-link" @click="handleNavClick">
       {{ t('SITE_NAV_DOWNLOAD') }}
     </router-link>
 
@@ -33,6 +34,7 @@
 
 import { useI18n }            from '@/composables/useI18n'
 import CustomLanguageDropdown from '@/components/reusables/custom_lang_dropdown.vue'
+import { useAnimations }      from '@/composables/reduced_motion_check'
 
 defineProps({
   /**
@@ -54,6 +56,24 @@ defineProps({
 })
 
 const { t } = useI18n()
+const { animationsEnabled } = useAnimations()
+
+/**
+  * Scrolls the page to the top immediately or smoothly depending on the reduced motion preference.
+  * @private
+  */
+const handleNavClick = () => {
+  const scrollBehavior = animationsEnabled.value ? 'smooth' : 'auto'
+
+  window.scrollTo({
+    top: 0,
+    behavior: scrollBehavior
+  })
+  document.documentElement.scrollTo({
+    top: 0,
+    behavior: scrollBehavior
+  })
+}
 </script>
 
 <style scoped>

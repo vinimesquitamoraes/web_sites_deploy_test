@@ -12,17 +12,12 @@
       @click="handleClick"
     >
       <div v-if="iconSrc" class="icon-wrapper">
-      
-        <!-- 
-          Render a CSS-masked background div if an icon color is provided, 
-          allowing dynamic recoloring via CSS v-bind.
-        -->
+
         <div 
           v-if="hasValidColor"
           class="button-icon-masked"
         ></div>
 
-        <!-- Fallback to a standard <img> tag if no color mask is specified. -->
         <img 
           v-else
           :src="processedIconSrc" 
