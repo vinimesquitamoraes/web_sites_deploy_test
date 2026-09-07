@@ -2,10 +2,12 @@
 
 Credits view component use Credits Section component to display credits for the selected act.
 
+**Source File:** [CreditsView.vue](../../../src/components/views/CreditsView.vue)
+
 ## Imported Components
 
-- CreditsSection (`@/components/reusables/credits_all.vue`)
-- CustomDropdown (`@/components/reusables/custom_dropdown.vue`)
+- [CreditsSection](../reusables/credits_all.md)
+- [CustomDropdown](../reusables/custom_dropdown.md)
 
 ## Imported Composables
 
@@ -23,7 +25,7 @@ Credits view component use Credits Section component to display credits for the 
 
 ## Computed Properties & Methods
 
-- `availableActs`: * @file        CreditsView.vue
+- `availableActs`: Computes the list of available act options for the dropdown selector.
 
 ## Slots
 
@@ -31,4 +33,4 @@ Credits view component use Credits Section component to display credits for the 
 
 ## Internal Methods
 
-- *None specified*
+- `currentAct`: Tracks the currently selected act identifier for the credits filter.

@@ -2,6 +2,8 @@
 
 Character card component supporting image customization, description paragraphs, and flexible orientations.
 
+**Source File:** [character_card.vue](../../../src/components/reusables/character_card.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -31,7 +33,7 @@ Character card component supporting image customization, description paragraphs,
 
 ## Computed Properties & Methods
 
-- `descriptionParagraphs`: * @file character_card.vue
+- `descriptionParagraphs`: Computed property that normalizes the description prop in a arrays.
 
 ## Slots
 

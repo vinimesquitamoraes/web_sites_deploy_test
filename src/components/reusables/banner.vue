@@ -15,6 +15,7 @@
     </div>
 
     <div class="hero-content center">
+      <!-- @slot media - Custom content slot -->
       <slot name="content">
         <div class="hero-logo-wrapper" v-if="showLogo">
           <img :src="logoSrc" alt="Game Logo" class="hero-logo-image" />

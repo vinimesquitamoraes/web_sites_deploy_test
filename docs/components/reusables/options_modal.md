@@ -2,10 +2,12 @@
 
 A modal dialog component that manages and persists toggleable options via sessionStorage with cross-tab sync support.
 
+**Source File:** [options_modal.vue](../../../src/components/reusables/options_modal.vue)
+
 ## Imported Components
 
-- ToggleButtom (`./toggle_button.vue`)
-- CustomButton (`./custom_button.vue`)
+- [ToggleButtom](toggle_button.md)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -13,7 +15,7 @@ A modal dialog component that manages and persists toggleable options via sessio
 
 ## Imported Assets
 
-- closeIcon (`@/assets/svg/close-svgrepo-com.svg`)
+- [closeIcon](../../../src/assets/svg/close-svgrepo-com.svg)
 
 ## Props
 
@@ -30,10 +32,7 @@ A modal dialog component that manages and persists toggleable options via sessio
 
 ## Computed Properties & Methods
 
-- `widthVal`: * @file        options_modal.vue
-- `syncSessionState`: * Synchronizes reactive session state with current sessionStorage values.
-- `toggleOption`: * Updates option state, persists to sessionStorage, dispatches update events, and emits changes.
-- `closeModal`: * Closes the modal by updating v-model state.
+- `widthVal`: Formats width value into pixel string if numeric.
 
 ## Slots
 
@@ -41,4 +40,6 @@ A modal dialog component that manages and persists toggleable options via sessio
 
 ## Internal Methods
 
-- *None specified*
+- `syncSessionState`: Synchronizes reactive session state with current sessionStorage values.
+- `toggleOption`: Updates option state, persists to sessionStorage, dispatches update events, and emits changes.
+- `closeModal`: Closes the modal by updating v-model state.

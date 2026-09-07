@@ -2,10 +2,12 @@
 
 Application header component containing the logo, navigation links, and a responsive custom hamburger menu button.
 
+**Source File:** [app_header.vue](../../../src/components/reusables/app_header.vue)
+
 ## Imported Components
 
-- NavigationComponent (`./navigation_component.vue`)
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [NavigationComponent](navigation_component.md)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -13,9 +15,9 @@ Application header component containing the logo, navigation links, and a respon
 
 ## Imported Assets
 
-- img_gameLogo (`@/assets/img/logos/Encore_Logo.png`)
-- img_hamburguer_icon_closed (`@/assets/svg/hamburger-button.svg`)
-- img_hamburguer_icon_open (`@/assets/svg/triangle-down-filled.svg`)
+- [img_gameLogo](../../../src/assets/img/logos/Encore_Logo.png)
+- [img_hamburguer_icon_closed](../../../src/assets/svg/hamburger-button.svg)
+- [img_hamburguer_icon_open](../../../src/assets/svg/triangle-down-filled.svg)
 
 ## Props
 
@@ -25,7 +27,7 @@ Application header component containing the logo, navigation links, and a respon
 
 ## Computed Properties & Methods
 
-- `toggleMenu`: * @file        app_header.vue
+- *None specified*
 
 ## Slots
 
@@ -33,4 +35,5 @@ Application header component containing the logo, navigation links, and a respon
 
 ## Internal Methods
 
-- *None specified*
+- `isMenuOpen`: Tracks whether the mobile hamburger menu is open.
+- `toggleMenu`: Toggles the mobile menu open/closed state.

@@ -2,6 +2,8 @@
 
 A system requirements display component using a responsive localized tabular layout.
 
+**Source File:** [requeriments.vue](../../../src/components/reusables/requeriments.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -30,4 +32,4 @@ A system requirements display component using a responsive localized tabular lay
 
 ## Internal Methods
 
-- *None specified*
+- `requirements`: List of system requirements keys mapping to internationalization labels.

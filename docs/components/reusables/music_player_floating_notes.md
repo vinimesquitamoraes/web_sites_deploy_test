@@ -2,6 +2,8 @@
 
 Floating animated musical notes animation component with random colors, customizable speed, and float trajectory distance.
 
+**Source File:** [music_player_floating_notes.vue](../../../src/components/reusables/music_player_floating_notes.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -27,8 +29,6 @@ Floating animated musical notes animation component with random colors, customiz
 
 ## Computed Properties & Methods
 
-- `getRandomColor`: * @file        music_player_floating_notes.vue
-- `refreshColors`: * Refreshes the color array with newly randomized colors for each note.
 - `computedDistance`: Formatted vertical float distance with unit support.
 - `computedSpeed`: Formatted animation speed duration with unit support.
 
@@ -38,4 +38,6 @@ Floating animated musical notes animation component with random colors, customiz
 
 ## Internal Methods
 
-- *None specified*
+- `noteColors`: Stores the current active colors assigned to the rendered notes.
+- `getRandomColor`: Selects a random color from the color palette or falls back appropriately.
+- `refreshColors`: Refreshes the color array with newly randomized colors for each note.

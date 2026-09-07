@@ -2,9 +2,11 @@
 
 Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable.
 
+**Source File:** [banner.vue](../../../src/components/reusables/banner.vue)
+
 ## Imported Components
 
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -12,9 +14,9 @@ Hero banner component featuring background image, logo display and a secret dire
 
 ## Imported Assets
 
-- img_gameLogo (`@/assets/img/logos/Encore_Logo.png`)
-- img_defaultBanner (`@/assets/img/art/chinese_plus_japanese.png`)
-- dowload_icon (`@/assets/svg/download.svg`)
+- [img_gameLogo](../../../src/assets/img/logos/Encore_Logo.png)
+- [img_defaultBanner](../../../src/assets/img/art/chinese_plus_japanese.png)
+- [dowload_icon](../../../src/assets/svg/download.svg)
 
 ## Props
 
@@ -45,9 +47,9 @@ Hero banner component featuring background image, logo display and a secret dire
 
 ## Slots
 
-- `content`: Custom implementation.
+- `media`: Custom content slot
 
 ## Internal Methods
 
-- `getRandomAlternative`: * @file banner.vue
+- `getRandomAlternative`: Selects a random alternative background image from the configured array.
 - `checkSessionState`: Checks and updates the active session state based on session storage value changes.

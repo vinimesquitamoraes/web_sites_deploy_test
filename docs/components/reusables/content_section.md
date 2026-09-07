@@ -2,9 +2,11 @@
 
 Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts.
 
+**Source File:** [content_section.vue](../../../src/components/reusables/content_section.vue)
+
 ## Imported Components
 
-- MediaModal (`./media_modal.vue`)
+- [MediaModal](media_modal.md)
 
 ## Imported Composables
 
@@ -47,10 +49,8 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 
 ## Computed Properties & Methods
 
-- `textParagraphs`: * @file content_section.vue
-- `shouldShowHeader`: * Evaluates whether the header title should render based on availability of text and heading properties.
-- `openImageModal`: * Intercepts clicks to trigger and display the image expansion modal when valid.
-- `closeImageModal`: * Closes the image modal view.
+- `textParagraphs`: Filters and formats raw input text into a valid array of paragraph string blocks.
+- `shouldShowHeader`: Evaluates whether the header title should render based on availability of text and heading properties.
 
 ## Slots
 
@@ -58,4 +58,5 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 
 ## Internal Methods
 
-- *None specified*
+- `openImageModal`: Intercepts clicks to trigger and display the image expansion modal when valid.
+- `closeImageModal`: Closes the image modal view.

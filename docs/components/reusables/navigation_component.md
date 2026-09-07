@@ -2,9 +2,11 @@
 
 The primary site navigation bar component containing route links and an optional language dropdown selector.
 
+**Source File:** [navigation_component.vue](../../../src/components/reusables/navigation_component.vue)
+
 ## Imported Components
 
-- CustomLanguageDropdown (`@/components/reusables/custom_lang_dropdown.vue`)
+- [CustomLanguageDropdown](custom_lang_dropdown.md)
 
 ## Imported Composables
 
@@ -23,7 +25,7 @@ The primary site navigation bar component containing route links and an optional
 
 ## Computed Properties & Methods
 
-- `handleNavClick`: * @file        navigation_component.vue
+- *None specified*
 
 ## Slots
 
@@ -31,4 +33,4 @@ The primary site navigation bar component containing route links and an optional
 
 ## Internal Methods
 
-- *None specified*
+- `handleNavClick`: Scrolls the page to the top immediately or smoothly depending on the reduced motion preference.

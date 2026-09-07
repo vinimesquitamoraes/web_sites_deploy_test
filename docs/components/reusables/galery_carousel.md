@@ -2,10 +2,12 @@
 
 Interactive image gallery component supporting automatic rotation, animated GIFs,
 
+**Source File:** [galery_carousel.vue](../../../src/components/reusables/galery_carousel.vue)
+
 ## Imported Components
 
-- MediaModal (`./media_modal.vue`)
-- CustomButton (`./custom_button.vue`)
+- [MediaModal](media_modal.md)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -13,8 +15,8 @@ Interactive image gallery component supporting automatic rotation, animated GIFs
 
 ## Imported Assets
 
-- img_left_arrow (`@/assets/svg/triangle-left-12-filled.svg`)
-- img_right_arrow (`@/assets/svg/triangle-right-12-filled.svg`)
+- [img_left_arrow](../../../src/assets/svg/triangle-left-12-filled.svg)
+- [img_right_arrow](../../../src/assets/svg/triangle-right-12-filled.svg)
 
 ## Props
 
@@ -33,7 +35,7 @@ Interactive image gallery component supporting automatic rotation, animated GIFs
 
 ## Internal Methods
 
-- `handleTouchStart`: * @file galery_carousel.vue
+- `handleTouchStart`: Captures initial touch horizontal coordinate on touch start.
 - `handleTouchEnd`: Captures ending touch coordinate on touch end and triggers swipe check.
 - `handleSwipe`: Evaluates touch displacement against a threshold to determine swipe direction.
 - `captureFirstFrame`: Renders the first frame of an animated GIF onto a canvas and extracts a static data URL.
@@ -42,5 +44,5 @@ Interactive image gallery component supporting automatic rotation, animated GIFs
 - `prevSlide`: Navigates the carousel backward to the previous slide.
 - `selectSlide`: Explicitly selects a slide index based on user selection or pagination interaction.
 - `scrollThumbnails`: Smoothly or instantly scrolls the thumbnail strip container horizontally in a given direction.
-- `openModal`: Watches index changes to reset timers and align active thumbnail positions smoothly or instantly. */
+- `openModal`: Opens the modal view for a given slide index and locks page scrolling.
 - `closeModal`: Closes the modal view and restores page scrolling.

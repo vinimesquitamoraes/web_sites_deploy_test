@@ -2,9 +2,11 @@
 
 A customizable credits section component featuring grouped roles, names, grid layout columns, dynamic links, and tooltip integrations.
 
+**Source File:** [credits_section.vue](../../../src/components/reusables/credits_section.vue)
+
 ## Imported Components
 
-- ToolTip (`@/components/reusables/tooltip.vue`)
+- [ToolTip](tooltip.md)
 
 ## Imported Composables
 
@@ -28,11 +30,7 @@ A customizable credits section component featuring grouped roles, names, grid la
 
 ## Computed Properties & Methods
 
-- `computedAlign`: * @file        credits_section.vue
-- `resolveName`: * Extracts string name from string or object person entries.
-- `resolveLink`: * Resolves link mapping for a person string.
-- `getPersonLink`: * Gets specific link or fallback resolved link for a person.
-- `isTooltipAllowed`: * Determines if tooltips are permitted based on config hierarchy.
+- `computedAlign`: Computes grid justification based on text alignment configuration.
 
 ## Slots
 
@@ -40,4 +38,7 @@ A customizable credits section component featuring grouped roles, names, grid la
 
 ## Internal Methods
 
-- *None specified*
+- `resolveName`: Extracts string name from string or object person entries.
+- `resolveLink`: Resolves link mapping for a person string.
+- `getPersonLink`: Gets specific link or fallback resolved link for a person.
+- `isTooltipAllowed`: Determines if tooltips are permitted based on config hierarchy.

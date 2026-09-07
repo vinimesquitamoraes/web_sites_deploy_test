@@ -2,10 +2,12 @@
 
 Music player playlist component displaying paginated track listings, current track states, loading indicators, and pagination navigation controls.
 
+**Source File:** [music_player_playlist.vue](../../../src/components/reusables/music_player_playlist.vue)
+
 ## Imported Components
 
-- SocialMediaButton (`@/components/reusables/social_media_button.vue`)
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [SocialMediaButton](social_media_button.md)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -13,8 +15,8 @@ Music player playlist component displaying paginated track listings, current tra
 
 ## Imported Assets
 
-- previous_icon (`@/assets/svg/triangle-left-12-filled.svg`)
-- next_icon (`@/assets/svg/triangle-right-12-filled.svg`)
+- [previous_icon](../../../src/assets/svg/triangle-left-12-filled.svg)
+- [next_icon](../../../src/assets/svg/triangle-right-12-filled.svg)
 
 ## Props
 

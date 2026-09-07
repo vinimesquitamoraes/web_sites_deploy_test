@@ -2,10 +2,12 @@
 
 About page view component displaying structured informational content sections with alternating media layouts.
 
+**Source File:** [AboutView.vue](../../../src/components/views/AboutView.vue)
+
 ## Imported Components
 
-- ContentSection (`@/components/reusables/content_section.vue`)
-- SocialMediaButton (`@/components/reusables/social_media_button.vue`)
+- [ContentSection](../reusables/content_section.md)
+- [SocialMediaButton](../reusables/social_media_button.md)
 
 ## Imported Composables
 
@@ -13,12 +15,12 @@ About page view component displaying structured informational content sections w
 
 ## Imported Assets
 
-- combatImage (`@/assets/img/screenshots/sc4.png`)
-- fieldImage (`@/assets/img/screenshots/sc1.png`)
-- storyImage (`@/assets/img/screenshots/sc2.png`)
-- visualImage (`@/assets/img/screenshots/sc3.png`)
-- musicImage (`@/assets/img/screenshots/sc5.png`)
-- imgGodotLogo (`@/assets/img/logos/logo_large_monochrome_light.png`)
+- [combatImage](../../../src/assets/img/screenshots/sc4.png)
+- [fieldImage](../../../src/assets/img/screenshots/sc1.png)
+- [storyImage](../../../src/assets/img/screenshots/sc2.png)
+- [visualImage](../../../src/assets/img/screenshots/sc3.png)
+- [musicImage](../../../src/assets/img/screenshots/sc5.png)
+- [imgGodotLogo](../../../src/assets/img/logos/logo_large_monochrome_light.png)
 
 ## Props
 
@@ -28,7 +30,7 @@ About page view component displaying structured informational content sections w
 
 ## Computed Properties & Methods
 
-- `infoSections`: * @file        AboutView.vue
+- `infoSections`: Computes the list of information sections displayed sequentially across the about page.
 
 ## Slots
 

@@ -17,36 +17,120 @@ function sanitizeTableCell(text) {
 }
 
 /**
+	* Clean JSDoc comment artifacts like leading asterisks and block leaks
+*/
+function cleanDocComment(text, componentName) {
+	if (!text) return 'Docstrings Missing.';
+	
+	let cleaned = String(text)
+		.replace(/^\s*\*\s*/gm, '')
+		.replace(/\/\*\*?|\*\/|@\w+/g, '')
+		.trim();
+
+	if (
+		!cleaned || 
+		cleaned.toLowerCase().endsWith('.vue') || 
+		(componentName && cleaned.toLowerCase() === componentName.toLowerCase())
+	) {
+		return 'Docstrings Missing.';
+	}
+
+	return cleaned;
+}
+
+/**
+	* Resolve import paths to absolute file paths with extension fallbacks
+*/
+function resolveFilePath(impPath, sourceFileDir) {
+	let resolvedPath = impPath;
+	if (resolvedPath.startsWith('@/')) {
+		resolvedPath = path.join(projectRoot, resolvedPath.replace('@/', 'src/'));
+	} else {
+		resolvedPath = path.resolve(sourceFileDir, resolvedPath);
+	}
+	
+	if (fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isFile()) {
+		return resolvedPath;
+	}
+	
+	const extensions = ['.ts', '.js', '.vue', '.json'];
+	for (const ext of extensions) {
+		if (fs.existsSync(resolvedPath + ext)) {
+			return resolvedPath + ext;
+		}
+	}
+	
+	return resolvedPath;
+}
+
+/**
 	* Builder Class to assemble the component documentation markdown.
 */
 class MarkdownBuilder {
-	constructor() {
+	constructor(currentSubFolder, fileInfoMap, componentName) {
 		this.sections = [];
+		this.currentSubFolder = currentSubFolder;
+		this.fileInfoMap = fileInfoMap;
+		this.componentName = componentName;
+		this.currentFileDir = path.join(baseDocsDir, currentSubFolder);
 	}
+
 	addOverview(brief) {
 		this.sections.push(`## Overview\n\n${sanitizeTableCell(brief)}`);
 		return this;
 	}
 
-	addImportedComponents(components) {
+	addSourceLink(sourceFilePath) {
+		let relPath = path.relative(this.currentFileDir, sourceFilePath);
+		relPath = relPath.split(path.sep).join('/');
+		this.sections.push(`**Source File:** [${path.basename(sourceFilePath)}](${relPath})`);
+		return this;
+	}
+
+	addImportedComponents(components, sourceFileDir) {
 		const content = components.length > 0 
-			? components.map(imp => `- ${sanitizeTableCell(imp.name)} (\`${sanitizeTableCell(imp.path)}\`)`).join('\n')
+			? components.map(imp => {
+				const resolvedPath = resolveFilePath(imp.path, sourceFileDir);
+				const targetInfo = this.fileInfoMap.get(path.resolve(resolvedPath));
+				
+				if (targetInfo) {
+					const targetFilePath = path.join(baseDocsDir, targetInfo.subFolder, targetInfo.fileName);
+					let relPath = path.relative(this.currentFileDir, targetFilePath);
+					relPath = relPath.split(path.sep).join('/');
+					return `- [${sanitizeTableCell(imp.name)}](${relPath})`;
+				}
+
+				let relPath = path.relative(this.currentFileDir, resolvedPath);
+				relPath = relPath.split(path.sep).join('/');
+				return `- [${sanitizeTableCell(imp.name)}](${relPath})`;
+			}).join('\n')
 			: '- *None specified*';
+
 		this.sections.push(`## Imported Components\n\n${content}`);
 		return this;
 	}
 
-	addImportedComposables(composables) {
+	addImportedComposables(composables, sourceFileDir) {
 		const content = composables.length > 0 
-			? composables.map(imp => `- ${sanitizeTableCell(imp.name)} (\`${sanitizeTableCell(imp.path)}\`)`).join('\n')
+			? composables.map(imp => {
+				const targetPath = resolveFilePath(imp.path, sourceFileDir);
+				let relPath = path.relative(this.currentFileDir, targetPath);
+				relPath = relPath.split(path.sep).join('/');
+				return `- [${sanitizeTableCell(imp.name)}](${relPath})`;
+			}).join('\n')
 			: '- *None specified*';
 		this.sections.push(`## Imported Composables\n\n${content}`);
 		return this;
 	}
 
-	addImportedAssets(assets) {
+	addImportedAssets(assets, sourceFileDir) {
 		const content = assets.length > 0 
-			? assets.map(imp => `- ${sanitizeTableCell(imp.name)} (\`${sanitizeTableCell(imp.path)}\`)`).join('\n')
+			? assets.map(imp => {
+				const targetPath = resolveFilePath(imp.path, sourceFileDir);
+				let relPath = path.relative(this.currentFileDir, targetPath);
+				relPath = relPath.split(path.sep).join('/');
+				return `- [${sanitizeTableCell(imp.name)}](${relPath})`;
+			}).join('\n')
 			: '- *None specified*';
 		this.sections.push(`## Imported Assets\n\n${content}`);
 		return this;
@@ -97,8 +181,13 @@ class MarkdownBuilder {
 	}
 
 	addSectionList(title, items) {
-		const content = items && items.length > 0 
-			? items.map(item => `- \`${sanitizeTableCell(item.name)}\`: ${sanitizeTableCell(item.description || 'Custom implementation.')}`).join('\n')
+		const cleanedItems = items ? items.map(item => ({
+			name: item.name,
+			description: cleanDocComment(item.description, this.componentName)
+		})) : [];
+
+		const content = cleanedItems.length > 0 
+			? cleanedItems.map(item => `- \`${sanitizeTableCell(item.name)}\`: ${sanitizeTableCell(item.description)}`).join('\n')
 			: '- *None specified*';
 		this.sections.push(`## ${title}\n\n${content}`);
 		return this;
@@ -111,7 +200,7 @@ class MarkdownBuilder {
 
 function getVueFiles(dir, fileList = []) {
 	if (!fs.existsSync(dir)) return fileList;
-	const files = fs.readdirSync(dir);
+	const files = readdirSyncSafely(dir);
 	files.forEach(file => {
 		const filePath = path.join(dir, file);
 		if (fs.statSync(filePath).isDirectory()) {
@@ -121,6 +210,14 @@ function getVueFiles(dir, fileList = []) {
 		}
 	});
 	return fileList;
+}
+
+function readdirSyncSafely(dir) {
+	try {
+		return fs.readdirSync(dir);
+	} catch {
+		return [];
+	}
 }
 
 function parseBriefTag(content) {
@@ -135,10 +232,7 @@ function parseImports(content) {
     let match;
     
     while ((match = importRegex.exec(content)) !== null) {
-        const importName = match[1];
-        const importPath = match[2];
-        
-        imports.push({ name: importName, path: importPath });
+        imports.push({ name: match[1], path: match[2] });
     }
     
     return imports;
@@ -151,11 +245,9 @@ function classifyImports(imports) {
 
     imports.forEach(imp => {
         const lowerPath = imp.path.toLowerCase();
-
-        const isComposable 		= lowerPath.includes('composables');
+        const isComposable = lowerPath.includes('composables');
         const hasAssetExtension = /\.(png|jpg|jpeg|svg|gif|webp|css)$/.test(lowerPath);
-        const isAssetFolder 	= lowerPath.includes('assets') || lowerPath.includes('img');
-        
+        const isAssetFolder = lowerPath.includes('assets') || lowerPath.includes('img');
         const isAsset = hasAssetExtension || isAssetFolder;
 
         if (isComposable) {
@@ -170,68 +262,189 @@ function classifyImports(imports) {
     return { components, composables, assets };
 }
 
+/**
+	* Robust line-by-line state machine parser for script setup members and computed properties
+*/
 function parseScriptSetupMembers(content) {
     const computedList = [];
     const methodsList = [];
 
-    const memberRegex = /\/\*\*([\s\S]*?)\*\/\s*(?:export\s+)?const\s+([a-zA-Z0-9_$]+)\s*=\s*(?:computed\s*\(|\([^)]*\)\s*=>|function)/g;
-    
-    let match;
-    while ((match = memberRegex.exec(content)) !== null) {
+    const lines = content.split(/\r?\n/);
+    let currentCommentLines = [];
+    let inComment = false;
 
-        const commentBlock 	= match[1];
-        const memberName 	= match[2];
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
 
-        const descMatch 	= commentBlock.match(/(?:^|\s*\*+)\s*(?!@)([^\r\n]+)/);
-        const description 	= descMatch ? descMatch[1].trim() : 'DOCSTRINGS NOT FOUND.';
+        if (trimmed.startsWith('/**')) {
+            inComment = true;
+            currentCommentLines = [trimmed];
+            if (trimmed.endsWith('*/')) {
+                inComment = false;
+            }
+            continue;
+        }
 
-        const isPrivateComment 				= commentBlock.includes('@private');
-        const startsWithComputed 			= memberName.startsWith('computed');
-        const isExplicitComputedAssignment 	= content.includes(`${memberName} = computed`);
+        if (inComment) {
+            currentCommentLines.push(trimmed);
+            if (trimmed.endsWith('*/')) {
+                inComment = false;
+            }
+            continue;
+        }
 
-        const isComputedMember = isPrivateComment || startsWithComputed || isExplicitComputedAssignment;
+        if (currentCommentLines.length > 0) {
+            const declMatch = trimmed.match(/^(?:export\s+)?(?:const|let|var|function|async\s+function)\s+([a-zA-Z0-9_$]+)/);
+            if (declMatch) {
+                const memberName = declMatch[1];
+                const fullComment = currentCommentLines.join('\n');
+                currentCommentLines = [];
 
-        if (isComputedMember) {
-            computedList.push({ name: memberName, description });
-        } else {
-            methodsList.push({ name: memberName, description });
+                if (fullComment.includes('@file') || fullComment.includes('@brief')) {
+                    continue;
+                }
+
+                let description = '';
+                for (const cLine of fullComment.split('\n')) {
+                    const cleanedLine = cLine.replace(/^\s*\*\s*/, '').replace(/\/\*\*?|\*\//g, '').trim();
+                    if (cleanedLine && !cleanedLine.startsWith('@')) {
+                        description = cleanedLine;
+                        break;
+                    }
+                }
+
+                let isComputed = memberName.startsWith('computed');
+                for (let j = i; j < Math.min(i + 3, lines.length); j++) {
+                    if (lines[j].includes('computed(')) {
+                        isComputed = true;
+                        break;
+                    }
+                }
+
+                const item = { name: memberName, description };
+                if (isComputed) {
+                    computedList.push(item);
+                } else {
+                    methodsList.push(item);
+                }
+            } else if (trimmed === '' || trimmed.startsWith('//')) {
+                continue;
+            } else {
+                currentCommentLines = [];
+            }
         }
     }
 
     return { computedList, methodsList };
 }
 
+/**
+	* Generates an index.md file listing all discovered components in a Markdown table.
+*/
+function generateIndexMarkdown(fileMetadata) {
+	const categorized = {};
+
+	fileMetadata.forEach(meta => {
+		if (!categorized[meta.subFolder]) {
+			categorized[meta.subFolder] = [];
+		}
+		categorized[meta.subFolder].push(meta);
+	});
+
+	let markdown = `# Component Index\n\n`;
+
+	Object.keys(categorized).sort().forEach(category => {
+		const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
+		markdown += `## ${categoryTitle}\n\n`;
+		markdown += `| Component | Description |\n`;
+		markdown += `| :-------- | :---------- |\n`;
+
+		const items = categorized[category].sort((a, b) => 
+			a.componentName.localeCompare(b.componentName)
+		);
+
+		items.forEach(meta => {
+			const fileName = `${meta.componentName.toLowerCase()}.md`;
+			const relPath = `${meta.subFolder}/${fileName}`;
+			const brief = parseBriefTag(meta.rawContent) || meta.docData.description || 'No description provided.';
+			
+			const componentLink = `[**${sanitizeTableCell(meta.componentName)}**](${relPath})`;
+			const sanitizedBrief = sanitizeTableCell(brief);
+
+			markdown += `| ${componentLink} | ${sanitizedBrief} |\n`;
+		});
+
+		markdown += `\n`;
+	});
+
+	if (!fs.existsSync(baseDocsDir)) {
+		fs.mkdirSync(baseDocsDir, { recursive: true });
+	}
+
+	const indexPath = path.join(baseDocsDir, 'index.md');
+	fs.writeFileSync(indexPath, markdown.trim() + '\n');
+	console.log(`Generated component index table: ${indexPath}`);
+}
+
 async function generateMarkdown() {
 	const vueFiles = getVueFiles(componentsDir);
+	const fileMetadata = [];
 
 	for (const file of vueFiles) {
 		try {
 			const rawContent = fs.readFileSync(file, 'utf-8');
-			
 			const docData = await parse(file);
+			const componentName = docData.displayName || path.basename(file, '.vue');
+			const relativePath = path.relative(componentsDir, file);
+			const subFolder = relativePath.toLowerCase().includes('view') || relativePath.toLowerCase().includes('views') 
+				? 'views' 
+				: 'reusables';
+
+			fileMetadata.push({
+				file,
+				rawContent,
+				docData,
+				componentName,
+				subFolder
+			});
+		} catch (error) {
+			console.error(`Error pre-parsing ${file}:`, error.message);
+		}
+	}
+
+	const fileInfoMap = new Map();
+	fileMetadata.forEach(meta => {
+		fileInfoMap.set(path.resolve(meta.file), {
+			subFolder: meta.subFolder,
+			fileName: `${meta.componentName.toLowerCase()}.md`
+		});
+	});
+
+	for (const meta of fileMetadata) {
+		try {
+			const { file, rawContent, docData, componentName, subFolder } = meta;
 			const allImports = parseImports(rawContent);
 			const { components, composables, assets } = classifyImports(allImports);
 			const { computedList, methodsList } = parseScriptSetupMembers(rawContent);
 
 			const customBrief = parseBriefTag(rawContent);
 			const brief = customBrief || docData.description || 'No description provided.';
-			const componentName = docData.displayName || path.basename(file, '.vue');
 
-			const markdownContent = new MarkdownBuilder()
+			const finalComputed = computedList.length > 0 ? computedList : [];
+			const finalMethods = methodsList.length > 0 ? methodsList : (docData.methods || []);
+
+			const markdownContent = new MarkdownBuilder(subFolder, fileInfoMap, componentName)
 				.addOverview(brief)
-				.addImportedComponents(components)
-				.addImportedComposables(composables)
-				.addImportedAssets(assets)
+				.addSourceLink(file)
+				.addImportedComponents(components, path.dirname(file))
+				.addImportedComposables(composables, path.dirname(file))
+				.addImportedAssets(assets, path.dirname(file))
 				.addProps(docData.props)
-				.addSectionList('Computed Properties & Methods', computedList.length > 0 ? computedList : docData.methods)
+				.addSectionList('Computed Properties & Methods', finalComputed)
 				.addSectionList('Slots', docData.slots)
-				.addSectionList('Internal Methods', methodsList.length > 0 ? methodsList : docData.methods)
+				.addSectionList('Internal Methods', finalMethods)
 				.build();
-
-			const relativePath = path.relative(componentsDir, file);
-			const subFolder = relativePath.toLowerCase().includes('view') || relativePath.toLowerCase().includes('views') 
-				? 'views' 
-				: 'reusables';
 
 			const targetOutputDir = path.join(baseDocsDir, subFolder);
 			if (!fs.existsSync(targetOutputDir)) {
@@ -243,9 +456,11 @@ async function generateMarkdown() {
 			console.log(`Generated (${subFolder}): ${componentName}`);
 
 		} catch (error) {
-			console.error(`Error parsing ${file}:`, error.message);
+			console.error(`Error processing ${file}:`, error.message);
 		}
 	}
+
+	generateIndexMarkdown(fileMetadata);
 }
 
 generateMarkdown();

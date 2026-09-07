@@ -53,10 +53,11 @@
             :image-openable       ="imageOpenable"
           >
             <template #media>
+              <!-- @slot media - Custom media content slot -->
               <slot name="media"></slot>
             </template>
           </ContentSection>
-          
+          <!-- @slot Slot for main inner body content -->
           <slot></slot>
         </div>
       </div>

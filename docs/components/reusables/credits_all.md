@@ -2,9 +2,11 @@
 
 The master credits container component that parses CSV files for roles and links, formatting localized credit lists for display.
 
+**Source File:** [credits_all.vue](../../../src/components/reusables/credits_all.vue)
+
 ## Imported Components
 
-- CreditsSection (`@/components/reusables/credits_section.vue`)
+- [CreditsSection](credits_section.md)
 
 ## Imported Composables
 
@@ -12,8 +14,8 @@ The master credits container component that parses CSV files for roles and links
 
 ## Imported Assets
 
-- rolesCSVText (`@/assets/csv/credits_roles.csv?raw`)
-- linksCSVText (`@/assets/csv/credits_links.csv?raw`)
+- [rolesCSVText](../../../src/assets/csv/credits_roles.csv?raw)
+- [linksCSVText](../../../src/assets/csv/credits_links.csv?raw)
 
 ## Props
 
@@ -23,12 +25,10 @@ The master credits container component that parses CSV files for roles and links
 
 ## Computed Properties & Methods
 
-- `debugLog`: * @file        credits_all.vue
-- `specialCredits`: * The act filter string ('all' or specific act number).
-- `playerThanks`: * Optional player thank you block configuration.
-- `parseCSV`: * Parses raw CSV text into structured JavaScript objects.
-- `linksMap`: * Generates a lookup dictionary mapping names to external links from the parsed links CSV.
-- `formattedCredits`: * Formats the raw CSV role data and links into structured credit groups based on the active act filter.
+- `specialCredits`: Special static credits block for thanks, community, and contributor notices.
+- `playerThanks`: Optional player thank you block configuration.
+- `linksMap`: Generates a lookup dictionary mapping names to external links from the parsed links CSV.
+- `formattedCredits`: Formats the raw CSV role data and links into structured credit groups based on the active act filter.
 
 ## Slots
 
@@ -36,4 +36,5 @@ The master credits container component that parses CSV files for roles and links
 
 ## Internal Methods
 
-- *None specified*
+- `debugLog`: Logs debug messages to the console if debugging is toggled on.
+- `parseCSV`: Parses raw CSV text into structured JavaScript objects.

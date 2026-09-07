@@ -2,6 +2,8 @@
 
 A customizable switch toggle component supporting active/inactive icons, masked colorization, and custom dimensions.
 
+**Source File:** [toggle_button.vue](../../../src/components/reusables/toggle_button.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -33,19 +35,17 @@ A customizable switch toggle component supporting active/inactive icons, masked 
 
 ## Computed Properties & Methods
 
-- `formatValue`: * @file        toggle_button.vue
-- `cssWidth`: * Computed width style for the slider track.
-- `cssHeight`: * Computed height style for the slider track.
-- `cssSliderBg`: * Computed dynamic background color for the slider depending on state.
-- `handleSizeValue`: * Computed size for the handle based on slider height.
-- `cssHandleSize`: * Computed width/height style for the handle element.
-- `activeTranslateX`: * Computed translation distance for the active state based on width, handle size, borders, and margins.
-- `cssTranslateX`: * Formatted translation distance string for CSS binding.
-- `cssIconSize`: * Computed size style for the icon element.
-- `rawIcon`: * Computed raw icon string depending on active/inactive states.
-- `processedIcon`: * Processes raw SVG strings into data URIs or passes through image paths.
-- `cssMaskImage`: * Computed CSS mask URL for SVG icons.
-- `handleClick`: * Handles the click action to toggle states and emit events.
+- `cssWidth`: Computed width style for the slider track.
+- `cssHeight`: Computed height style for the slider track.
+- `cssSliderBg`: Computed dynamic background color for the slider depending on state.
+- `handleSizeValue`: Computed size for the handle based on slider height.
+- `cssHandleSize`: Computed width/height style for the handle element.
+- `activeTranslateX`: Computed translation distance for the active state based on width, handle size, borders, and margins.
+- `cssTranslateX`: Formatted translation distance string for CSS binding.
+- `cssIconSize`: Computed size style for the icon element.
+- `rawIcon`: Computed raw icon string depending on active/inactive states.
+- `processedIcon`: Processes raw SVG strings into data URIs or passes through image paths.
+- `cssMaskImage`: Computed CSS mask URL for SVG icons.
 
 ## Slots
 
@@ -53,4 +53,5 @@ A customizable switch toggle component supporting active/inactive icons, masked 
 
 ## Internal Methods
 
-- *None specified*
+- `formatValue`: Helper to format value (number to px string).
+- `handleClick`: Handles the click action to toggle states and emit events.

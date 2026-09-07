@@ -2,9 +2,11 @@
 
 Music player control panel component featuring mechanical-style buttons for playback navigation, recording, and state management.
 
+**Source File:** [music_player_controls.vue](../../../src/components/reusables/music_player_controls.vue)
+
 ## Imported Components
 
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -12,12 +14,12 @@ Music player control panel component featuring mechanical-style buttons for play
 
 ## Imported Assets
 
-- prevSvg (`@/assets/svg/player-prev.svg`)
-- playSvg (`@/assets/svg/player-play.svg`)
-- pauseSvg (`@/assets/svg/player-pause.svg`)
-- stopSvg (`@/assets/svg/player-stop.svg`)
-- nextSvg (`@/assets/svg/player-next.svg`)
-- recSvg (`@/assets/svg/player-rec.svg`)
+- [prevSvg](../../../src/assets/svg/player-prev.svg)
+- [playSvg](../../../src/assets/svg/player-play.svg)
+- [pauseSvg](../../../src/assets/svg/player-pause.svg)
+- [stopSvg](../../../src/assets/svg/player-stop.svg)
+- [nextSvg](../../../src/assets/svg/player-next.svg)
+- [recSvg](../../../src/assets/svg/player-rec.svg)
 
 ## Props
 

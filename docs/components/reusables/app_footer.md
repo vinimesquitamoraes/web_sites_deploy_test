@@ -1,11 +1,17 @@
+---
+tags:
+  - Vue_Component
+---
 ## Overview
 
 Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts.
 
+**Source File:** [app_footer.vue](../../../src/components/reusables/app_footer.vue)
+
 ## Imported Components
 
-- NavigationComponent (`@/components/reusables/navigation_component.vue`)
-- SocialMediaButton (`@/components/reusables/social_media_button.vue`)
+- [NavigationComponent](navigation_component.md)
+- [SocialMediaButton](social_media_button.md)
 
 ## Imported Composables
 
@@ -13,7 +19,7 @@ Application footer component featuring a brand logo, navigation links, social me
 
 ## Imported Assets
 
-- img_gameLogo (`@/assets/img/logos/Encore_Logo.png`)
+- [img_gameLogo](../../../src/assets/img/logos/Encore_Logo.png)
 
 ## Props
 

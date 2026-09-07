@@ -46,7 +46,7 @@
 <script setup>
   /**
     * @file        App.vue
-    * @brief       Main application root component managing routing, layout, and global features like motion toggles.
+    * @brief       Main application root component
   */
   import { onMounted } from 'vue'
   import { useRoute } from 'vue-router'

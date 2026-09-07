@@ -2,9 +2,11 @@
 
 Music player volume control component supporting horizontal/vertical layouts, thumbwheels, slider bars, and mute state toggling.
 
+**Source File:** [music_player_volume_control.vue](../../../src/components/reusables/music_player_volume_control.vue)
+
 ## Imported Components
 
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -12,8 +14,8 @@ Music player volume control component supporting horizontal/vertical layouts, th
 
 ## Imported Assets
 
-- imgVolume (`@/assets/svg/volume-fill.svg`)
-- imgVolumeMute (`@/assets/svg/volume-mute-fill.svg`)
+- [imgVolume](../../../src/assets/svg/volume-fill.svg)
+- [imgVolumeMute](../../../src/assets/svg/volume-mute-fill.svg)
 
 ## Props
 
@@ -42,7 +44,7 @@ Music player volume control component supporting horizontal/vertical layouts, th
 
 ## Computed Properties & Methods
 
-- `isCurrentHorizontal`: * @file        music_player_volume_control.vue
+- `isCurrentHorizontal`: Evaluates whether the current orientation includes a horizontal format.
 
 ## Slots
 

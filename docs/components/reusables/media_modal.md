@@ -2,9 +2,11 @@
 
 Media modal component for displaying enlarged images or videos with custom navigation buttons.
 
+**Source File:** [media_modal.vue](../../../src/components/reusables/media_modal.vue)
+
 ## Imported Components
 
-- CustomButton (`./custom_button.vue`)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -12,9 +14,9 @@ Media modal component for displaying enlarged images or videos with custom navig
 
 ## Imported Assets
 
-- img_left_arrow (`@/assets/svg/triangle-left-12-filled.svg`)
-- img_right_arrow (`@/assets/svg/triangle-right-12-filled.svg`)
-- img_close (`@/assets/svg/close-svgrepo-com.svg`)
+- [img_left_arrow](../../../src/assets/svg/triangle-left-12-filled.svg)
+- [img_right_arrow](../../../src/assets/svg/triangle-right-12-filled.svg)
+- [img_close](../../../src/assets/svg/close-svgrepo-com.svg)
 
 ## Props
 

@@ -2,6 +2,8 @@
 
 An operating system platform link/icon button component supporting custom masking, sizing, and clickability states.
 
+**Source File:** [so_buttons.vue](../../../src/components/reusables/so_buttons.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -27,11 +29,10 @@ An operating system platform link/icon button component supporting custom maskin
 
 ## Computed Properties & Methods
 
-- `isClickable`: * @file        so_buttons.vue
-- `resolvedUrl`: * Resolves final target URL based on props and defaults.
-- `iconSize`: * Formats size value into pixel string if numeric.
-- `iconMask`: * Computes the SVG icon URL for CSS masking.
-- `handleClick`: * Prevents default navigation behavior if the button is marked unclickable.
+- `isClickable`: Determines if the platform link is active/clickable.
+- `resolvedUrl`: Resolves final target URL based on props and defaults.
+- `iconSize`: Formats size value into pixel string if numeric.
+- `iconMask`: Computes the SVG icon URL for CSS masking.
 
 ## Slots
 
@@ -39,4 +40,4 @@ An operating system platform link/icon button component supporting custom maskin
 
 ## Internal Methods
 
-- *None specified*
+- `handleClick`: Prevents default navigation behavior if the button is marked unclickable.

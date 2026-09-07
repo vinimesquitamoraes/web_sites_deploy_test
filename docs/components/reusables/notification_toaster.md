@@ -2,9 +2,11 @@
 
 A customizable toast notification component supporting multiple positions, types, auto-dismiss timers, progress bars, and custom buttons.
 
+**Source File:** [notification_toaster.vue](../../../src/components/reusables/notification_toaster.vue)
+
 ## Imported Components
 
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -12,7 +14,7 @@ A customizable toast notification component supporting multiple positions, types
 
 ## Imported Assets
 
-- img_close (`@/assets/svg/close-svgrepo-com.svg`)
+- [img_close](../../../src/assets/svg/close-svgrepo-com.svg)
 
 ## Props
 
@@ -29,18 +31,17 @@ A customizable toast notification component supporting multiple positions, types
 
 ## Computed Properties & Methods
 
-- `visible`: * @file        notification_toaster.vue
-- `startTimer`: * Starts the auto-dismiss timer based on the configured duration.
-- `closeToast`: * Closes the toast notification and triggers cleanup events.
-- `positionClass`: * Computes the CSS position class name.
-- `typeClass`: * Computes the CSS theme type class name.
-- `transitionName`: * Computes the transition animation name based on screen position.
+- `visible`: Computed wrapper for v-model visibility binding.
+- `positionClass`: Computes the CSS position class name.
+- `typeClass`: Computes the CSS theme type class name.
+- `transitionName`: Computes the transition animation name based on screen position.
 
 ## Slots
 
-- `icon`: Custom implementation.
-- `default`: Custom implementation.
+- `icon`: Slot to override the default notification icon
+- `toaster_message_text`: Slot for custom message text
 
 ## Internal Methods
 
-- *None specified*
+- `startTimer`: Starts the auto-dismiss timer based on the configured duration.
+- `closeToast`: Closes the toast notification and triggers cleanup events.

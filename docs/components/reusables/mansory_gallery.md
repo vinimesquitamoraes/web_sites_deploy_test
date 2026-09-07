@@ -2,6 +2,8 @@
 
 A responsive masonry grid gallery component supporting images, background-looped videos, and captions.
 
+**Source File:** [mansory_gallery.vue](../../../src/components/reusables/mansory_gallery.vue)
+
 ## Imported Components
 
 - *None specified*

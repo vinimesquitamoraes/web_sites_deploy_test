@@ -2,9 +2,11 @@
 
 Walkman-style music player component featuring an LCD screen, track progress scrubber, custom cassette display toggle with an SVG icon, and animated tape reels.
 
+**Source File:** [music_player_walkman.vue](../../../src/components/reusables/music_player_walkman.vue)
+
 ## Imported Components
 
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -12,7 +14,7 @@ Walkman-style music player component featuring an LCD screen, track progress scr
 
 ## Imported Assets
 
-- starIcon (`@/assets/svg/star-rounded.svg`)
+- [starIcon](../../../src/assets/svg/star-rounded.svg)
 
 ## Props
 
@@ -49,7 +51,7 @@ Walkman-style music player component featuring an LCD screen, track progress scr
 
 ## Computed Properties & Methods
 
-- `checkSessionAccess`: * @file        music_player_walkman.vue
+- *None specified*
 
 ## Slots
 
@@ -57,4 +59,5 @@ Walkman-style music player component featuring an LCD screen, track progress scr
 
 ## Internal Methods
 
-- *None specified*
+- `hasSpecialTapeAccess`: Tracks whether the user has unlocked special tape access in session storage.
+- `checkSessionAccess`: Checks session storage for special tape access permissions.

@@ -2,9 +2,11 @@
 
 A text list carousel component featuring slides of feature lists, custom pagination indicators, and custom navigation buttons.
 
+**Source File:** [list_text_carroulsel.vue](../../../src/components/reusables/list_text_carroulsel.vue)
+
 ## Imported Components
 
-- CustomButton (`@/components/reusables/custom_button.vue`)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -12,8 +14,8 @@ A text list carousel component featuring slides of feature lists, custom paginat
 
 ## Imported Assets
 
-- img_left_arrow (`@/assets/svg/triangle-left-12-filled.svg`)
-- img_right_arrow (`@/assets/svg/triangle-right-12-filled.svg`)
+- [img_left_arrow](../../../src/assets/svg/triangle-left-12-filled.svg)
+- [img_right_arrow](../../../src/assets/svg/triangle-right-12-filled.svg)
 
 ## Props
 
@@ -24,9 +26,7 @@ A text list carousel component featuring slides of feature lists, custom paginat
 
 ## Computed Properties & Methods
 
-- `nextSlide`: * @file        list_text_carroulsel.vue
-- `prevSlide`: * Moves the carousel to the previous slide.
-- `goToSlide`: * Directly navigates the carousel to a specific slide index.
+- *None specified*
 
 ## Slots
 
@@ -34,4 +34,7 @@ A text list carousel component featuring slides of feature lists, custom paginat
 
 ## Internal Methods
 
-- *None specified*
+- `currentIndex`: Tracks the active slide index of the carousel.
+- `nextSlide`: Advances the carousel to the next slide.
+- `prevSlide`: Moves the carousel to the previous slide.
+- `goToSlide`: Directly navigates the carousel to a specific slide index.

@@ -2,12 +2,14 @@
 
 The download view page displaying download info text, unclickable OS platform icons, Itch.io action button, character illustration, and system requirements.
 
+**Source File:** [DownloadView.vue](../../../src/components/views/DownloadView.vue)
+
 ## Imported Components
 
-- ContentSection (`@/components/reusables/content_section.vue`)
-- PlatformButton (`@/components/reusables/so_buttons.vue`)
-- CustomButton (`@/components/reusables/custom_button.vue`)
-- Requirements (`@/components/reusables/requeriments.vue`)
+- [ContentSection](../reusables/content_section.md)
+- [PlatformButton](../reusables/so_buttons.md)
+- [CustomButton](../reusables/custom_button.md)
+- [Requirements](../reusables/requeriments.md)
 
 ## Imported Composables
 
@@ -15,8 +17,8 @@ The download view page displaying download info text, unclickable OS platform ic
 
 ## Imported Assets
 
-- img_lloydDad (`@/assets/img/characters/Lloyd_Dad.png`)
-- iconItchio (`@/assets/svg/itchio.svg?url`)
+- [img_lloydDad](../../../src/assets/img/characters/Lloyd_Dad.png)
+- [iconItchio](../../../src/assets/svg/itchio.svg?url)
 
 ## Props
 

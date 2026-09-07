@@ -6,7 +6,9 @@
       :class="`position-${position}`"
       role="tooltip"
     >
-      <slot>{{ text }}</slot>
+      
+    <!-- @slot tooltip-text - The text displayed in the tool tip -->
+      <slot name="tooltip-text">{{ text }}</slot>
       <img
         :src="tooltipArrow"
         class="tooltip-arrow"

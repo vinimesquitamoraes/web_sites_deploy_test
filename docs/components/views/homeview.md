@@ -2,12 +2,14 @@
 
 The primary home page view component containing the main banner, introduction video, gallery carousel, and cast list showcase.
 
+**Source File:** [HomeView.vue](../../../src/components/views/HomeView.vue)
+
 ## Imported Components
 
-- Banner (`@/components/reusables/banner.vue`)
-- ContentSection (`@/components/reusables/content_section.vue`)
-- GaleryCarrousel (`@/components/reusables/galery_carousel.vue`)
-- CastList (`@/components/reusables/cast_list.vue`)
+- [Banner](../reusables/banner.md)
+- [ContentSection](../reusables/content_section.md)
+- [GaleryCarrousel](../reusables/galery_carousel.md)
+- [CastList](../reusables/cast_list.md)
 
 ## Imported Composables
 
@@ -33,4 +35,5 @@ The primary home page view component containing the main banner, introduction vi
 
 ## Internal Methods
 
-- *None specified*
+- `mapRenderImagesGlob`: Glob import for map render images used as alternative banner backgrounds.
+- `homeImages`: Glob import for home page screenshot images passed to the gallery carousel.

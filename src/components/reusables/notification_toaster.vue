@@ -9,12 +9,14 @@
     >
       <div class="toaster-content">
         <div v-if="icon || $slots.icon" class="toaster-icon-wrap">
+          <!-- @slot Slot to override the default notification icon -->
           <slot name="icon">
             <img :src="icon" alt="Toast Icon" class="toaster-icon-img" />
           </slot>
         </div>
         <div class="toaster-text-wrap">
-          <slot>
+          <!-- @slot Slot for custom message text -->
+          <slot name="toaster_message_text">
             <p class="toaster-message">{{ message }}</p>
           </slot>
         </div>

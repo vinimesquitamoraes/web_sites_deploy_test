@@ -2,9 +2,11 @@
 
 Reusable social media link button component featuring dynamic SVG icons and a hover tooltip.
 
+**Source File:** [social_media_button.vue](../../../src/components/reusables/social_media_button.vue)
+
 ## Imported Components
 
-- ToolTip (`@/components/reusables/tooltip.vue`)
+- [ToolTip](tooltip.md)
 
 ## Imported Composables
 
@@ -28,10 +30,10 @@ Reusable social media link button component featuring dynamic SVG icons and a ho
 
 ## Computed Properties & Methods
 
-- `computedTooltipText`: * @file social_media_button.vue
-- `cssSize`: Eager glob import map resolving SVG asset files. */
+- `computedTooltipText`: Computed text string rendered inside the tooltip component.
+- `cssSize`: Resolved CSS unit size string computed from props.size.
 - `cssMask`: Resolved SVG mask URL path computed from platform key.
-- `isTooltipVisible`: Internal reactive visibility state toggle flag. */
+- `isTooltipVisible`: Computed flag validating if the component tooltip should be visible.
 
 ## Slots
 
@@ -39,5 +41,13 @@ Reusable social media link button component featuring dynamic SVG icons and a ho
 
 ## Internal Methods
 
+- `props`: Component props definition.
+- `linkRef`: Reference object bound to the interactive link element.
+- `key`: Normalized platform string key.
+- `platforms`: Registry collection mapping platform names to target URLs and display labels.
+- `platformInfo`: Resolved platform dataset object fallback configuration.
+- `socialIcons`: Eager glob import map resolving SVG asset files.
+- `internalShow`: Internal reactive visibility state toggle flag.
+- `tooltipTimer`: Identifier reference for active asynchronous tooltip display timers.
 - `handleMouseEnter`: Event handler triggered upon mouse entering the button container area.
 - `handleMouseLeave`: Event handler triggered upon mouse leaving the button container area.

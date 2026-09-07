@@ -2,6 +2,8 @@
 
 A customizable dropdown component supporting v-model selection, click-outside closing behavior, and animated arrow icons.
 
+**Source File:** [custom_dropdown.vue](../../../src/components/reusables/custom_dropdown.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -23,9 +25,7 @@ A customizable dropdown component supporting v-model selection, click-outside cl
 
 ## Computed Properties & Methods
 
-- `selectedLabel`: * @file        custom_dropdown.vue
-- `selectOption`: * Handles selection of an option and closes the dropdown.
-- `closeDropdown`: * Closes the dropdown if a click event occurs outside of the component.
+- `selectedLabel`: Computes the display label for the currently selected option.
 
 ## Slots
 
@@ -33,4 +33,7 @@ A customizable dropdown component supporting v-model selection, click-outside cl
 
 ## Internal Methods
 
-- *None specified*
+- `isOpen`: Tracks whether the dropdown option list is expanded.
+- `dropdownRef`: Reference to the root dropdown container DOM element.
+- `selectOption`: Handles selection of an option and closes the dropdown.
+- `closeDropdown`: Closes the dropdown if a click event occurs outside of the component.

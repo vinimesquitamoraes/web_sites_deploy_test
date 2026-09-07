@@ -2,9 +2,11 @@
 
 An accordion/foldable section component wrapping a content section with smooth collapse transition and auto-scroll capabilities.
 
+**Source File:** [foldable_section.vue](../../../src/components/reusables/foldable_section.vue)
+
 ## Imported Components
 
-- ContentSection (`@/components/reusables/content_section.vue`)
+- [ContentSection](content_section.md)
 
 ## Imported Composables
 
@@ -54,14 +56,14 @@ An accordion/foldable section component wrapping a content section with smooth c
 
 ## Computed Properties & Methods
 
-- `scrollToSelf`: * @file        foldable_section.vue
-- `toggleFold`: * Toggles the open/closed state of the foldable item and handles events.
+- *None specified*
 
 ## Slots
 
-- `media`: Custom implementation.
-- `default`: Custom implementation.
+- `media`: Custom media content slot
+- `default`: Slot for main inner body content
 
 ## Internal Methods
 
-- *None specified*
+- `scrollToSelf`: Scrolls the window smoothly to center this component into view.
+- `toggleFold`: Toggles the open/closed state of the foldable item and handles events.

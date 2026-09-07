@@ -2,6 +2,8 @@
 
 A customizable tooltip component supporting multiple positions, transition durations, and custom styling.
 
+**Source File:** [tooltip.vue](../../../src/components/reusables/tooltip.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -12,7 +14,7 @@ A customizable tooltip component supporting multiple positions, transition durat
 
 ## Imported Assets
 
-- tooltipArrow (`@/assets/svg/triangle-down-filled.svg`)
+- [tooltipArrow](../../../src/assets/svg/triangle-down-filled.svg)
 
 ## Props
 
@@ -33,7 +35,7 @@ A customizable tooltip component supporting multiple positions, transition durat
 
 ## Slots
 
-- `default`: Custom implementation.
+- `tooltip-text`: The text displayed in the tool tip
 
 ## Internal Methods
 

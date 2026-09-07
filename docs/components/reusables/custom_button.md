@@ -2,6 +2,8 @@
 
 Customizable button component supporting icons, dynamic coloring, Vue Router navigation, external links, and press animations.
 
+**Source File:** [custom_button.vue](../../../src/components/reusables/custom_button.vue)
+
 ## Imported Components
 
 - *None specified*
@@ -43,8 +45,8 @@ Customizable button component supporting icons, dynamic coloring, Vue Router nav
 
 ## Computed Properties & Methods
 
-- `processedIconSrc`: * @file        custom_button.vue
-- `hasValidColor`: * Checks if valid dynamic icon colors exist for CSS mask rendering.
+- `processedIconSrc`: Formats raw inline SVG strings to data URIs or returns raw image paths.
+- `hasValidColor`: Checks if valid dynamic icon colors exist for CSS mask rendering.
 - `computedFlexDirection`: Computed flex direction mapping based on icon position.
 - `computedWidth`: Computed width mapping based on autoAdaptSize and width prop.
 - `computedHeight`: Computed height mapping.
@@ -61,5 +63,6 @@ Customizable button component supporting icons, dynamic coloring, Vue Router nav
 
 ## Internal Methods
 
+- `emit`: Triggered when the button is clicked by the user.
 - `formatValue`: Helper to format value (number to px string).
-- `handleClick`: * Handles button click, emits event, and executes internal or external routing.
+- `handleClick`: Handles button click, emits event, and executes internal or external routing.
