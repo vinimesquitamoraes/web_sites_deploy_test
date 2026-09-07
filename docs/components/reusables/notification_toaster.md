@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: notification_toaster
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 A customizable toast notification component supporting multiple positions, types, auto-dismiss timers, progress bars, and custom buttons.

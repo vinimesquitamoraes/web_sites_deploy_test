@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: navigation_component
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 The primary site navigation bar component containing route links and an optional language dropdown selector.
@@ -35,7 +23,7 @@ The primary site navigation bar component containing route links and an optional
 
 ## Computed Properties & Methods
 
-- *None specified*
+- `handleNavClick`: * @file        navigation_component.vue
 
 ## Slots
 

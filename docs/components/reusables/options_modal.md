@@ -1,22 +1,10 @@
----
-type: 'Page'
-title: options_modal
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 A modal dialog component that manages and persists toggleable options via sessionStorage with cross-tab sync support.
 
 ## Imported Components
 
-- ToggleSwitch (`./toggle_button.vue`)
+- ToggleButtom (`./toggle_button.vue`)
 - CustomButton (`./custom_button.vue`)
 
 ## Imported Composables
@@ -43,9 +31,9 @@ A modal dialog component that manages and persists toggleable options via sessio
 ## Computed Properties & Methods
 
 - `widthVal`: * @file        options_modal.vue
-- `syncSessionState`: Synchronizes reactive session state with current sessionStorage values. * @private
+- `syncSessionState`: * Synchronizes reactive session state with current sessionStorage values.
 - `toggleOption`: * Updates option state, persists to sessionStorage, dispatches update events, and emits changes.
-- `closeModal`: Closes the modal by updating v-model state. * @private
+- `closeModal`: * Closes the modal by updating v-model state.
 
 ## Slots
 

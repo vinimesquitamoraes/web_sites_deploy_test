@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: app_header
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Application header component containing the logo, navigation links, and a responsive custom hamburger menu button.

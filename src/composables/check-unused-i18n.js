@@ -23,7 +23,7 @@ function getFiles(dir, fileList = []) {
     const filePath = path.join(dir, file)
     if (fs.statSync(filePath).isDirectory()) {
       getFiles(filePath, fileList)
-    } else if (file.endsWith('.vue') || file.endsWith('.js') || file.endsWith('.ts')) {
+    } else if (file.endsWith('.vue') || file.endsWith('.js')) {
       fileList.push(filePath)
     }
   })

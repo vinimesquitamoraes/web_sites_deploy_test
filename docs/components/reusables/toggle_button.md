@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: toggle_button
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 A customizable switch toggle component supporting active/inactive icons, masked colorization, and custom dimensions.
@@ -45,15 +33,18 @@ A customizable switch toggle component supporting active/inactive icons, masked 
 
 ## Computed Properties & Methods
 
-- `cssWidth`: Computed width style for the slider track.
-- `cssHeight`: Computed height style for the slider track.
-- `cssSliderBg`: Computed dynamic background color for the slider depending on state.
-- `handleSizeValue`: Computed size for the handle based on slider height.
-- `cssHandleSize`: Computed width/height style for the handle element.
-- `cssIconSize`: Computed size style for the icon element.
-- `rawIcon`: Computed raw icon string depending on active/inactive states. * @private
-- `processedIcon`: Processes raw SVG strings into data URIs or passes through image paths. * @private
-- `cssMaskImage`: Computed CSS mask URL for SVG icons. * @private
+- `formatValue`: * @file        toggle_button.vue
+- `cssWidth`: * Computed width style for the slider track.
+- `cssHeight`: * Computed height style for the slider track.
+- `cssSliderBg`: * Computed dynamic background color for the slider depending on state.
+- `handleSizeValue`: * Computed size for the handle based on slider height.
+- `cssHandleSize`: * Computed width/height style for the handle element.
+- `activeTranslateX`: * Computed translation distance for the active state based on width, handle size, borders, and margins.
+- `cssTranslateX`: * Formatted translation distance string for CSS binding.
+- `cssIconSize`: * Computed size style for the icon element.
+- `rawIcon`: * Computed raw icon string depending on active/inactive states.
+- `processedIcon`: * Processes raw SVG strings into data URIs or passes through image paths.
+- `cssMaskImage`: * Computed CSS mask URL for SVG icons.
 - `handleClick`: * Handles the click action to toggle states and emit events.
 
 ## Slots
@@ -62,4 +53,4 @@ A customizable switch toggle component supporting active/inactive icons, masked 
 
 ## Internal Methods
 
-- `formatValue`: * @file        toggle_button.vue
+- *None specified*

@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: so_buttons
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 An operating system platform link/icon button component supporting custom masking, sizing, and clickability states.

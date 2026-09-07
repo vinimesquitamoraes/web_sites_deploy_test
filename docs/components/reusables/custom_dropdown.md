@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: custom_dropdown
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 A customizable dropdown component supporting v-model selection, click-outside closing behavior, and animated arrow icons.

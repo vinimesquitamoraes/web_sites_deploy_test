@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: music_player_floating_notes
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Floating animated musical notes animation component with random colors, customizable speed, and float trajectory distance.

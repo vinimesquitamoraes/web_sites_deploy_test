@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: HomeView
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 The primary home page view component containing the main banner, introduction video, gallery carousel, and cast list showcase.

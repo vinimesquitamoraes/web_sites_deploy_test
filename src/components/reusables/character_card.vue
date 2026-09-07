@@ -41,10 +41,10 @@
 
 <script setup>
 /**
- * @file character_card.vue
- * @brief Character card component supporting image customization, description paragraphs, and flexible orientations.
- * @displayName Character Card
- */
+  * @file character_card.vue
+  * @brief Character card component supporting image customization, description paragraphs, and flexible orientations.
+  * @displayName Character Card
+*/
 
 import { computed } from 'vue';
 
@@ -136,7 +136,7 @@ const props = defineProps({
 });
 
 /**
-  * Computed property that normalizes description text or arrays into paragraphs.
+  * Computed property that normalizes the description prop in a arrays.
   * @private
 */
 const descriptionParagraphs = computed(() => {
@@ -188,10 +188,10 @@ const descriptionParagraphs = computed(() => {
   display        : block;
   transform      : scale(v-bind(imageScale));
   padding        : v-bind(imagePadding);
-  filter         : drop-shadow(4px    0 0 #ffffff) 
+  /* filter         : drop-shadow(4px    0 0 #ffffff) 
                    drop-shadow(-4px   0 0 #ffffff) 
                    drop-shadow(0    4px 0 #ffffff) 
-                   drop-shadow(0   -4px 0 #ffffff);
+                   drop-shadow(0   -4px 0 #ffffff); */
 }
 
 .character-card.is-vertical .image-wrapper {

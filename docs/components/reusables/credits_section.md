@@ -1,22 +1,10 @@
----
-type: 'Page'
-title: credits_section
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 A customizable credits section component featuring grouped roles, names, grid layout columns, dynamic links, and tooltip integrations.
 
 ## Imported Components
 
-- CustomTooltip (`@/components/reusables/tooltip.vue`)
+- ToolTip (`@/components/reusables/tooltip.vue`)
 
 ## Imported Composables
 
@@ -36,15 +24,15 @@ A customizable credits section component featuring grouped roles, names, grid la
 | `subtitleColor` | string | `'var(--color-credits-role)'` | - | Text color for group roles/subtitles. |
 | `textColor` | string | `'var(--color-credits-name)'` | - | Text color for individual names. |
 | `columns` | number\|string | `2` | - | Number of grid columns for the names list. |
-| `textAlign` | string | `'left'` | - | Text alignment orientation ('left', 'center', 'right'). |
+| `textAlign` | string | `'left'` | left, center, right | Text alignment orientation ('left', 'center', 'right'). |
 
 ## Computed Properties & Methods
 
 - `computedAlign`: * @file        credits_section.vue
-- `resolveName`: Extracts string name from string or object person entries. * @private
-- `resolveLink`: Resolves link mapping for a person string. * @private
-- `getPersonLink`: Gets specific link or fallback resolved link for a person. * @private
-- `isTooltipAllowed`: Determines if tooltips are permitted based on config hierarchy. * @private
+- `resolveName`: * Extracts string name from string or object person entries.
+- `resolveLink`: * Resolves link mapping for a person string.
+- `getPersonLink`: * Gets specific link or fallback resolved link for a person.
+- `isTooltipAllowed`: * Determines if tooltips are permitted based on config hierarchy.
 
 ## Slots
 

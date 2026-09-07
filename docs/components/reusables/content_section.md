@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: content_section
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts.
@@ -60,7 +48,9 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 ## Computed Properties & Methods
 
 - `textParagraphs`: * @file content_section.vue
-- `shouldShowHeader`: Evaluates whether the header title should render based on availability of text and heading properties.
+- `shouldShowHeader`: * Evaluates whether the header title should render based on availability of text and heading properties.
+- `openImageModal`: * Intercepts clicks to trigger and display the image expansion modal when valid.
+- `closeImageModal`: * Closes the image modal view.
 
 ## Slots
 
@@ -68,5 +58,4 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 
 ## Internal Methods
 
-- `openImageModal`: Intercepts clicks to trigger and display the image expansion modal when valid.
-- `closeImageModal`: Closes the image modal view.
+- *None specified*

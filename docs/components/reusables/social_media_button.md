@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: social_media_button
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Reusable social media link button component featuring dynamic SVG icons and a hover tooltip.

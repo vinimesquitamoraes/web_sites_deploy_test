@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: custom_lang_dropdown
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 A language selector dropdown component utilizing i18n composables, toggling language options, and handling click-outside dismissals.

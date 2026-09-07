@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: foldable_section
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 An accordion/foldable section component wrapping a content section with smooth collapse transition and auto-scroll capabilities.

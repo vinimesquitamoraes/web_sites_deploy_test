@@ -1,49 +1,28 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { parse } from 'vue-docgen-api';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const projectRoot = process.cwd();
 const componentsDir = path.join(projectRoot, 'src/components'); 
 const baseDocsDir = path.join(projectRoot, 'docs/components');     
 
 /**
- * Helper to sanitize strings so they don't break markdown table rows/columns
- */
+	* Helper to sanitize strings so they don't break markdown table rows/columns
+*/
 function sanitizeTableCell(text) {
 	if (text === undefined || text === null) return '-';
 	const stringVal = String(text).trim();
 	if (stringVal === '') return '-';
-	// Replace pipes with code-friendly entity or escape them, and strip newlines
 	return stringVal.replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ');
 }
 
 /**
- * Builder Pattern class to assemble the component documentation markdown.
- */
+	* Builder Class to assemble the component documentation markdown.
+*/
 class MarkdownBuilder {
 	constructor() {
 		this.sections = [];
 	}
-
-	setFrontmatter(componentName, timestamp) {
-		this.sections.push(`---
-type: 'Page'
-title: ${componentName}
-aliases: null
-description: null
-icon: null
-createdAt: '${timestamp}'
-lastUpdated: '${timestamp}'
-tags: []
-imagemDeCapa: null
----`);
-		return this;
-	}
-
 	addOverview(brief) {
 		this.sections.push(`## Overview\n\n${sanitizeTableCell(brief)}`);
 		return this;
@@ -144,74 +123,86 @@ function getVueFiles(dir, fileList = []) {
 	return fileList;
 }
 
-// Extract @brief tag via Regex
 function parseBriefTag(content) {
 	const briefRegex = /@brief\s+([^\r\n*]+)/;
 	const match = content.match(briefRegex);
 	return match ? match[1].trim() : null;
 }
 
-// Extract all import statements via Regex
 function parseImports(content) {
-	const importRegex = /import\s+([a-zA-Z0-9_-]+)\s+from\s+['"]([^'"]+)['"]/g;
-	const imports = [];
-	let match;
-	while ((match = importRegex.exec(content)) !== null) {
-		imports.push({ name: match[1], path: match[2] });
-	}
-	return imports;
+    const importRegex = /import\s+([a-zA-Z0-9_-]+)\s+from\s+['"]([^'"]+)['"]/g;
+    const imports = [];
+    let match;
+    
+    while ((match = importRegex.exec(content)) !== null) {
+        const importName = match[1];
+        const importPath = match[2];
+        
+        imports.push({ name: importName, path: importPath });
+    }
+    
+    return imports;
 }
 
-// Classify imports into Components, Composables, and Assets
 function classifyImports(imports) {
-	const components = [];
-	const composables = [];
-	const assets = [];
+    const components = [];
+    const composables = [];
+    const assets = [];
 
-	imports.forEach(imp => {
-		const p = imp.path.toLowerCase();
-		const name = imp.name;
+    imports.forEach(imp => {
+        const lowerPath = imp.path.toLowerCase();
 
-		if (p.includes('composables') || name.startsWith('use')) {
-			composables.push(imp);
-		} else if (p.match(/\.(png|jpg|jpeg|svg|gif|webp|css|scss)$/) || p.includes('assets') || p.includes('img')) {
-			assets.push(imp);
-		} else {
-			components.push(imp);
-		}
-	});
+        const isComposable 		= lowerPath.includes('composables');
+        const hasAssetExtension = /\.(png|jpg|jpeg|svg|gif|webp|css)$/.test(lowerPath);
+        const isAssetFolder 	= lowerPath.includes('assets') || lowerPath.includes('img');
+        
+        const isAsset = hasAssetExtension || isAssetFolder;
 
-	return { components, composables, assets };
+        if (isComposable) {
+            composables.push(imp);
+        } else if (isAsset) {
+            assets.push(imp);
+        } else {
+            components.push(imp);
+        }
+    });
+
+    return { components, composables, assets };
 }
 
-// Manually parse computed properties and functions/methods from <script setup> blocks
 function parseScriptSetupMembers(content) {
-	const computedList = [];
-	const methodsList = [];
+    const computedList = [];
+    const methodsList = [];
 
-	const memberRegex = /\/\*\*([\s\S]*?)\*\/\s*(?:export\s+)?const\s+([a-zA-Z0-9_$]+)\s*=\s*(?:computed\s*\(|\([^)]*\)\s*=>|function)/g;
-	
-	let match;
-	while ((match = memberRegex.exec(content)) !== null) {
-		const commentBlock = match[1];
-		const name = match[2];
+    const memberRegex = /\/\*\*([\s\S]*?)\*\/\s*(?:export\s+)?const\s+([a-zA-Z0-9_$]+)\s*=\s*(?:computed\s*\(|\([^)]*\)\s*=>|function)/g;
+    
+    let match;
+    while ((match = memberRegex.exec(content)) !== null) {
 
-		const descMatch = commentBlock.match(/(?:^|\s*\*)\s*([^@\r\n][^\r\n]*)/);
-		const description = descMatch ? descMatch[1].trim() : 'Documented implementation.';
+        const commentBlock 	= match[1];
+        const memberName 	= match[2];
 
-		if (commentBlock.includes('@private') || name.startsWith('computed') || content.includes(`${name} = computed`)) {
-			computedList.push({ name, description });
-		} else {
-			methodsList.push({ name, description });
-		}
-	}
+        const descMatch 	= commentBlock.match(/(?:^|\s*\*+)\s*(?!@)([^\r\n]+)/);
+        const description 	= descMatch ? descMatch[1].trim() : 'DOCSTRINGS NOT FOUND.';
 
-	return { computedList, methodsList };
+        const isPrivateComment 				= commentBlock.includes('@private');
+        const startsWithComputed 			= memberName.startsWith('computed');
+        const isExplicitComputedAssignment 	= content.includes(`${memberName} = computed`);
+
+        const isComputedMember = isPrivateComment || startsWithComputed || isExplicitComputedAssignment;
+
+        if (isComputedMember) {
+            computedList.push({ name: memberName, description });
+        } else {
+            methodsList.push({ name: memberName, description });
+        }
+    }
+
+    return { computedList, methodsList };
 }
 
 async function generateMarkdown() {
 	const vueFiles = getVueFiles(componentsDir);
-	const timestamp = new Date().toISOString();
 
 	for (const file of vueFiles) {
 		try {
@@ -227,7 +218,6 @@ async function generateMarkdown() {
 			const componentName = docData.displayName || path.basename(file, '.vue');
 
 			const markdownContent = new MarkdownBuilder()
-				.setFrontmatter(componentName, timestamp)
 				.addOverview(brief)
 				.addImportedComponents(components)
 				.addImportedComposables(composables)
@@ -238,7 +228,6 @@ async function generateMarkdown() {
 				.addSectionList('Internal Methods', methodsList.length > 0 ? methodsList : docData.methods)
 				.build();
 
-			// Determine subfolder based on file path (reusables vs views)
 			const relativePath = path.relative(componentsDir, file);
 			const subFolder = relativePath.toLowerCase().includes('view') || relativePath.toLowerCase().includes('views') 
 				? 'views' 

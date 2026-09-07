@@ -86,7 +86,7 @@ const mediaOrderConfig = [
   {
     fileName: 'dogten.jpg',
     alt: '???',
-    caption: '???',
+    caption: 'Dogten',
     visible: true
   },
   {
@@ -124,19 +124,19 @@ const mediaOrderConfig = [
   {
     fileName: 'lloyd_suicide.png',
     alt: '???',
-    caption: '???',
+    caption: 'Every Encore Dev',
     visible: true
   },
   {
     fileName: 'found_atm_magicant.png',
     alt: '???',
-    caption: '???',
+    caption: 'Wheres it',
     visible: true
   },
   {
     fileName: 'oh_my_full_name.png',
     alt: '???',
-    caption: '???',
+    caption: 'Oh My Full Name',
     visible: true
   },
   {
@@ -148,7 +148,13 @@ const mediaOrderConfig = [
   {
     fileName: 'ferris_special_mixtape.png',
     alt: '???',
-    caption: '???',
+    caption: 'Special',
+    visible: true
+  },
+  {
+    fileName: 'Lloyd_I_have_a_crush_on_you.png',
+    alt: '???',
+    caption: 'Gay',
     visible: true
   }
 ]

@@ -453,7 +453,7 @@ const syncState = async () => {
 }
 
 /**
-  * Starts an interval timer to update playback progress tracking metrics.
+  * Starts an interval timer to update playback progress tracking.
   * @private
   */
 const startInterval = () => {
@@ -824,34 +824,33 @@ const onCompactLeave = (el) => {
 }
 
 .special-tape-palette {
-  --music-player-color-bg-main: var(--special-music-player-color-bg-main);
-  --music-player-color-bg-secondary: var(--special-music-player-color-bg-secondary);
-  --music-player-color-bg-dark: var(--special-music-player-color-bg-dark);
-  --music-player-color-surface: var(--special-music-player-color-surface);
-  --music-player-border: var(--special-music-player-border);
-  --music-player-border-radius: var(--special-music-player-border-radius);
-  --music-player-color-accent: var(--special-music-player-color-accent);
-  --music-player-color-accent-light: var(--special-music-player-color-accent-light);
-  --music-player-color-primary: var(--special-music-player-color-primary);
-  --music-player-color-playbt-playing: var(--special-music-player-color-playbt-playing);
-  --music-player-color-playbt-paused: var(--special-music-player-color-playbt-paused);
+  --music-player-color-bg-main:          var(--special-music-player-color-bg-main);
+  --music-player-color-bg-secondary:     var(--special-music-player-color-bg-secondary);
+  --music-player-color-bg-dark:          var(--special-music-player-color-bg-dark);
+  --music-player-color-surface:          var(--special-music-player-color-surface);
+  --music-player-border:                 var(--special-music-player-border);
+  --music-player-border-radius:          var(--special-music-player-border-radius);
+  --music-player-color-accent:           var(--special-music-player-color-accent);
+  --music-player-color-accent-light:     var(--special-music-player-color-accent-light);
+  --music-player-color-primary:          var(--special-music-player-color-primary);
+  --music-player-color-playbt-playing:   var(--special-music-player-color-playbt-playing);
+  --music-player-color-playbt-paused:    var(--special-music-player-color-playbt-paused);
   
-  --music-player-playlist-bg: var(--special-music-player-playlist-bg);
-  --music-player-playlist-header-bg: var(--special-music-player-playlist-header-bg);
-  --music-player-playlist-header-text: var(--special-music-player-playlist-header-text);
-  --music-player-playlist-item-bg: var(--special-music-player-playlist-item-bg);
-  --music-player-playlist-item-active-bg: var(--special-music-player-playlist-item-active-bg);
-  --music-player-playlist-item-active-text: var(--special-music-player-playlist-item-active-text);
-  --music-player-playlist-text-color: var(--special-music-player-playlist-text-color);
-  --music-player-playlist-number-color: var(--special-music-player-playlist-number-color);
-  --music-player-playlist-number-active-color: var(--special-music-player-playlist-number-active-color);
+  --music-player-playlist-bg:                    var(--special-music-player-playlist-bg);
+  --music-player-playlist-header-bg:             var(--special-music-player-playlist-header-bg);
+  --music-player-playlist-header-text:           var(--special-music-player-playlist-header-text);
+  --music-player-playlist-item-bg:               var(--special-music-player-playlist-item-bg);
+  --music-player-playlist-item-active-bg:        var(--special-music-player-playlist-item-active-bg);
+  --music-player-playlist-item-active-text:      var(--special-music-player-playlist-item-active-text);
+  --music-player-playlist-text-color:            var(--special-music-player-playlist-text-color);
+  --music-player-playlist-number-color:          var(--special-music-player-playlist-number-color);
+  --music-player-playlist-number-active-color:   var(--special-music-player-playlist-number-active-color);
 
-  --music-player-volume-controls-bg: var(--special-music-player-volume-controls-bg);
-  --music-player-volume-controls-slider: var(--special-music-player-volume-controls-slider);
+  --music-player-volume-controls-bg:        var(--special-music-player-volume-controls-bg);
+  --music-player-volume-controls-slider:    var(--special-music-player-volume-controls-slider);
   --music-player-volume-controls-container: var(--special-music-player-volume-controls-container);
-  --music-player-volume-controls-track: var(--special-music-player-volume-controls-track);
+  --music-player-volume-controls-track:     var(--special-music-player-volume-controls-track);
 }
-
 @media (max-width: 480px) {
   .music-player-wrapper {
     left      : 12px !important;

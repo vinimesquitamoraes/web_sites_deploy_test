@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: CreditsView
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Credits view component use Credits Section component to display credits for the selected act.

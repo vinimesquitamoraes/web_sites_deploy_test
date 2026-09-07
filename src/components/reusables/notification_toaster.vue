@@ -28,11 +28,9 @@
             iconColor      = "var(--toaster-text-color)"
             bgColor        = "transparent"
             hoverIconColor = "var(--toaster-text-color)"
-            hoverBgColor   = "rgba(0, 0, 0, 0.05)"
             pressAnimation = "scale"
             :iconSrc       = "img_close"
             @click         = "closeToast"
-            aria-label     = "Close Notification"
           />
         </div>
       </div>

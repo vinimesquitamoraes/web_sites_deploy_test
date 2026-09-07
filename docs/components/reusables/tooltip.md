@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: tooltip
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 A customizable tooltip component supporting multiple positions, transition durations, and custom styling.

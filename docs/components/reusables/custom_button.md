@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: custom_button
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Customizable button component supporting icons, dynamic coloring, Vue Router navigation, external links, and press animations.

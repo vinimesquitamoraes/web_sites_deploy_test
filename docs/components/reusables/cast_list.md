@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: cast_list
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Displays a showcase list or tabbed view of characters with portrait navigation and transition support.

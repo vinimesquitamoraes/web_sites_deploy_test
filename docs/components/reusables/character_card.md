@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: character_card
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Character card component supporting image customization, description paragraphs, and flexible orientations.
@@ -43,7 +31,7 @@ Character card component supporting image customization, description paragraphs,
 
 ## Computed Properties & Methods
 
-- *None specified*
+- `descriptionParagraphs`: * @file character_card.vue
 
 ## Slots
 

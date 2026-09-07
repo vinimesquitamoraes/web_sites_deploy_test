@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: app_footer
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts.

@@ -1,18 +1,6 @@
----
-type: 'Page'
-title: back_to_top_button
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
-A floating back-to-top button component with dynamic footer overlap handling and smooth scrolling behavior.
+A floating back-to-top button component with dynamic footer overlap handling and smooth/instant scrolling behavior.
 
 ## Imported Components
 
@@ -36,7 +24,7 @@ A floating back-to-top button component with dynamic footer overlap handling and
 
 - `handleScroll`: * @file        back_to_top_button.vue
 - `handleFooterOverlap`: * Computes footer bounding rectangles to adjust position when overlapping the footer.
-- `scrollToTop`: * Smoothly scrolls the window back to the top.
+- `scrollToTop`: * Scrolls the window back to the top instantly if motion is reduced, or smoothly otherwise.
 
 ## Slots
 

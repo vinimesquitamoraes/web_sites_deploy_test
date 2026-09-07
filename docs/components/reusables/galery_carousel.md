@@ -1,15 +1,3 @@
----
-type: 'Page'
-title: galery_carousel
-aliases: null
-description: null
-icon: null
-createdAt: '2026-09-05T01:16:07.179Z'
-lastUpdated: '2026-09-05T01:16:07.179Z'
-tags: []
-imagemDeCapa: null
----
-
 ## Overview
 
 Interactive image gallery component supporting automatic rotation, animated GIFs,
@@ -53,6 +41,6 @@ Interactive image gallery component supporting automatic rotation, animated GIFs
 - `nextSlide`: Advances the carousel forward to the next slide.
 - `prevSlide`: Navigates the carousel backward to the previous slide.
 - `selectSlide`: Explicitly selects a slide index based on user selection or pagination interaction.
-- `scrollThumbnails`: Smoothly scrolls the thumbnail strip container horizontally in a given direction.
-- `openModal`: Watches index changes to reset timers and align active thumbnail positions smoothly. */
+- `scrollThumbnails`: Smoothly or instantly scrolls the thumbnail strip container horizontally in a given direction.
+- `openModal`: Watches index changes to reset timers and align active thumbnail positions smoothly or instantly. */
 - `closeModal`: Closes the modal view and restores page scrolling.

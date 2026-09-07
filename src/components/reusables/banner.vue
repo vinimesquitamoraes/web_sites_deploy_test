@@ -142,7 +142,7 @@ const props = defineProps({
   imageChangeInterval: {
     type    : Number,
     required: false,
-    default : 25000
+    default : 12500
   },
   /** Controls whether the brand logo image container is visible. */
   showLogo: {
@@ -514,7 +514,8 @@ defineEmits(['cta-click'])
   
   .hero-subtitle {
     font-family       : var(--font-mobile-h2) !important;
-    font-size         : clamp(0.875rem, 3.5vw, var(--font-mobile-h2-size)) !important;
+    font-size         : clamp(1.1rem, 4.5vw, var(--font-mobile-h2-size)) !important;
+    padding           : 0 0.5rem;
   }
 }
 </style>
