@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView     from "@/components/views/HomeView.vue"
 import AboutView    from '@/components/views/AboutView.vue'
@@ -7,7 +7,6 @@ import CreditsView  from '@/components/views/CreditsView.vue'
 import DownloadView from '@/components/views/DownloadView.vue'
 import DogtenView   from '@/components/views/DogtenView.vue'
 
-import LOGO_IMAGE_URL from  '@/assets/img/logos/logobg_itch_io.png'
 
 const SITE_URL = typeof window !== 'undefined' 
   ? window.location.origin 
@@ -55,7 +54,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
     return { top: 0, left: 0, behavior: 'smooth' }

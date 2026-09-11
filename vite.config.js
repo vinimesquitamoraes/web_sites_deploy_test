@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import Sitemap from 'vite-plugin-sitemap'
 
 export default defineConfig({
-  base: "https://vinimesquitamoraes.github.io/web_sites_deploy_test/",
+  base: '/web_sites_deploy_test/',
   assetsInclude: ['**/*.xlsx'],
   plugins: [
     vue(),
