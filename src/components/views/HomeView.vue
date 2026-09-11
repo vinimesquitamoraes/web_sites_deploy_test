@@ -1,32 +1,39 @@
+<!-- HomeView.vue -->
 <template>
-  <div class="main-content">
+  <div class="view-wrapper">
+
     <Banner
-      sessionKey                ="replace_banner_for_map_renders"
-      :alternativeImages        ="mapRenderImagesArray"
-      alternativeScrollDirection="both"
-      :subtitle                 ="t('SITE_HOME_BANNER_TEXT')"
-      vignetteStyle             = "style_1"
+      sessionKey                  ="replace_banner_for_map_renders"
+      :alternativeImages          ="mapRenderImagesArray"
+      alternativeScrollDirection  ="both"
+      :subtitle                   ="t('SITE_HOME_BANNER_TEXT')"
+      vignetteStyle               ="style_3"
+      
     />
 
-    <ContentSection 
-      :heading        ="t('SITE_HOME_HEADLINE')"
-      :text           ="[t('SITE_HOME_INTRO_1'), t('SITE_HOME_INTRO_2'), t('SITE_HOME_INTRO_3')]" 
-      mediaType       ="video" 
-      mediaSrc        ="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
-      text-align      ="left"
-    />
-    
-    <GaleryCarrousel 
-      :image-modules="homeImages" 
-      :interval-time="10000"
-    />
-    
-    <CastList 
-      view-type="list" 
-      transition-type="fade" 
-    />
+    <div class="main-content">
+      <ContentSection 
+        :heading    ="t('SITE_HOME_HEADLINE')"
+        :text       ="[t('SITE_HOME_INTRO_1'), t('SITE_HOME_INTRO_2'), t('SITE_HOME_INTRO_3')]" 
+        mediaType   ="video" 
+        mediaSrc    ="https://www.youtube-nocookie.com/embed/rVubWY0Ubzs"
+        text-align  ="left"
+      />
+      
+      <GaleryCarrousel 
+        :image-modules="homeImages" 
+        :interval-time="10000"
+      />
+      
+      <CastList 
+        view-type="list" 
+        transition-type="fade" 
+      />
+    </div>
   </div>
 </template>
+
+
 
 <script setup>
 /**
@@ -63,3 +70,18 @@ const homeImages = import.meta.glob('@/assets/img/screenshots/*.{png,jpg,jpeg,sv
   import: 'default' 
 })
 </script>
+
+<style scoped>
+.view-wrapper {
+  width       : 100%;
+
+}
+
+.main-content {
+  width         : 100%;
+  max-width     : 1240px;
+  margin        : 0 auto;
+  display       : flex;
+  flex-direction: column;  
+}
+</style>

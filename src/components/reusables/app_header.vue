@@ -1,72 +1,86 @@
-<script setup>
-/**
-  * @file        app_header.vue
-  * @brief       Application header component containing the logo, navigation links, and a responsive custom hamburger menu button.
-  * @displayName App Header
-*/
-
-import { ref } from 'vue'
-
-import img_gameLogo               from '@/assets/img/logos/Encore_Logo.png'
-import img_hamburguer_icon_closed from '@/assets/svg/hamburger-button.svg'
-import img_hamburguer_icon_open   from '@/assets/svg/triangle-down-filled.svg'
-
-import NavigationComponent        from './navigation_component.vue'
-import CustomButton               from '@/components/reusables/custom_button.vue'
-
-defineProps({
-  /** The currently active navigation page name. */
-  activePage: {
-    type    : String,
-    default : 'Home'
-  }
-})
-
-/**
-  * Tracks whether the mobile hamburger menu is open.
-  * @private
-  */
-const isMenuOpen = ref(false)
-
-/**
-  * Toggles the mobile menu open/closed state.
-  * @private
-  */
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value
-}
-</script>
-
 <template>
   <header class="header-container">
     <div class="header-inner">
       
-      <router-link to="/" class="logo-container">
-        <img :src="img_gameLogo" alt="Logo placeholder" class="logo" />
+      <router-link to="/" class="logo-container" @contextmenu="handleContextMenu">
+        <img 
+          :src="img_gameLogo" 
+          alt="Logo placeholder" 
+          class="logo"
+          :draggable="allowDrag"
+          @contextmenu="handleContextMenu"
+        />
       </router-link>
       
-      <CustomButton
-        class          = "hamburger-btn"
-        text           = ""
-        iconSize       = "30px"
-        width          = "50px"
-        height         = "50px"
-        bgColor        = "transparent"
-        
-        iconColor      = "var(--color-default-text-color)"
-        hoverIconColor = "#ffffff"
-        border         = "none"
-        pressAnimation = "scale"
-        :iconSrc       = "isMenuOpen ? img_hamburguer_icon_open : img_hamburguer_icon_closed"
-        @click         = "toggleMenu"
-        aria-label     = "Toggle Menu"
-      />
-
-      <NavigationComponent :activePage="activePage" :isMenuOpen="isMenuOpen" />
+      <NavigationComponent :activePage="activePage" />
       
     </div>
   </header>
 </template>
+
+<script setup>
+/**
+  * @file        app_header.vue
+  * @brief       Application header component containing the logo and navigation component.
+  *              Supports configurable logo dragging, text selection, and context menu options.
+  * @displayName App Header
+*/
+
+import { computed } from 'vue'
+import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
+import NavigationComponent from './navigation_component.vue'
+
+const props = defineProps({
+  /** The currently active navigation page name. */
+  activePage: {
+    type    : String,
+    default : 'Home'
+  },
+  /**
+    * Toggles image drag functionality on the header logo.
+    * @public
+  */
+  allowDrag: {
+    type    : Boolean,
+    default : true
+  },
+  /**
+    * Controls whether the right-click context menu ("Save image as...") is allowed on the logo.
+    *@public
+  */
+  allowSaveAs: {
+    type    : Boolean,
+    default : false
+  },
+  /**
+    * Disables text and element selection on the header logo.
+    * @public
+  */
+  disableSelect: {
+    type    : Boolean,
+    default : true
+  }
+})
+
+/**
+  * Computed CSS user-select property value based on selection protection configuration.
+  * @private
+*/
+const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
+
+/**
+  * Handles right-click events according to the `allowSaveAs` property configuration.
+  * Stops propagation to guarantee element trees do not trigger native context menu.
+  * @param {MouseEvent} event - Context menu event instance.
+  * @private
+*/
+const handleContextMenu = (event) => {
+  if (!props.allowSaveAs) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
+</script>
 
 <style scoped>
 .header-container {
@@ -99,20 +113,18 @@ const toggleMenu = () => {
   align-items       : center;
   flex-direction    : row;
   gap               : 10px;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .logo {
-  display           : block;
-  max-height        : 50px;
-}
-
-.hamburger-btn {
-  display           : none !important;
-}
-
-@media (max-width: 900px) {
-  .hamburger-btn {
-    display         : flex !important;
-  }
+  display             : block;
+  max-height          : 50px;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 </style>

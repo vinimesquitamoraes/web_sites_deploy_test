@@ -1,5 +1,5 @@
 <template>
-  <div class="gallery-container" tabindex="-1">
+  <div class="gallery-container" tabindex="-1" @contextmenu="handleContextMenu">
     <h2 class="gallery-title">{{ t('SITE_HOME_GALLERY') }}</h2>
 
     <div class="carousel-main-row">
@@ -8,6 +8,7 @@
         tabindex      = "-1"
         @touchstart   = "handleTouchStart"
         @touchend     = "handleTouchEnd"
+        @contextmenu  = "handleContextMenu"
       >
         <CustomButton
           class          = "nav-arrow left"
@@ -34,12 +35,17 @@
             class     = "slide-item"
             tabindex  = "-1"
           >
-            <img 
-              :src    = "slide.isGif && index === currentIndex ? slide.img : (slide.staticFrame || slide.img)" 
-              alt     = "Gallery Slide Image" 
-              class   = "slide-img clickable" 
-              @click  = "openModal(index)"
-            />
+            <!-- @slot slide-image - Custom slot for rendering slide images -->
+            <slot name="slide-image" :slide="slide" :index="index" :is-active="index === currentIndex">
+              <img 
+                :src        = "slide.isGif && index === currentIndex ? slide.img : (slide.staticFrame || slide.img)" 
+                alt         = "Gallery Slide Image" 
+                class       = "slide-img clickable" 
+                :draggable = "allowDrag"
+                @contextmenu= "handleContextMenu"
+                @click      = "openModal(index)"
+              />
+            </slot>
           </div>
         </div>
 
@@ -78,7 +84,7 @@
       ></div>
     </div>
 
-    <div class="thumbnails-container">
+    <div class="thumbnails-container" @contextmenu="handleContextMenu">
       <CustomButton
         class          = "thumb-arrow left"
         text           = ""
@@ -108,9 +114,11 @@
             @click    = "selectSlide(index)"
           >
             <img 
-              :src    = "slide.staticFrame || slide.thumb" 
-              alt     = "Thumbnail Preview" 
-              class   = "thumb-img" 
+              :src        = "slide.staticFrame || slide.thumb" 
+              alt         = "Thumbnail Preview" 
+              class       = "thumb-img" 
+              :draggable = "allowDrag"
+              @contextmenu= "handleContextMenu"
             />
             <div class="red-tint-overlay"></div>
           </div>
@@ -139,6 +147,7 @@
       @close          = "closeModal" 
       @next           = "nextSlide(true)"
       @prev           = "prevSlide(true)"
+      @contextmenu.prevent
     />
   </div>
 </template>
@@ -147,36 +156,72 @@
 /**
  * @file galery_carousel.vue
  * @brief Interactive image gallery component supporting automatic rotation, animated GIFs,
- *        touch gestures, static frame capturing, and modal view.
+ *        touch gestures, static frame capturing, configurable dragging, and context menu options.
  * @displayName Gallery Carousel
  */
 
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useI18n }    from '@/composables/useI18n'
+import { useI18n }       from '@/composables/useI18n'
 import { useAnimations } from '@/composables/reduced_motion_check'
 
-import MediaModal from './media_modal.vue'
+import MediaModal   from './media_modal.vue'
 import CustomButton from './custom_button.vue'
 
-import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
-import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
+import img_left_arrow  from '@/assets/svg/triangle-left-12-filled.svg'
+import img_right_arrow from '@/assets/svg/triangle-right-12-filled.svg'
 
 const { t } = useI18n()
 const { animationsEnabled } = useAnimations()
 
 const props = defineProps({
-  /** Time in milliseconds before advancing to the next slide. */
+  /**
+   * Time in milliseconds before advancing to the next slide automatically.
+   * @public
+   */
   intervalTime: {
     type: Number,
     default: 1000
   },
-  /** Object Dictionary esque of imported image/GIF source URLs. */
+  /**
+   * Key-value object dictionary of imported image/GIF source URLs.
+   * @public
+   */
   imageModules: {
     type: Object,
     required: true,
     default: () => ({})
+  },
+  /**
+   * Toggles image drag functionality.
+   * @public
+   */
+  allowDrag: {
+    type: Boolean,
+    default: true
+  },
+  /**
+   * Controls whether the right-click context menu ("Save image as...") is allowed.
+   * @public
+   */
+  allowSaveAs: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * Disables text selection across gallery elements.
+   * @public
+   */
+  disableSelect: {
+    type: Boolean,
+    default: true
   }
 })
+
+/**
+ * Computed CSS user-select property value based on selection protection configuration.
+ * @private
+ */
+const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
 
 const slides = ref(
   Object.values(props.imageModules).map((url, index) => ({
@@ -188,16 +233,33 @@ const slides = ref(
   }))
 )
 
-const currentIndex = ref(0)
-const isModalOpen = ref(false)
+const currentIndex       = ref(0)
+const isModalOpen        = ref(false)
 const thumbnailsTrackRef = ref(null)
-const timerKey = ref(0)
-let slideInterval = null
+const timerKey           = ref(0)
+let slideInterval        = null
 
 const touchStartX = ref(0)
-const touchEndX = ref(0)
+const touchEndX   = ref(0)
 
-/** Captures initial touch horizontal coordinate on touch start. */
+/**
+ * Handles right-click events according to the `allowSaveAs` property configuration.
+ * Stops propagation to guarantee child components do not trigger native defaults.
+ * @param {MouseEvent} event - Context menu event instance.
+ * @private
+ */
+const handleContextMenu = (event) => {
+  if (!props.allowSaveAs) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
+
+/**
+ * Captures initial touch horizontal coordinate on touch start.
+ * @param {TouchEvent} e - Touch start event.
+ * @private
+ */
 const handleTouchStart = (e) => {
   const TouchStartBuilder = {
     extractX(event) {
@@ -208,7 +270,11 @@ const handleTouchStart = (e) => {
   touchStartX.value = TouchStartBuilder.extractX(e)
 }
 
-/** Captures ending touch coordinate on touch end and triggers swipe check. */
+/**
+ * Captures ending touch coordinate on touch end and triggers swipe evaluation.
+ * @param {TouchEvent} e - Touch end event.
+ * @private
+ */
 const handleTouchEnd = (e) => {
   const TouchEndBuilder = {
     extractX(event) {
@@ -220,7 +286,10 @@ const handleTouchEnd = (e) => {
   handleSwipe()
 }
 
-/** Evaluates touch displacement against a threshold to determine swipe direction. */
+/**
+ * Evaluates touch displacement against a threshold to determine swipe direction.
+ * @private
+ */
 const handleSwipe = () => {
   const SwipeActionBuilder = {
     getThreshold() {
@@ -241,7 +310,10 @@ const handleSwipe = () => {
   }
 }
 
-/** Computed property providing the current media/medias for the modal. */
+/**
+ * Computed property providing active media details for the viewer modal.
+ * @private
+ */
 const currentModalMediaItem = computed(() => {
   const ModalMediaBuilder = {
     build(list, index) {
@@ -257,7 +329,12 @@ const currentModalMediaItem = computed(() => {
   return ModalMediaBuilder.build(slides.value, currentIndex.value)
 })
 
-/** Renders the first frame of an animated GIF onto a canvas and extracts a static data URL. */
+/**
+ * Renders the first frame of an animated GIF onto an offscreen canvas to generate a static data URL.
+ * @param {string} url - Target GIF asset URL.
+ * @returns {Promise<string>} Static image frame data URL.
+ * @private
+ */
 const captureFirstFrame = (url) => {
   const FrameCaptureBuilder = {
     createPromise(targetUrl) {
@@ -281,7 +358,10 @@ const captureFirstFrame = (url) => {
   return FrameCaptureBuilder.createPromise(url)
 }
 
-/** Restarts the auto-advance timer. */
+/**
+ * Restarts auto-advance rotation timer and resets the progress bar animation state.
+ * @private
+ */
 const resetTimer = () => {
   const TimerBuilder = {
     clear(interval) {
@@ -302,7 +382,11 @@ const resetTimer = () => {
   }, props.intervalTime)
 }
 
-/** Advances the carousel forward to the next slide. */
+/**
+ * Advances carousel forward to the next slide index.
+ * @param {boolean} [isUserAction=true] - Indicates whether action was manually triggered by user.
+ * @private
+ */
 const nextSlide = (isUserAction = true) => {
   const NextSlideBuilder = {
     calculateIndex(current, length) {
@@ -316,7 +400,11 @@ const nextSlide = (isUserAction = true) => {
   if (isUserAction) resetTimer()
 }
 
-/** Navigates the carousel backward to the previous slide. */
+/**
+ * Navigates carousel backward to the previous slide index.
+ * @param {boolean} [isUserAction=true] - Indicates whether action was manually triggered by user.
+ * @private
+ */
 const prevSlide = (isUserAction = true) => {
   const PrevSlideBuilder = {
     calculateIndex(current, length) {
@@ -330,7 +418,11 @@ const prevSlide = (isUserAction = true) => {
   if (isUserAction) resetTimer()
 }
 
-/** Explicitly selects a slide index based on user selection or pagination interaction. */
+/**
+ * Selects a specific slide index directly.
+ * @param {number} index - Target slide index.
+ * @private
+ */
 const selectSlide = (index) => {
   const SelectSlideBuilder = {
     resolve(current, target) {
@@ -346,7 +438,11 @@ const selectSlide = (index) => {
   }
 }
 
-/** Smoothly or instantly scrolls the thumbnail strip container horizontally in a given direction. */
+/**
+ * Scrolls the thumbnail strip horizontally based on scroll direction.
+ * @param {'left'|'right'} direction - Target horizontal scroll direction.
+ * @private
+ */
 const scrollThumbnails = (direction) => {
   const ThumbnailScrollBuilder = {
     getAmount(track) {
@@ -369,7 +465,10 @@ const scrollThumbnails = (direction) => {
   resetTimer()
 }
 
-/** Watches index changes to reset timers and align active thumbnail positions smoothly or instantly. */
+/**
+ * Synchronizes active slide changes with auto-timer reset and thumbnail alignment.
+ * @private
+ */
 watch(currentIndex, (newIndex) => {
   resetTimer()
   if (!thumbnailsTrackRef.value) return
@@ -389,7 +488,11 @@ watch(currentIndex, (newIndex) => {
   }
 })
 
-/** Opens the modal view for a given slide index and locks page scrolling. */
+/**
+ * Opens expanded image modal view and prevents document scrolling.
+ * @param {number} index - Active slide index.
+ * @private
+ */
 const openModal = (index) => {
   const ModalOpenBuilder = {
     applyBodyStyles() {
@@ -403,7 +506,10 @@ const openModal = (index) => {
   resetTimer()
 }
 
-/** Closes the modal view and restores page scrolling. */
+/**
+ * Closes image modal view and restores document scrolling.
+ * @private
+ */
 const closeModal = () => {
   const ModalCloseBuilder = {
     clearBodyStyles() {
@@ -490,11 +596,15 @@ onUnmounted(() => {
 }
 
 .slide-img {
-  width         : 100%;
-  height        : 100%;
-  object-fit    : contain;
-  display       : block;
-  border-radius : inherit;
+  width               : 100%;
+  height              : 100%;
+  object-fit          : contain;
+  display             : block;
+  border-radius       : inherit;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .slide-img.clickable {
@@ -564,7 +674,6 @@ onUnmounted(() => {
   transform : translateX(-50%);
   display   : flex;
   gap       : 6px;
-  
 }
 
 .dot {
@@ -657,11 +766,15 @@ onUnmounted(() => {
 }
 
 .thumb-img {
-  width      : 100%;
-  height     : 100%;
-  object-fit : cover;
-  display    : block;
-  transition : filter 0.2s ease;
+  width               : 100%;
+  height              : 100%;
+  object-fit          : cover;
+  display             : block;
+  transition          : filter 0.2s ease;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .thumbnail-item.thumb-active .thumb-img {
@@ -689,6 +802,7 @@ onUnmounted(() => {
   .thumbnail-item {
     flex: 0 0 calc(33.333% - 7px);
   }
+
   .gallery-container {
     padding : 0.5rem 1rem;
   }

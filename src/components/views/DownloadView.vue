@@ -115,6 +115,12 @@ const { t } = useI18n()
     margin-bottom     : -150px;
     pointer-events    : none;
     box-sizing        : border-box;
+    -webkit-user-drag   : none;
+    -khtml-user-drag    : none;
+    -moz-user-select    : none;
+    -webkit-user-select : none;
+    user-select         : none;
+
 }
 
 .page-character {

@@ -4,8 +4,14 @@
       <div class="footer-content">
         
         <div class="footer-top-row">
-          <router-link to="/" class="logo-container">
-            <img :src="img_gameLogo" alt="Logo placeholder" class="logo" />
+          <router-link to="/" class="logo-container" @contextmenu="handleContextMenu">
+            <img 
+              :src="img_gameLogo" 
+              alt="Logo placeholder" 
+              class="logo" 
+              :draggable="allowDrag"
+              @contextmenu="handleContextMenu"
+            />
           </router-link>
 
           <NavigationComponent :showLanguageDropdown="false" />
@@ -66,10 +72,12 @@
 <script setup>
 /**
   * @file         app_footer.vue
-  * @brief        Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts.
+  * @brief        Application footer component featuring a brand logo, navigation links, 
+  *               social media buttons, disclaimer texts, and configurable logo protection settings.
   * @displayName  AppFooter
 */
 
+import { computed } from 'vue'
 import { useI18n } from '@/composables/useI18n'
 
 import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
@@ -77,22 +85,76 @@ import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
 import NavigationComponent  from '@/components/reusables/navigation_component.vue'
 import SocialMediaButton    from '@/components/reusables/social_media_button.vue'
 
+const props = defineProps({
+  /**
+    * Toggles image drag functionality on the footer logo.
+    * @public
+  */
+  allowDrag: {
+    type    : Boolean,
+    default : true
+  },
+  /**
+    * Controls whether the right-click context menu ("Save image as...") is allowed on the logo.
+    * @public
+  */
+  allowSaveAs: {
+    type    : Boolean,
+    default : false
+  },
+  /**
+    * Disables text and element selection on the footer logo.
+    * @public
+  */
+  disableSelect: {
+    type    : Boolean,
+    default : true
+  }
+})
+
 const { t } = useI18n()
+
+/**
+  * Computed CSS user-select property value based on selection protection configuration.
+  * @private
+*/
+const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
+
+/**
+  * Handles right-click events according to the `allowSaveAs` property configuration.
+  * Stops propagation to guarantee element trees do not trigger native context menu.
+  * @param {MouseEvent} event - Context menu event instance.
+  * @private
+*/
+const handleContextMenu = (event) => {
+  if (!props.allowSaveAs) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
 </script>
 
 <style scoped>
 
 .logo-container {
-  display           : flex;
-  justify-content   : flex-start;
-  align-items       : center;
-  flex-direction    : row;
-  gap               : 10px;
+  display             : flex;
+  justify-content     : flex-start;
+  align-items         : center;
+  flex-direction      : row;
+  gap                 : 10px;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .logo {
-  display           : block;
-  max-height        : 50px;
+  display             : block;
+  max-height          : 50px;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .footer-outer {
@@ -189,7 +251,7 @@ const { t } = useI18n()
   justify-content   : flex-start;
   align-items       : center;
   flex-direction    : column;
-  gap               : 10px
+  gap               : 10px;
 }
 
 .footer-divider {
@@ -208,6 +270,11 @@ const { t } = useI18n()
   opacity           : 0.9;
   text-align        : center;
 }
+
+.footer-outer :deep(.hamburger-btn) {
+  display: none !important;
+}
+
 .footer-disclaimer :deep(a) {
   color                 : var(--color-footer-hyperlink);              
   text-decoration       : underline;     
@@ -224,6 +291,7 @@ const { t } = useI18n()
   justify-content   : stretch;
   text-align        : center;
 }
+
 .footer-framework a {
   color             : var(--color-footer-vue-link); 
   text-decoration   : none;
@@ -238,17 +306,21 @@ const { t } = useI18n()
   .footer-outer {
     padding: 0 20px;
   }
+
   .footer-container {
-    padding: 40px 20px;
+    padding: 40px 30px;
+    align-items: center;
   }
+
+  .footer-content {
+    align-items: center;
+  }
+
   .footer-top-row {
     flex-direction: column;
     align-items   : center;
+    justify-content: center;
     gap           : 30px;
-  }
-  .footer-nav {
-    flex-direction: column;
-    gap           : 20px;
   }
 
   .footer-socials {
@@ -256,10 +328,35 @@ const { t } = useI18n()
   }
 }
 
-@media (max-width: 480px) {
-  .footer-socials {
-    gap: 12px;
+@media (max-width: 600px) {
+  .footer-outer {
+    padding: 0 10px;
+  }
+
+  .footer-container {
+    padding: 30px 15px;
+    gap: 30px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+  }
+
+  .footer-top-row {
+    gap: 24px;
+  }
+
+  .logo-container {
     justify-content: center;
+  }
+
+  .footer-socials {
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .footer-disclaimer,
+  .footer-framework {
+    text-align: center;
+    font-size: calc(var(--font-p-size) * 0.9);
   }
 }
 </style>

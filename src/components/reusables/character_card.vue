@@ -5,6 +5,7 @@
       reverse: isReversed && orientation !== 'vertical', 
       'is-vertical': orientation === 'vertical' 
     }"
+    @contextmenu="handleContextMenu"
   >
     <div 
       class="image-wrapper"
@@ -18,11 +19,14 @@
         maxHeight       : imageSize,
         borderRadius    : imageShape === 'circle' ? '50%' : '20px'
       }"
+      @contextmenu="handleContextMenu"
     >
       <img 
-        :src    ="image" 
-        :alt    ="name" 
-        class   ="character-image" 
+        :src        = "image" 
+        :alt        = "name" 
+        class       = "character-image" 
+        :draggable = "allowDrag"
+        @contextmenu= "handleContextMenu"
       />
     </div>
 
@@ -42,7 +46,8 @@
 <script setup>
 /**
   * @file character_card.vue
-  * @brief Character card component supporting image customization, description paragraphs, and flexible orientations.
+  * @brief Character card component supporting image customization, description paragraphs, 
+  *        flexible orientations, configurable dragging, and context menu actions.
   * @displayName Character Card
 */
 
@@ -133,10 +138,53 @@ const props = defineProps({
     type    : String,
     default : "0 0 70px 0"
   },
+  /**
+   * Toggles image drag functionality.
+   * @public
+   */
+  allowDrag: {
+    type: Boolean,
+    default: true
+  },
+  /**
+   * Controls whether the right-click context menu ("Save image as...") is allowed.
+   * @public
+   */
+  allowSaveAs: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * Disables text selection across element text/images.
+   * @public
+   */
+  disableSelect: {
+    type: Boolean,
+    default: true
+  }
 });
 
 /**
-  * Computed property that normalizes the description prop in a arrays.
+ * Computed CSS user-select property value based on selection protection configuration.
+ * @private
+ */
+const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'));
+
+/**
+ * Handles right-click events according to the `allowSaveAs` property configuration.
+ * Stops propagation to guarantee element trees do not trigger native context menu.
+ * @param {MouseEvent} event - Context menu event instance.
+ * @private
+ */
+const handleContextMenu = (event) => {
+  if (!props.allowSaveAs) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+};
+
+/**
+  * Computed property that normalizes the description prop into an array.
   * @private
 */
 const descriptionParagraphs = computed(() => {
@@ -149,17 +197,21 @@ const descriptionParagraphs = computed(() => {
 
 <style scoped>
 .character-card {
-  width          : 100%;
-  max-width      : 100%;
-  min-height     : 80px;
-  background     : var(--color-primary);
-  border-radius  : 30px;
-  padding        : 30px 40px;
-  display        : flex;
-  align-items    : center;
-  gap            : 40px;
-  box-sizing     : border-box;
-  overflow       : visible;
+  width               : 100%;
+  max-width           : 100%;
+  min-height          : 80px;
+  background          : var(--color-primary);
+  border-radius       : 30px;
+  padding             : 30px 40px;
+  display             : flex;
+  align-items         : center;
+  gap                 : 40px;
+  box-sizing          : border-box;
+  overflow            : visible;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .character-card.reverse {
@@ -182,16 +234,16 @@ const descriptionParagraphs = computed(() => {
 }
 
 .character-image {
-  width          : 100%;
-  height         : 100%;
-  object-fit     : contain; 
-  display        : block;
-  transform      : scale(v-bind(imageScale));
-  padding        : v-bind(imagePadding);
-  /* filter         : drop-shadow(4px    0 0 #ffffff) 
-                   drop-shadow(-4px   0 0 #ffffff) 
-                   drop-shadow(0    4px 0 #ffffff) 
-                   drop-shadow(0   -4px 0 #ffffff); */
+  width               : 100%;
+  height              : 100%;
+  object-fit          : contain; 
+  display             : block;
+  transform           : scale(v-bind(imageScale));
+  padding             : v-bind(imagePadding);
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .character-card.is-vertical .image-wrapper {

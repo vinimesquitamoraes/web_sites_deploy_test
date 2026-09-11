@@ -15,7 +15,7 @@ Hero banner component featuring background image, logo display and a secret dire
 ## Imported Assets
 
 - [img_gameLogo](../../../src/assets/img/logos/Encore_Logo.png)
-- [img_defaultBanner](../../../src/assets/img/art/chinese_plus_japanese.png)
+- [img_defaultBanner](../../../src/assets/img/art/170_sin_titulo_20260909211151.png)
 - [dowload_icon](../../../src/assets/svg/download.svg)
 
 ## Props

@@ -1,7 +1,3 @@
----
-tags:
-  - Vue_Component
----
 ## Overview
 
 Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts.

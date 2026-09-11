@@ -1,7 +1,7 @@
 ,Translation Key,ALL ACTS,ACT 1,ACT 2
 Project Creator,CREDITS_CREATOR,Sam the Salmon,Sam the Salmon,
 Director,CREDITS_DIRECTOR,Pkdotts,Pkdotts,Pkdotts
-Programmer,CREDITS_PROGRAMMERS,Artem “Inqurity” N.; benichi; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher",benichi; Danionel; Pkdotts; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher,Artem “Inqurity” N.; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; JumpmanFR"
+Programmer,CREDITS_PROGRAMMERS,"Artem “Inqurity” N.; benichi; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; Vini; BismuthBloom; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher",benichi; Danionel; Pkdotts; BismuthBloom; HepHep; JumpmanFR; Pedro Braga; roka; ZetCipher,"Artem “Inqurity” N.; Danionel; Pkdotts; Tony ""TheQuickSlash"" Petrie; turnip; Vini; JumpmanFR"
 NPC Sprite Artist,CREDITS_ARTISTS_NPC,Anderp40; benichi; Destroyer120; Megadrivesonic; Pkdotts; Shachi Welt; Tessa; Bassya; Bndi; Clipbrick; FlintMother3; Nicolás Romero; Retro64; Sam the Salmon; Yahav,benichi; Megadrivesonic; Pkdotts; Bassya; Clipbrick; FlintMother3; Nicolás Romero; Retro64; Sam the Salmon; Yahav,Anderp40; Destroyer120; Megadrivesonic; Pkdotts; Shachi Welt; Tessa; Bndi; Sam the Salmon
 Character Animator,CREDITS_ANIM_CHARA,benichi; CartMart; Cosmocha; GeraFierro; MP64; Pkdotts; pkgalaxia; VentesTheFloof; Castor28; Clipbrick; Corblan; deebits; dianesaur; Mallow; Maxbound; Sam the Salmon; SuperSquidoodle; Remie_REM_Sleep,benichi; CartMart; MP64; Pkdotts; Castor28; Clipbrick; Corblan; dianesaur; Mallow; Maxbound; Sam the Salmon; Remie_REM_Sleep,CartMart; Cosmocha; GeraFierro; MP64; Pkdotts; pkgalaxia; VentesTheFloof; Castor28; deebits; SuperSquidoodle
 Object Animator,CREDITS_ANIM_OBJECT,Cosmocha; MP64; Pkdotts; Vini; Clipbrick; SuperSquidoodle,Pkdotts; Clipbrick; SuperSquidoodle,Cosmocha; MP64; Pkdotts; Vini
@@ -37,4 +37,5 @@ Russian Translator,CREDITS_TRANSLATOR_RU,Anasu Meruku; Mikhail “Px-Ch” Fefil
 Ukrainian Translator,CREDITS_TRANSLATOR_UK,Artem “Inqurity” N.; turnip,Artem “Inqurity” N.; turnip,Artem “Inqurity” N.; turnip
 Chinese Translator,CREDITS_TRANSLATOR_ZH_CN,AX暗星233; kawaws66; 希铁石z; 新星派; 罗宾nick; 载•Toknyc; 绿荼不喝茶,AX暗星233; kawaws66; 希铁石z; 新星派; 罗宾nick; 载•Toknyc; 绿荼不喝茶,AX暗星233; kawaws66; 希铁石z; 新星派; 罗宾nick; 载•Toknyc; 绿荼不喝茶
 Special Thanks,CREDITS_THANKS,Cherryello; 绵花糖QAQ; Jade; Jonathan Daegg123; Pastel; Porky; Snowwood a.k.a. Burger God; Tinx; Okano; 岚暮欣 ,Jade; Jonathan Daegg123; Pastel; Porky; Snowwood a.k.a. Burger God; Tinx; 岚暮欣 ,Cherryello; 绵花糖QAQ; Okano; 岚暮欣 
+Website Programmer,CREDITS_WEBSITE_PROGRAMMER,,,
 Manager of Fun,CREDITS_FUN,sludgeXP,sludgeXP,

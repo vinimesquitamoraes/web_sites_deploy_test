@@ -665,7 +665,7 @@ const onCompactLeave = (el) => {
   pointer-events: none;
   opacity     : 0;
   visibility  : hidden;
-  transition  : left 0.2s ease-out, right 0.2s ease-out, bottom 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
+  transition  : left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
 .music-player-wrapper.is-ready {
