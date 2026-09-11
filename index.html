@@ -2,16 +2,55 @@
 <html lang="en">  
   <head>
     <script type="text/javascript">
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
+      (function(location, history) {
+        function UrlRestorer(loc) {
+          this.loc          = loc;
+          this.search       = loc.search || '';
+          this.pathname     = loc.pathname || '';
+          this.hash         = loc.hash || '';
+          this.decodedPath  = '';
+          this.cleanUrl     = '';
         }
-      }(window.location))
+
+        UrlRestorer.prototype.hasRedirect = function() {
+          return this.search.charAt(1) === '/';
+        };
+
+        UrlRestorer.prototype.decode = function() {
+          if (!this.hasRedirect()) return this;
+
+          this.decodedPath = this.search
+            .slice(1)
+            .split('&')
+            .map(function(segment) {
+              return segment.replace(/~and~/g, '&');
+            })
+            .join('?');
+
+          return this;
+        };
+
+        UrlRestorer.prototype.build = function() {
+          if (!this.decodedPath) return this;
+
+          var basePath = this.pathname.slice(0, -1);
+          this.cleanUrl = basePath + this.decodedPath + this.hash;
+
+          return this;
+        };
+
+        UrlRestorer.prototype.apply = function(hist) {
+          if (this.cleanUrl && hist && hist.replaceState) {
+            hist.replaceState(null, null, this.cleanUrl);
+          }
+          return this;
+        };
+
+        new UrlRestorer(location)
+          .decode()
+          .build()
+          .apply(history);
+      }(window.location, window.history));
     </script>
 
     <title>MOTHER Encore</title>
@@ -26,15 +65,13 @@
     <meta property="og:title" content="MOTHER Encore" />
     <meta property="og:description" content="A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!" />
     
-    <!-- Full absolute URL for Open Graph -->
     <meta property="og:image" content="https://vinimesquitamoraes.github.io/web_sites_deploy_test/logobg_itch_io.png" />
 
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@Mother_Encore" />
     <meta name="twitter:title" content="MOTHER Encore" />
     <meta name="twitter:description" content="A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!" />
     
-    <!-- Full absolute URL for Twitter -->
     <meta name="twitter:image" content="https://vinimesquitamoraes.github.io/web_sites_deploy_test/logobg_itch_io.png" />
   </head>
   <body>
