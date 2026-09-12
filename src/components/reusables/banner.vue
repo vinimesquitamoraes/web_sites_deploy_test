@@ -80,7 +80,8 @@ import { useI18n }  from '@/composables/useI18n'
 import CustomButton from '@/components/reusables/custom_button.vue'
 
 import img_gameLogo       from '@/assets/img/logos/Encore_Logo.png'
-import img_defaultBanner  from '@/assets/img/art/170_sin_titulo_20260909211151.png'
+import img_defaultBanner  from '@/assets/img/art/banner_test.png'
+
 import dowload_icon       from '@/assets/svg/download.svg'
 
 const { t } = useI18n()
