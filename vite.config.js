@@ -5,9 +5,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import Sitemap from 'vite-plugin-sitemap'
-import prerender from '@prerenderer/rollup-plugin'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
   base: '/web_sites_deploy_test/',
@@ -24,18 +22,14 @@ export default defineConfig({
         '/credits'
       ]
     }),
-    prerender({
-      routes: [
-        '/',
-        '/about',
-        '/FAQ',
-        '/download',
-        '/credits'
-      ],
-      renderer: '@prerenderer/renderer-puppeteer',
-      rendererOptions: {
-        renderAfterTime: 1000, 
-      },
+    viteStaticCopy({
+      targets: [
+        { src: 'dist/index.html', dest: 'about' },
+        { src: 'dist/index.html', dest: 'FAQ' },
+        { src: 'dist/index.html', dest: 'download' },
+        { src: 'dist/index.html', dest: 'credits' },
+        { src: 'dist/index.html', dest: '.', rename: '404.html' }
+      ]
     })
   ],
   resolve: {
