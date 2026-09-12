@@ -434,6 +434,10 @@ const closeImageModal = () => {
   margin                : 30px 4px 4px 0;
   position              : relative;
   z-index               : 1;
+  -webkit-user-select   : v-bind(userSelectValue);
+  -moz-user-select      : v-bind(userSelectValue);
+  -ms-user-select       : v-bind(userSelectValue);
+  user-select           : v-bind(userSelectValue);
 }
 
 .content-section-heading {
@@ -540,16 +544,14 @@ const closeImageModal = () => {
   max-width             : 100%;
   display               : block;
   position              : relative;
-  height                : auto;
 }
 
 .content-section-media-inner {
   width                 : 100%;
-  height                : auto;
   overflow              : hidden;
   border                : var(--content-section-media-border);
   border-radius         : var(--content-section-media-radius);
-  background-color      :  v-bind(contentBg);
+  background-color      : v-bind(contentBg);
   display               : block;
   position              : relative;
 }
@@ -558,14 +560,27 @@ const closeImageModal = () => {
   cursor                : pointer;
 }
 
+.content-section-media-img,
+.content-section-video-iframe {
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
+  pointer-events      : auto;
+}
+
 .content-section-media-img {
   width                 : 100%;
-  height                : auto;
+  max-width             : 100%;
+  height                : auto !important;
   display               : block;
+  object-fit            : contain;
 }
 
 .content-section-video-iframe {
   width                 : 100%;
+  aspect-ratio          : 16 / 9;
+  height                : auto !important;
   border                : none;
   display               : block;
 }
@@ -601,10 +616,7 @@ const closeImageModal = () => {
     width               : 100% !important;
   }
 
-  .content-section-media-container {
-    height              : auto !important;
-  }
-
+  .content-section-media-container,
   .content-section-media-inner {
     height              : auto !important;
   }
@@ -613,10 +625,6 @@ const closeImageModal = () => {
     height              : auto !important;
     max-height          : none !important;
     object-fit          : contain !important;
-  }
-  
-  .content-section-video-iframe {
-    height              : 220px !important;
   }
 }
 
