@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useHead } from '@unhead/vue'
 
 import HomeView     from "@/components/views/HomeView.vue"
 import AboutView    from '@/components/views/AboutView.vue'
@@ -8,9 +9,7 @@ import DownloadView from '@/components/views/DownloadView.vue'
 import DogtenView   from '@/components/views/DogtenView.vue'
 
 
-const SITE_URL = typeof window !== 'undefined' 
-  ? window.location.origin 
-  : 'https://motherencore.com'
+const DEFAULT_IMAGE = 'https://vinimesquitamoraes.github.io/web_sites_deploy_test/logobg_itch_io.png'
 
 const routes = [
   { 
@@ -18,8 +17,18 @@ const routes = [
     name: 'Home', 
     component: HomeView,
     meta: {
-      title: 'MOTHER Encore',
-      description: 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!'
+      head: {
+        title: 'MOTHER Encore',
+        meta: [
+          { name: 'description', content: 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!' },
+          { property: 'og:title', content: 'MOTHER Encore' },
+          { property: 'og:description', content: 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!' },
+          { property: 'og:image', content: DEFAULT_IMAGE },
+          { name: 'twitter:card', content: 'summary' },
+          { name: 'twitter:title', content: 'MOTHER Encore' },
+          { name: 'twitter:description', content: 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!' }
+        ]
+      }
     }
   },
   { 
@@ -27,8 +36,18 @@ const routes = [
     name: 'About', 
     component: AboutView,
     meta: {
-      title: 'About - MOTHER Encore',
-      description: 'Learn more about the MOTHER Encore project, its history, and what makes this fan reimagining unique.'
+      head: {
+        title: 'About - MOTHER Encore',
+        meta: [
+          { name: 'description', content: 'Learn more about MOTHER Encore.' },
+          { property: 'og:title', content: 'About - MOTHER Encore' },
+          { property: 'og:description', content: 'Learn more about MOTHER Encore.' },
+          { property: 'og:image', content: DEFAULT_IMAGE },
+          { name: 'twitter:card', content: 'summary' },
+          { name: 'twitter:title', content: 'About - MOTHER Encore' },
+          { name: 'twitter:description', content: 'Learn more about MOTHER Encore.' }
+        ]
+      }
     }
   },
   { 
@@ -36,8 +55,14 @@ const routes = [
     name: 'Faq', 
     component: FaqView,
     meta: {
-      title: 'FAQ - MOTHER Encore',
-      description: 'Find answers to common questions about MOTHER Encore, compatibility, gameplay, and release details.'
+      head: {
+        title: 'FAQ - MOTHER Encore',
+        meta: [
+          { name: 'description', content: 'Frequently asked questions regarding MOTHER Encore.' },
+          { property: 'og:title', content: 'FAQ - MOTHER Encore' },
+          { property: 'og:description', content: 'Frequently asked questions regarding MOTHER Encore.' }
+        ]
+      }
     }
   },
   { 
@@ -45,8 +70,14 @@ const routes = [
     name: 'Download', 
     component: DownloadView,
     meta: {
-      title: 'Download - MOTHER Encore',
-      description: 'Download the latest version of MOTHER Encore and get started on your journey.'
+      head: {
+        title: 'Download - MOTHER Encore',
+        meta: [
+          { name: 'description', content: 'Download the latest version of MOTHER Encore.' },
+          { property: 'og:title', content: 'Download - MOTHER Encore' },
+          { property: 'og:description', content: 'Download the latest version of MOTHER Encore.' }
+        ]
+      }
     }
   },
   { 
@@ -54,8 +85,14 @@ const routes = [
     name: 'Credits', 
     component: CreditsView,
     meta: {
-      title: 'Credits - MOTHER Encore',
-      description: 'Meet the team, contributors, and artists behind the creation of MOTHER Encore.'
+      head: {
+        title: 'Credits - MOTHER Encore',
+        meta: [
+          { name: 'description', content: 'Meet the team behind MOTHER Encore.' },
+          { property: 'og:title', content: 'Credits - MOTHER Encore' },
+          { property: 'og:description', content: 'Meet the team behind MOTHER Encore.' }
+        ]
+      }
     }
   },
   { 
@@ -63,8 +100,9 @@ const routes = [
     name: 'Dogten', 
     component: DogtenView,
     meta: {
-      title: 'Dogten - MOTHER Encore',
-      description: 'A secret area in MOTHER Encore.'
+      head: {
+        title: 'Dogten - MOTHER Encore'
+      }
     },
     beforeEnter: (to, from) => {
       const isAuthorized = sessionStorage.getItem('unlocked_dogten') === 'true'
@@ -83,38 +121,16 @@ const router = createRouter({
   }
 })
 
+router.beforeEach((to) => {
+  if (to.meta.head) {
+    useHead(to.meta.head)
+  }
+})
+
 router.afterEach((to) => {
   if (to.name === 'Dogten') {
     sessionStorage.removeItem('unlocked_dogten')
   }
-
-  // Fallbacks
-  const defaultTitle = 'MOTHER Encore'
-  const defaultDescription = 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!'
-
-  const title = to.meta.title || defaultTitle
-  const description = to.meta.description || defaultDescription
-  const currentUrl = `${SITE_URL}${to.fullPath}`
-
-  document.title = title
-
-  const setMeta = (selector, attribute, value) => {
-    let el = document.querySelector(selector)
-    if (el) {
-      el.setAttribute(attribute, value)
-    }
-  }
-
-
-  setMeta('meta[name="description"]', 'content', description)
-  setMeta('link[rel="canonical"]', 'href', currentUrl)
-
-  setMeta('meta[property="og:title"]', 'content', title)
-  setMeta('meta[property="og:description"]', 'content', description)
-  setMeta('meta[property="og:url"]', 'content', currentUrl)
-
-  setMeta('meta[name="twitter:title"]', 'content', title)
-  setMeta('meta[name="twitter:description"]', 'content', description)
 })
 
 export default router
