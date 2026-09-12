@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useHead } from '@unhead/vue'
 
 import HomeView     from "@/components/views/HomeView.vue"
 import AboutView    from '@/components/views/AboutView.vue'
@@ -7,9 +6,6 @@ import FaqView      from '@/components/views/FaqView.vue'
 import CreditsView  from '@/components/views/CreditsView.vue'
 import DownloadView from '@/components/views/DownloadView.vue'
 import DogtenView   from '@/components/views/DogtenView.vue'
-
-
-const DEFAULT_IMAGE = 'https://vinimesquitamoraes.github.io/web_sites_deploy_test/logobg_itch_io.png'
 
 const routes = [
   { 
@@ -55,12 +51,6 @@ const router = createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     return { top: 0, left: 0, behavior: 'smooth' }
-  }
-})
-
-router.beforeEach((to) => {
-  if (to.meta.head) {
-    useHead(to.meta.head)
   }
 })
 
