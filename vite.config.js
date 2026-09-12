@@ -12,9 +12,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const routeMeta = {
   '/about': {
     title: 'About - MOTHER Encore',
-    description: 'Learn more about the MOTHER Encore project, its history, and development.'
+    description: 'Learn more about MOTHER Encore.'
   },
-  '/FAQ': {
+  '/faq': {
     title: 'FAQ - MOTHER Encore',
     description: 'Frequently asked questions regarding MOTHER Encore.'
   },

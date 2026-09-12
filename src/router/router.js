@@ -19,7 +19,7 @@ const routes = [
     component: AboutView,
   },
   { 
-    path: '/FAQ', 
+    path: '/faq', 
     name: 'Faq', 
     component: FaqView,
   },
