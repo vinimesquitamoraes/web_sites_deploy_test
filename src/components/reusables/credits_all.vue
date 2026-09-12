@@ -20,6 +20,7 @@
 
 import { computed } from 'vue'
 import { useI18n } from '@/composables/useI18n'
+
 import CreditsSection from '@/components/reusables/credits_section.vue'
 
 import rolesCSVText from '@/assets/csv/credits_roles.csv?raw'
@@ -67,16 +68,6 @@ const specialCredits = computed(() => [
         ]
       }
     ]
-  },
-])
-
-/**
-  * Optional player thank you block configuration.
-  * @private
-  */
-const playerThanks = computed(() => [
-  {
-    title: t('CREDITS_PLAYER_THANK_YOU'),
   },
 ])
 

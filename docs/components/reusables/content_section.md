@@ -46,6 +46,7 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 | `layout` | string | `'horizontal'` | horizontal, vertical | Main structural flow layout configuration (horizontal, vertical). |
 | `imageOpenable` | boolean | `true` | - | Controls whether images expand into a modal view on click. |
 | `mediaFit` | string | `'contain'` | cover, contain, fill, scale-down | CSS object-fit rule for media images (cover, contain, fill, scale-down). |
+| `isProtected` | boolean | `true` | - | Prevents selection, dragging, and context menu copying on media assets. |
 
 ## Computed Properties & Methods
 

@@ -26,7 +26,6 @@ The master credits container component that parses CSV files for roles and links
 ## Computed Properties & Methods
 
 - `specialCredits`: Special static credits block for thanks, community, and contributor notices.
-- `playerThanks`: Optional player thank you block configuration.
 - `linksMap`: Generates a lookup dictionary mapping names to external links from the parsed links CSV.
 - `formattedCredits`: Formats the raw CSV role data and links into structured credit groups based on the active act filter.
 

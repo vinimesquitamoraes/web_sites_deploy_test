@@ -6,8 +6,8 @@
       backgroundColor : contentBg, 
       borderRadius    : borderRadius,
       border          : border,
-      
     }"
+    @contextmenu="handleContextMenu"
   >
     <h2 
       v-if="shouldShowHeader && headerPosition === 'top'" 
@@ -56,6 +56,7 @@
         v-if="mediaType !== 'text'" 
         class="content-section-media-wrapper"
         :style="{ '--media-width': mediaWidth }"
+        @contextmenu="handleContextMenu"
       >
         <div 
           class="content-section-media-container" 
@@ -92,6 +93,7 @@
                 :src="mediaSrc" 
                 :alt="mediaAlt || heading"
                 class="content-section-media-img"
+                :draggable="allowDrag"
                 :style="{ 
                   color: textColor, 
                   height: mediaHeight !== 'auto' ? mediaHeight : 'auto',
@@ -99,6 +101,7 @@
                   objectFit: mediaHeight !== 'auto' ? mediaFit : 'contain'
                 }"
                 @error="hasError = true"
+                @contextmenu="handleContextMenu"
               />
             </slot>
           </div>
@@ -115,15 +118,17 @@
     :media-item="{ type: mediaType, src: mediaSrc, alt: mediaAlt || heading }" 
     :show-nav="false"
     @close="closeImageModal" 
+    @contextmenu.prevent
   />
 </template>
 
 <script setup>
 /**
- * @file content_section.vue
- * @brief Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts.
- * @displayName Content Section
- */
+  * @file content_section.vue
+  * @brief Content section component supporting headings, dynamic body text paragraphs, embedded media, 
+  *        flexible layouts, configurable dragging, and context menu options.
+  * @displayName Content Section
+*/
 
 import { ref, computed, watch } from 'vue'
 import MediaModal from './media_modal.vue'
@@ -230,7 +235,7 @@ const props = defineProps({
     default : ''
   },
   /**
-    * Border radius styling applied to the inner media inner media wrapper.
+    * Border radius styling applied to the inner media wrapper.
     * @public
     */
   mediaBorderRadius: {
@@ -351,10 +356,49 @@ const props = defineProps({
     default : 'contain',
     validator: (value) => ['cover', 'contain', 'fill', 'scale-down'].includes(value)
   },
+  /**
+   * Toggles image drag functionality.
+   * @public
+   */
+  allowDrag: {
+    type    : Boolean,
+    default : true
+  },
+  /**
+   * Controls whether the right-click context menu ("Save image as...") is allowed.
+   * @public
+   */
+  allowSaveAs: {
+    type    : Boolean,
+    default : false
+  },
+  /**
+   * Disables text selection across elements.
+   * @public
+   */
+  disableSelect: {
+    type    : Boolean,
+    default : true
+  }
 })
 
 const isModalOpen = ref(false)
-const hasError = ref(false)
+const hasError    = ref(false)
+
+const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
+
+/**
+ * Handles right-click events according to the `allowSaveAs` property configuration.
+ * Stops propagation to guarantee element trees do not trigger native context menu.
+ * @param {MouseEvent} event - Context menu event instance.
+ * @private
+ */
+const handleContextMenu = (event) => {
+  if (!props.allowSaveAs) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
 
 /**
   * Filters and formats raw input text into a valid array of paragraph string blocks.

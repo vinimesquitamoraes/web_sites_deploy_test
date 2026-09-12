@@ -17,8 +17,18 @@
     <div class="hero-content center">
       <!-- @slot media - Custom content slot -->
       <slot name="content">
-        <div class="hero-logo-wrapper" v-if="showLogo">
-          <img :src="logoSrc" alt="Game Logo" class="hero-logo-image" />
+        <div 
+          class="hero-logo-wrapper" 
+          v-if="showLogo"
+          @contextmenu="handleContextMenu"
+        >
+          <img 
+            :src="logoSrc" 
+            alt="Game Logo" 
+            class="hero-logo-image" 
+            :draggable="allowDrag"
+            @contextmenu="handleContextMenu"
+          />
         </div>
 
         <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
@@ -59,7 +69,8 @@
 <script setup>
 /**
   * @file banner.vue
-  * @brief Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable.
+  * @brief Hero banner component featuring background image, logo display, configurable logo protection settings,
+  *        and a secret directional scrolling animation defined via session variable.
   * @displayName Hero Banner
 */
 
@@ -70,6 +81,7 @@ import CustomButton from '@/components/reusables/custom_button.vue'
 
 import img_gameLogo       from '@/assets/img/logos/Encore_Logo.png'
 import img_defaultBanner  from '@/assets/img/art/banner_test.png'
+
 import dowload_icon       from '@/assets/svg/download.svg'
 
 const { t } = useI18n()
@@ -177,6 +189,30 @@ const props = defineProps({
     type    : String,
     required: false,
     default : 'style_1'
+  },
+  /**
+   * Toggles image drag functionality on the banner logo.
+   * @public
+   */
+  allowDrag: {
+    type    : Boolean,
+    default : true
+  },
+  /**
+   * Controls whether the right-click context menu ("Save image as...") is allowed on the logo.
+   * @public
+   */
+  allowSaveAs: {
+    type    : Boolean,
+    default : false
+  },
+  /**
+   * Disables text and element selection on the banner logo.
+   * @public
+   */
+  disableSelect: {
+    type    : Boolean,
+    default : true
   }
 })
 
@@ -204,6 +240,25 @@ const isSessionActive = ref(
 
 const randomAlternativeImage = ref(getRandomAlternative())
 const timerKey = ref(0)
+
+/**
+ * Computed CSS user-select property value based on selection protection configuration.
+ * @private
+ */
+const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
+
+/**
+ * Handles right-click events according to the `allowSaveAs` property configuration.
+ * Stops propagation to guarantee element trees do not trigger native context menu.
+ * @param {MouseEvent} event - Context menu event instance.
+ * @private
+ */
+const handleContextMenu = (event) => {
+  if (!props.allowSaveAs) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
 
 /** Checks and updates the active session state based on session storage value changes. */
 const checkSessionState = () => {
@@ -319,19 +374,16 @@ defineEmits(['cta-click'])
 </script>
 
 <style scoped>
+
 .hero-banner {
-  position            : relative;
-  width               : 100vw;
-  height              : clamp(450px, 55vh, 650px);
-  left                : 50%;
-  right               : 50%;
-  margin-left         : -50vw;
-  margin-right        : -50vw;
-  display             : flex;
-  align-items         : center;
-  justify-content     : center;
-  overflow            : hidden;
-  box-sizing          : border-box;
+  position        : relative;
+  width           : 100%;
+  height          : clamp(450px, 55vh, 650px);
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+  overflow        : hidden; 
+  box-sizing      : border-box;
 }
 
 .hero-image-wrapper {
@@ -450,6 +502,10 @@ defineEmits(['cta-click'])
   display             : flex;
   justify-content     : center;
   width               : 100%;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .hero-logo-image {
@@ -458,6 +514,10 @@ defineEmits(['cta-click'])
   height              : auto;
   object-fit          : contain;
   filter              : drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.6));
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .hero-subtitle {

@@ -1,11 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
+  <script type="text/javascript">
+    (function(location, history) {
+      function UrlRestorer(loc) {
+        this.loc          = loc;
+        this.search       = loc.search || '';
+        this.pathname     = loc.pathname || '';
+        this.hash         = loc.hash || '';
+        this.decodedPath  = '';
+        this.cleanUrl     = '';
+      }
+
+      UrlRestorer.prototype.hasRedirect = function() {
+        return this.search.charAt(1) === '/';
+      };
+
+      UrlRestorer.prototype.decode = function() {
+        if (!this.hasRedirect()) return this;
+
+        this.decodedPath = this.search
+          .slice(1)
+          .split('&')
+          .map(function(segment) {
+            return segment.replace(/~and~/g, '&');
+          })
+          .join('?');
+
+        return this;
+      };
+
+      UrlRestorer.prototype.build = function() {
+        if (!this.decodedPath) return this;
+
+        var basePath = this.pathname.slice(0, -1);
+        this.cleanUrl = basePath + this.decodedPath + this.hash;
+
+        return this;
+      };
+
+      UrlRestorer.prototype.apply = function(hist) {
+        if (this.cleanUrl && hist && hist.replaceState) {
+          hist.replaceState(null, null, this.cleanUrl);
+        }
+        return this;
+      };
+
+      new UrlRestorer(location)
+        .decode()
+        .build()
+        .apply(history);
+    }(window.location, window.history));
+  </script>
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/src/assets/ico/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Encore Game</title>
+    <title>MOTHER Encore</title>
+    <meta name="description" content="A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!" />
+
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://motherencore.com/" />
+
+    <meta name="theme-color" content="#E50012" />
+    <meta name="msapplication-TileColor" content="#E50012" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MOTHER Encore" />
+    <meta property="og:description" content="A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!" />
+    <meta property="og:image" content="https://vinimesquitamoraes.github.io/web_sites_deploy_test/logobg_itch_io.png" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@Mother_Encore" />
+    <meta name="twitter:title" content="MOTHER Encore" />
+    <meta name="twitter:description" content="A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!" />
+    <meta name="twitter:image" content="https://vinimesquitamoraes.github.io/web_sites_deploy_test/logobg_itch_io_twitter.png" />
   </head>
   <body>
     <div id="app"></div>

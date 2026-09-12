@@ -517,8 +517,6 @@ body.reduce-motion *::after {
   --color-banner-button-text               : var(--color-black); 
 }
 
-
-
 body {
   margin                : 0;
   background            : var(--color-default-background) ;
@@ -541,6 +539,7 @@ body {
   align-items           : center;
   min-height            : 100vh;
   box-sizing            : border-box;
+  overflow-x            : hidden;
 }
 
 .content-wrapper {
@@ -585,6 +584,7 @@ body {
   max-width             : 1240px;
   display               : flex;
   flex-direction        : column;  
+  
 }
 
 .section-title {

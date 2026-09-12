@@ -5,7 +5,7 @@
 | Component | Description |
 | :-------- | :---------- |
 | [**app_footer**](reusables/app_footer.md) | Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts. |
-| [**app_header**](reusables/app_header.md) | Application header component containing the logo, navigation links, and a responsive custom hamburger menu button. |
+| [**app_header**](reusables/app_header.md) | Application header component containing the logo and navigation component. |
 | [**back_to_top_button**](reusables/back_to_top_button.md) | A floating back-to-top button component with dynamic footer overlap handling and smooth/instant scrolling behavior. |
 | [**banner**](reusables/banner.md) | Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable. |
 | [**cast_list**](reusables/cast_list.md) | Displays a showcase list or tabbed view of characters with portrait navigation and transition support. |
@@ -27,7 +27,7 @@
 | [**music_player_playlist**](reusables/music_player_playlist.md) | Music player playlist component displaying paginated track listings, current track states, loading indicators, and pagination navigation controls. |
 | [**music_player_volume_control**](reusables/music_player_volume_control.md) | Music player volume control component supporting horizontal/vertical layouts, thumbwheels, slider bars, and mute state toggling. |
 | [**music_player_walkman**](reusables/music_player_walkman.md) | Walkman-style music player component featuring an LCD screen, track progress scrubber, custom cassette display toggle with an SVG icon, and animated tape reels. |
-| [**navigation_component**](reusables/navigation_component.md) | The primary site navigation bar component containing route links and an optional language dropdown selector. |
+| [**navigation_component**](reusables/navigation_component.md) | The primary site navigation bar component containing route links, custom button hamburger menu with smooth rotation animations, and an optional language dropdown selector. |
 | [**notification_toaster**](reusables/notification_toaster.md) | A customizable toast notification component supporting multiple positions, types, auto-dismiss timers, progress bars, and custom buttons. |
 | [**options_modal**](reusables/options_modal.md) | A modal dialog component that manages and persists toggleable options via sessionStorage with cross-tab sync support. |
 | [**requeriments**](reusables/requeriments.md) | A system requirements display component using a responsive localized tabular layout. |
