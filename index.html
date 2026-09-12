@@ -3,6 +3,10 @@
   <head>
     <script type="text/javascript">
       (function(location, history) {
+        if (navigator.userAgent.includes('HeadlessChrome') || window.__PRERENDER_INJECTED) {
+          return;
+        }
+
         function UrlRestorer(loc) {
           this.loc          = loc;
           this.search       = loc.search || '';
