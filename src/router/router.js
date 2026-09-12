@@ -16,94 +16,31 @@ const routes = [
     path: '/', 
     name: 'Home', 
     component: HomeView,
-    meta: {
-      head: {
-        title: 'MOTHER Encore',
-        meta: [
-          { name: 'description', content: 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!' },
-          { property: 'og:title', content: 'MOTHER Encore' },
-          { property: 'og:description', content: 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!' },
-          { property: 'og:image', content: DEFAULT_IMAGE },
-          { name: 'twitter:card', content: 'summary' },
-          { name: 'twitter:title', content: 'MOTHER Encore' },
-          { name: 'twitter:description', content: 'A Reimagining of the original NES game. Featuring tons of fixes, additions and twists on the classic game!' }
-        ]
-      }
-    }
   },
   { 
     path: '/about', 
     name: 'About', 
     component: AboutView,
-    meta: {
-      head: {
-        title: 'About - MOTHER Encore',
-        meta: [
-          { name: 'description', content: 'Learn more about MOTHER Encore.' },
-          { property: 'og:title', content: 'About - MOTHER Encore' },
-          { property: 'og:description', content: 'Learn more about MOTHER Encore.' },
-          { property: 'og:image', content: DEFAULT_IMAGE },
-          { name: 'twitter:card', content: 'summary' },
-          { name: 'twitter:title', content: 'About - MOTHER Encore' },
-          { name: 'twitter:description', content: 'Learn more about MOTHER Encore.' }
-        ]
-      }
-    }
   },
   { 
     path: '/FAQ', 
     name: 'Faq', 
     component: FaqView,
-    meta: {
-      head: {
-        title: 'FAQ - MOTHER Encore',
-        meta: [
-          { name: 'description', content: 'Frequently asked questions regarding MOTHER Encore.' },
-          { property: 'og:title', content: 'FAQ - MOTHER Encore' },
-          { property: 'og:description', content: 'Frequently asked questions regarding MOTHER Encore.' }
-        ]
-      }
-    }
   },
   { 
     path: '/download', 
     name: 'Download', 
     component: DownloadView,
-    meta: {
-      head: {
-        title: 'Download - MOTHER Encore',
-        meta: [
-          { name: 'description', content: 'Download the latest version of MOTHER Encore.' },
-          { property: 'og:title', content: 'Download - MOTHER Encore' },
-          { property: 'og:description', content: 'Download the latest version of MOTHER Encore.' }
-        ]
-      }
-    }
   },
   { 
     path: '/credits', 
     name: 'Credits', 
     component: CreditsView,
-    meta: {
-      head: {
-        title: 'Credits - MOTHER Encore',
-        meta: [
-          { name: 'description', content: 'Meet the team behind MOTHER Encore.' },
-          { property: 'og:title', content: 'Credits - MOTHER Encore' },
-          { property: 'og:description', content: 'Meet the team behind MOTHER Encore.' }
-        ]
-      }
-    }
   },
   { 
     path: '/dogten', 
     name: 'Dogten', 
     component: DogtenView,
-    meta: {
-      head: {
-        title: 'Dogten - MOTHER Encore'
-      }
-    },
     beforeEnter: (to, from) => {
       const isAuthorized = sessionStorage.getItem('unlocked_dogten') === 'true'
       if (!isAuthorized) {
