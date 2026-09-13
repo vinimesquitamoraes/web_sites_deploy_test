@@ -56,7 +56,7 @@ import img_close from '@/assets/svg/close-svgrepo-com.svg'
 
 const props = defineProps({
   /**
-    * Controls the visibility state of the notification toast (v-model).
+    * Controls the visibility state of the notification toast.
     * @public
     */
   modelValue: {

@@ -139,25 +139,25 @@ const props = defineProps({
     default : "0 0 70px 0"
   },
   /**
-   * Toggles image drag functionality.
-   * @public
-   */
+    * Toggles image drag functionality.
+    * @public
+  */
   allowDrag: {
     type: Boolean,
     default: true
   },
   /**
-   * Controls whether the right-click context menu ("Save image as...") is allowed.
-   * @public
-   */
+    * Controls whether the right-click context menu ("Save image as...") is allowed.
+    * @public
+  */
   allowSaveAs: {
     type: Boolean,
     default: false
   },
   /**
-   * Disables text selection across element text/images.
-   * @public
-   */
+    * Disables text selection across element text/images.
+    * @public
+  */
   disableSelect: {
     type: Boolean,
     default: true
@@ -165,17 +165,17 @@ const props = defineProps({
 });
 
 /**
- * Computed CSS user-select property value based on selection protection configuration.
- * @private
- */
+  * Computed CSS user-select property value based on selection protection configuration.
+  * @private
+*/
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'));
 
 /**
- * Handles right-click events according to the `allowSaveAs` property configuration.
- * Stops propagation to guarantee element trees do not trigger native context menu.
- * @param {MouseEvent} event - Context menu event instance.
- * @private
- */
+  * Handles right-click events according to the `allowSaveAs` property configuration.
+  * Stops propagation to guarantee element trees do not trigger native context menu.
+  * @param {MouseEvent} event - Context menu event instance.
+  * @private
+*/
 const handleContextMenu = (event) => {
   if (!props.allowSaveAs) {
     event.preventDefault();

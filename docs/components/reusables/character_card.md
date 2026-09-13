@@ -1,6 +1,6 @@
 ## Overview
 
-Character card component supporting image customization, description paragraphs, and flexible orientations.
+Character card component supporting image customization, description paragraphs,
 
 **Source File:** [character_card.vue](../../../src/components/reusables/character_card.vue)
 
@@ -30,10 +30,14 @@ Character card component supporting image customization, description paragraphs,
 | `imageSize` | string | `'340px'` | - | Custom CSS size width and height for the image wrapper. |
 | `imageScale` | number\|string | `1` | - | Scale factor transformation applied to the character image. |
 | `imagePadding` | string | `"0 0 70px 0"` | - | Inner padding spacing applied to the character image. |
+| `allowDrag` | boolean | `true` | - | Toggles image drag functionality. |
+| `allowSaveAs` | boolean | `false` | - | Controls whether the right-click context menu ("Save image as...") is allowed. |
+| `disableSelect` | boolean | `true` | - | Disables text selection across element text/images. |
 
 ## Computed Properties & Methods
 
-- `descriptionParagraphs`: Computed property that normalizes the description prop in a arrays.
+- `userSelectValue`: Computed CSS user-select property value based on selection protection configuration.
+- `descriptionParagraphs`: Computed property that normalizes the description prop into an array.
 
 ## Slots
 
@@ -41,4 +45,4 @@ Character card component supporting image customization, description paragraphs,
 
 ## Internal Methods
 
-- *None specified*
+- `handleContextMenu`: Handles right-click events according to the `allowSaveAs` property configuration.

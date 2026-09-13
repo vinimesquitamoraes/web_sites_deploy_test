@@ -105,12 +105,16 @@ watch(
   { immediate: true }
 )
 
-/** Formatted vertical float distance with unit support. */
+/** Formatted vertical float distance with unit support.
+  * @private
+  */
 const computedDistance = computed(() => {
   return typeof props.distance === 'number' ? `${props.distance}px` : props.distance
 })
 
-/** Formatted animation speed duration with unit support. */
+/** Formatted animation speed duration with unit support.
+  * @private
+  */
 const computedSpeed = computed(() => {
   return typeof props.speed === 'number' ? `${props.speed}s` : props.speed
 })

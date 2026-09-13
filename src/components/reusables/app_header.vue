@@ -31,7 +31,9 @@ import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
 import NavigationComponent from './navigation_component.vue'
 
 const props = defineProps({
-  /** The currently active navigation page name. */
+  /** The currently active navigation page name.
+    * @private
+  */
   activePage: {
     type    : String,
     default : 'Home'

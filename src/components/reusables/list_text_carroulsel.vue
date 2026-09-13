@@ -84,12 +84,16 @@ import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 
 const props = defineProps({
-  /** Title header text displayed above the carousel. */
+  /** Title header text displayed above the carousel. 
+    * @public
+  */
   title: {
     type: String,
     default: 'GAME FEATURES'
   },
-  /** Array of feature lists displayed across carousel slides. */
+  /** Array of feature lists displayed across carousel slides. 
+    * @public
+  */
   features: {
     type: Array,
     required: true,

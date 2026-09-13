@@ -166,23 +166,23 @@
 */
 
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useI18n } from '@/composables/useI18n'
-import { useRouter } from 'vue-router'
+import { useI18n }    from '@/composables/useI18n'
+import { useRouter }  from 'vue-router'
 
-import ToasterNotification from '@/components/reusables/notification_toaster.vue'
-import CustomButton from '@/components/reusables/custom_button.vue'
-import PlayerControls from '@/components/reusables/music_player_controls.vue'
-import WalkmanDevice from '@/components/reusables/music_player_walkman.vue'
-import PlaylistView from '@/components/reusables/music_player_playlist.vue'
-import VolumeControl from '@/components/reusables/music_player_volume_control.vue'
-import FloatingNotes from '@/components/reusables/music_player_floating_notes.vue'
+import ToasterNotification  from '@/components/reusables/notification_toaster.vue'
+import CustomButton         from '@/components/reusables/custom_button.vue'
+import PlayerControls       from '@/components/reusables/music_player_controls.vue'
+import WalkmanDevice        from '@/components/reusables/music_player_walkman.vue'
+import PlaylistView         from '@/components/reusables/music_player_playlist.vue'
+import VolumeControl        from '@/components/reusables/music_player_volume_control.vue'
+import FloatingNotes        from '@/components/reusables/music_player_floating_notes.vue'
 
-import musicNoteSvg from '@/assets/svg/music-note-4-svgrepo-com.svg'
-import triangleLeftSvg from '@/assets/svg/triangle-left-12-filled.svg'
-import triangleUpSvg from '@/assets/svg/triangle-up-12-filled.svg'
-import nintenBoppinIcon from '@/assets/img/characters/Ninten_Boppin.gif'
-import ninten67Icon from '@/assets/img/funny/Ninten_67.gif'
-import ferris_special_tape from '@/assets/img/funny/ferris_special_mixtape.png'
+import musicNoteSvg         from '@/assets/svg/music-note-4-svgrepo-com.svg'
+import triangleLeftSvg      from '@/assets/svg/triangle-left-12-filled.svg'
+import triangleUpSvg        from '@/assets/svg/triangle-up-12-filled.svg'
+import nintenBoppinIcon     from '@/assets/img/characters/Ninten_Boppin.gif'
+import ninten67Icon         from '@/assets/img/funny/Ninten_67.gif'
+import ferris_special_tape  from '@/assets/img/funny/ferris_special_mixtape.png'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -238,43 +238,43 @@ const props = defineProps({
   }
 })
 
-const isOpen = ref(false)
-const isPlayerHidden = ref(true)
-const isPlayerHiddenAction = ref(true)
-const isPlaying = ref(false)
-const isRecording = ref(false)
-const recClickCount = ref(0)
-const currentTrackIndex = ref(0)
-const currentTime = ref(0)
-const duration = ref(0)
-const volume = ref(20)
-const isMuted = ref(false)
-const tracks = ref([])
-const currentPage = ref(1)
-const isLoadingTracks = ref(true)
-const showImageTape = ref(false)
-const isSpecialStyle = ref(false)
-const hasSpecialTapeAccess = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
+const isOpen                 = ref(false)
+const isPlayerHidden         = ref(true)
+const isPlayerHiddenAction   = ref(true)
+const isPlaying              = ref(false)
+const isRecording            = ref(false)
+const recClickCount          = ref(0)
+const currentTrackIndex      = ref(0)
+const currentTime            = ref(0)
+const duration               = ref(0)
+const volume                 = ref(20)
+const isMuted                = ref(false)
+const tracks                 = ref([])
+const currentPage            = ref(1)
+const isLoadingTracks        = ref(true)
+const showImageTape          = ref(false)
+const isSpecialStyle         = ref(false)
+const hasSpecialTapeAccess   = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
 
-const playerBottom = ref(16)
-const isCentered = ref(false)
-const isHidden = ref(false)
-const isReady = ref(false)
+const playerBottom           = ref(16)
+const isCentered             = ref(false)
+const isHidden               = ref(false)
+const isReady                = ref(false)
 
-const showToast = ref(false)
-const toastMessage = ref('')
-const defaultToastIcon = ref(nintenBoppinIcon)
-const toastIcon = ref(nintenBoppinIcon)
+const showToast              = ref(false)
+const toastMessage           = ref('')
+const defaultToastIcon       = ref(nintenBoppinIcon)
+const toastIcon              = ref(nintenBoppinIcon)
 
-let player = null
-let progressInterval = null
-let lastVolume = 80
+let player                   = null
+let progressInterval         = null
+let lastVolume               = 80
 
-const totalPages = computed(() => tracks.value.length ? Math.ceil(tracks.value.length / props.pageSize) : 1)
-const paginatedTracks = computed(() => tracks.value.slice((currentPage.value - 1) * props.pageSize, currentPage.value * props.pageSize))
+const totalPages             = computed(() => tracks.value.length ? Math.ceil(tracks.value.length / props.pageSize) : 1)
+const paginatedTracks        = computed(() => tracks.value.slice((currentPage.value - 1) * props.pageSize, currentPage.value * props.pageSize))
 
-const currentIconColor = computed(() => 'var(--music-player-color-bg-secondary)')
-const currentHoverIconColor = computed(() => 'var(--music-player-color-bg-secondary)')
+const currentIconColor       = computed(() => 'var(--music-player-color-bg-secondary)')
+const currentHoverIconColor  = computed(() => 'var(--music-player-color-bg-secondary)')
 
 /**
   * Formats track duration seconds into a human-readable mm:ss string.
@@ -345,7 +345,7 @@ const updateFooterPosition = () => {
 }
 
 /**
-  * Injects the YouTube iframe API script into the document if missing.
+  * Injects the YouTube iframe API script into the document IF missing.
   * @private
   */
 const initPlayer = () => {
@@ -589,7 +589,7 @@ const toggleTapeStyle = () => {
   */
 const handleRecClick = () => {
   isRecording.value = !isRecording.value
-  //67 NUMBER OF CLICKS HERE !!!!!!!!!!1
+  //67 NUMBER OF CLICKS HERE !!!!!!!!!!
   if (++recClickCount.value >= 67) {
     recClickCount.value = 0
     toastMessage.value  = '67'

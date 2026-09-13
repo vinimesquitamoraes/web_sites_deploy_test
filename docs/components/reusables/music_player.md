@@ -51,7 +51,7 @@ Main music player component handling YouTube playback, state management, layouts
 - `formatTime`: Formats track duration seconds into a human-readable mm:ss string.
 - `extractPlaylistId`: Extracts a clean YouTube playlist identifier or URL string.
 - `updateFooterPosition`: Calculates footer overlap and updates player positioning dynamically on scroll.
-- `initPlayer`: Injects the YouTube iframe API script into the document if missing.
+- `initPlayer`: Injects the YouTube iframe API script into the document IF missing.
 - `createPlayer`: Instantiates the YouTube player object and registers event handlers.
 - `syncState`: Syncs the player state and asynchronously fetches track metadata titles in batches.
 - `startInterval`: Starts an interval timer to update playback progress tracking.

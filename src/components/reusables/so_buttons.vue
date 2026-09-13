@@ -91,6 +91,7 @@ const isClickable = computed(() => {
 const platformInput = props.platform.toLowerCase()
 const key = (platformInput === 'macos' || platformInput === 'mac') ? 'mac' : platformInput
 
+
 const platforms = {
   windows: {
     url: 'https://mother-encore.itch.io/mother-encore#download',

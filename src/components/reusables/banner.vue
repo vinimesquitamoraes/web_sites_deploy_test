@@ -69,8 +69,7 @@
 <script setup>
 /**
   * @file banner.vue
-  * @brief Hero banner component featuring background image, logo display, configurable logo protection settings,
-  *        and a secret directional scrolling animation defined via session variable.
+  * @brief Hero banner component featuring background image, logo display, call to action button and a secret directional scrolling animation defined via session variable.
   * @displayName Hero Banner
 */
 
@@ -88,6 +87,10 @@ const { t } = useI18n()
 
 const logoSrc = img_gameLogo
 
+/**
+  * Vignet preset styles for the banner
+  * @private
+*/
 const VIGNETTE_STYLES = {
   style_1: 'radial-gradient(circle    , rgba(0,0,0,0.2) 0% , rgba(0,0,0,0.6 ) 100%)',
   style_2: 'linear-gradient(to bottom , rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.8 ) 100%)',
@@ -96,25 +99,33 @@ const VIGNETTE_STYLES = {
 }
 
 const props = defineProps({
-  /** Default background image source URL. */
+  /** Default background image source URL. 
+    * @public
+  */
   imageSrc: {
     type    : String,
     required: false,
     default : ''
   },
-  /** Accessibility description text for the background image. */
+  /** Accessibility description text for the background image. 
+    * @public
+  */
   imageAlt: {
     type    : String,
     required: false,
     default : 'Hero banner background'
   },
-  /** Subtitle tha appears below logo. */
+  /** Subtitle tha appears below logo.
+    * @public
+  */
   subtitle: {
     type    : String,
     required: false,
     default : '[Default Banner Text]'
   },
-  /** Determine if scrolling background animations are enabled. */
+  /** Determine if scrolling background animations are enabled.
+    * @public
+  */
   isScrollable: {
     type    : [Boolean, String],
     required: false,
@@ -122,6 +133,7 @@ const props = defineProps({
   },
   /** 
     * Direction trajectory for background scrolling animation.
+    * @public
     * @values none, horizontal, vertical, both
   */
   scrollDirection: {
@@ -130,7 +142,9 @@ const props = defineProps({
     default : 'horizontal',
     validator: (value) => ['none', 'horizontal', 'vertical', 'both'].includes(value)
   },
-  /** Browser session storage lookup key for conditional alternative asset displays. */
+  /** Browser session storage lookup key for conditional alternative asset displays. 
+    * @public
+  */
   sessionKey: {
     type    : String,
     required: false,
@@ -138,6 +152,7 @@ const props = defineProps({
   },
   /** 
     * List of alternative background images for active session rotation.
+    * @public
     * @default []
   */
   alternativeImages: {
@@ -145,37 +160,50 @@ const props = defineProps({
     required: false,
     default : () => []
   },
-  /** Scroll animation direction when an alternative session state is active. */
+  /** Scroll animation direction when an alternative session state is active. 
+    * @public
+  */
   alternativeScrollDirection: {
     type    : String,
     required: false,
     default : 'both'
   },
-  /** Time interval in milliseconds between background image transitions. */
+  /** Time interval in milliseconds between background image transitions.
+    * @public
+  */
   imageChangeInterval: {
     type    : Number,
     required: false,
     default : 12500
   },
-  /** Controls whether the brand logo image container is visible. */
+  /** Controls whether the brand logo image container is visible. 
+    * @public
+  */
   showLogo: {
     type    : Boolean,
     required: false,
     default : true
   },
-  /** Controls whether the call-to-action button element is visible. */
+  /** Controls whether the call-to-action button element is visible.
+    * @public
+  */
   showCtaButton: {
     type    : Boolean,
     required: false,
     default : true
   },
-  /** Custom text label override string for the call-to-action button. */
+  /** Custom text label override string for the call-to-action button. 
+    * @public
+  */
   ctaText: {
     type    : String,
     required: false,
     default : ''
   },
-  /** Target routing link destination path for the call-to-action button. */
+  /** Target routing link destination path for the call-to-action button.
+    * @public
+  */
+  
   ctaLink: {
     type    : String,
     required: false,
@@ -183,6 +211,7 @@ const props = defineProps({
   },
   /** 
     * Predefined vignette style key or custom CSS background value.
+    * @public
     * @values style_1, style_2, style_3, style_4
   */
   vignetteStyle: {
@@ -191,25 +220,25 @@ const props = defineProps({
     default : 'style_1'
   },
   /**
-   * Toggles image drag functionality on the banner logo.
-   * @public
-   */
+    * Toggles image drag functionality on the banner logo.
+    * @public
+  */
   allowDrag: {
     type    : Boolean,
     default : true
   },
   /**
-   * Controls whether the right-click context menu ("Save image as...") is allowed on the logo.
-   * @public
-   */
+    * Controls whether the right-click context menu ("Save image as...") is allowed on the logo.
+    * @public
+  */
   allowSaveAs: {
     type    : Boolean,
     default : false
   },
   /**
-   * Disables text and element selection on the banner logo.
-   * @public
-   */
+    * Disables text and element selection on the banner logo.
+    * @public
+  */
   disableSelect: {
     type    : Boolean,
     default : true
@@ -242,17 +271,17 @@ const randomAlternativeImage = ref(getRandomAlternative())
 const timerKey = ref(0)
 
 /**
- * Computed CSS user-select property value based on selection protection configuration.
- * @private
- */
+  * Computed CSS user-select property value based on selection protection configuration.
+  * @private
+  */
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
 
 /**
- * Handles right-click events according to the `allowSaveAs` property configuration.
- * Stops propagation to guarantee element trees do not trigger native context menu.
- * @param {MouseEvent} event - Context menu event instance.
- * @private
- */
+  * Handles right-click events according to the `allowSaveAs` property configuration.
+  * Stops propagation to guarantee element trees do not trigger native context menu.
+  * @param {MouseEvent} event - Context menu event instance.
+  * @private
+*/
 const handleContextMenu = (event) => {
   if (!props.allowSaveAs) {
     event.preventDefault()
@@ -260,7 +289,9 @@ const handleContextMenu = (event) => {
   }
 }
 
-/** Checks and updates the active session state based on session storage value changes. */
+/** Checks and updates the active session state based on session storage value changes.
+  *  @private
+*/
 const checkSessionState = () => {
   const SessionBuilder = {
     isValidKey(key) {
@@ -311,7 +342,9 @@ onUnmounted(() => {
   if (bgCycleIntervalId) clearInterval(bgCycleIntervalId)
 })
 
-/** Computed property that resolves the current background image URL. */
+/** Computed property that resolves the current background image URL.
+  *  @private
+*/
 const activeImageSrc = computed(() => {
   const ImageSrcBuilder = {
     buildSource(isActive, altImage, defaultImg, fallbackDefault) {
@@ -330,7 +363,9 @@ const activeImageSrc = computed(() => {
   )
 })
 
-/** Computed property to determine if the background scroll animation is active. */
+/** Computed property to determine if the background scroll animation is active.
+  *  @private
+*/
 const isScrollableActive = computed(() => {
   const ScrollableBuilder = {
     resolveState(isActive, defaultScrollable) {
@@ -344,7 +379,9 @@ const isScrollableActive = computed(() => {
   return ScrollableBuilder.resolveState(isSessionActive.value, props.isScrollable)
 })
 
-/** Computed property that resolves the current active scroll direction style. */
+/** Computed property that resolves the current active scroll direction style.
+  *  @private
+*/
 const activeScrollDirection = computed(() => {
   const DirectionBuilder = {
     resolveDirection(isActive, altDirection, defaultDirection) {
@@ -362,12 +399,16 @@ const activeScrollDirection = computed(() => {
   )
 })
 
-/** Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS. */
+/** Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS. 
+  *  @private
+*/
 const resolvedVignette = computed(() => {
   return VIGNETTE_STYLES[props.vignetteStyle] || props.vignetteStyle
 })
 
-/** Resolved vignette background style computed from resolvedVignette. */
+/** Resolved vignette background style computed from resolvedVignette.
+  *  @private
+*/
 const cssVignetteBackground = computed(() => resolvedVignette.value)
 
 defineEmits(['cta-click'])

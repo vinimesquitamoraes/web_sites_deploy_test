@@ -91,112 +91,156 @@ import nextSvg      from '@/assets/svg/player-next.svg'
 import recSvg       from '@/assets/svg/player-rec.svg'
 
 defineProps({
-  /** Indicates whether the player is currently active and playing media. */
+  /** Indicates whether the player is currently active and playing media. 
+    * @public
+  */
   isPlaying: {
     type: Boolean,
     default: false
   },
-  /** Indicates whether the player is currently recording. */
+  /** Indicates whether the player is currently recording. 
+    * @public
+  */
   isRecording: {
     type: Boolean,
     default: false
   },
-  /** Icon color for previous button. */
+  /** Icon color for previous button. 
+    * @public
+  */
   prevIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Hover icon color for previous button. */
+  /** Hover icon color for previous button. 
+    * @public
+  */
   prevHoverIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Background color for previous button. */
+  /** Background color for previous button. 
+    * @public
+  */
   prevBgColor: {
     type: String,
     default: 'var(--music-player-color-surface)'
   },
-  /** Hover background color for previous button. */
+  /** Hover background color for previous button. 
+    * @public
+  */
   prevHoverBgColor: {
     type: String,
     default: 'var(--color-custom-button-hover)'
   },
-  /** Icon color for play button. */
+  /** Icon color for play button. 
+    * @public
+  */
   playIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Hover icon color for play button. */
+  /** Hover icon color for play button. 
+    * @public
+  */
   playHoverIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Background color for play button. */
+  /** Background color for play button. 
+    * @public
+  */
   playBgColor: {
     type: String,
     default: 'var(--music-player-color-playbt-paused)'
   },
-  /** Hover background color for play button. */
+  /** Hover background color for play button. 
+    * @public
+  */
   playHoverBgColor: {
     type: String,
     default: 'var(--color-custom-button-hover)'
   },
-  /** Icon color for stop button. */
+  /** Icon color for stop button. 
+    * @public
+  */
   stopIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Hover icon color for stop button. */
+  /** Hover icon color for stop button. 
+    * @public
+  */
   stopHoverIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Background color for stop button. */
+  /** Background color for stop button. 
+    * @public
+  */
   stopBgColor: {
     type: String,
     default: 'var(--music-player-color-surface)'
   },
-  /** Hover background color for stop button. */
+  /** Hover background color for stop button. 
+    * @public
+  */
   stopHoverBgColor: {
     type: String,
     default: 'var(--color-custom-button-hover)'
   },
-  /** Icon color for next button. */
+  /** Icon color for next button. 
+    * @public
+  */
   nextIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Hover icon color for next button. */
+  /** Hover icon color for next button. 
+    * @public
+  */
   nextHoverIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Background color for next button. */
+  /** Background color for next button. 
+    * @public
+  */
   nextBgColor: {
     type: String,
     default: 'var(--music-player-color-surface)'
   },
-  /** Hover background color for next button. */
+  /** Hover background color for next button. 
+    * @public
+  */
   nextHoverBgColor: {
     type: String,
     default: 'var(--color-custom-button-hover)'
   },
-  /** Icon color for record button. */
+  /** Icon color for record button. 
+    * @public
+  */
   recIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Hover icon color for record button. */
+  /** Hover icon color for record button. 
+    * @public
+  */
   recHoverIconColor: {
     type: String,
     default: 'var(--music-player-color-bg-secondary)'
   },
-  /** Background color for record button. */
+  /** Background color for record button. 
+    * @public
+  */
   recBgColor: {
     type: String,
     default: '#e74c3c'
   },
-  /** Hover background color for record button. */
+  /** Hover background color for record button. 
+    * @public
+  */
   recHoverBgColor: {
     type: String,
     default: 'var(--color-custom-button-hover)'

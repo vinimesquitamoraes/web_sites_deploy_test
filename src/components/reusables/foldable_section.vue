@@ -76,169 +76,235 @@ import { ref, watch, nextTick } from 'vue'
 import ContentSection from '@/components/reusables/content_section.vue'
 
 const props = defineProps({
-  /** Header title text displayed on the toggle button. */
+  /** Header title text displayed on the toggle button. 
+    * @public
+  */
   title: {
     type: String,
     required: true
   },
-  /** Controls the open or closed state of the foldable item externally via v-model. */
+  /** Controls the open or closed state of the foldable item externally via v-model. 
+    * @public
+  */
   modelValue: {
     type: Boolean,
     default: undefined
   },
-  /** Automatically scrolls the view to center this component when expanded. */
+  /** Automatically scrolls the view to center this component when expanded. 
+    * @public
+  */
   autoScroll: {
     type: Boolean,
     default: true
   },
-  /** Background color of the header element. */
+  /** Background color of the header element. 
+    * @public
+  */
   headerBg: {
     type: String,
     default: 'var(--foldable-header-bg)'
   },
-  /** Text color of the header title. */
+  /** Text color of the header title. 
+    * @public
+  */
   titleColor: {
     type: String,
     default: 'var(--foldable-title-color)'
   },
-  /** Background color of the main body wrapper. */
+  /** Background color of the main body wrapper. 
+    * @public
+  */
   bodyBg: {
     type: String,
     default: 'var(--foldable-body-bg)'
   },
-  /** Background color of the icon container wrapper. */
+  /** Background color of the icon container wrapper. 
+    * @public
+  */
   arrowBgColor: {
     type: String,
     default: 'var(--foldable-icon-bg)'
   },
-  /** Main fill color of the indicator arrow icon. */
+  /** Main fill color of the indicator arrow icon. 
+    * @public
+  */
   arrowColor: {
     type: String,
     default: 'var(--foldable-icon-color)'
   },
-  /** Outline shadow or border color of the indicator arrow icon. */
+  /** Outline shadow or border color of the indicator arrow icon. 
+    * @public
+  */
   outlineColor: {
     type: String,
     default: 'var(--foldable-icon-outline)'
   },
 
   // ContentSection Stuff =============================================================================================================
-  /** Text content passed down to the inner ContentSection component. */
+  /** Text content passed down to the inner ContentSection component. 
+    * @public
+  */
   content: {
     type: [String, Array],
     default: () => []
   },
-  /** Position of the header relative to the content block. */
+  /** Position of the header relative to the content block. 
+    * @public
+  */
   headerPosition: {
     type: String,
     default: 'top'
   },
-  /** Color of the inner heading element. */
+  /** Color of the inner heading element. 
+    * @public
+  */
   headingColor: {
     type: String,
     default: ''
   },
-  /** Alignment of the inner heading text. */
+  /** Alignment of the inner heading text. 
+    * @public
+  */
   headingAlign: {
     type: String,
     default: 'center'
   },
-  /** Text color applied inside the content block. */
+  /** Text color applied inside the content block. 
+    * @public
+  */
   textColor: {
     type: String,
     default: 'var(--foldable-text-color)'
   },
-  /** Background color of the inner content block. */
+  /** Background color of the inner content block. 
+    * @public
+  */
   contentBg: {
     type: String,
     default: '#202020'
   },
-  /** Border radius applied to the inner content section. */
+  /** Border radius applied to the inner content section. 
+    * @public
+  */
   borderRadius: {
     type: String,
     default: '8px'
   },
-  /** Outer border styling for the inner section. */
+  /** Outer border styling for the inner section. 
+    * @public
+  */
   border: {
     type: String,
     default: '3px solid #7a6c86'
   },
-  /** Header border styling. */
+  /** Header border styling. 
+    * @public
+  */
   headerBorder: {
     type: String,
     default: 'transparent'
   },
-  /** Text section border styling. */
+  /** Text section border styling. 
+    * @public
+  */
   textBorder: {
     type: String,
     default: 'none'
   },
-  /** Media block border styling. */
+  /** Media block border styling. 
+    * @public
+  */
   mediaBorder: {
     type: String,
     default: ''
   },
-  /** Media block border radius styling. */
+  /** Media block border radius styling. 
+    * @public
+  */
   mediaBorderRadius: {
     type: String,
     default: ''
   },
-  /** Text alignment inside the content block. */
+  /** Text alignment inside the content block. 
+    * @public
+  */
   textAlign: {
     type: String,
     default: 'left'
   },
-  /** Padding spacing for the content section container. */
+  /** Padding spacing for the content section container. 
+    * @public
+  */
   sectionPadding: {
     type: String,
     default: '16px 20px'
   },
-  /** Padding spacing specifically for the text container. */
+  /** Padding spacing specifically for the text container. 
+    * @public
+  */
   textPadding: {
     type: String,
     default: '0px'
   },
-  /** Media asset source URL. */
+  /** Media asset source URL. 
+    * @public
+  */
   mediaSrc: {
     type: String,
     default: ''
   },
-  /** Alternative descriptive text for media elements. */
+  /** Alternative descriptive text for media elements. 
+    * @public
+  */
   mediaAlt: {
     type: String,
     default: ''
   },
-  /** Caption text displayed alongside media elements. */
+  /** Caption text displayed alongside media elements. 
+    * @public
+  */
   mediaCaption: {
     type: String,
     default: ''
   },
-  /** Width dimension configuration for media elements. */
+  /** Width dimension configuration for media elements. 
+    * @public
+  */
   mediaWidth: {
     type: String,
     default: '535px'
   },
-  /** Height dimension configuration for media elements. */
+  /** Height dimension configuration for media elements. 
+    * @public
+  */
   mediaHeight: {
     type: String,
     default: 'auto'
   },
-  /** Type classification of the media element. */
+  /** Type classification of the media element. 
+    * @public
+  */
   mediaType: {
     type: String,
     default: 'text'
   },
-  /** Alignment/position layout of media relative to text. */
+  /** Alignment/position layout of media relative to text. 
+    * @public
+  */
   mediaPosition: {
     type: String,
     default: 'right'
   },
-  /** General arrangement layout mode. */
+  /** General arrangement layout mode. 
+    * @public
+  */
   layout: {
     type: String,
     default: 'horizontal'
   },
-  /** Determines if inner images can be opened/zoomed. */
+  /** Determines if inner images can be opened/zoomed. 
+    * @public
+  */
   imageOpenable: {
     type: Boolean,
     default: true

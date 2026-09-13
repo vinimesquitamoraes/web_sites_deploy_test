@@ -560,7 +560,6 @@ body {
   align-items           : center;  
   gap                   : 15px;    
   background            : var(--color-black);
-  padding               : 10px 20px;
   box-sizing            : border-box;
   border-bottom         : var(--default-border);
 }

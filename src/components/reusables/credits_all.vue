@@ -31,7 +31,7 @@ const { t } = useI18n()
 const toggle_debug_log = true 
 
 /**
-  * Logs debug messages to the console if debugging is toggled on.
+  * Logs debug messages to the console if debugging is toggle_debug_log is true.
   * @private
   */
 const debugLog = (...args) => {

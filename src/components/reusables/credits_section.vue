@@ -57,7 +57,7 @@
 <script setup>
 /**
   * @file        credits_section.vue
-  * @brief       A customizable credits section component featuring grouped roles, names, grid layout columns, dynamic links, and tooltip integrations.
+  * @brief       A customizable credits section component featuring grouped roles, names, grid layout columns, dynamic links, and tooltip.
   * @displayName Credits Section
 */
 
@@ -74,7 +74,7 @@ const props = defineProps({
     required: true,
   },
   /**
-    * Mapping dictionary matching names to external links.
+    * Mapping dictionary of names and external links.
     * @public
   */
   linksMap: {

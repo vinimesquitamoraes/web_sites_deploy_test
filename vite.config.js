@@ -40,7 +40,6 @@ function postBuildRoutePages() {
       const template = fs.readFileSync(templatePath, 'utf-8')
 
       Object.entries(routeMeta).forEach(([route, meta]) => {
-
         const folderName = route.replace(/^\//, '')
         const routeDir = path.join(distDir, folderName)
 
@@ -65,16 +64,16 @@ function postBuildRoutePages() {
 }
 
 export default defineConfig({
-  base: '/web_sites_deploy_test/',
+  base: '/',
   assetsInclude: ['**/*.xlsx'],
   plugins: [
     vue(),
     vueDevTools(),
     Sitemap({
-      hostname: 'https://vinimesquitamoraes.github.io/web_sites_deploy_test/',
+      hostname: 'https://yourcustomdomain.com',
       dynamicRoutes: [
         '/about',
-        '/FAQ',
+        '/faq',
         '/download',
         '/credits'
       ]

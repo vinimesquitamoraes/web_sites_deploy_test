@@ -22,27 +22,32 @@ Interactive image gallery component supporting automatic rotation, animated GIFs
 
 | Prop Name | Type | Default | Possible Values | Description |
 | :-------- | :--- | :------ | :-------------- | :---------- |
-| `intervalTime` | number | `1000` | - | Time in milliseconds before advancing to the next slide. |
-| `imageModules` | object | `{}` | - | Object Dictionary esque of imported image/GIF source URLs. |
+| `intervalTime` | number | `1000` | - | Time in milliseconds before advancing to the next slide automatically. |
+| `imageModules` | object | `{}` | - | Key-value object dictionary of imported image/GIF source URLs. |
+| `allowDrag` | boolean | `true` | - | Toggles image drag functionality. |
+| `allowSaveAs` | boolean | `false` | - | Controls whether the right-click context menu ("Save image as...") is allowed. |
+| `disableSelect` | boolean | `true` | - | Disables text selection across gallery elements. |
 
 ## Computed Properties & Methods
 
-- `currentModalMediaItem`: Computed property providing the current media/medias for the modal.
+- `userSelectValue`: Computed CSS user-select property value based on selection protection configuration.
+- `currentModalMediaItem`: Computed property providing active media details for the viewer modal.
 
 ## Slots
 
-- *None specified*
+- `slide-image`: Custom slot for rendering slide images
 
 ## Internal Methods
 
+- `handleContextMenu`: Handles right-click events according to the `allowSaveAs` property configuration.
 - `handleTouchStart`: Captures initial touch horizontal coordinate on touch start.
-- `handleTouchEnd`: Captures ending touch coordinate on touch end and triggers swipe check.
+- `handleTouchEnd`: Captures ending touch coordinate on touch end and triggers swipe evaluation.
 - `handleSwipe`: Evaluates touch displacement against a threshold to determine swipe direction.
-- `captureFirstFrame`: Renders the first frame of an animated GIF onto a canvas and extracts a static data URL.
-- `resetTimer`: Restarts the auto-advance timer.
-- `nextSlide`: Advances the carousel forward to the next slide.
-- `prevSlide`: Navigates the carousel backward to the previous slide.
-- `selectSlide`: Explicitly selects a slide index based on user selection or pagination interaction.
-- `scrollThumbnails`: Smoothly or instantly scrolls the thumbnail strip container horizontally in a given direction.
-- `openModal`: Opens the modal view for a given slide index and locks page scrolling.
-- `closeModal`: Closes the modal view and restores page scrolling.
+- `captureFirstFrame`: Renders the first frame of an animated GIF onto an offscreen canvas to generate a static data URL.
+- `resetTimer`: Restarts auto-advance rotation timer and resets the progress bar animation state.
+- `nextSlide`: Advances carousel forward to the next slide index.
+- `prevSlide`: Navigates carousel backward to the previous slide index.
+- `selectSlide`: Selects a specific slide index directly.
+- `scrollThumbnails`: Scrolls the thumbnail strip horizontally based on scroll direction.
+- `openModal`: Opens expanded image modal view and prevents document scrolling.
+- `closeModal`: Closes image modal view and restores document scrolling.

@@ -1,6 +1,6 @@
 ## Overview
 
-Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts.
+Content section component supporting headings, dynamic body text paragraphs, embedded media,
 
 **Source File:** [content_section.vue](../../../src/components/reusables/content_section.vue)
 
@@ -32,7 +32,7 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 | `headerBorder` | string | `'transparent'` | - | Border styling applied to the section header. |
 | `textBorder` | string | `'none'` | - | Border styling applied to the text container block. |
 | `mediaBorder` | string | `''` | - | Border styling applied around the inner media wrapper. |
-| `mediaBorderRadius` | string | `''` | - | Border radius styling applied to the inner media inner media wrapper. |
+| `mediaBorderRadius` | string | `''` | - | Border radius styling applied to the inner media wrapper. |
 | `textAlign` | string | `'center'` | left, center, right, justify | Text alignment for paragraphs (left, center, right, justify). |
 | `sectionPadding` | string | `'0px'` | - | Inner padding spacing applied to the section container wrapper. |
 | `textPadding` | string | `'0px'` | - | Inner padding spacing applied to the text content container block. |
@@ -46,7 +46,9 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 | `layout` | string | `'horizontal'` | horizontal, vertical | Main structural flow layout configuration (horizontal, vertical). |
 | `imageOpenable` | boolean | `true` | - | Controls whether images expand into a modal view on click. |
 | `mediaFit` | string | `'contain'` | cover, contain, fill, scale-down | CSS object-fit rule for media images (cover, contain, fill, scale-down). |
-| `isProtected` | boolean | `true` | - | Prevents selection, dragging, and context menu copying on media assets. |
+| `allowDrag` | boolean | `true` | - | Toggles image drag functionality. |
+| `allowSaveAs` | boolean | `false` | - | Controls whether the right-click context menu ("Save image as...") is allowed. |
+| `disableSelect` | boolean | `true` | - | Disables text selection across elements. |
 
 ## Computed Properties & Methods
 
@@ -59,5 +61,6 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 
 ## Internal Methods
 
+- `handleContextMenu`: Handles right-click events according to the `allowSaveAs` property configuration.
 - `openImageModal`: Intercepts clicks to trigger and display the image expansion modal when valid.
 - `closeImageModal`: Closes the image modal view.

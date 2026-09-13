@@ -6,9 +6,6 @@ const projectRoot = process.cwd();
 const componentsDir = path.join(projectRoot, 'src/components'); 
 const baseDocsDir = path.join(projectRoot, 'docs/components');     
 
-/**
-	* Helper to sanitize strings so they don't break markdown table rows/columns
-*/
 function sanitizeTableCell(text) {
 	if (text === undefined || text === null) return '-';
 	const stringVal = String(text).trim();
@@ -16,9 +13,6 @@ function sanitizeTableCell(text) {
 	return stringVal.replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ');
 }
 
-/**
-	* Clean JSDoc comment artifacts like leading asterisks and block leaks
-*/
 function cleanDocComment(text, componentName) {
 	if (!text) return 'Docstrings Missing.';
 	
@@ -38,9 +32,6 @@ function cleanDocComment(text, componentName) {
 	return cleaned;
 }
 
-/**
-	* Resolve import paths to absolute file paths with extension fallbacks
-*/
 function resolveFilePath(impPath, sourceFileDir) {
 	let resolvedPath = impPath;
 	if (resolvedPath.startsWith('@/')) {
@@ -63,9 +54,6 @@ function resolveFilePath(impPath, sourceFileDir) {
 	return resolvedPath;
 }
 
-/**
-	* Builder Class to assemble the component documentation markdown.
-*/
 class MarkdownBuilder {
 	constructor(currentSubFolder, fileInfoMap, componentName) {
 		this.sections = [];
@@ -262,9 +250,6 @@ function classifyImports(imports) {
     return { components, composables, assets };
 }
 
-/**
-	* Robust line-by-line state machine parser for script setup members and computed properties
-*/
 function parseScriptSetupMembers(content) {
     const computedList = [];
     const methodsList = [];
@@ -339,9 +324,6 @@ function parseScriptSetupMembers(content) {
     return { computedList, methodsList };
 }
 
-/**
-	* Generates an index.md file listing all discovered components in a Markdown table.
-*/
 function generateIndexMarkdown(fileMetadata) {
 	const categorized = {};
 

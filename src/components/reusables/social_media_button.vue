@@ -23,9 +23,9 @@
 
 <script setup>
 /**
- * @file social_media_button.vue
- * @brief Reusable social media link button component featuring dynamic SVG icons and a hover tooltip.
- */
+  * @file social_media_button.vue
+  * @brief Reusable social media link button component featuring dynamic SVG icons and a hover tooltip.
+*/
 
 import { ref, computed, onUnmounted } from 'vue'
 import ToolTip from '@/components/reusables/tooltip.vue'
@@ -33,9 +33,6 @@ import { useAnimations } from '@/composables/reduced_motion_check'
 
 const { animationsEnabled } = useAnimations()
 
-/**
- * Component props definition.
- */
 const props = defineProps({
   /** The social network platform identifier (e.g. 'twitter', 'discord'). */
   platform: {

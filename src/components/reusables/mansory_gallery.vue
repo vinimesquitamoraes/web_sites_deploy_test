@@ -43,17 +43,16 @@ import { useAnimations } from '@/composables/reduced_motion_check'
 const { animationsEnabled } = useAnimations()
 
 defineProps({
-  /** Array of media item objects (images or videos) to display in the gallery grid. */
+  /** Array of media item objects (images or videos) to display in the gallery grid. 
+    * @public
+  */
   items: {
     type: Array,
     required: true,
   }
 })
 
-defineEmits([
-  /** Emitted when an individual gallery item is selected/clicked. */
-  'select'
-])
+defineEmits(['select'])
 </script>
 
 <style scoped>

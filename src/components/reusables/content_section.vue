@@ -50,6 +50,17 @@
           :style="{ color: textColor, textAlign: textAlign }"
           v-html="paragraph"
         ></p>
+        <div 
+          v-if="$slots.actions" 
+          class="content-section-actions"
+          :style="{ 
+            alignSelf: actionsAlign === 'right' ? 'flex-end' : (actionsAlign === 'center' ? 'center' : 'flex-start'), 
+            margim: '100px'
+          }"
+        >
+          <!-- @slot actions - Slot for buttons or extra controls -->
+          <slot name="actions"></slot>
+        </div>
       </div>
 
       <div 
@@ -357,28 +368,38 @@ const props = defineProps({
     validator: (value) => ['cover', 'contain', 'fill', 'scale-down'].includes(value)
   },
   /**
-   * Toggles image drag functionality.
-   * @public
-   */
+    * Toggles image drag functionality.
+    * @public
+  */
   allowDrag: {
     type    : Boolean,
     default : true
   },
   /**
-   * Controls whether the right-click context menu ("Save image as...") is allowed.
-   * @public
-   */
+    * Controls whether the right-click context menu ("Save image as...") is allowed.
+    * @public
+  */
   allowSaveAs: {
     type    : Boolean,
     default : false
   },
   /**
-   * Disables text selection across elements.
-   * @public
-   */
+    * Disables text selection across elements.
+    * @public
+  */
   disableSelect: {
     type    : Boolean,
     default : true
+  },
+  /**
+  * Alignment for actions slot content (left, center, right).
+  * @values left, center, right
+  * @public
+  */
+  actionsAlign: {
+    type    : String,
+    default : 'left',
+    validator: (value) => ['left', 'center', 'right'].includes(value)
   }
 })
 
@@ -388,11 +409,11 @@ const hasError    = ref(false)
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
 
 /**
- * Handles right-click events according to the `allowSaveAs` property configuration.
- * Stops propagation to guarantee element trees do not trigger native context menu.
- * @param {MouseEvent} event - Context menu event instance.
- * @private
- */
+  * Handles right-click events according to the `allowSaveAs` property configuration.
+  * Stops propagation to guarantee element trees do not trigger native context menu.
+  * @param {MouseEvent} event - Context menu event instance.
+  * @private
+*/
 const handleContextMenu = (event) => {
   if (!props.allowSaveAs) {
     event.preventDefault()

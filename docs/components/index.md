@@ -4,15 +4,15 @@
 
 | Component | Description |
 | :-------- | :---------- |
-| [**app_footer**](reusables/app_footer.md) | Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts. |
+| [**app_footer**](reusables/app_footer.md) | Application footer component featuring a brand logo, navigation links, |
 | [**app_header**](reusables/app_header.md) | Application header component containing the logo and navigation component. |
 | [**back_to_top_button**](reusables/back_to_top_button.md) | A floating back-to-top button component with dynamic footer overlap handling and smooth/instant scrolling behavior. |
-| [**banner**](reusables/banner.md) | Hero banner component featuring background image, logo display and a secret directional scrolling animation defined via session variable. |
+| [**banner**](reusables/banner.md) | Hero banner component featuring background image, logo display, call to action button and a secret directional scrolling animation defined via session variable. |
 | [**cast_list**](reusables/cast_list.md) | Displays a showcase list or tabbed view of characters with portrait navigation and transition support. |
-| [**character_card**](reusables/character_card.md) | Character card component supporting image customization, description paragraphs, and flexible orientations. |
-| [**content_section**](reusables/content_section.md) | Content section component supporting headings, dynamic body text paragraphs, embedded media, and flexible layouts. |
+| [**character_card**](reusables/character_card.md) | Character card component supporting image customization, description paragraphs, |
+| [**content_section**](reusables/content_section.md) | Content section component supporting headings, dynamic body text paragraphs, embedded media, |
 | [**credits_all**](reusables/credits_all.md) | The master credits container component that parses CSV files for roles and links, formatting localized credit lists for display. |
-| [**credits_section**](reusables/credits_section.md) | A customizable credits section component featuring grouped roles, names, grid layout columns, dynamic links, and tooltip integrations. |
+| [**credits_section**](reusables/credits_section.md) | A customizable credits section component featuring grouped roles, names, grid layout columns, dynamic links, and tooltip. |
 | [**custom_button**](reusables/custom_button.md) | Customizable button component supporting icons, dynamic coloring, Vue Router navigation, external links, and press animations. |
 | [**custom_dropdown**](reusables/custom_dropdown.md) | A customizable dropdown component supporting v-model selection, click-outside closing behavior, and animated arrow icons. |
 | [**custom_lang_dropdown**](reusables/custom_lang_dropdown.md) | A language selector dropdown component utilizing i18n composables, toggling language options, and handling click-outside dismissals. |

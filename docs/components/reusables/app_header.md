@@ -21,10 +21,13 @@ Application header component containing the logo and navigation component.
 | Prop Name | Type | Default | Possible Values | Description |
 | :-------- | :--- | :------ | :-------------- | :---------- |
 | `activePage` | string | `'Home'` | - | The currently active navigation page name. |
+| `allowDrag` | boolean | `true` | - | Toggles image drag functionality on the header logo. |
+| `allowSaveAs` | boolean | `false` | - | Controls whether the right-click context menu ("Save image as...") is allowed on the logo. |
+| `disableSelect` | boolean | `true` | - | Disables text and element selection on the header logo. |
 
 ## Computed Properties & Methods
 
-- *None specified*
+- `userSelectValue`: Computed CSS user-select property value based on selection protection configuration.
 
 ## Slots
 
@@ -32,4 +35,4 @@ Application header component containing the logo and navigation component.
 
 ## Internal Methods
 
-- *None specified*
+- `handleContextMenu`: Handles right-click events according to the `allowSaveAs` property configuration.

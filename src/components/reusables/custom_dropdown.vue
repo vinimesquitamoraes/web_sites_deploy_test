@@ -32,12 +32,16 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
-  /** Current selected value bound via v-model. */
+  /** Current selected value bound via v-model. 
+    * @public
+  */
   modelValue: {
     type: [String, Number],
     required: true
   },
-  /** List of selectable options containing id and label properties. */
+  /** List of selectable options containing id and label properties. 
+    * @public
+  */
   options: {
     type: Array,
     required: true,

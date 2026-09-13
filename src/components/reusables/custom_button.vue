@@ -50,118 +50,160 @@ import { useAnimations } from '@/composables/reduced_motion_check'
 const { animationsEnabled } = useAnimations()
 
 const props = defineProps({
-  /** Disables interactions and reduces opacity when set to true. */
+  /** Disables interactions and reduces opacity when set to true. 
+    * @public
+  */
   disabled: {
     type    : Boolean,
     default : false
   },
-  /** Automatically adapts the button size to wrap or fit text when it becomes long. */
+  /** Automatically adapts the button size to wrap or fit text when it becomes long. 
+    * @public
+  */
   autoAdaptSize: {
     type    : Boolean,
     default : false
   },
-  /** Label text displayed inside the button. */
+  /** Label text displayed inside the button. 
+    * @public
+  */
   text: {
     type    : String,
     default : ''
   },
-  /** Image URL or raw inline SVG string for the button icon. */
+  /** Image URL or raw inline SVG string for the button icon. 
+    * @public
+  */
   iconSrc: {
     type    : String,
     default : '' 
   },
   /** 
     * Position of the icon relative to the text.
-    * @values left, right, top, bottom
+    * @values left, right, top, bottom 
+    * @public
   */
   iconPosition: {
     type    : String,
     default : 'left',
     validator: (value) => ['left', 'right', 'top', 'bottom'].includes(value)
   },
-  /** Custom margin/spacing applied specifically to the icon (e.g., '0 10px 0 0', '5px'). */
+  /** Custom margin/spacing applied specifically to the icon (e.g., '0 10px 0 0', '5px'). 
+    * @public
+  */
   iconMargin: {
     type    : [Number, String],
     default : null
   },
-  /** Custom margin/spacing applied specifically to the text (e.g., '0 0 0 5px', '2px'). */
+  /** Custom margin/spacing applied specifically to the text (e.g., '0 0 0 5px', '2px'). 
+    * @public
+  */
   textMargin: {
     type    : [Number, String],
     default : null
   },
-  /** Width and height dimension for the icon container (e.g., `24`, `'2rem'`, `'var(--icon-size)'`). */
+  /** Width and height dimension for the icon container (e.g., `24`, `'2rem'`, `'var(--icon-size)'`). 
+    * @public
+  */
   iconSize: {
     type    : [Number, String],
     default : null
   },
-  /** Fill color for CSS mask-based icons. */
+  /** Fill color for CSS mask-based icons. 
+    * @public
+  */
   iconColor: {
     type    : String,
     default : "var(--color-custom-icon)"
   },
-  /** Hover fill color for CSS mask-based icons. */
+  /** Hover fill color for CSS mask-based icons. 
+    * @public
+  */
   hoverIconColor: {
     type    : String,
     default : "var(--color-custom-icon-hover)"
   },
-  /** CSS border applied to the button layout. */
+  /** CSS border applied to the button layout. 
+    * @public
+  */
   border: {
     type    : String,
     default : 'var(--custom-button-border)'
   },
-  /** Inner padding spacing for the button container. */
+  /** Inner padding spacing for the button container. 
+    * @public
+  */
   padding: {
     type    : String,
     default : 'clamp(0.35rem, 1vw, 0.5rem)'
   },
-  /** Custom width applied to the button layout. */
+  /** Custom width applied to the button layout. 
+    * @public
+  */
   width: {
     type    : [Number, String],
     default : 'fit-content'
   },
-  /** Custom height applied to the button layout. */
+  /** Custom height applied to the button layout. 
+    * @public
+  */
   height: {
     type    : [Number, String],
     default : 'auto'
   },
-  /** Font size applied to the text string inside the button. */
+  /** Font size applied to the text string inside the button. 
+    * @public
+  */
   fontSize: {
     type    : [Number, String],
     default : 'var(--custom-button-font-size)'
   },
-  /** Background color of the button in default state. */
+  /** Background color of the button in default state. 
+    * @public
+  */
   bgColor: {
     type    : String,
     default : 'var(--color-custom-button-background)'
   },
-  /** Background color when hovering over the button. */
+  /** Background color when hovering over the button. 
+    * @public
+  */
   hoverBgColor: {
     type    : String,
     default : 'var(--color-custom-button-hover)'
   },
-  /** Text color of the button in default state. */
+  /** Text color of the button in default state. 
+    * @public
+  */
   textColor: {
     type    : String,
     default : 'var(--color-custom-button-text)'
   },
-  /** Text color when hovering over the button. */
+  /** Text color when hovering over the button. 
+    * @public
+  */
   hoverTextColor: {
     type    : String,
     default : 'var(--color-custom-button-text-hover)'
   },
-  /** Vue Router target location for internal SPA navigation. */
+  /** Vue Router target location for internal SPA navigation. 
+    * @public
+  */
   to: {
     type    : [String, Object],
     default : null
   },
-  /** External URL to navigate to via window location. */
+  /** External URL to navigate to via window location. 
+    * @public
+  */
   externalUrl: {
     type    : String,
     default : null
   },
   /** 
     * Active press animation transform style.
-    * @values scale, lift, push, none
+    * @values scale, lift, push, none 
+    * @public
   */
   pressAnimation: {
     type    : String,
@@ -221,10 +263,14 @@ const hasValidColor = computed(() => {
   return ColorBuilder.isValid(props.iconColor) || ColorBuilder.isValid(props.hoverIconColor)
 })
 
-/** Helper to format value (number to px string). */
+/** Helper to format value (number to px string).
+  * @private
+  */
 const formatValue = (val) => (typeof val === 'number' ? `${val}px` : val)
 
-/** Computed flex direction mapping based on icon position. */
+/** Computed flex direction mapping based on icon position.
+  * @private
+  */
 const computedFlexDirection = computed(() => {
   if (props.iconPosition === 'right')  return 'row-reverse'
   if (props.iconPosition === 'top')    return 'column'
@@ -232,28 +278,44 @@ const computedFlexDirection = computed(() => {
   return 'row'
 })
 
-/** Computed width mapping based on autoAdaptSize and width prop. */
+/** Computed width mapping based on autoAdaptSize and width prop.
+  * @private
+  */
 const computedWidth = computed(() => props.autoAdaptSize ? 'fit-content' : formatValue(props.width))
 
-/** Computed height mapping. */
+/** Computed height mapping.
+  * @private
+*/
 const computedHeight = computed(() => formatValue(props.height))
 
-/** Computed icon size dimension mapping. */
+/** Computed icon size dimension mapping.
+  * @private
+*/
 const cssIconSize = computed(() => props.iconSize ? formatValue(props.iconSize) : (Boolean(props.text) ? '1.2em' : '80%'))
 
-/** Computed icon container width/height mapping. */
+/** Computed icon container width/height mapping.
+  * @private
+*/
 const cssIconWidth = computed(() => props.iconSize ? formatValue(props.iconSize) : (Boolean(props.text) ? 'auto' : '80%'))
 
-/** Computed icon margin mapping. */
+/** Computed icon margin mapping.
+  * @private
+*/
 const cssIconMargin = computed(() => props.iconMargin ? formatValue(props.iconMargin) : null)
 
-/** Computed text font size mapping. */
+/** Computed text font size mapping.
+  * @private
+*/
 const cssFontSize = computed(() => formatValue(props.fontSize))
 
-/** Computed text margin mapping. */
+/** Computed text margin mapping.
+  * @private
+*/
 const cssTextMargin = computed(() => props.textMargin ? formatValue(props.textMargin) : null)
 
-/** Computed CSS mask URL for SVG icons. */
+/** Computed CSS mask URL for SVG icons.
+  * @private
+*/
 const cssMaskImage = computed(() => `url("${processedIconSrc.value}")`)
 
 /**

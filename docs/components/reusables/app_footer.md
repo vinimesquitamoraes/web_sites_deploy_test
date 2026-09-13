@@ -1,6 +1,6 @@
 ## Overview
 
-Application footer component featuring a brand logo, navigation links, social media buttons, and disclaimer texts.
+Application footer component featuring a brand logo, navigation links,
 
 **Source File:** [app_footer.vue](../../../src/components/reusables/app_footer.vue)
 
@@ -21,11 +21,13 @@ Application footer component featuring a brand logo, navigation links, social me
 
 | Prop Name | Type | Default | Possible Values | Description |
 | :-------- | :--- | :------ | :-------------- | :---------- |
-| *None* | - | - | - | - |
+| `allowDrag` | boolean | `true` | - | Toggles image drag functionality on the footer logo. |
+| `allowSaveAs` | boolean | `false` | - | Controls whether the right-click context menu ("Save image as...") is allowed on the logo. |
+| `disableSelect` | boolean | `true` | - | Disables text and element selection on the footer logo. |
 
 ## Computed Properties & Methods
 
-- *None specified*
+- `userSelectValue`: Computed CSS user-select property value based on selection protection configuration.
 
 ## Slots
 
@@ -33,4 +35,4 @@ Application footer component featuring a brand logo, navigation links, social me
 
 ## Internal Methods
 
-- *None specified*
+- `handleContextMenu`: Handles right-click events according to the `allowSaveAs` property configuration.

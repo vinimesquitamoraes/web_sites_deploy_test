@@ -41,7 +41,6 @@ Reusable social media link button component featuring dynamic SVG icons and a ho
 
 ## Internal Methods
 
-- `props`: Component props definition.
 - `linkRef`: Reference object bound to the interactive link element.
 - `key`: Normalized platform string key.
 - `platforms`: Registry collection mapping platform names to target URLs and display labels.

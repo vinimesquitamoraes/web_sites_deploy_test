@@ -20,7 +20,7 @@ A customizable toast notification component supporting multiple positions, types
 
 | Prop Name | Type | Default | Possible Values | Description |
 | :-------- | :--- | :------ | :-------------- | :---------- |
-| `modelValue` | boolean | `''` | - | Controls the visibility state of the notification toast (v-model). |
+| `modelValue` | boolean | `''` | - | Controls the visibility state of the notification toast. |
 | `message` | string | `'Default toaster notification!'` | - | Text message to display inside the notification. |
 | `icon` | string | `'@/assets/img/characters/ninten_head_sprite.png'` | - | Source path or URL for the notification icon. |
 | `position` | string | `'top-right'` | top-right, top-left, top-center, bottom-right, bottom-left, bottom-center | Screen position where the toaster appears. |
