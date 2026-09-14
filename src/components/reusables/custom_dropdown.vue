@@ -1,19 +1,37 @@
 <template>
   <div class="dropdown-container" ref="dropdownRef">
-    <div class="dropdown-trigger" @click="isOpen = !isOpen">
+    <div 
+      class="dropdown-trigger" 
+      tabindex="0"
+      role="combobox"
+      :aria-expanded="isOpen"
+      aria-haspopup="listbox"
+      @click="isOpen = !isOpen"
+      @keydown.space.prevent="isOpen = !isOpen"
+      @keydown.enter.prevent="isOpen = !isOpen"
+    >
       <div class="arrow-wrapper" :class="{ open: isOpen }">
         <span class="arrow-icon"></span>
       </div>
       <span class="selected-label">{{ selectedLabel }}</span>
     </div>
 
-    <div v-if="isOpen" class="dropdown-options-list">
+    <div 
+      v-if="isOpen" 
+      class="dropdown-options-list"
+      role="listbox"
+    >
       <div 
         v-for="option in options" 
         :key="option.id"
         class="dropdown-option"
         :class="{ active: modelValue === option.id }"
+        role="option"
+        :aria-selected="modelValue === option.id"
+        tabindex="0"
         @click="selectOption(option.id)"
+        @keydown.enter.prevent="selectOption(option.id)"
+        @keydown.space.prevent="selectOption(option.id)"
       >
         <span class="option-arrow"></span>
         {{ option.label }}
@@ -44,8 +62,7 @@ const props = defineProps({
   */
   options: {
     type: Array,
-    required: true,
-    default: () => []
+    required: true
   }
 })
 
@@ -105,7 +122,7 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   position          : relative;
   font-family       : var(--font-dropdown);
   font-size         : var(--font-dropdown-size);
-  font-weight         : bold;
+  font-weight       : bold;
   box-sizing        : border-box;
 }
 
@@ -126,6 +143,7 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   align-items       : center;
   white-space       : nowrap;
   overflow          : hidden;
+  outline           : none;
 }
 
 .selected-label {
@@ -169,14 +187,15 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   animation           : choppy-horizontal 0.6s steps(3, end) infinite alternate;
 }
 
-.dropdown-trigger:hover {
+.dropdown-trigger:hover,
+.dropdown-trigger:focus-visible {
   background-color  : var(--color-dropdown-trigger-hover-bg);
   color             : var(--color-dropdown-trigger-hover-text);
   transform         : translateY(-2px);
-
 }
 
-.dropdown-trigger:hover .arrow-icon {
+.dropdown-trigger:hover .arrow-icon,
+.dropdown-trigger:focus-visible .arrow-icon {
   background-color  : var(--color-dropdown-arrow-hover);
 }
 
@@ -204,14 +223,17 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown))
   position            : relative;
   transition          : background-color 0.15s ease;
   white-space         : nowrap;
+  outline             : none;
 }
 
-.dropdown-option:hover {
+.dropdown-option:hover,
+.dropdown-option:focus-visible {
   background-color    : var(--color-dropdown-option-hover-bg);
   color               : var(--color-dropdown-option-hover-text);
 }
 
-.dropdown-option:hover .option-arrow {
+.dropdown-option:hover .option-arrow,
+.dropdown-option:focus-visible .option-arrow {
   background-color    : var(--color-dropdown-arrow-hover);
 }
 

@@ -1,4 +1,3 @@
-<!-- navigation_component.vue -->
 <template>
   <div class="nav-wrapper">
     <CustomButton
@@ -12,7 +11,6 @@
       hoverIconColor = "#ffffff"
       border         = "none"
       pressAnimation = "none"
-      :key           = "isMenuOpen ? 'open' : 'closed'"
       :iconSrc       = "isMenuOpen ? img_hamburguer_icon_open : img_hamburguer_icon_closed"
       :class         = "{ 'icon-open': isMenuOpen }"
       @click         = "toggleMenu"
@@ -99,10 +97,6 @@ const handleNavClick = () => {
   const scrollBehavior = animationsEnabled.value ? 'smooth' : 'auto'
 
   window.scrollTo({
-    top: 0,
-    behavior: scrollBehavior
-  })
-  document.documentElement.scrollTo({
     top: 0,
     behavior: scrollBehavior
   })

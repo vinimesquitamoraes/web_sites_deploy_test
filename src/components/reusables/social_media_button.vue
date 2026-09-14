@@ -6,8 +6,10 @@
     class         ="social-link"
     :class        ="{ 'no-motion': !animationsEnabled }"
     :aria-label   ="computedTooltipText"
-    @mouseenter   ="handleMouseEnter"
-    @mouseleave   ="handleMouseLeave"
+    @mouseenter   ="handleShowTooltip"
+    @mouseleave   ="handleHideTooltip"
+    @focus        ="handleShowTooltip"
+    @blur         ="handleHideTooltip"
     ref           ="linkRef"
   >
     <div class="social-icon"/>
@@ -23,61 +25,96 @@
 
 <script setup>
 /**
-  * @file social_media_button.vue
-  * @brief Reusable social media link button component featuring dynamic SVG icons and a hover tooltip.
+  * @file        social_media_button.vue
+  * @brief       Reusable social media link button component featuring dynamic SVG icons and a hover tooltip.
+  * @displayName Social Media Button
 */
 
 import { ref, computed, onUnmounted } from 'vue'
 import ToolTip from '@/components/reusables/tooltip.vue'
 import { useAnimations } from '@/composables/reduced_motion_check'
 
+/**
+  * Composable providing reduced motion animation settings.
+  * @private
+  */
 const { animationsEnabled } = useAnimations()
 
 const props = defineProps({
-  /** The social network platform identifier (e.g. 'twitter', 'discord'). */
+  /** 
+    * The social network platform identifier (e.g. 'twitter', 'discord'). 
+    * @public
+    */
   platform: {
     type: String,
     required: true
   },
-  /** Custom text string override for the tooltip. */
+  /** 
+    * Custom text string override for the tooltip. 
+    * @public
+    */
   tooltipText: {
     type: String,
     default: null
   },
-  /** Flag indicating whether the tooltip should display. */
+  /** 
+    * Flag indicating whether the tooltip should display. 
+    * @public
+    */
   showTooltip: {
     type: Boolean,
     default: true
   },
-  /** Position of the tooltip relative to the icon button. */
+  /** 
+    * Position of the tooltip relative to the icon button. 
+    * @public
+    */
   toolTipPosition: {
     type: String,
     default: 'top'
   },
-  /** Dimension size value for the icon button width and height. */
+  /** 
+    * Dimension size value for the icon button width and height. 
+    * @public
+    */
   size: {
     type: [Number, String],
     default: 48
   },
-  /** Default CSS color string. */
+  /** 
+    * Default CSS color string. 
+    * @public
+    */
   color: {
     type: String,
     default: 'var(--color-social-icons-color, inherit)'
   },
-  /** Hover state CSS color string. */
+  /** 
+    * Hover state CSS color string. 
+    * @public
+    */
   hoverColor: {
     type: String,
     default: 'var(--color-social-icons-hover-color, inherit)'
   }
 })
 
-/** Reference object bound to the interactive link element. */
+/** 
+  * Reference object bound to the interactive link element. 
+  * @private
+  */
 const linkRef = ref(null)
 
-/** Normalized platform string key. */
-const key = props.platform.toLowerCase()
+/** 
+  * Normalized reactive platform key. 
+  * @private
+  */
+const activeKey = computed(() => (props.platform || '').toLowerCase())
 
-/** Registry collection mapping platform names to target URLs and display labels. */
+/** 
+  * Registry collection mapping platform names to target URLs and display labels. 
+  * @private
+  */
 const platforms = {
   twitter: { url: 'https://x.com/Mother_Encore', label: 'Twitter' },
   discord: { url: 'https://discord.gg/SS4wBGDDGm', label: 'Discord' },
@@ -87,44 +124,73 @@ const platforms = {
   itchio:  { url: 'https://mother-encore.itch.io/mother-encore', label: 'Itch.io' }
 }
 
-/** Resolved platform dataset object fallback configuration. */
-const platformInfo = platforms[key] || {
-  url: '#',
-  label: props.platform
-}
+/** 
+  * Resolved platform dataset object fallback configuration. 
+  * @private
+  */
+const platformInfo = computed(() => {
+  return platforms[activeKey.value] || {
+    url: '#',
+    label: props.platform
+  }
+})
 
-/** Computed text string rendered inside the tooltip component. */
-const computedTooltipText = computed(() => props.tooltipText || platformInfo.label)
+/** 
+  * Computed text string rendered inside the tooltip component. 
+  * @private
+  */
+const computedTooltipText = computed(() => props.tooltipText || platformInfo.value.label)
 
-/** Eager glob import map resolving SVG asset files. */
+/** 
+  * Eager glob import map resolving SVG asset files. 
+  * @private
+  */
 const socialIcons = import.meta.glob('/src/assets/svg/social_media_icons/*.svg', {
   eager: true,
   import: 'default',
 })
 
-/** Resolved CSS unit size string computed from props.size. */
+/** 
+  * Resolved CSS unit size string computed from props.size. 
+  * @private
+  */
 const cssSize = computed(() => typeof props.size === 'number' ? `${props.size}px` : props.size)
 
-/** Resolved SVG mask URL path computed from platform key. */
+/** 
+  * Resolved SVG mask URL path computed from platform key. 
+  * @private
+  */
 const cssMask = computed(() => {
-  const fullPath = `/src/assets/svg/social_media_icons/${key}.svg`
+  const fullPath = `/src/assets/svg/social_media_icons/${activeKey.value}.svg`
   return `url("${socialIcons[fullPath] || ''}")`
 })
 
-/** Internal reactive visibility state toggle flag. */
+/** 
+  * Internal reactive visibility state toggle flag. 
+  * @private
+  */
 const internalShow = ref(false)
 
-/** Identifier reference for active asynchronous tooltip display timers. */
-let   tooltipTimer = null
+/** 
+  * Identifier reference for active asynchronous tooltip display timers. 
+  * @private
+  */
+let tooltipTimer = null
 
-/** Computed flag validating if the component tooltip should be visible. */
+/** 
+  * Computed flag validating if the component tooltip should be visible. 
+  * @private
+  */
 const isTooltipVisible = computed(() => {
   if (props.showTooltip === false) return false
   return internalShow.value
 })
 
-/** Event handler triggered upon mouse entering the button container area. */
-const handleMouseEnter = () => {
+/** 
+  * Event handler triggered upon mouse entering or focusing the button container area. 
+  * @private
+  */
+const handleShowTooltip = () => {
   if (tooltipTimer) clearTimeout(tooltipTimer)
   
   tooltipTimer = setTimeout(() => {
@@ -132,13 +198,19 @@ const handleMouseEnter = () => {
   }, 500)
 }
 
-/** Event handler triggered upon mouse leaving the button container area. */
-const handleMouseLeave = () => {
+/** 
+  * Event handler triggered upon mouse leaving or blurring the button container area. 
+  * @private
+  */
+const handleHideTooltip = () => {
   if (tooltipTimer) clearTimeout(tooltipTimer)
   internalShow.value = false
 }
 
-/** Lifecycle hook cleaning up active timers upon component destruction. */
+/** 
+  * Lifecycle hook cleaning up active timers upon component destruction. 
+  * @private
+  */
 onUnmounted(() => {
   if (tooltipTimer) clearTimeout(tooltipTimer)
 })
@@ -153,14 +225,17 @@ onUnmounted(() => {
 	text-decoration  : none;
 	transition       : transform 0.15s ease, color 0.3s ease;
 	color            : v-bind('props.color');
+  outline          : none;
 }
 
-.social-link:hover {
+.social-link:hover,
+.social-link:focus-visible {
 	transform        : translateY(-3px);
 	color            : v-bind('props.hoverColor');
 }
 
-.social-link.no-motion:hover {
+.social-link.no-motion:hover,
+.social-link.no-motion:focus-visible {
 	transform        : none;
 }
 

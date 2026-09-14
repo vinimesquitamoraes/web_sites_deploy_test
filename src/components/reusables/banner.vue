@@ -203,7 +203,6 @@ const props = defineProps({
   /** Target routing link destination path for the call-to-action button.
     * @public
   */
-  
   ctaLink: {
     type    : String,
     required: false,
@@ -290,7 +289,7 @@ const handleContextMenu = (event) => {
 }
 
 /** Checks and updates the active session state based on session storage value changes.
-  *  @private
+  * @private
 */
 const checkSessionState = () => {
   const SessionBuilder = {
@@ -313,12 +312,22 @@ const checkSessionState = () => {
   }
 }
 
-let intervalId = null
+/** Event listener handler for window storage updates across windows/tabs. 
+  * @private
+*/
+const handleStorageChange = (event) => {
+  if (!props.sessionKey) return
+  if (!event || event.key === props.sessionKey) {
+    checkSessionState()
+  }
+}
+
 let bgCycleIntervalId = null
 
 onMounted(() => {
   if (props.sessionKey) {
-    intervalId = setInterval(checkSessionState, 500)
+    checkSessionState()
+    window.addEventListener('storage', handleStorageChange)
   }
 
   if (props.alternativeImages.length > 1) {
@@ -338,12 +347,14 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (intervalId) clearInterval(intervalId)
+  if (props.sessionKey) {
+    window.removeEventListener('storage', handleStorageChange)
+  }
   if (bgCycleIntervalId) clearInterval(bgCycleIntervalId)
 })
 
 /** Computed property that resolves the current background image URL.
-  *  @private
+  * @private
 */
 const activeImageSrc = computed(() => {
   const ImageSrcBuilder = {
@@ -364,7 +375,7 @@ const activeImageSrc = computed(() => {
 })
 
 /** Computed property to determine if the background scroll animation is active.
-  *  @private
+  * @private
 */
 const isScrollableActive = computed(() => {
   const ScrollableBuilder = {
@@ -380,7 +391,7 @@ const isScrollableActive = computed(() => {
 })
 
 /** Computed property that resolves the current active scroll direction style.
-  *  @private
+  * @private
 */
 const activeScrollDirection = computed(() => {
   const DirectionBuilder = {
@@ -400,14 +411,14 @@ const activeScrollDirection = computed(() => {
 })
 
 /** Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS. 
-  *  @private
+  * @private
 */
 const resolvedVignette = computed(() => {
   return VIGNETTE_STYLES[props.vignetteStyle] || props.vignetteStyle
 })
 
 /** Resolved vignette background style computed from resolvedVignette.
-  *  @private
+  * @private
 */
 const cssVignetteBackground = computed(() => resolvedVignette.value)
 

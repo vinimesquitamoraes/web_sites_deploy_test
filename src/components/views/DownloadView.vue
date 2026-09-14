@@ -59,10 +59,12 @@
 
 import { ref } from 'vue'
 import { useI18n } from '@/composables/useI18n'
+
 import ContentSection   from '@/components/reusables/content_section.vue'
 import PlatformButton   from '@/components/reusables/so_buttons.vue'
 import CustomButton     from '@/components/reusables/custom_button.vue'
 import Requirements     from '@/components/reusables/requeriments.vue'
+
 import img_lloydDad     from '@/assets/img/characters/Lloyd_Dad.png'
 import iconItchio       from '@/assets/svg/itchio.svg?url'
 

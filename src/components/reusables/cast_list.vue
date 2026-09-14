@@ -17,7 +17,7 @@
 
       <div class="cast-display">
         <Transition 
-          :name="computedTransition === 'fade' ? 'card-fade' : ''" 
+          :name="transitionType === 'fade' ? 'card-fade' : ''" 
           mode="out-in"
         >
           <CharacterCard 
@@ -101,15 +101,6 @@ const { t } = useI18n()
 const activeIndex = ref(0)
 
 /**
-  * Computes the active transition effect name.
-  * @private
-*/
-const computedTransition = computed(() => {
-  const mode = props.transitionType;
-  return mode === 'immediate' ? 'immediate' : 'fade';
-});
-
-/**
   * Formats the triangle SVG path for CSS mask usage.
   * @private
 */
@@ -148,7 +139,6 @@ const characters = computed(() => [
     imageBgColor: 'var(--color-default-background)',
     imageScale  : "1.3",
     imagePadding: "0 0 100px 0",
-
   },
   {
     name        : t('SITE_HOME_TEDDY_TITLE'),
@@ -177,7 +167,6 @@ onMounted(() => {
   align-items    : center;
   width          : 100%;
   box-sizing     : border-box;
-
 }
 
 .section-title {
@@ -223,7 +212,6 @@ onMounted(() => {
   justify-content: center;
   box-sizing     : border-box;
   transition     : transform 0.1s ease;
-  image-rendering: crisp-edges;
   image-rendering: pixelated;
 
   backface-visibility : hidden;
@@ -323,7 +311,7 @@ onMounted(() => {
     min-height   : auto;
   }
   .cast-grid{
-    gap          :  80px;
+    gap          : 80px;
   }
 }
 </style>

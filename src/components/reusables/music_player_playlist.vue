@@ -1,7 +1,7 @@
 <template>
   <div 
     class="playlist-container"
-    :style="{ '--page-size': pageSize }"
+    :style="containerStyles"
   >
     <div class="playlist-header">
       <h3 class="playlist-title">Track List</h3>
@@ -10,16 +10,15 @@
         color           = "#ffffff" 
         hoverColor      = "var(--music-player-color-accent)" 
         size            = "30px"
-        :tooltip-text   = "t('SITE_MUSIC_PLAYER_LINK')"
+        :tooltipText   = "t('SITE_MUSIC_PLAYER_LINK')"
         toolTipPosition = "left"
       />
-  
     </div>
 
     <div class="playlist-content">
       <div class="playlist-body-area">
         <div v-if="isLoadingTracks" class="loading-state">Loading...</div>
-        <ul class="track-list" v-else>
+        <ul v-else class="track-list">
           <li 
             v-for        = "(track, index) in paginatedTracks" 
             :key         = "track.id"
@@ -34,34 +33,36 @@
       </div>
 
       <div 
-        class        = "pagination-controls" 
-        :style       = "{ opacity: (!isLoadingTracks && totalPages > 1) ? 1 : 0, pointerEvents: (!isLoadingTracks && totalPages > 1) ? 'auto' : 'none' }"
+        class  = "pagination-controls" 
+        :class = "{ 'is-hidden': isLoadingTracks || totalPages <= 1 }"
       >
         <CustomButton
-          :bg-color         = "playlistButtonBg"
-          :hover-bg-color   = "playlistButtonHoverBg"
-          :icon-src         = "previous_icon"
-          :icon-color       = "playlistButtonIconColor"
-          :hover-icon-color = "playlistButtonHoverIconColor"
+          :bgColor          = "playlistButtonBg"
+          :hoverBgColor     = "playlistButtonHoverBg"
+          :iconSrc          = "previous_icon"
+          :iconColor        = "playlistButtonIconColor"
+          :hoverIconColor   = "playlistButtonHoverIconColor"
           height            = "30px"  
           width             = "30px"    
           iconSize          = "20px"
           padding           = "0"
           :disabled         = "currentPage === 1"
+          aria-label        = "Previous track page"
           @click            = "$emit('updatePage', currentPage - 1)"
         />
         <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
         <CustomButton
-          :bg-color         = "playlistButtonBg"
-          :hover-bg-color   = "playlistButtonHoverBg"
-          :icon-src         = "next_icon"
-          :icon-color       = "playlistButtonIconColor"
-          :hover-icon-color = "playlistButtonHoverIconColor"
+          :bgColor          = "playlistButtonBg"
+          :hoverBgColor     = "playlistButtonHoverBg"
+          :iconSrc          = "next_icon"
+          :iconColor        = "playlistButtonIconColor"
+          :hoverIconColor   = "playlistButtonHoverIconColor"
           height            = "30px"  
           width             = "30px"    
           iconSize          = "20px"
           padding           = "0"
           :disabled         = "currentPage === totalPages"
+          aria-label        = "Next track page"
           @click            = "$emit('updatePage', currentPage + 1)"
         />
       </div>
@@ -76,6 +77,7 @@
   * @displayName Music Player Playlist
 */
 
+import { computed } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
 
 import SocialMediaButton from '@/components/reusables/social_media_button.vue'
@@ -84,7 +86,7 @@ import CustomButton      from '@/components/reusables/custom_button.vue'
 import previous_icon from '@/assets/svg/triangle-left-12-filled.svg'
 import next_icon     from '@/assets/svg/triangle-right-12-filled.svg'
 
-defineProps({
+const props = defineProps({
   /**
     * Indicates whether the track list is currently in a loading state.
     * @public
@@ -287,9 +289,39 @@ defineProps({
   }
 })
 
+/**
+  * Emitted track interaction and pagination page change events.
+  * @public
+  */
 defineEmits(['playTrack', 'updatePage'])
 
+/**
+  * Internationalization translation hook instance.
+  * @private
+  */
 const { t } = useI18n()
+
+/**
+  * Consolidated style object mapping props to CSS variables without style injector overhead.
+  * @private
+  */
+const containerStyles = computed(() => ({
+  '--page-size': props.pageSize,
+  '--pl-bg': props.bgColor,
+  '--pl-border': props.borderColor,
+  '--pl-radius': props.borderRadius,
+  '--pl-header-bg': props.headerBgColor,
+  '--pl-header-text': props.headerTextColor,
+  '--pl-item-bg': props.itemBgColor,
+  '--pl-item-active-bg': props.itemActiveBgColor,
+  '--pl-item-active-text': props.itemActiveTextColor,
+  '--pl-text': props.textColor,
+  '--pl-num': props.numberColor,
+  '--pl-num-active': props.numberActiveColor,
+  '--pl-loading-bg': props.loadingBgColor,
+  '--pl-loading-text': props.loadingTextColor,
+  '--pl-page-info': props.pageInfoColor
+}))
 </script>
 
 <style scoped>
@@ -297,10 +329,10 @@ const { t } = useI18n()
   display               : flex;
   flex-direction        : column;
   gap                   : 8px;
-  background            : v-bind(bgColor);
-  border                : v-bind(borderColor);
+  background            : var(--pl-bg);
+  border                : var(--pl-border);
   padding               : 10px;
-  border-radius         : v-bind(borderRadius);
+  border-radius         : var(--pl-radius);
   box-sizing            : border-box;
   width                 : 100%;
   overflow              : visible;
@@ -310,9 +342,9 @@ const { t } = useI18n()
   display               : flex;
   justify-content       : space-between;
   align-items           : center;
-  background            : v-bind(headerBgColor);
-  border                : v-bind(borderColor);
-  border-radius         : v-bind(borderRadius);
+  background            : var(--pl-header-bg);
+  border                : var(--pl-border);
+  border-radius         : var(--pl-radius);
   padding               : 8px 12px;
   user-select           : none;
 }
@@ -321,7 +353,7 @@ const { t } = useI18n()
   font-size             : 0.8rem;
   margin                : 0;
   font-weight           : 700;
-  color                 : v-bind(headerTextColor);
+  color                 : var(--pl-header-text);
 }
 
 .playlist-content {
@@ -348,9 +380,9 @@ const { t } = useI18n()
   justify-content       : center;
   align-items           : center;
   flex                  : 1;
-  color                 : v-bind(loadingTextColor);
+  color                 : var(--pl-loading-text);
   font-size             : 0.8rem;
-  background            : v-bind(loadingBgColor);
+  background            : var(--pl-loading-bg);
   border-radius         : 6px;
   font-family           : monospace;
 }
@@ -395,14 +427,14 @@ const { t } = useI18n()
   align-items           : center;
   gap                   : 8px;
   padding               : 6px 8px;
-  background            : v-bind(itemBgColor);
-  border                : v-bind(borderColor);
+  background            : var(--pl-item-bg);
+  border                : var(--pl-border);
   border-radius         : 6px;
   cursor                : pointer;
   box-sizing            : border-box;
   width                 : 100%;
   max-width             : 100%;
-  color                 : v-bind(textColor);
+  color                 : var(--pl-text);
 }
 
 .track-item:active {
@@ -410,19 +442,19 @@ const { t } = useI18n()
 }
 
 .track-item.active {
-  background            : v-bind(itemActiveBgColor);
-  color                 : v-bind(itemActiveTextColor);
+  background            : var(--pl-item-active-bg);
+  color                 : var(--pl-item-active-text);
 }
 
 .track-number {
-  color                 : v-bind(numberColor);
+  color                 : var(--pl-num);
   font                  : var(--music_player-font-p);
   font-size             : var(--music_player-font-p-size);
   flex-shrink           : 0;
 }
 
 .track-item.active .track-number {
-  color                 : v-bind(numberActiveColor);
+  color                 : var(--pl-num-active);
 }
 
 .track-name {
@@ -444,6 +476,13 @@ const { t } = useI18n()
   box-sizing            : border-box;
   transition            : opacity 0.2s ease;
   overflow              : visible;
+  opacity               : 1;
+  pointer-events        : auto;
+}
+
+.pagination-controls.is-hidden {
+  opacity               : 0;
+  pointer-events        : none;
 }
 
 .pagination-controls :deep(.custom-btn) {
@@ -452,7 +491,7 @@ const { t } = useI18n()
 
 .page-info {
   font-size             : 0.75rem;
-  color                 : v-bind(pageInfoColor);
+  color                 : var(--pl-page-info);
   font-family           : monospace;
 }
 </style>

@@ -97,6 +97,10 @@ const refreshColors = () => {
   noteColors.value = [getRandomColor(), getRandomColor(), getRandomColor()]
 }
 
+/**
+  * Reactive state watcher updating note color palette on active status or prop changes.
+  * @private
+  */
 watch(
   [() => props.active, () => props.isRandomColor, () => props.colors],
   () => {
@@ -105,14 +109,16 @@ watch(
   { immediate: true }
 )
 
-/** Formatted vertical float distance with unit support.
+/** 
+  * Formatted vertical float distance with unit support.
   * @private
   */
 const computedDistance = computed(() => {
   return typeof props.distance === 'number' ? `${props.distance}px` : props.distance
 })
 
-/** Formatted animation speed duration with unit support.
+/** 
+  * Formatted animation speed duration with unit support.
   * @private
   */
 const computedSpeed = computed(() => {
@@ -176,14 +182,14 @@ const computedSpeed = computed(() => {
 
 .note-2 {
   left                 : 50%;
-  animation-delay      : calc(v-bind(computedSpeed) * 0.3);
+  animation-delay      : 0.6s;
   -webkit-mask-image   : url('@/assets/svg/crotchet-musical-note.svg');
   mask-image           : url('@/assets/svg/crotchet-musical-note.svg');
 }
 
 .note-3 {
   left                 : 75%;
-  animation-delay      : calc(v-bind(computedSpeed) * 0.6);
+  animation-delay      : 1.2s;
   -webkit-mask-image   : url('@/assets/svg/quaver-musical-note.svg');
   mask-image           : url('@/assets/svg/quaver-musical-note.svg');
 }

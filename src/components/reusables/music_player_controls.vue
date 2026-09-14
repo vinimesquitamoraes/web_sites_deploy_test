@@ -2,73 +2,78 @@
   <div class="top-buttons-bar">
     <CustomButton
       class             = "top-mech-btn"
-      :icon-src         = "prevSvg"
-      icon-size         = "16px"
-      :icon-color       = "prevIconColor"
-      :hover-icon-color = "prevHoverIconColor"
-      :bg-color         = "prevBgColor"
-      :hover-bg-color   = "prevHoverBgColor"
+      :iconSrc          = "prevSvg"
+      iconSize          = "16px"
+      :iconColor        = "prevIconColor"
+      :hoverIconColor   = "prevHoverIconColor"
+      :bgColor          = "prevBgColor"
+      :hoverBgColor     = "prevHoverBgColor"
       padding           = "0"
       width             = "100%"
       height            = "34px"
+      aria-label        = "Previous track"
       @click            = "$emit('prev')"
     />
 
     <CustomButton
       class             = "top-mech-btn play-mech-btn"
       :class            = "{ 'is-playing': isPlaying }"
-      :icon-src         = "isPlaying ? pauseSvg : playSvg"
-      icon-size         = "16px"
-      :icon-color       = "playIconColor"
-      :hover-icon-color = "playHoverIconColor"
-      :bg-color         = "playBgColor"
-      :hover-bg-color   = "playHoverBgColor"
+      :iconSrc          = "isPlaying ? pauseSvg : playSvg"
+      iconSize          = "16px"
+      :iconColor        = "playIconColor"
+      :hoverIconColor   = "playHoverIconColor"
+      :bgColor          = "isPlaying ? 'var(--music-player-color-playbt-playing)' : playBgColor"
+      :hoverBgColor     = "playHoverBgColor"
       padding           = "0"
       width             = "100%"
       height            = "34px"
+      :aria-label       = "isPlaying ? 'Pause' : 'Play'"
       @click            = "$emit('togglePlay')"
     />
 
     <CustomButton
       class             = "top-mech-btn"
-      :icon-src         = "stopSvg"
-      icon-size         = "16px"
-      :icon-color       = "stopIconColor"
-      :hover-icon-color = "stopHoverIconColor"
-      :bg-color         = "stopBgColor"
-      :hover-bg-color   = "stopHoverBgColor"
+      :iconSrc          = "stopSvg"
+      iconSize          = "16px"
+      :iconColor        = "stopIconColor"
+      :hoverIconColor   = "stopHoverIconColor"
+      :bgColor          = "stopBgColor"
+      :hoverBgColor     = "stopHoverBgColor"
       padding           = "0"
       width             = "100%"
       height            = "34px"
+      aria-label        = "Stop playback"
       @click            = "$emit('stop')"
     />
 
     <CustomButton
       class             = "top-mech-btn"
-      :icon-src         = "nextSvg"
-      icon-size         = "16px"
-      :icon-color       = "nextIconColor"
-      :hover-icon-color = "nextHoverIconColor"
-      :bg-color         = "nextBgColor"
-      :hover-bg-color   = "nextHoverBgColor"
+      :iconSrc          = "nextSvg"
+      iconSize          = "16px"
+      :iconColor        = "nextIconColor"
+      :hoverIconColor   = "nextHoverIconColor"
+      :bgColor          = "nextBgColor"
+      :hoverBgColor     = "nextHoverBgColor"
       padding           = "0"
       width             = "100%"
       height            = "34px"
+      aria-label        = "Next track"
       @click            = "$emit('next')"
     />
 
     <CustomButton
       class             = "top-mech-btn rec-mech-btn"
       :class            = "{ active: isRecording }"
-      :icon-src         = "recSvg"
-      icon-size         = "16px"
-      :icon-color       = "recIconColor"
-      :hover-icon-color = "recHoverIconColor"
-      :bg-color         = "recBgColor"
-      :hover-bg-color   = "recHoverBgColor"
+      :iconSrc          = "recSvg"
+      iconSize          = "16px"
+      :iconColor        = "recIconColor"
+      :hoverIconColor   = "recHoverIconColor"
+      :bgColor          = "recBgColor"
+      :hoverBgColor     = "recHoverBgColor"
       padding           = "0"
       width             = "100%"
       height            = "34px"
+      aria-label        = "Record audio"
       @click            = "$emit('record')"
     />
   </div>
@@ -247,6 +252,9 @@ defineProps({
   }
 })
 
+/** Emitted player control navigation events.
+  * @public
+*/
 defineEmits(['prev', 'togglePlay', 'stop', 'next', 'record'])
 </script>
 
@@ -267,16 +275,4 @@ defineEmits(['prev', 'togglePlay', 'stop', 'next', 'record'])
   flex                  : 1;
   min-width             : 0;
 }
-
-.play-mech-btn.play-mech-btn {
-  background-color      : v-bind('playBgColor');
-}
-
-
-
-.play-mech-btn.is-playing {
-  --color-custom-button-background: var(--music-player-color-playbt-playing); 
-}
-
-
 </style>

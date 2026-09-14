@@ -1,5 +1,5 @@
 <template>
-  <div class="music-player walkman">
+  <div class="music-player walkman" :style="containerStyles">
     <div class="walkman-chassis">
       <div class="walkman-top-panel">
         <div class="model-badge">
@@ -9,15 +9,16 @@
           v-if              = "hasSpecialTapeAccess" 
           class             = "tape-toggle-btn" 
           :class            = "{ active: showImageTape }"
-          :icon-src         = "starIcon"
-          :bg-color         = "showImageTape ? walkmanButtonActiveBg : walkmanButtonBg"
-          :hover-bg-color   = "showImageTape ? walkmanButtonActiveHoverBg : walkmanButtonHoverBg"
-          :icon-color       = "showImageTape ? walkmanButtonActiveIconColor : walkmanButtonIconColor"
-          :hover-icon-color = "showImageTape ? walkmanButtonActiveHoverIconColor : walkmanButtonHoverIconColor"
+          :iconSrc          = "starIcon"
+          :bgColor          = "showImageTape ? walkmanButtonActiveBg : walkmanButtonBg"
+          :hoverBgColor     = "showImageTape ? walkmanButtonActiveHoverBg : walkmanButtonHoverBg"
+          :iconColor        = "showImageTape ? walkmanButtonActiveIconColor : walkmanButtonIconColor"
+          :hoverIconColor   = "showImageTape ? walkmanButtonActiveHoverIconColor : walkmanButtonHoverIconColor"
           height            = "24px"
           width             = "24px"
           padding           = "2px"
-          icon-size         = "14px"
+          iconSize          = "14px"
+          aria-label        = "Toggle special tape design"
           @click            = "$emit('toggleTapeStyle')"
         />
       </div>
@@ -36,8 +37,9 @@
               :max          = "duration || 0" 
               step          = "0.1"
               :value        = "currentTime" 
-              @input        = "$emit('seek', $event)"
+              aria-label    = "Track progress scrubber"
               class         = "lcd-progress-slider"
+              @input        = "$emit('seek', $event)"
             />
           </div>
         </div>
@@ -70,15 +72,15 @@
 <script setup>
 /**
   * @file        music_player_walkman.vue
-  * @brief       Walkman-style music player component featuring an LCD screen, track progress scrubber, custom cassette display toggle with an SVG icon, and animated tape reels.
+  * @brief       Walkman-style music player component featuring an LCD screen, track progress, custom cassette display toggle with an SVG icon, and animated tape reels.
   * @displayName Music Player Walkman
 */
 
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import CustomButton from '@/components/reusables/custom_button.vue'
 import starIcon     from '@/assets/svg/star-rounded.svg'
 
-defineProps({
+const props = defineProps({
   /**
     * Indicates whether media is currently playing.
     * @public
@@ -305,6 +307,9 @@ defineProps({
   }
 })
 
+/** Emitted tape style toggle and progress seek events.
+  * @public
+  */
 defineEmits(['toggleTapeStyle', 'seek'])
 
 /**
@@ -312,6 +317,26 @@ defineEmits(['toggleTapeStyle', 'seek'])
   * @private
   */
 const hasSpecialTapeAccess = ref(false)
+
+/**
+  * Consolidated style object mapping props to CSS variables.
+  * @private
+  */
+const containerStyles = computed(() => ({
+  '--wm-bg': props.bgColor,
+  '--wm-border': props.border,
+  '--wm-radius': props.borderRadius,
+  '--wm-chassis-bg': props.chassisBg,
+  '--wm-brand-color': props.brandColor,
+  '--wm-door-bg': props.doorBg,
+  '--wm-shell-bg': props.shellBg,
+  '--wm-label-color': props.labelColor,
+  '--wm-window-bg': props.windowBg,
+  '--wm-reel-color': props.reelColor,
+  '--wm-reel-hub-bg': props.reelHubBg,
+  '--wm-lcd-bg': props.lcdBg,
+  '--wm-lcd-color': props.lcdColor
+}))
 
 /**
   * Checks session storage for special tape access permissions.
@@ -338,9 +363,9 @@ onUnmounted(() => {
   display               : flex;
   flex-direction        : column;
   width                 : 100%;
-  background            : v-bind(bgColor);
-  border                : v-bind(border);
-  border-radius         : v-bind(borderRadius);
+  background            : var(--wm-bg);
+  border                : var(--wm-border);
+  border-radius         : var(--wm-radius);
   padding               : 12px;
   box-sizing            : border-box;
   color                 : var(--music-player-color-bg-dark);
@@ -349,9 +374,9 @@ onUnmounted(() => {
 }
 
 .walkman-chassis {
-  background            : v-bind(chassisBg);
-  border                : v-bind(border);
-  border-radius         : v-bind(borderRadius);
+  background            : var(--wm-chassis-bg);
+  border                : var(--wm-border);
+  border-radius         : var(--wm-radius);
   padding               : 12px;
   display               : flex;
   flex-direction        : column;
@@ -374,7 +399,7 @@ onUnmounted(() => {
   font-weight           : 900;
   font-size             : 0.75rem;
   letter-spacing        : 2px;
-  color                 : v-bind(brandColor);
+  color                 : var(--wm-brand-color);
   font                  : var(--music_player-font-h1);
 }
 
@@ -384,9 +409,9 @@ onUnmounted(() => {
 
 .cassette-door {
   position              : relative;
-  background            : v-bind(doorBg);
-  border                : v-bind(border);
-  border-radius         : v-bind(borderRadius);
+  background            : var(--wm-door-bg);
+  border                : var(--wm-border);
+  border-radius         : var(--wm-radius);
   padding               : 8px;
   display               : flex;
   justify-content       : center;
@@ -414,7 +439,7 @@ onUnmounted(() => {
 
 .cassette-shell {
   width                 : 100%;
-  background            : v-bind(shellBg);
+  background            : var(--wm-shell-bg);
   border-radius         : 4px;
   padding               : 8px;
   box-sizing            : border-box;
@@ -429,13 +454,13 @@ onUnmounted(() => {
   font                  : var(--music_player-font-p);
   font-size             : 0.5rem;
   font-weight           : 700;
-  color                 : v-bind(labelColor);
-  border-bottom         : 1px solid v-bind(brandColor);
+  color                 : var(--wm-label-color);
+  border-bottom         : 1px solid var(--wm-brand-color);
   padding-bottom        : 2px;
 }
 
 .cassette-window {
-  background            : v-bind(windowBg);
+  background            : var(--wm-window-bg);
   height                : 42px;
   border-radius         : 4px;
   display               : flex;
@@ -448,7 +473,7 @@ onUnmounted(() => {
 .reel {
   width                 : 28px;
   height                : 28px;
-  border                : 3px dashed v-bind(reelColor);
+  border                : 3px dashed var(--wm-reel-color);
   border-radius         : 50%;
   display               : flex;
   justify-content       : center;
@@ -464,7 +489,7 @@ onUnmounted(() => {
 .reel-hub {
   width                 : 8px;
   height                : 8px;
-  background            : v-bind(reelHubBg);
+  background            : var(--wm-reel-hub-bg);
   border-radius         : 50%;
 }
 
@@ -479,9 +504,9 @@ onUnmounted(() => {
 }
 
 .lcd-panel {
-  background            : v-bind(lcdBg);
-  border                : v-bind(border);
-  border-radius         : v-bind(borderRadius);
+  background            : var(--wm-lcd-bg);
+  border                : var(--wm-border);
+  border-radius         : var(--wm-radius);
   padding               : 6px 10px;
 }
 
@@ -500,12 +525,12 @@ onUnmounted(() => {
 }
 
 .lcd-status-tag, .lcd-track-num, .lcd-time-display{
-  color                 : v-bind(lcdColor);
+  color                 : var(--wm-lcd-color);
 }
 
 .lcd-progress-slider {
   width                 : 100%;
-  accent-color          : v-bind(lcdColor);
+  accent-color          : var(--wm-lcd-color);
   cursor                : pointer;
   height                : 4px;
 }

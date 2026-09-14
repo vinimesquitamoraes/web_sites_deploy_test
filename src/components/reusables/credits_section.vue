@@ -1,14 +1,14 @@
 <template>
   <div class="credits-container">
     <div class="credits-body">
-      <div v-for="(section, sIndex) in credits" :key="sIndex" class="credits-section-block">
+      <div v-for="(section, sIndex) in credits" :key="section.title || sIndex" class="credits-section-block">
         <h2 v-if="section.title" class="credits-main-title">
           {{ section.title }}
         </h2>
         
         <div 
           v-for="(group, index) in section.groups" 
-          :key="index" 
+          :key="group.subtitle || index" 
           class="credits-group"
         >
           <h3 v-if="group.subtitle" class="credits-role">
@@ -17,7 +17,7 @@
           <ul class="credits-names-list">
             <li 
               v-for="(person, nameIndex) in group.names" 
-              :key="nameIndex" 
+              :key="resolveName(person)" 
               class="credits-name"
               @mouseenter="activeTooltipIndex = `${sIndex}-${index}-${nameIndex}`"
               @mouseleave="activeTooltipIndex = null"

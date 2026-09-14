@@ -3,6 +3,7 @@
     <label 
       class="custom-switch" 
       :class="{ 'is-active': modelValue }"
+      :style="computedStyles"
       @click="handleClick"
       @mouseenter="isHovered = true"
       @mouseleave="isHovered = false"
@@ -239,6 +240,23 @@ const processedIcon = computed(() => {
   */
 const cssMaskImage = computed(() => `url("${processedIcon.value}")`)
 
+/**
+  * Consolidates dynamic dynamic CSS variables into a single computed property.
+  * @private
+  */
+const computedStyles = computed(() => ({
+  '--switch-width'       : cssWidth.value,
+  '--switch-height'      : cssHeight.value,
+  '--switch-slider-bg'   : cssSliderBg.value,
+  '--switch-handle-size' : cssHandleSize.value,
+  '--switch-handle-bg'   : props.handleBgColor,
+  '--switch-translate-x' : cssTranslateX.value,
+  '--switch-icon-size'   : cssIconSize.value,
+  '--switch-icon-color'  : props.iconColor,
+  '--switch-mask-image'  : cssMaskImage.value,
+  '--switch-active-bg'   : props.activeBgColor
+}))
+
 /** 
   * Handles the click action to toggle states and emit events.
   * @private
@@ -277,9 +295,9 @@ const handleClick = (event) => {
   border                      : 3px solid #000000;
   border-radius               : var(--default-border-radius);
 
-  width                       : v-bind(cssWidth);
-  height                      : v-bind(cssHeight);
-  background-color            : v-bind(cssSliderBg);
+  width                       : var(--switch-width);
+  height                      : var(--switch-height);
+  background-color            : var(--switch-slider-bg);
 
   transition                  : background-color 0.4s ease, 
                                 color 0.4s ease;
@@ -294,9 +312,9 @@ const handleClick = (event) => {
   justify-content             : center;
   box-sizing                  : border-box;
   
-  width                       : v-bind(cssHandleSize);
-  height                      : v-bind(cssHandleSize);
-  background-color            : v-bind('props.handleBgColor');
+  width                       : var(--switch-handle-size);
+  height                      : var(--switch-handle-size);
+  background-color            : var(--switch-handle-bg);
 
   transition                  : transform 0.4s cubic-bezier(0.1, 1, 0.2, 1), 
                                 background-color 0.4s ease;
@@ -304,11 +322,11 @@ const handleClick = (event) => {
 
 .custom-switch.is-active .slider,
 label.custom-switch.is-active span.slider {
-  background-color            : v-bind('props.activeBgColor') !important;
+  background-color            : var(--switch-active-bg) !important;
 }
 
 .custom-switch.is-active .handle {
-  transform                   : translateX(v-bind(cssTranslateX));
+  transform                   : translateX(var(--switch-translate-x));
 }
 
 .custom-switch:active .handle {
@@ -316,23 +334,23 @@ label.custom-switch.is-active span.slider {
 }
 
 .custom-switch.is-active:active .handle {
-  transform                   : translateX(v-bind(cssTranslateX)) scale(0.9);
+  transform                   : translateX(var(--switch-translate-x)) scale(0.9);
 }
 
 .switch-icon {
-  width                       : v-bind(cssIconSize);
-  height                      : v-bind(cssIconSize);
+  width                       : var(--switch-icon-size);
+  height                      : var(--switch-icon-size);
   object-fit                  : contain;
   pointer-events              : none;
 }
 
 .switch-icon-masked {
   display                     : inline-block;
-  width                       : v-bind(cssIconSize);
-  height                      : v-bind(cssIconSize);
-  background-color            : v-bind('props.iconColor');
-  mask-image                  : v-bind(cssMaskImage);
-  -webkit-mask-image          : v-bind(cssMaskImage);
+  width                       : var(--switch-icon-size);
+  height                      : var(--switch-icon-size);
+  background-color            : var(--switch-icon-color);
+  mask-image                  : var(--switch-mask-image);
+  -webkit-mask-image          : var(--switch-mask-image);
   mask-repeat                 : no-repeat;
   -webkit-mask-repeat         : no-repeat;
   mask-position               : center;

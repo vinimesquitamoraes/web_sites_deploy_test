@@ -38,7 +38,7 @@
             <SocialMediaButton 
               platform   ="github" 
               color      ="#ffffff" 
-              hoverColor ="#00000" 
+              hoverColor ="#000000" 
               :size       = 35
             />
             <SocialMediaButton 
@@ -112,6 +112,10 @@ const props = defineProps({
   }
 })
 
+/**
+  * Internationalization translation function instance.
+  * @private
+*/
 const { t } = useI18n()
 
 /**
@@ -135,7 +139,6 @@ const handleContextMenu = (event) => {
 </script>
 
 <style scoped>
-
 .logo-container {
   display             : flex;
   justify-content     : flex-start;
@@ -203,34 +206,6 @@ const handleContextMenu = (event) => {
   flex-wrap         : wrap;
 }
 
-.footer-logo img {
-  display           : block;
-}
-
-.footer-nav {
-  display           : flex;
-  justify-content   : center;
-  align-items       : center;
-  flex-direction    : row;
-  gap               : 40px;
-  flex              : 1;
-}
-
-.footer-link {
-  line-height       : 28px;
-  text-decoration   : none;
-  opacity           : 0.8;
-  transition        : opacity 0.2s ease;
-  color             : var(--color-footer-link);
-}
-
-.footer-link:hover,
-.footer-link.router-link-exact-active {
-  opacity           : 1;
-  font-weight       : bold;
-  color             : var(--color-footer-link-hover);
-}
-
 .footer-socials {
   display           : flex;
   justify-content   : flex-start;
@@ -238,11 +213,6 @@ const handleContextMenu = (event) => {
   flex-direction    : row;
   gap               : 20px;
   flex-wrap         : wrap;
-}
-
-.footer-socials img {
-  display           : block;
-  border-radius     : 8px;
 }
 
 .footer-bottom-section {

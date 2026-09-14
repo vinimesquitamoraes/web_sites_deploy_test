@@ -55,7 +55,7 @@
           class="content-section-actions"
           :style="{ 
             alignSelf: actionsAlign === 'right' ? 'flex-end' : (actionsAlign === 'center' ? 'center' : 'flex-start'), 
-            margim: '100px'
+            margin: '100px'
           }"
         >
           <!-- @slot actions - Slot for buttons or extra controls -->
@@ -141,7 +141,7 @@
   * @displayName Content Section
 */
 
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import MediaModal from './media_modal.vue'
 
 const props = defineProps({
@@ -426,16 +426,10 @@ const handleContextMenu = (event) => {
   * @private
 */
 const textParagraphs = computed(() => {
-  const ParagraphBuilder = {
-    normalizeText(rawText) {
-      if (Array.isArray(rawText)) {
-        return rawText.filter(p => Boolean(p))
-      }
-      return rawText ? [rawText] : []
-    }
+  if (Array.isArray(props.text)) {
+    return props.text.filter(p => Boolean(p))
   }
-
-  return ParagraphBuilder.normalizeText(props.text)
+  return props.text ? [props.text] : []
 })
 
 /**
@@ -443,13 +437,7 @@ const textParagraphs = computed(() => {
   * @private
 */
 const shouldShowHeader = computed(() => {
-  const HeaderBuilder = {
-    evaluate(headingText, paragraphsCount) {
-      return Boolean(headingText) && paragraphsCount > 0
-    }
-  }
-
-  return HeaderBuilder.evaluate(props.heading, textParagraphs.value.length)
+  return Boolean(props.heading) && textParagraphs.value.length > 0
 })
 
 watch(() => props.mediaSrc, () => {
@@ -461,13 +449,7 @@ watch(() => props.mediaSrc, () => {
   * @private
 */
 const openImageModal = () => {
-  const ModalOpenBuilder = {
-    canOpen(type, src, openable, errorState) {
-      return type === 'image' && src && openable && !errorState
-    }
-  }
-
-  if (ModalOpenBuilder.canOpen(props.mediaType, props.mediaSrc, props.imageOpenable, hasError.value)) {
+  if (props.mediaType === 'image' && props.mediaSrc && props.imageOpenable && !hasError.value) {
     isModalOpen.value = true
     document.body.style.overflow = 'hidden'
   }
@@ -478,15 +460,16 @@ const openImageModal = () => {
   * @private
 */
 const closeImageModal = () => {
-  const ModalCloseBuilder = {
-    reset() {
-      return false
-    }
-  }
-
-  isModalOpen.value = ModalCloseBuilder.reset()
+  isModalOpen.value = false
   document.body.style.overflow = ''
 }
+
+// Ensure body scrolling is restored if the component unmounts while modal is open
+onUnmounted(() => {
+  if (isModalOpen.value) {
+    document.body.style.overflow = ''
+  }
+})
 </script>
 
 <style scoped>

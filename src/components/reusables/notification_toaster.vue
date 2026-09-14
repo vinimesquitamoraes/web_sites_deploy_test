@@ -22,17 +22,18 @@
         </div>
         <div v-if="dismissible" class="toaster-dismiss-wrapper">
           <CustomButton
-            class          = "toaster-dismiss-btn"
-            text           = ""
-            iconSize       = "1.25rem"
-            width          = "28px"
-            height         = "28px"
-            iconColor      = "var(--toaster-text-color)"
-            bgColor        = "transparent"
-            hoverIconColor = "var(--toaster-text-color)"
-            pressAnimation = "scale"
-            :iconSrc       = "img_close"
-            @click         = "closeToast"
+            class            = "toaster-dismiss-btn"
+            text             = ""
+            aria-label       = "Close notification"
+            icon-size        = "1.25rem"
+            width            = "28px"
+            height           = "28px"
+            icon-color       = "var(--toaster-text-color)"
+            bg-color         = "transparent"
+            hover-icon-color = "var(--toaster-text-color)"
+            press-animation  = "scale"
+            :icon-src        = "img_close"
+            @click           = "closeToast"
           />
         </div>
       </div>
@@ -50,9 +51,9 @@
   * @displayName Notification Toaster
 */
 
-import { computed, watch } from 'vue'
+import { computed, watch, onUnmounted } from 'vue'
 import CustomButton from '@/components/reusables/custom_button.vue'
-import img_close from '@/assets/svg/close-svgrepo-com.svg'
+import img_close    from '@/assets/svg/close-svgrepo-com.svg'
 
 const props = defineProps({
   /**
@@ -84,8 +85,8 @@ const props = defineProps({
     * @public
     */
   position: {
-    type    : String,
-    default : 'top-right',
+    type     : String,
+    default  : 'top-right',
     validator: (val) => ['top-right', 'top-left', 'top-center', 'bottom-right', 'bottom-left', 'bottom-center'].includes(val)
   },
   /**
@@ -93,8 +94,8 @@ const props = defineProps({
     * @public
     */
   type: {
-    type    : String,
-    default : 'info',
+    type     : String,
+    default  : 'info',
     validator: (val) => ['info', 'success', 'warning', 'error'].includes(val)
   },
   /**
@@ -162,8 +163,14 @@ const closeToast = () => {
 watch(() => props.modelValue, (newVal) => {
   if (newVal) {
     startTimer()
+  } else {
+    clearTimeout(timer)
   }
 }, { immediate: true })
+
+onUnmounted(() => {
+  clearTimeout(timer)
+})
 
 /**
   * Computes the CSS position class name.
@@ -175,7 +182,7 @@ const positionClass = computed(() => `toaster-${props.position}`)
   * Computes the CSS theme type class name.
   * @private
   */
-const typeClass     = computed(() => `toaster-${props.type}`)
+const typeClass = computed(() => `toaster-${props.type}`)
 
 /**
   * Computes the transition animation name based on screen position.

@@ -9,8 +9,8 @@
               class          = "close-btn"
               text           = ""
               iconSize       = "20px"
-              width          = "-36px"
-              height         = "-36px"
+              width          = "36px"
+              height         = "36px"
               iconColor      = "var(--color-primary)"
               bgColor        = "var(--color-default-background)"
               hoverIconColor = "var(--color-default-background)"
@@ -25,7 +25,7 @@
         <div class="modal-body">
           <div v-for="option in options" :key="option.key" class="option-row">
             <span class="option-label">{{ option.label }}</span>
-            <ToggleButtom
+            <ToggleButton
               :modelValue         ="sessionState[option.key]"
               @update:modelValue  ="(val) => toggleOption(option.key, val)"
               activeBgColor = "var(--color-secondary)"
@@ -45,8 +45,8 @@
   * @displayName Options Modal
 */
 
-import { reactive, computed, onMounted, onUnmounted } from 'vue'
-import ToggleButtom from './toggle_button.vue'
+import { reactive, computed, watch, onMounted, onUnmounted } from 'vue'
+import ToggleButton from './toggle_button.vue'
 import CustomButton from './custom_button.vue'
 
 import closeIcon from '@/assets/svg/close-svgrepo-com.svg'
@@ -141,7 +141,7 @@ const syncSessionState = () => {
   })
 }
 
-syncSessionState()
+watch(() => props.options, syncSessionState, { immediate: true, deep: true })
 
 /** 
   * Updates option state, persists to sessionStorage, dispatches update events, and emits changes.
@@ -199,7 +199,6 @@ onUnmounted(() => {
   box-sizing                  : border-box;
   overflow                    : hidden;
   max-height                  : calc(100vh - 2rem);
-
   width                       : v-bind(widthVal);
   max-width                   : calc(100vw - 2rem);
   background-color            : v-bind('props.bgColor');
@@ -207,11 +206,12 @@ onUnmounted(() => {
 }
 
 .modal-header {
+  position                    : relative;
   display                     : flex;
   align-items                 : center;
   justify-content             : space-between;
   padding                     : 1rem 1.5rem;
-  border-bottom               : var(--default-border);
+  border-bottom               : 3px solid #000000;
   flex-shrink                 : 0;
 }
 
@@ -229,17 +229,6 @@ onUnmounted(() => {
   gap                         : 1rem;
   overflow-y                  : auto;
   -webkit-overflow-scrolling  : touch;
- 
-}
-
-.modal-header {
-  position                    : relative; 
-  display                     : flex;
-  align-items                 : center;
-  justify-content             : space-between;
-  padding                     : 1rem 1.5rem;
-  border-bottom               : 3px solid #000000;
-  flex-shrink                 : 0;
 }
 
 .close-btn-wrapper {

@@ -31,8 +31,9 @@ import img_gameLogo from '@/assets/img/logos/Encore_Logo.png'
 import NavigationComponent from './navigation_component.vue'
 
 const props = defineProps({
-  /** The currently active navigation page name.
-    * @private
+  /** 
+    * The currently active navigation page name.
+    * @public
   */
   activePage: {
     type    : String,
@@ -48,7 +49,7 @@ const props = defineProps({
   },
   /**
     * Controls whether the right-click context menu ("Save image as...") is allowed on the logo.
-    *@public
+    * @public
   */
   allowSaveAs: {
     type    : Boolean,

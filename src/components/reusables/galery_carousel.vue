@@ -261,13 +261,7 @@ const handleContextMenu = (event) => {
   * @private
 */
 const handleTouchStart = (e) => {
-  const TouchStartBuilder = {
-    extractX(event) {
-      return event.changedTouches[0].screenX
-    }
-  }
-
-  touchStartX.value = TouchStartBuilder.extractX(e)
+  touchStartX.value = e.changedTouches[0].screenX
 }
 
 /**
@@ -276,13 +270,7 @@ const handleTouchStart = (e) => {
   * @private
 */
 const handleTouchEnd = (e) => {
-  const TouchEndBuilder = {
-    extractX(event) {
-      return event.changedTouches[0].screenX
-    }
-  }
-
-  touchEndX.value = TouchEndBuilder.extractX(e)
+  touchEndX.value = e.changedTouches[0].screenX
   handleSwipe()
 }
 
@@ -291,21 +279,12 @@ const handleTouchEnd = (e) => {
   * @private
 */
 const handleSwipe = () => {
-  const SwipeActionBuilder = {
-    getThreshold() {
-      return 40
-    },
-    evaluate(startX, endX, threshold) {
-      if (startX - endX > threshold) return 'next'
-      if (endX - startX > threshold) return 'prev'
-      return null
-    }
-  }
+  const threshold = 40
+  const diff = touchStartX.value - touchEndX.value
 
-  const action = SwipeActionBuilder.evaluate(touchStartX.value, touchEndX.value, SwipeActionBuilder.getThreshold())
-  if (action === 'next') {
+  if (diff > threshold) {
     nextSlide(true)
-  } else if (action === 'prev') {
+  } else if (-diff > threshold) {
     prevSlide(true)
   }
 }
@@ -315,18 +294,12 @@ const handleSwipe = () => {
   * @private
 */
 const currentModalMediaItem = computed(() => {
-  const ModalMediaBuilder = {
-    build(list, index) {
-      if (list.length === 0) return { type: 'image', src: '' }
-      return {
-        type: 'image',
-        src: list[index].img,
-        alt: `Gallery Image ${index + 1}`
-      }
-    }
+  if (slides.value.length === 0) return { type: 'image', src: '' }
+  return {
+    type: 'image',
+    src: slides.value[currentIndex.value].img,
+    alt: `Gallery Image ${currentIndex.value + 1}`
   }
-
-  return ModalMediaBuilder.build(slides.value, currentIndex.value)
 })
 
 /**
@@ -336,26 +309,20 @@ const currentModalMediaItem = computed(() => {
   * @private
 */
 const captureFirstFrame = (url) => {
-  const FrameCaptureBuilder = {
-    createPromise(targetUrl) {
-      return new Promise((resolve) => {
-        const img = new Image()
-        img.crossOrigin = 'anonymous'
-        img.src = targetUrl
-        img.onload = () => {
-          const canvas = document.createElement('canvas')
-          canvas.width = img.naturalWidth
-          canvas.height = img.naturalHeight
-          const ctx = canvas.getContext('2d')
-          ctx.drawImage(img, 0, 0)
-          resolve(canvas.toDataURL('image/png'))
-        }
-        img.onerror = () => resolve(targetUrl)
-      })
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.src = url
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = img.naturalWidth
+      canvas.height = img.naturalHeight
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+      resolve(canvas.toDataURL('image/png'))
     }
-  }
-
-  return FrameCaptureBuilder.createPromise(url)
+    img.onerror = () => resolve(url)
+  })
 }
 
 /**
@@ -363,19 +330,10 @@ const captureFirstFrame = (url) => {
   * @private
 */
 const resetTimer = () => {
-  const TimerBuilder = {
-    clear(interval) {
-      if (interval) clearInterval(interval)
-    },
-    setupInterval(callback, time) {
-      return setInterval(callback, time)
-    }
-  }
-
-  TimerBuilder.clear(slideInterval)
+  if (slideInterval) clearInterval(slideInterval)
   timerKey.value++
   
-  slideInterval = TimerBuilder.setupInterval(() => {
+  slideInterval = setInterval(() => {
     if (!isModalOpen.value && slides.value.length > 0) {
       nextSlide(false)
     }
@@ -388,15 +346,8 @@ const resetTimer = () => {
   * @private
 */
 const nextSlide = (isUserAction = true) => {
-  const NextSlideBuilder = {
-    calculateIndex(current, length) {
-      if (length === 0) return current
-      return (current + 1) % length
-    }
-  }
-
   if (slides.value.length === 0) return
-  currentIndex.value = NextSlideBuilder.calculateIndex(currentIndex.value, slides.value.length)
+  currentIndex.value = (currentIndex.value + 1) % slides.value.length
   if (isUserAction) resetTimer()
 }
 
@@ -406,15 +357,8 @@ const nextSlide = (isUserAction = true) => {
   * @private
 */
 const prevSlide = (isUserAction = true) => {
-  const PrevSlideBuilder = {
-    calculateIndex(current, length) {
-      if (length === 0) return current
-      return (current - 1 + length) % length
-    }
-  }
-
   if (slides.value.length === 0) return
-  currentIndex.value = PrevSlideBuilder.calculateIndex(currentIndex.value, slides.value.length)
+  currentIndex.value = (currentIndex.value - 1 + slides.value.length) % slides.value.length
   if (isUserAction) resetTimer()
 }
 
@@ -424,14 +368,7 @@ const prevSlide = (isUserAction = true) => {
   * @private
 */
 const selectSlide = (index) => {
-  const SelectSlideBuilder = {
-    resolve(current, target) {
-      return current === target ? 'reset' : 'update'
-    }
-  }
-
-  const action = SelectSlideBuilder.resolve(currentIndex.value, index)
-  if (action === 'reset') {
+  if (currentIndex.value === index) {
     resetTimer()
   } else {
     currentIndex.value = index
@@ -444,27 +381,18 @@ const selectSlide = (index) => {
   * @private
 */
 const scrollThumbnails = (direction) => {
-  const ThumbnailScrollBuilder = {
-    getAmount(track) {
-      return track ? track.clientWidth : 0
-    },
-    getTargetScroll(track, dir) {
-      const amount = this.getAmount(track)
-      return dir === 'left' ? -amount : amount
-    }
-  }
-
   if (!thumbnailsTrackRef.value) return
-  const scrollAmount = ThumbnailScrollBuilder.getTargetScroll(thumbnailsTrackRef.value, direction)
+  const track = thumbnailsTrackRef.value
+  const amount = track.clientWidth
+  const scrollAmount = direction === 'left' ? -amount : amount
   const scrollBehavior = animationsEnabled.value ? 'smooth' : 'auto'
 
-  thumbnailsTrackRef.value.scrollBy({
+  track.scrollBy({
     left: scrollAmount,
     behavior: scrollBehavior
   })
   resetTimer()
 }
-
 
 watch(currentIndex, (newIndex) => {
   resetTimer()
@@ -491,15 +419,9 @@ watch(currentIndex, (newIndex) => {
   * @private
 */
 const openModal = (index) => {
-  const ModalOpenBuilder = {
-    applyBodyStyles() {
-      document.body.style.overflow = 'hidden'
-    }
-  }
-
   currentIndex.value = index
   isModalOpen.value = true
-  ModalOpenBuilder.applyBodyStyles()
+  document.body.style.overflow = 'hidden'
   resetTimer()
 }
 
@@ -508,14 +430,8 @@ const openModal = (index) => {
   * @private
 */
 const closeModal = () => {
-  const ModalCloseBuilder = {
-    clearBodyStyles() {
-      document.body.style.overflow = ''
-    }
-  }
-
   isModalOpen.value = false
-  ModalCloseBuilder.clearBodyStyles()
+  document.body.style.overflow = ''
   resetTimer()
 }
 

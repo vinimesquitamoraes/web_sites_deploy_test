@@ -4,16 +4,7 @@
       class     = "music-player-wrapper" 
       :class    = "{ 
         'is-open'       : isOpen, 
-        'is-ready'      : isReady, 
         'compact-mode'  : isPlayerHidden 
-      }"
-      :style    = "{ 
-        bottom     : playerBottom + 'px',
-        left       : (isCentered || footerBehavior === 'center') ? '50%' : '16px',
-        right      : 'auto',
-        transform  : (isCentered || footerBehavior === 'center') ? 'translateX(-50%)' : 'none',
-        opacity    : isHidden ? 0 : undefined,
-        visibility : isHidden ? 'hidden' : 'visible'
       }"
     >
       <div class="hidden-player">
@@ -26,12 +17,12 @@
             class            = "compact-button"
             width            = "var(--music_player-compact-button-size)"
             height           = "var(--music_player-compact-button-size)"
-            iconSize         = "var(--music_player-compact-button-icon-size)"
-            bgColor          = "var(--music_player-compact-button-color-bg)"
-            hoverBgColor     = "var(--music_player-compact-button-color-bg-hover)"
-            iconColor        = "var(--music_player-compact-button-color-icon)"
-            hoverIconColor   = "var(--music_player-compact-button-color-icon-hover)"
-            :iconSrc         = "musicNoteSvg"
+            icon-size        = "var(--music_player-compact-button-icon-size)"
+            bg-color         = "var(--music_player-compact-button-color-bg)"
+            hover-bg-color    = "var(--music_player-compact-button-color-bg-hover)"
+            icon-color       = "var(--music_player-compact-button-color-icon)"
+            hover-icon-color = "var(--music_player-compact-button-color-icon-hover)"
+            :icon-src        = "musicNoteSvg"
             @click           = "isPlayerHidden = false; isPlayerHiddenAction = false"
           />
 
@@ -55,13 +46,13 @@
                   width            = "auto"
                   height           = "auto"
                   padding          = "2px 8px"
-                  bgColor          = "transparent"
-                  hoverBgColor     = "transparent"
+                  bg-color         = "transparent"
+                  hover-bg-color    = "transparent"
                   border           = "none"
-                  :iconSrc         = "triangleLeftSvg"
-                  iconSize         = "22px"
-                  :iconColor       = "currentIconColor"
-                  :hoverIconColor  = "currentHoverIconColor"
+                  :icon-src        = "triangleLeftSvg"
+                  icon-size        = "22px"
+                  :icon-color      = "currentIconColor"
+                  :hover-icon-color = "currentHoverIconColor"
                   @click           = "isPlayerHiddenAction = true; isOpen = false"
                 />
 
@@ -71,72 +62,72 @@
                   width            = "auto"
                   height           = "auto"
                   padding          = "2px 8px"
-                  bgColor          = "transparent"
-                  hoverBgColor     = "transparent"
+                  bg-color         = "transparent"
+                  hover-bg-color    = "transparent"
                   border           = "none"
-                  :iconSrc         = "triangleUpSvg"
-                  iconSize         = "22px"
-                  :iconColor       = "currentIconColor"
-                  :hoverIconColor  = "currentHoverIconColor"
+                  :icon-src        = "triangleUpSvg"
+                  icon-size        = "22px"
+                  :icon-color      = "currentIconColor"
+                  :hover-icon-color = "currentHoverIconColor"
                   :style           = "{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }"
                   @click           = "isOpen = !isOpen" 
                 />
               </div>
 
               <PlayerControls 
-                :playlistId         = "playlistId"
-                :isPlaying          = "isPlaying" 
-                :isRecording        = "isRecording"
-                :prevIconColor      = "currentIconColor"
-                :prevHoverIconColor = "currentHoverIconColor"
-                :playIconColor      = "currentIconColor"
-                :playHoverIconColor = "currentHoverIconColor"
-                :stopIconColor      = "currentIconColor"
-                :stopHoverIconColor = "currentHoverIconColor"
-                :nextIconColor      = "currentIconColor"
-                :nextHoverIconColor = "currentHoverIconColor"
-                :recIconColor       = "currentIconColor"
-                :recHoverIconColor  = "currentHoverIconColor"
-                @prev               = "changeTrack(-1)"
-                @togglePlay         = "togglePlay"
-                @stop               = "stopPlayer"
-                @next               = "changeTrack(1)"
-                @record             = "handleRecClick"
+                :playlist-id           = "playlistId"
+                :is-playing            = "isPlaying" 
+                :is-recording          = "isRecording"
+                :prev-icon-color       = "currentIconColor"
+                :prev-hover-icon-color = "currentHoverIconColor"
+                :play-icon-color       = "currentIconColor"
+                :play-hover-icon-color = "currentHoverIconColor"
+                :stop-icon-color       = "currentIconColor"
+                :stop-hover-icon-color = "currentHoverIconColor"
+                :next-icon-color       = "currentIconColor"
+                :next-hover-icon-color = "currentHoverIconColor"
+                :rec-icon-color        = "currentIconColor"
+                :rec-hover-icon-color  = "currentHoverIconColor"
+                @prev                  = "changeTrack(-1)"
+                @togglePlay            = "togglePlay"
+                @stop                  = "stopPlayer"
+                @next                  = "changeTrack(1)"
+                @record                = "handleRecClick"
               />
             </div>
 
             <div class="player-collapsible-content">
               <WalkmanDevice 
-                class                 = "mobile-hidden-walkman"
-                :isPlaying            = "isPlaying"
-                :hasSpecialTapeAccess = "hasSpecialTapeAccess"
-                :showImageTape        = "showImageTape"
-                :currentTrackIndex    = "currentTrackIndex"
-                :currentTime          = "currentTime"
-                :duration             = "duration"
-                :specialTapeImg       = "ferris_special_tape"
-                :formatTime           = "formatTime"
-                @toggleTapeStyle      = "toggleTapeStyle"
-                @seek                 = "onSeek"
+                class                   = "mobile-hidden-walkman"
+                :is-playing              = "isPlaying"
+                :has-special-tape-access = "hasSpecialTapeAccess"
+                :show-image-tape          = "showImageTape"
+                :current-track-index      = "currentTrackIndex"
+                :current-time            = "currentTime"
+                :duration               = "duration"
+                :special-tape-img         = "ferris_special_tape"
+                :format-time             = "formatTime"
+                @toggleTapeStyle        = "toggleTapeStyle"
+                @seek                   = "onSeek"
               />
 
               <PlaylistView 
-                :isLoadingTracks    = "isLoadingTracks"
-                :paginatedTracks    = "paginatedTracks"
-                :currentTrackIndex  = "currentTrackIndex"
-                :currentPage        = "currentPage"
-                :totalPages         = "totalPages"
-                :getGlobalIndex     = "(i) => (currentPage - 1) * pageSize + i"
-                @playTrack          = "playTrack"
-                @updatePage         = "(val) => currentPage = val"
+                :is-loading-tracks    = "isLoadingTracks"
+                :paginated-tracks    = "paginatedTracks"
+                :current-track-index  = "currentTrackIndex"
+                :current-page        = "currentPage"
+                :total-pages         = "totalPages"
+                :get-global-index     = "getGlobalIndex"
+                @playTrack            = "playTrack"
+                @updatePage           = "(val) => currentPage = val"
               />
             </div>
           </div>
 
           <VolumeControl 
-            :volumeLayout       = "volumeLayout"
+            :volume-layout       = "volumeLayout"
             :volume             = "volume"
-            :isMuted            = "isMuted"
+            :is-muted            = "isMuted"
             :orientation        = "orientation"
             @wheelVolume        = "onWheelVolume"
             @volumeChange       = "onVolumeChange"
@@ -153,16 +144,16 @@
       v-model   = "showToast"
       :message  = "toastMessage"
       :icon     = "toastIcon"
-      @close    = "toastIcon = defaultToastIcon"
+      @close    = "onToastClose"
     />
   </div>
 </template>
 
 <script setup>
 /**
-  * @file        music_player_2.vue
+  * @file        music_player.vue
   * @brief       Main music player component handling YouTube playback, state management, layouts, and subcomponent coordination.
-  * @displayName Music Player 2
+  * @displayName Music Player
 */
 
 import { ref, onMounted, onUnmounted, computed } from 'vue'
@@ -203,14 +194,6 @@ const props = defineProps({
   pageSize: { 
     type    : Number, 
     default : 7 
-  },
-  /**
-    * Determines how the player reacts when overlapping the page footer.
-    * @public
-    */
-  footerBehavior: { 
-    type    : String, 
-    default : 'center' 
   },
   /**
     * The layout style used for the volume control component.
@@ -254,12 +237,7 @@ const currentPage            = ref(1)
 const isLoadingTracks        = ref(true)
 const showImageTape          = ref(false)
 const isSpecialStyle         = ref(false)
-const hasSpecialTapeAccess   = ref(sessionStorage.getItem('unlocked_special_tape') === 'true')
-
-const playerBottom           = ref(16)
-const isCentered             = ref(false)
-const isHidden               = ref(false)
-const isReady                = ref(false)
+const hasSpecialTapeAccess   = ref(false)
 
 const showToast              = ref(false)
 const toastMessage           = ref('')
@@ -277,21 +255,22 @@ const currentIconColor       = computed(() => 'var(--music-player-color-bg-secon
 const currentHoverIconColor  = computed(() => 'var(--music-player-color-bg-secondary)')
 
 /**
+  * Calculates global track index from relative page position.
+  * @private
+  */
+const getGlobalIndex = (i) => (currentPage.value - 1) * props.pageSize + i
+
+/**
   * Formats track duration seconds into a human-readable mm:ss string.
   * @private
   * @param {number} secs - The track duration or current time in seconds.
   * @returns {string} The formatted time string (e.g., '3:45').
   */
 const formatTime = (secs) => {
-  const TimeBuilder = {
-    isInvalid(s) { return isNaN(s) || s <= 0 },
-    build(s) {
-      const m = Math.floor(s / 60)
-      const r = Math.floor(s % 60)
-      return `${m}:${r < 10 ? '0' : ''}${r}`
-    }
-  }
-  return TimeBuilder.isInvalid(secs) ? '0:00' : TimeBuilder.build(secs)
+  if (isNaN(secs) || secs <= 0) return '0:00'
+  const m = Math.floor(secs / 60)
+  const r = Math.floor(secs % 60)
+  return `${m}:${r < 10 ? '0' : ''}${r}`
 }
 
 /**
@@ -301,47 +280,13 @@ const formatTime = (secs) => {
   * @returns {string} The isolated playlist ID string.
   */
 const extractPlaylistId = (val) => {
-  const IdBuilder = {
-    isEmpty(v) { return !v },
-    isPlain(v) { return !v.includes('http') },
-    clean(v) { return v.trim() },
-    fromUrl(v) {
-      try { return new URL(v).searchParams.get('list') || v } catch { return v }
-    }
+  if (!val) return ''
+  if (!val.includes('http')) return val.trim()
+  try {
+    return new URL(val).searchParams.get('list') || val
+  } catch {
+    return val
   }
-  if (IdBuilder.isEmpty(val)) return ''
-  if (IdBuilder.isPlain(val)) return IdBuilder.clean(val)
-  return IdBuilder.fromUrl(val)
-}
-
-/**
-  * Calculates footer overlap and updates player positioning dynamically on scroll.
-  * @private
-  */
-const updateFooterPosition = () => {
-  const FooterBuilder = {
-    getElement() { return document.querySelector('.footer-container') },
-    getOverlap(el) { return window.innerHeight - el.getBoundingClientRect().top }
-  }
-
-  const footer = FooterBuilder.getElement()
-  if (!footer) {
-    playerBottom.value = 30
-    isReady.value = true
-    return
-  }
-
-  const overlap = FooterBuilder.getOverlap(footer)
-  isCentered.value = false
-  isHidden.value = false
-  playerBottom.value = 16
-
-  if (overlap > 0) {
-    if (props.footerBehavior === 'hide') isHidden.value = true
-    else if (props.footerBehavior === 'center') isCentered.value = true
-    playerBottom.value = overlap + 16
-  }
-  isReady.value = true
 }
 
 /**
@@ -352,7 +297,8 @@ const initPlayer = () => {
   if (!window.YT) {
     const tag = document.createElement('script')
     tag.src = 'https://www.youtube.com/iframe_api'
-    document.getElementsByTagName('script')[0].parentNode.insertBefore(tag, document.getElementsByTagName('script')[0])
+    const firstScript = document.getElementsByTagName('script')[0]
+    firstScript.parentNode.insertBefore(tag, firstScript)
     window.onYouTubeIframeAPIReady = createPlayer
   } else {
     createPlayer()
@@ -487,7 +433,12 @@ const togglePlay = () => {
   */
 const stopPlayer = () => {
   if (!player) return
-  player.stopVideo?.() || (player.pauseVideo(), player.seekTo?.(0, true))
+  if (player.stopVideo) {
+    player.stopVideo()
+  } else {
+    player.pauseVideo?.()
+    player.seekTo?.(0, true)
+  }
   isPlaying.value = false
   currentTime.value = 0
   stopInterval()
@@ -543,13 +494,8 @@ const onVolumeChange = (e) => {
   * @param {WheelEvent} e - The mouse wheel scroll event.
   */
 const onWheelVolume = (e) => {
-  const VolumeBuilder = {
-    calculate(cur, delta) {
-      const step = delta < 0 ? 5 : -5
-      return Math.max(0, Math.min(100, cur + step))
-    }
-  }
-  volume.value = VolumeBuilder.calculate(volume.value, e.deltaY)
+  const step = e.deltaY < 0 ? 5 : -5
+  volume.value = Math.max(0, Math.min(100, volume.value + step))
   if (isMuted.value) { isMuted.value = false; player?.unMute?.() }
   player?.setVolume?.(volume.value)
 }
@@ -589,7 +535,6 @@ const toggleTapeStyle = () => {
   */
 const handleRecClick = () => {
   isRecording.value = !isRecording.value
-  //67 NUMBER OF CLICKS HERE !!!!!!!!!!
   if (++recClickCount.value >= 67) {
     recClickCount.value = 0
     toastMessage.value  = '67'
@@ -601,29 +546,56 @@ const handleRecClick = () => {
 }
 
 /**
-  * Handles real-time updates when the special tape option changes.
+  * Checks session storage for special tape access permissions.
   * @private
   */
-const handleSpecialTapeUpdate = (e) => {
-  hasSpecialTapeAccess.value = e.detail.value
-  if (!e.detail.value) {
+const checkTapeAccess = () => {
+  hasSpecialTapeAccess.value = sessionStorage.getItem('unlocked_special_tape') === 'true'
+  if (!hasSpecialTapeAccess.value) {
     isSpecialStyle.value = false
     showImageTape.value = false
   }
 }
 
+/**
+  * Handles special tape access updates triggered by custom events.
+  * @private
+  */
+const handleSpecialTapeUpdate = (e) => {
+  if (e?.detail?.value !== undefined) {
+    hasSpecialTapeAccess.value = Boolean(e.detail.value)
+    if (!hasSpecialTapeAccess.value) {
+      isSpecialStyle.value = false
+      showImageTape.value = false
+    }
+  } else {
+    checkTapeAccess()
+  }
+}
+
+/**
+  * Resets toast icon to default state when notification closes.
+  * @private
+  */
+const onToastClose = () => {
+  toastIcon.value = defaultToastIcon.value
+}
+
 onMounted(() => {
+  checkTapeAccess()
   initPlayer()
-  window.addEventListener('scroll', updateFooterPosition, { passive: true })
   window.addEventListener('special-tape-updated', handleSpecialTapeUpdate)
-  setTimeout(updateFooterPosition, 50)
+  window.addEventListener('session-storage-updated', checkTapeAccess)
+  window.addEventListener('storage', checkTapeAccess)
 })
 
 onUnmounted(() => {
   stopInterval()
-  window.removeEventListener('scroll', updateFooterPosition)
   window.removeEventListener('special-tape-updated', handleSpecialTapeUpdate)
+  window.removeEventListener('session-storage-updated', checkTapeAccess)
+  window.removeEventListener('storage', checkTapeAccess)
 })
+
 /**
   * Resets inline element transition styles when closing the compact player button.
   * @private
@@ -656,6 +628,8 @@ const onCompactLeave = (el) => {
 
 .music-player-wrapper {
   position    : fixed;
+  bottom      : 16px;
+  left        : 16px;
   max-width   : calc(100vw - 24px);
   z-index     : 21;
   display     : flex;
@@ -663,13 +637,9 @@ const onCompactLeave = (el) => {
   width       : auto;
   box-sizing  : border-box;
   pointer-events: none;
-  opacity     : 0;
-  visibility  : hidden;
-  transition  : left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
-}
-
-.music-player-wrapper.is-ready {
+  opacity     : 1;
   visibility  : visible;
+  transition  : left 0.2s ease-out, right 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
   animation   : playerEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -851,6 +821,7 @@ const onCompactLeave = (el) => {
   --music-player-volume-controls-container: var(--special-music-player-volume-controls-container);
   --music-player-volume-controls-track:     var(--special-music-player-volume-controls-track);
 }
+
 @media (max-width: 480px) {
   .music-player-wrapper {
     left      : 12px !important;

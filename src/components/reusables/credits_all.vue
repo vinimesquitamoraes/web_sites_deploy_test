@@ -1,14 +1,16 @@
 <template>
-  <CreditsSection 
-    :credits="formattedCredits" 
-    :linksMap="linksMap" 
-  />
-  <CreditsSection 
-    :credits="specialCredits" 
-    :linksMap="{}" 
-    columns="1"
-    textAlign="center"
-  />
+  <div class="credits-all-wrapper">
+    <CreditsSection 
+      :credits="formattedCredits" 
+      :linksMap="linksMap" 
+    />
+    <CreditsSection 
+      :credits="specialCredits" 
+      :linksMap="{}" 
+      columns="1"
+      textAlign="center"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -27,18 +29,6 @@ import rolesCSVText from '@/assets/csv/credits_roles.csv?raw'
 import linksCSVText from '@/assets/csv/credits_links.csv?raw'
 
 const { t } = useI18n()
-
-const toggle_debug_log = true 
-
-/**
-  * Logs debug messages to the console if debugging is toggle_debug_log is true.
-  * @private
-  */
-const debugLog = (...args) => {
-  if (toggle_debug_log) {
-    console.log(...args)
-  }
-}
 
 const props = defineProps({
   /**
@@ -72,33 +62,54 @@ const specialCredits = computed(() => [
 ])
 
 /**
+  * Robust RFC-4180 safe CSV line splitter.
+  * @param {string} line - CSV row string.
+  * @private
+  */
+const splitCSVLine = (line) => {
+  const result = []
+  let current = ''
+  let inQuotes = false
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i]
+    if (char === '"' && line[i + 1] === '"') {
+      current += '"'
+      i++
+    } else if (char === '"') {
+      inQuotes = !inQuotes
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim())
+      current = ''
+    } else {
+      current += char
+    }
+  }
+  result.push(current.trim())
+  return result
+}
+
+/**
   * Parses raw CSV text into structured JavaScript objects.
   * @private
   */
 const parseCSV = (text) => {
-  debugLog('[parseCSV] Started parsing text of length:', text?.length)
   if (!text) return []
   
   const lines = text.split(/\r?\n/).filter(line => line.trim() !== '')
-  debugLog('[parseCSV] Total lines found:', lines.length)
-  
   if (lines.length === 0) return []
 
-  const headers = lines[0].split(',').map(h => h.trim())
-  debugLog('[parseCSV] Headers extracted:', headers)
+  const headers = splitCSVLine(lines[0])
 
-  const parsedData = lines.slice(1).map((row, index) => {
-    const values = row.split(',')
+  return lines.slice(1).map((row) => {
+    const values = splitCSVLine(row)
     const obj = {}
     
     headers.forEach((header, idx) => {
-      obj[header] = values[idx] ? values[idx].trim() : ''
+      obj[header] = values[idx] ? values[idx] : ''
     })
     return obj
   })
-  
-  debugLog('[parseCSV] Finished parsing into objects:', parsedData)
-  return parsedData
 }
 
 /**
@@ -106,7 +117,6 @@ const parseCSV = (text) => {
   * @private
   */
 const linksMap = computed(() => {
-  debugLog('[linksMap] Generating dictionary from links CSV...')
   const map = {}
   const rawLinks = parseCSV(linksCSVText)
   
@@ -119,7 +129,6 @@ const linksMap = computed(() => {
     }
   })
   
-  debugLog('[linksMap] Final dictionary generated:', map)
   return map
 })
 
@@ -128,13 +137,10 @@ const linksMap = computed(() => {
   * @private
   */
 const formattedCredits = computed(() => {
-  debugLog(`[formattedCredits] Building credits for ACT: ${props.act}`)
   const rawRoles = parseCSV(rolesCSVText)
   
-  const groups = rawRoles.map((row, index) => {
-    debugLog(`[formattedCredits] Processing row ${index}...`, row)
-    
-    const roleKey = row['Translation Key'].trim()
+  const groups = rawRoles.map((row) => {
+    const roleKey = (row['Translation Key'] || '').trim()
     const englishFallback = (row['Role'] || '').trim()
 
     let rawNames = ''
@@ -149,7 +155,6 @@ const formattedCredits = computed(() => {
     const processedNames = namesList.map(name => {
       const matchKey = name.toLowerCase()
       const foundLink = linksMap.value[matchKey] || null
-      if (foundLink) debugLog(`[formattedCredits] Found link for ${name}: ${foundLink}`)
       
       return {
         name: name,
@@ -168,8 +173,6 @@ const formattedCredits = computed(() => {
     }
   }).filter(group => group.names.length > 0)
 
-  debugLog('[formattedCredits] Final generated groups:', groups)
-
   return [
     {
       title: '',
@@ -178,3 +181,12 @@ const formattedCredits = computed(() => {
   ]
 })
 </script>
+
+<style scoped>
+.credits-all-wrapper {
+  width          : 100%;
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
+}
+</style>

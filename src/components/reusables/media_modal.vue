@@ -15,7 +15,7 @@
           hoverBgColor   = "var(--media-modal-button-bg-hover)"
           pressAnimation = "scale"
           :iconSrc       = "img_close"
-          @click         = "$emit('close')"
+          @click         = "handleClose"
         />
       </div>
       
@@ -44,6 +44,7 @@
         />
         <video 
           v-else-if="mediaItem?.type === 'video'" 
+          ref="videoRef"
           :src="mediaItem.src" 
           controls 
           autoplay 
@@ -79,13 +80,14 @@
   * @displayName Media Modal
 */
 
+import { ref, watch, onUnmounted } from 'vue'
 import CustomButton from './custom_button.vue'
 
 import img_left_arrow   from '@/assets/svg/triangle-left-12-filled.svg'
 import img_right_arrow  from '@/assets/svg/triangle-right-12-filled.svg'
 import img_close        from '@/assets/svg/close-svgrepo-com.svg'
 
-defineProps({
+const props = defineProps({
   /**
     * Controls whether the modal overlay is active and visible.
     * @public
@@ -114,7 +116,7 @@ defineProps({
   }
 })
 
-defineEmits([
+const emit = defineEmits([
   /**
     * Triggered when the user clicks the overlay background or the close button.
     * @public
@@ -131,6 +133,57 @@ defineEmits([
     */
   'prev'
 ])
+
+const videoRef = ref(null)
+
+/**
+  * Stops video playback, detaches media stream, and clears memory buffer.
+  * @private
+  */
+const cleanupVideo = () => {
+  if (videoRef.value) {
+    videoRef.value.pause()
+    videoRef.value.removeAttribute('src')
+    videoRef.value.load()
+  }
+}
+
+/**
+  * Wrapper function to clean active video instance before firing close event.
+  * @private
+  */
+const handleClose = () => {
+  cleanupVideo()
+  emit('close')
+}
+
+/**
+  * Keydown handler for keyboard modal controls (Esc, Left, Right).
+  * @param {KeyboardEvent} e
+  * @private
+  */
+const handleKeyDown = (e) => {
+  if (!props.isOpen) return
+  if (e.key === 'Escape') handleClose()
+  if (props.showNav && e.key === 'ArrowLeft') emit('prev')
+  if (props.showNav && e.key === 'ArrowRight') emit('next')
+}
+
+// Watch modal status to manage active window event listeners and cleanup video on close
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    window.addEventListener('keydown', handleKeyDown)
+  } else {
+    cleanupVideo()
+    window.removeEventListener('keydown', handleKeyDown)
+  }
+})
+
+// Clean up video and listeners if modal unmounts while open
+onUnmounted(() => {
+  cleanupVideo()
+  window.removeEventListener('keydown', handleKeyDown)
+})
 </script>
 
 <style scoped>

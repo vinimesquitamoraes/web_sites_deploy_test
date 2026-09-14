@@ -7,14 +7,14 @@
     <AppHeader />
 
     <div class="animation-toggle-bar">
-      <span class="toggle-label">{{t('SITE_REDUCED_MOTION')}}</span>
+      <span class="toggle-label">{{ t('SITE_REDUCED_MOTION') }}</span>
       <ToggleButton 
         :modelValue="!animationsEnabled" 
         @change="handleAnimationToggle"
-        :width  = "40"
-        :height = "20"
-        activeBgColor = "var(--color-secondary)"
-        hoverBgColor = "var(--color-primary)"
+        :width="40"
+        :height="20"
+        activeBgColor="var(--color-secondary)"
+        hoverBgColor="var(--color-primary)"
       />
     </div>
 
@@ -26,23 +26,21 @@
       </router-view>
     </div>
 
-    <BackToTop 
-      footerBehavior="stay" 
-    />
+    <BackToTop />
 
     <MusicPlayer 
       v-if="!route.meta.hideMusicPlayer"
-      playlistId        ="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
-      footerBehavior    ="stay" 
-      volumeLayout      ="bar"
-      minimizedBehavior = "compact"
+      playlistId="PLhtMNOPRVvaALJNwIWPeR3fMunIpoxt63" 
+      volumeLayout="bar"
+      minimizedBehavior="compact"
     />
 
-    <div ref="footerRef" class="footer-container">
+    <div class="footer-container">
       <AppFooter />
     </div>
   </div>
 </template>
+
 <script setup>
   /**
     * @file        App.vue
@@ -53,14 +51,14 @@
   import { useI18n } from '@/composables/useI18n'
   import { useAnimations } from '@/composables/reduced_motion_check'
 
-  import AppHeader      from '@/components/reusables/app_header.vue'
-  import AppFooter      from '@/components/reusables/app_footer.vue'
-  import BackToTop      from '@/components/reusables/back_to_top_button.vue'
-  import MusicPlayer    from '@/components/reusables/music_player.vue'
-  import ToggleButton   from '@/components/reusables/toggle_button.vue'
+  import AppHeader    from '@/components/reusables/app_header.vue'
+  import AppFooter    from '@/components/reusables/app_footer.vue'
+  import BackToTop    from '@/components/reusables/back_to_top_button.vue'
+  import MusicPlayer  from '@/components/reusables/music_player.vue'
+  import ToggleButton from '@/components/reusables/toggle_button.vue'
   
   const route = useRoute()
-  const { loadTranslations, isLoaded } = useI18n()
+  const { loadTranslations, isLoaded, t } = useI18n()
   const { animationsEnabled, setAnimationsEnabled } = useAnimations()
 
   onMounted(() => {
@@ -73,9 +71,6 @@
   const handleAnimationToggle = (value) => {
     setAnimationsEnabled(!value)
   }
-
-  const { t } = useI18n()
-
 </script>
 
 <style>
@@ -519,7 +514,7 @@ body.reduce-motion *::after {
 
 body {
   margin                : 0;
-  background            : var(--color-default-background) ;
+  background            : var(--color-default-background);
   overflow-x            : hidden;
 }
 
@@ -583,7 +578,6 @@ body {
   max-width             : 1240px;
   display               : flex;
   flex-direction        : column;  
-  
 }
 
 .section-title {

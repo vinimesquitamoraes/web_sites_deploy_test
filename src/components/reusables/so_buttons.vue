@@ -88,9 +88,14 @@ const isClickable = computed(() => {
   return Boolean(props.clickable)
 })
 
-const platformInput = props.platform.toLowerCase()
-const key = (platformInput === 'macos' || platformInput === 'mac') ? 'mac' : platformInput
-
+/**
+  * Normalizes platform input string.
+  * @private
+  */
+const activeKey = computed(() => {
+  const input = (props.platform || '').toLowerCase()
+  return (input === 'macos' || input === 'mac') ? 'mac' : input
+})
 
 const platforms = {
   windows: {
@@ -107,16 +112,22 @@ const platforms = {
   },
 }
 
-const platformInfo = platforms[key] || {
-  url: '#',
-  label: props.platform
-}
+/**
+  * Resolves platform metadata dictionary.
+  * @private
+  */
+const platformInfo = computed(() => {
+  return platforms[activeKey.value] || {
+    url: '#',
+    label: props.platform
+  }
+})
 
 /**
   * Resolves final target URL based on props and defaults.
   * @private
   */
-const resolvedUrl = computed(() => props.url || platformInfo.url)
+const resolvedUrl = computed(() => props.url || platformInfo.value.url)
 
 const soIcons = import.meta.glob('/src/assets/svg/so_icons/*.svg', {
   eager: true,
@@ -134,7 +145,7 @@ const iconSize = computed(() => (typeof props.size === 'number' ? `${props.size}
   * @private
   */
 const iconMask = computed(() => {
-  const fullPath = `/src/assets/svg/so_icons/${key}.svg`
+  const fullPath = `/src/assets/svg/so_icons/${activeKey.value}.svg`
   const iconUrl = soIcons[fullPath] || ''
   return `url("${iconUrl}")`
 })
@@ -146,8 +157,6 @@ const iconMask = computed(() => {
 const handleClick = (e) => {
   if (!isClickable.value) {
     e.preventDefault()
-    e.stopPropagation()
-    e.stopImmediatePropagation()
   }
 }
 </script>
