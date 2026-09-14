@@ -64,7 +64,7 @@ function postBuildRoutePages() {
 }
 
 export default defineConfig({
-  base: '/',
+  base: '/web_sites_deploy_test/',
   assetsInclude: ['**/*.xlsx'],
   plugins: [
     vue(),
