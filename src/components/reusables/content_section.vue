@@ -58,7 +58,6 @@
             margin: '100px'
           }"
         >
-          <!-- @slot actions - Slot for buttons or extra controls -->
           <slot name="actions"></slot>
         </div>
       </div>
@@ -86,10 +85,9 @@
               borderRadius: mediaBorderRadius
             }"
           >
-            <!-- @slot media - Custom media content slot -->
             <slot name="media">
               <iframe 
-                v-if="mediaType === 'video' && mediaSrc"
+                v-if="mediaType === 'video' && mediaSrc && isEmbeddedVideo"
                 :src="mediaSrc" 
                 :title="mediaAlt || heading"
                 class="content-section-video-iframe"
@@ -98,6 +96,17 @@
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
               ></iframe>
+
+              <video
+                v-else-if="mediaType === 'video' && mediaSrc"
+                :src="mediaSrc"
+                autoplay
+                loop
+                muted
+                playsinline
+                class="content-section-video-element"
+                :style="{ height: mediaHeight !== 'auto' ? mediaHeight : 'auto' }"
+              ></video>
 
               <img 
                 v-else-if="mediaType === 'image' && mediaSrc"
@@ -280,7 +289,7 @@ const props = defineProps({
     default : '0px'
   },
   /**
-    * Source URL for the media asset (image or video iframe).
+    * Source URL or local file path for the media asset (image, video iframe, or local video file).
     * @public
     */
   mediaSrc: {
@@ -352,7 +361,7 @@ const props = defineProps({
   /**
     * Controls whether images expand into a modal view on click.
     * @public
-    */
+  */
   imageOpenable: {
     type    : Boolean,
     default : true
@@ -407,6 +416,18 @@ const isModalOpen = ref(false)
 const hasError    = ref(false)
 
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
+
+/**
+  * Evaluates whether the media source points to an external iframe embed provider.
+  * @private
+*/
+const isEmbeddedVideo = computed(() => {
+  if (!props.mediaSrc) return false
+  return props.mediaSrc.includes('youtube') || 
+         props.mediaSrc.includes('youtu.be') || 
+         props.mediaSrc.includes('vimeo') || 
+         props.mediaSrc.includes('embed')
+})
 
 /**
   * Handles right-click events according to the `allowSaveAs` property configuration.
@@ -464,7 +485,6 @@ const closeImageModal = () => {
   document.body.style.overflow = ''
 }
 
-// Ensure body scrolling is restored if the component unmounts while modal is open
 onUnmounted(() => {
   if (isModalOpen.value) {
     document.body.style.overflow = ''
@@ -633,6 +653,36 @@ onUnmounted(() => {
   display               : block;
 }
 
+.content-section-video-element {
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
+  pointer-events      : none;
+  width               : 100%;
+  max-width           : 100%;
+  height              : auto;
+  display             : block;
+  object-fit          : cover;
+}
+
+.content-section-video-element::-webkit-media-controls {
+  display             : none !important;
+  -webkit-appearance  : none;
+}
+
+.content-section-video-element::-webkit-media-controls-enclosure {
+  display             : none !important;
+}
+
+.content-section-video-element::-webkit-media-controls-panel {
+  display             : none !important;
+}
+
+.content-section-video-element::-js-controls {
+  display             : none !important;
+}
+
 @media (max-width: 1220px) {
   .content-section-wrapper {
     width               : calc(100% - 12px);
@@ -669,7 +719,8 @@ onUnmounted(() => {
     height              : auto !important;
   }
 
-  .content-section-media-img {
+  .content-section-media-img,
+  .content-section-video-element {
     height              : auto !important;
     max-height          : none !important;
     object-fit          : contain !important;

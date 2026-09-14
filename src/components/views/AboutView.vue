@@ -62,11 +62,11 @@ import CustomButton   from '@/components/reusables/custom_button.vue'
 
 import musicNoteSvg from '@/assets/svg/music-note-4-svgrepo-com.svg'
 
-import combatImage  from '@/assets/img/screenshots/sc4.png'
-import fieldImage   from '@/assets/img/screenshots/sc1.png'
-import storyImage   from '@/assets/img/screenshots/sc2.png'
-import visualImage  from '@/assets/img/screenshots/sc3.png'
-import musicImage   from '@/assets/img/screenshots/sc7.png'
+import combatMedia  from '@/assets/mp4/showreels/Combat.mp4'
+import fieldMedia   from '@/assets/mp4/showreels/Field Skills & Dungeons.mp4'
+import storyMedia   from '@/assets/mp4/showreels/Story.mp4'
+import visualMedia  from '@/assets/mp4/showreels/Panning.mp4'
+import musicMedia   from '@/assets/gif/showreels/Music.gif'
 
 import godotImage   from '@/assets/img/logos/logo_large_monochrome_light.png'
 const { t } = useI18n()
@@ -86,32 +86,32 @@ const infoSections_1 = computed(() => [
   {
     title       : t('SITE_ABOUT_COMBAT_TITLE'),
     text        : t('SITE_ABOUT_COMBAT_P1'),
-    image       : combatImage,
-    content_type: "image",
+    image       : combatMedia,
+    content_type: "video",
   },
   {
     title       : t('SITE_ABOUT_FIELD_SKILLS_TITLE'),
     text        : t('SITE_ABOUT_FIELD_SKILLS_P1'),
-    image       : fieldImage,
-    content_type: "image",
+    image       : fieldMedia,
+    content_type: "video",
   },
   {
     title       : t('SITE_ABOUT_STORY_TITLE'),
     text        : t('SITE_ABOUT_STORY_P1'),
-    image       : storyImage,
-    content_type: "image",
+    image       : storyMedia,
+    content_type: "video",
   },
   {
     title       : t('SITE_ABOUT_VISUALS_TITLE'),
     text        : t('SITE_ABOUT_VISUALS_P1'),
-    image       : visualImage,
-    content_type: "image"
+    image       : visualMedia,
+    content_type: "video"
   },
     {
     title       : t('SITE_ABOUT_MUSIC_TITLE'),
     text        : t('SITE_ABOUT_MUSIC_P1'),
     content_type: "image",
-    image       : musicImage,
+    image       : musicMedia,
     actionsAlign: "center"
 
   },    
