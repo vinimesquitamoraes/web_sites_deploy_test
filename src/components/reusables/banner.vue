@@ -2,18 +2,23 @@
   <transition :name="animationsEnabled ? 'banner-fade' : ''" :appear="animationsEnabled">
     <section class="hero-banner">
       <div class="hero-image-wrapper">
-        <transition :name="animationsEnabled ? 'bg-fade' : ''">
-          <div 
-            class       ="hero-bg-image"
-            :key        ="`${activeImageSrc}-${isSessionActive}`"
-            :style      ="{ backgroundImage: `url(${activeImageSrc})` }"
-            :class      ="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
-            :aria-label ="imageAlt"
-            role="img"
-          ></div>
+        <transition 
+          :name="animationsEnabled ? 'hero-bg-scroll' : ''" 
+          :appear="animationsEnabled"
+        >
+          <transition :name="animationsEnabled ? 'bg-fade' : ''">
+            <div 
+              class       ="hero-bg-image"
+              :key        ="`${activeImageSrc}-${isSessionActive}`"
+              :style      ="{ backgroundImage: `url(${activeImageSrc})` }"
+              :class      ="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
+              :aria-label ="imageAlt"
+              role="img"
+            ></div>
+          </transition>
         </transition>
         <div class="hero-overlay"></div>
-        <transition :name="animationsEnabled ? 'slide-left' : ''" :appear="animationsEnabled">
+        <transition :name="animationsEnabled ? 'slide-from-left' : ''" :appear="animationsEnabled">
           <img 
             v-if="!isSessionActive"
             :src="charactersImage" 
@@ -48,7 +53,8 @@
           </transition>
 
           <transition :name="animationsEnabled ? 'pop-in' : ''" :appear="animationsEnabled">
-            <CustomButton 
+            <CustomButton
+              class         = "cta_button"
               v-if="showCtaButton"
               :text         ="ctaText || t('SITE_NAV_DOWNLOAD')" 
               :to           ="ctaLink" 
@@ -107,10 +113,6 @@ const { animationsEnabled } = useAnimations()
 
 const logoSrc = img_gameLogo
 
-/**
-  * Vignet preset styles for the banner
-  * @private
-*/
 const VIGNETTE_STYLES = {
   style_1: 'radial-gradient(circle    , rgba(0,0,0,0.2) 0% , rgba(0,0,0,0.6 ) 100%)',
   style_2: 'linear-gradient(to bottom , rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.8 ) 100%)',
@@ -264,7 +266,10 @@ const props = defineProps({
   }
 })
 
-/** Selects a random alternative background image from the configured array. */
+/**
+  * Selects a random alternative background image from the configured array.
+  * @private
+*/
 const getRandomAlternative = () => {
   const AlternativeBuilder = {
     hasImages(images) {
@@ -298,12 +303,11 @@ watch(isSessionActive, (newVal) => {
 /**
   * Computed CSS user-select property value based on selection protection configuration.
   * @private
-  */
+*/
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
 
 /**
   * Handles right-click events according to the `allowSaveAs` property configuration.
-  * Stops propagation to guarantee element trees do not trigger native context menu.
   * @param {MouseEvent} event - Context menu event instance.
   * @private
 */
@@ -314,7 +318,8 @@ const handleContextMenu = (event) => {
   }
 }
 
-/** Checks and updates the active session state based on session storage value changes.
+/**
+  * Checks and updates the active session state based on session storage value changes.
   * @private
 */
 const checkSessionState = () => {
@@ -326,7 +331,9 @@ const checkSessionState = () => {
   }
 }
 
-/** Event listener handler for window storage updates across windows/tabs. 
+/**
+  * Event listener handler for window storage updates across windows/tabs.
+  * @param {StorageEvent} event - Storage event instance.
   * @private
 */
 const handleStorageChange = (event) => {
@@ -371,7 +378,8 @@ onUnmounted(() => {
   if (sessionPollIntervalId) clearInterval(sessionPollIntervalId)
 })
 
-/** Computed property that resolves the current background image URL.
+/**
+  * Computed property that resolves the current background image URL.
   * @private
 */
 const activeImageSrc = computed(() => {
@@ -392,7 +400,8 @@ const activeImageSrc = computed(() => {
   )
 })
 
-/** Computed property to determine if the background scroll animation is active.
+/**
+  * Computed property to determine if the background scroll animation is active.
   * @private
 */
 const isScrollableActive = computed(() => {
@@ -408,7 +417,8 @@ const isScrollableActive = computed(() => {
   return ScrollableBuilder.resolveState(isSessionActive.value, props.isScrollable)
 })
 
-/** Computed property that resolves the current active scroll direction style.
+/**
+  * Computed property that resolves the current active scroll direction style.
   * @private
 */
 const activeScrollDirection = computed(() => {
@@ -428,14 +438,16 @@ const activeScrollDirection = computed(() => {
   )
 })
 
-/** Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS. 
+/**
+  * Computed property to map the vignetteStyle prop key to a style string, or fallback to raw CSS.
   * @private
 */
 const resolvedVignette = computed(() => {
   return VIGNETTE_STYLES[props.vignetteStyle] || props.vignetteStyle
 })
 
-/** Resolved vignette background style computed from resolvedVignette.
+/**
+  * Resolved vignette background style computed from resolvedVignette.
   * @private
 */
 const cssVignetteBackground = computed(() => resolvedVignette.value)
@@ -444,6 +456,14 @@ defineEmits(['cta-click'])
 </script>
 
 <style scoped>
+.hero-bg-scroll-enter-active .hero-bg-image {
+  transition      : transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease-out;
+  transition-delay: 0.1s;
+}
+.hero-bg-scroll-enter-from .hero-bg-image {
+  opacity         : 0;
+  transform       : translateY(100%) scale(1.02);
+}
 
 .banner-fade-enter-active {
   transition: opacity 0.8s ease-out;
@@ -452,17 +472,17 @@ defineEmits(['cta-click'])
   opacity: 0;
 }
 
-.slide-left-enter-active {
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+.slide-from-left-enter-active {
+  transition      : transform 2.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
   transition-delay: 0.2s;
 }
-.slide-left-enter-from {
+.slide-from-left-enter-from {
   opacity: 0;
-  transform: translateX(-100px);
+  transform: translateX(-100vw);
 }
 
 .slide-down-enter-active {
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+  transition      : transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
   transition-delay: 0.3s;
 }
 .slide-down-enter-from {
@@ -471,7 +491,7 @@ defineEmits(['cta-click'])
 }
 
 .slide-down-delay-enter-active {
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+  transition      : transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
   transition-delay: 0.45s;
 }
 .slide-down-delay-enter-from {
@@ -480,7 +500,7 @@ defineEmits(['cta-click'])
 }
 
 .pop-in-enter-active {
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease-out;
+  transition      : transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease-out;
   transition-delay: 0.6s;
 }
 .pop-in-enter-from {
@@ -697,7 +717,7 @@ defineEmits(['cta-click'])
 
 @media (max-width: 768px) {
   .hero-banner {
-    height            : 400px;
+    height            : 300px;
   }
 
   .hero-content {
@@ -705,19 +725,36 @@ defineEmits(['cta-click'])
   }
 
   .hero-logo-image {
-    max-width         : 280px;
+    visibility      : hidden;
   }
   
   .hero-subtitle {
     font-family       : var(--font-mobile-h2) !important;
     font-size         : clamp(1.1rem, 4.5vw, var(--font-mobile-h2-size)) !important;
     padding           : 0 0.5rem;
+    margin-bottom     : 0.5rem !important; 
   }
 
   .hero-bottom-right-image {
     height            : clamp(220px, 50vh, 280px);
     bottom            : 0px;
-    right             : 0px;
+    left              : 50%;
+    right             : auto;
+    transform         : translateX(-50%);
+  }
+
+  .slide-from-left-enter-from {
+    opacity           : 0;
+    transform         : translateX(-100vw);
+  }
+
+  .slide-from-left-enter-to {
+    transform         : translateX(-50%);
+  }
+
+  .slide-from-left-enter-active {
+    transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out;
+    transition-delay: 0.1s;
   }
 }
 </style>

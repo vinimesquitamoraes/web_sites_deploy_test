@@ -97,19 +97,43 @@
                 allowfullscreen
               ></iframe>
 
-              <video
-                v-else-if="mediaType === 'video' && mediaSrc"
-                ref="videoRef"
-                :src="mediaSrc"
-                :autoplay="animationsEnabled"
-                loop
-                muted
-                playsinline
-                class="content-section-video-element"
-                :style="{ height: mediaHeight !== 'auto' ? mediaHeight : 'auto' }"
-                @mouseenter="handleMouseEnter"
-                @mouseleave="handleMouseLeave"
-              ></video>
+              <div 
+                v-else-if="mediaType === 'video' && mediaSrc" 
+                class="content-section-video-wrapper"
+              >
+                <video
+                  ref="videoRef"
+                  :src="mediaSrc"
+                  :autoplay="animationsEnabled"
+                  loop
+                  muted
+                  playsinline
+                  class="content-section-video-element"
+                  :style="{ height: mediaHeight !== 'auto' ? mediaHeight : 'auto' }"
+                  @mouseenter="handleMouseEnter"
+                  @mouseleave="handleMouseLeave"
+                  @click="handleVideoClick"
+                  @play="isPlaying = true"
+                  @pause="isPlaying = false"
+                ></video>
+
+                <CustomButton
+                  v-if="!animationsEnabled && !isPlaying"
+                  class          ="content-section-video-control-btn"
+                  :icon-src       ="playSvg"
+                  iconColor       ="var(--color-primary)"
+                  hoverIconColor  ="var(--back-to-top-button-icon-color-hover)"
+                  bg-color        ="var(--color-default-background)"
+                  hover-bg-color  ="var(--color-primary)"
+                  width           ="48px"
+                  height          ="48px"
+                  padding         ="0"
+                  icon-size       ="24px"
+                  press-animation="none"
+                  border          ="none"
+                  @click.stop="toggleVideoPlay"
+                />
+              </div>
 
               <img 
                 v-else-if="mediaType === 'image' && mediaSrc"
@@ -156,6 +180,10 @@
 import { ref, computed, watch, onUnmounted } from 'vue'
 
 import MediaModal from './media_modal.vue'
+import CustomButton from './custom_button.vue'
+
+import playSvg from '@/assets/svg/player-play.svg'
+import pauseSvg from '@/assets/svg/player-pause.svg'
 
 import { useAnimations } from '@/composables/reduced_motion_check'
 
@@ -433,6 +461,7 @@ const { animationsEnabled } = useAnimations()
 const videoRef = ref(null)
 const isModalOpen = ref(false)
 const hasError    = ref(false)
+const isPlaying   = ref(false)
 
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
 
@@ -456,6 +485,30 @@ const handleMouseLeave = () => {
     if (props.videoPauseMode === 'rewind') {
       videoRef.value.currentTime = 0
     }
+  }
+}
+
+/**
+  * Toggles video playback manually when triggered via control overlay.
+  * @private
+*/
+const toggleVideoPlay = () => {
+  if (!videoRef.value) return
+  if (videoRef.value.paused) {
+    videoRef.value.play().catch(() => {})
+  } else {
+    videoRef.value.pause()
+  }
+}
+
+/**
+  * Toggles video playback when clicked on mobile devices under reduced motion preferences.
+  * @private
+*/
+const handleVideoClick = () => {
+  const isMobile = window.innerWidth <= 1220
+  if (isMobile && !animationsEnabled.value) {
+    toggleVideoPlay()
   }
 }
 
@@ -505,6 +558,20 @@ const shouldShowHeader = computed(() => {
 
 watch(() => props.mediaSrc, () => {
   hasError.value = false
+})
+
+/**
+  * Reactively synchronizes video playback state with changes in reduced motion preferences.
+  * @private
+*/
+watch(animationsEnabled, (enabled) => {
+  if (props.mediaType === 'video' && videoRef.value) {
+    if (enabled) {
+      videoRef.value.play().catch(() => {})
+    } else {
+      videoRef.value.pause()
+    }
+  }
 })
 
 /**
@@ -695,6 +762,15 @@ onUnmounted(() => {
   display               : block;
 }
 
+.content-section-video-wrapper {
+  position              : relative;
+  width                 : 100%;
+  height                : 100%;
+  display               : flex;
+  align-items           : center;
+  justify-content       : center;
+}
+
 .content-section-video-element {
   -webkit-user-select : v-bind(userSelectValue);
   -moz-user-select    : v-bind(userSelectValue);
@@ -723,6 +799,14 @@ onUnmounted(() => {
 
 .content-section-video-element::-js-controls {
   display             : none !important;
+}
+
+.content-section-video-control-btn {
+  display             : none !important;
+  position            : absolute;
+  border-radius       : 50% !important;
+  z-index             : 2;
+  transform           : none !important;
 }
 
 @media (max-width: 1220px) {
@@ -766,6 +850,10 @@ onUnmounted(() => {
     height              : auto !important;
     max-height          : none !important;
     object-fit          : contain !important;
+  }
+
+  .content-section-video-control-btn {
+    display             : inline-flex !important;
   }
 }
 

@@ -314,6 +314,9 @@ const descriptionParagraphs = computed(() => {
   .character-info {
     align-items    : center;
   }
+  .character-info p {
+    font-size      : var(--character-card-title-size-mobile);
+  }
 
   .character-info h3 {
     font-size      : var(--character-card-title-size-mobile);

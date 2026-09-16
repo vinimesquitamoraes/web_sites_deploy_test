@@ -478,6 +478,7 @@ onUnmounted(() => {
   width      : 100%;
   max-width  : 1240px;
   box-sizing : border-box;
+  
 }
 
 .main-viewport {
