@@ -55,7 +55,7 @@
           class="content-section-actions"
           :style="{ 
             alignSelf: actionsAlign === 'right' ? 'flex-end' : (actionsAlign === 'center' ? 'center' : 'flex-start'), 
-            margin: '100px'
+            marginTop: '50px'
           }"
         >
           <slot name="actions"></slot>
@@ -99,13 +99,16 @@
 
               <video
                 v-else-if="mediaType === 'video' && mediaSrc"
+                ref="videoRef"
                 :src="mediaSrc"
-                autoplay
+                :autoplay="animationsEnabled"
                 loop
                 muted
                 playsinline
                 class="content-section-video-element"
                 :style="{ height: mediaHeight !== 'auto' ? mediaHeight : 'auto' }"
+                @mouseenter="handleMouseEnter"
+                @mouseleave="handleMouseLeave"
               ></video>
 
               <img 
@@ -146,12 +149,15 @@
 /**
   * @file content_section.vue
   * @brief Content section component supporting headings, dynamic body text paragraphs, embedded media, 
-  *        flexible layouts, configurable dragging, and context menu options.
+  *        flexible layouts, configurable dragging, context menu options, and accessibility-driven video autoplay.
   * @displayName Content Section
 */
 
 import { ref, computed, watch, onUnmounted } from 'vue'
+
 import MediaModal from './media_modal.vue'
+
+import { useAnimations } from '@/composables/reduced_motion_check'
 
 const props = defineProps({
   /**
@@ -409,13 +415,49 @@ const props = defineProps({
     type    : String,
     default : 'left',
     validator: (value) => ['left', 'center', 'right'].includes(value)
+  },
+  /**
+    * Controls how video stops when unhovered in reduced motion mode ('pause' or 'rewind').
+    * @values pause, rewind
+    * @public
+    */
+  videoPauseMode: {
+    type     : String,
+    default  : 'pause',
+    validator: (value) => ['pause', 'rewind'].includes(value)
   }
 })
 
+const { animationsEnabled } = useAnimations()
+
+const videoRef = ref(null)
 const isModalOpen = ref(false)
 const hasError    = ref(false)
 
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
+
+/**
+  * Plays video element when hovered if motion/animations are disabled.
+  * @private
+*/
+const handleMouseEnter = () => {
+  if (!animationsEnabled.value && videoRef.value) {
+    videoRef.value.play().catch(() => {})
+  }
+}
+
+/**
+  * Handles video leave state based on `videoPauseMode` prop when motion/animations are disabled.
+  * @private
+*/
+const handleMouseLeave = () => {
+  if (!animationsEnabled.value && videoRef.value) {
+    videoRef.value.pause()
+    if (props.videoPauseMode === 'rewind') {
+      videoRef.value.currentTime = 0
+    }
+  }
+}
 
 /**
   * Evaluates whether the media source points to an external iframe embed provider.
@@ -658,7 +700,7 @@ onUnmounted(() => {
   -moz-user-select    : v-bind(userSelectValue);
   -ms-user-select     : v-bind(userSelectValue);
   user-select         : v-bind(userSelectValue);
-  pointer-events      : none;
+  pointer-events      : auto;
   width               : 100%;
   max-width           : 100%;
   height              : auto;

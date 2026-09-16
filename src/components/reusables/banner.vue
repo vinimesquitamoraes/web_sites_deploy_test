@@ -1,69 +1,86 @@
 <template>
-  <section class="hero-banner">
-    <div class="hero-image-wrapper">
-      <transition name="bg-fade">
-        <div 
-          class       ="hero-bg-image"
-          :key        ="activeImageSrc"
-          :style      ="{ backgroundImage: `url(${activeImageSrc})` }"
-          :class      ="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
-          :aria-label ="imageAlt"
-          role="img"
-        ></div>
-      </transition>
-      <div class="hero-overlay"></div>
-    </div>
-
-    <div class="hero-content center">
-      <!-- @slot media - Custom content slot -->
-      <slot name="content">
-        <div 
-          class="hero-logo-wrapper" 
-          v-if="showLogo"
-          @contextmenu="handleContextMenu"
-        >
+  <transition :name="animationsEnabled ? 'banner-fade' : ''" :appear="animationsEnabled">
+    <section class="hero-banner">
+      <div class="hero-image-wrapper">
+        <transition :name="animationsEnabled ? 'bg-fade' : ''">
+          <div 
+            class       ="hero-bg-image"
+            :key        ="`${activeImageSrc}-${isSessionActive}`"
+            :style      ="{ backgroundImage: `url(${activeImageSrc})` }"
+            :class      ="(isScrollableActive === true || isScrollableActive === 'true') && activeScrollDirection !== 'none' ? `scroll-${activeScrollDirection}` : ''"
+            :aria-label ="imageAlt"
+            role="img"
+          ></div>
+        </transition>
+        <div class="hero-overlay"></div>
+        <transition :name="animationsEnabled ? 'slide-left' : ''" :appear="animationsEnabled">
           <img 
-            :src="logoSrc" 
-            alt="Game Logo" 
-            class="hero-logo-image" 
-            :draggable="allowDrag"
+            v-if="!isSessionActive"
+            :src="charactersImage" 
+            alt="Ninten and Lloyd" 
+            class="hero-bottom-right-image"
+            :draggable="false"
             @contextmenu="handleContextMenu"
           />
-        </div>
+        </transition>
+      </div>
 
-        <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
-        
-        <CustomButton 
-          v-if="showCtaButton"
-          :text         ="ctaText || t('SITE_NAV_DOWNLOAD')" 
-          :to           ="ctaLink" 
-          @click        ="$emit('cta-click')" 
-          :icon-src     ="dowload_icon"
-          border        ="var(--color-banner-button-border )"
-          bgColor       ="var(--color-banner-button-bg)"
-          hover-bg-color="var(--color-banner-button-hover-bg)"
-          icon-color    ="var(--color-banner-button-icon)"
-          text-color    ="var(--color-banner-button-text)"
-          icon-size     ="40px"
-          icon-position ="left"
-          icon-margin   ="0   -5px 0 0"
-          text-margin   ="4px 10px 0 0"
-          fontSize      ="var(--font-h2-size)" 
-          width         ="200px"
-          height        ="60px"
-          :autoAdaptSize = true
-        />
-      </slot>
-    </div>
+      <div class="hero-content center">
+        <slot name="content">
+          <transition :name="animationsEnabled ? 'slide-down' : ''" :appear="animationsEnabled">
+            <div 
+              class="hero-logo-wrapper" 
+              v-if="showLogo"
+              @contextmenu="handleContextMenu"
+            >
+              <img 
+                :src="logoSrc" 
+                alt="Game Logo" 
+                class="hero-logo-image" 
+                :draggable="allowDrag"
+                @contextmenu="handleContextMenu"
+              />
+            </div>
+          </transition>
 
-    <div class="timer-bar-wrapper" v-if="props.alternativeImages.length > 1 && isScrollableActive">
-      <div 
-        class="timer-bar" 
-        :key="timerKey" 
-        :style="{ animationDuration: `${props.imageChangeInterval}ms` }"
-      ></div>
-    </div>
-  </section>
+          <transition :name="animationsEnabled ? 'slide-down-delay' : ''" :appear="animationsEnabled">
+            <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
+          </transition>
+
+          <transition :name="animationsEnabled ? 'pop-in' : ''" :appear="animationsEnabled">
+            <CustomButton 
+              v-if="showCtaButton"
+              :text         ="ctaText || t('SITE_NAV_DOWNLOAD')" 
+              :to           ="ctaLink" 
+              @click        ="$emit('cta-click')" 
+              :icon-src     ="dowload_icon"
+              border        ="var(--color-banner-button-border )"
+              bgColor       ="var(--color-banner-button-bg)"
+              hover-bg-color="var(--color-banner-button-hover-bg)"
+              icon-color    ="var(--color-banner-button-icon)"
+              text-color    ="var(--color-banner-button-text)"
+              icon-size     ="40px"
+              icon-position ="left"
+              icon-margin   ="0   -5px 0 0"
+              text-margin   ="4px 10px 0 0"
+              fontSize      ="var(--font-h2-size)" 
+              width         ="200px"
+              height        ="60px"
+              :autoAdaptSize = true
+            />
+          </transition>
+        </slot>
+      </div>
+
+      <div class="timer-bar-wrapper" v-if="props.alternativeImages.length > 1 && isScrollableActive">
+        <div 
+          class="timer-bar" 
+          :key="timerKey" 
+          :style="{ animationDuration: `${props.imageChangeInterval}ms` }"
+        ></div>
+      </div>
+    </section>
+  </transition>
 </template>
 
 <script setup>
@@ -73,17 +90,20 @@
   * @displayName Hero Banner
 */
 
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n }  from '@/composables/useI18n'
+import { useAnimations } from '@/composables/reduced_motion_check'
 
 import CustomButton from '@/components/reusables/custom_button.vue'
 
 import img_gameLogo       from '@/assets/img/logos/Encore_Logo.png'
-import img_defaultBanner  from '@/assets/img/art/banner_test.png'
+import img_defaultBanner  from '@/assets/img/art/web_site_banner.png'
+import charactersImage    from '@/assets/img/art/ninten_and_lloyd.jpg'
 
 import dowload_icon       from '@/assets/svg/download.svg'
 
 const { t } = useI18n()
+const { animationsEnabled } = useAnimations()
 
 const logoSrc = img_gameLogo
 
@@ -269,6 +289,12 @@ const isSessionActive = ref(
 const randomAlternativeImage = ref(getRandomAlternative())
 const timerKey = ref(0)
 
+watch(isSessionActive, (newVal) => {
+  if (newVal && props.alternativeImages.length > 0) {
+    randomAlternativeImage.value = getRandomAlternative()
+  }
+})
+
 /**
   * Computed CSS user-select property value based on selection protection configuration.
   * @private
@@ -292,23 +318,11 @@ const handleContextMenu = (event) => {
   * @private
 */
 const checkSessionState = () => {
-  const SessionBuilder = {
-    isValidKey(key) {
-      return Boolean(key)
-    },
-    getStorageValue(key) {
-      return sessionStorage.getItem(key) === 'true'
-    }
-  }
-
-  if (!SessionBuilder.isValidKey(props.sessionKey)) return
-  const latestValue = SessionBuilder.getStorageValue(props.sessionKey)
+  if (!props.sessionKey) return
+  const latestValue = sessionStorage.getItem(props.sessionKey) === 'true'
   if (latestValue !== isSessionActive.value) {
     isSessionActive.value = latestValue
-    if (latestValue && props.alternativeImages.length > 0) {
-      randomAlternativeImage.value = getRandomAlternative()
-      timerKey.value++
-    }
+    timerKey.value++
   }
 }
 
@@ -323,11 +337,14 @@ const handleStorageChange = (event) => {
 }
 
 let bgCycleIntervalId = null
+let sessionPollIntervalId = null
 
 onMounted(() => {
   if (props.sessionKey) {
     checkSessionState()
     window.addEventListener('storage', handleStorageChange)
+    
+    sessionPollIntervalId = setInterval(checkSessionState, 500)
   }
 
   if (props.alternativeImages.length > 1) {
@@ -351,6 +368,7 @@ onUnmounted(() => {
     window.removeEventListener('storage', handleStorageChange)
   }
   if (bgCycleIntervalId) clearInterval(bgCycleIntervalId)
+  if (sessionPollIntervalId) clearInterval(sessionPollIntervalId)
 })
 
 /** Computed property that resolves the current background image URL.
@@ -427,6 +445,49 @@ defineEmits(['cta-click'])
 
 <style scoped>
 
+.banner-fade-enter-active {
+  transition: opacity 0.8s ease-out;
+}
+.banner-fade-enter-from {
+  opacity: 0;
+}
+
+.slide-left-enter-active {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+  transition-delay: 0.2s;
+}
+.slide-left-enter-from {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.slide-down-enter-active {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+  transition-delay: 0.3s;
+}
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-40px);
+}
+
+.slide-down-delay-enter-active {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+  transition-delay: 0.45s;
+}
+.slide-down-delay-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.pop-in-enter-active {
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease-out;
+  transition-delay: 0.6s;
+}
+.pop-in-enter-from {
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
+}
+
 .hero-banner {
   position        : relative;
   width           : 100%;
@@ -440,12 +501,11 @@ defineEmits(['cta-click'])
 
 .hero-image-wrapper {
   position            : absolute;
-  top                 : 0;
+  top                 : 10;
   left                : 0;
   width               : 100%;
   height              : 100%;
   z-index             : 1;
-  transform           : scale(1.02);
 }
 
 .hero-bg-image {
@@ -457,6 +517,7 @@ defineEmits(['cta-click'])
   background-size     : cover;
   background-position : center center;
   background-repeat   : no-repeat;
+  transform           : scale(1.02);
 }
 
 .bg-fade-enter-active,
@@ -529,6 +590,21 @@ defineEmits(['cta-click'])
   z-index             : 2;
   background          : v-bind(cssVignetteBackground);
   pointer-events      : none;
+}
+
+.hero-bottom-right-image {
+  position            : absolute;
+  bottom              : 0px;
+  right               : 0px;
+  z-index             : 3;
+  height              : clamp(340px, 48vh, 520px);
+  width               : auto;
+  object-fit          : contain;
+  pointer-events      : none;
+  -webkit-user-select : v-bind(userSelectValue);
+  -moz-user-select    : v-bind(userSelectValue);
+  -ms-user-select     : v-bind(userSelectValue);
+  user-select         : v-bind(userSelectValue);
 }
 
 .hero-content {
@@ -612,6 +688,14 @@ defineEmits(['cta-click'])
   100% { width: 100%; }
 }
 
+:global(body.reduce-motion) *,
+:global(body.reduce-motion) *::before,
+:global(body.reduce-motion) *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
 @media (max-width: 768px) {
   .hero-banner {
     height            : 400px;
@@ -629,6 +713,12 @@ defineEmits(['cta-click'])
     font-family       : var(--font-mobile-h2) !important;
     font-size         : clamp(1.1rem, 4.5vw, var(--font-mobile-h2-size)) !important;
     padding           : 0 0.5rem;
+  }
+
+  .hero-bottom-right-image {
+    height            : clamp(220px, 50vh, 280px);
+    bottom            : 0px;
+    right             : 0px;
   }
 }
 </style>

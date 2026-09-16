@@ -161,12 +161,7 @@ const openMusicPlayer = () => {
   gap               : clamp(1rem, 2.5vw, 1.5rem);
   box-sizing        : border-box;
 }
-.music_and_open_source_adhoc {
-  display       : flex;
-  flex-direction: row;
-  width         : 100%;
-  gap           : 1.5rem; 
-}
+
 
 .music_and_open_source_adhoc > * {
   flex      : 1;
