@@ -501,7 +501,6 @@ defineEmits(['cta-click'])
 
 .hero-image-wrapper {
   position            : absolute;
-  top                 : 10;
   left                : 0;
   width               : 100%;
   height              : 100%;
