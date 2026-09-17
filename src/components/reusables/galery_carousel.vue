@@ -483,8 +483,8 @@ onUnmounted(() => {
 
 .main-viewport {
   width         : 100%;
-  aspect-ratio  : 16 / 9;
-  max-height    : 611px;
+  aspect-ratio  : auto; 
+  max-height    : none;  
   background    : var(--gallery-viewport-bg);
   overflow      : hidden;
   position      : relative;
@@ -499,19 +499,24 @@ onUnmounted(() => {
   display    : flex;
   width      : 100%;
   height     : 100%;
+  box-sizing : border-box;
   transition : transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .slide-item {
+  width       : 100%;     
   min-width   : 100%;
+  max-width   : 100%;
   height      : 100%;
   flex-shrink : 0;
+  box-sizing  : border-box; 
   overflow    : hidden;
 }
 
 .slide-img {
   width               : 100%;
-  height              : 100%;
+  height              : auto;   
+  max-height          : 80vh;  
   object-fit          : contain;
   display             : block;
   border-radius       : inherit;
@@ -730,6 +735,30 @@ onUnmounted(() => {
   .dot {
     width  : 6px;
     height : 6px;
+  }
+  .thumb-arrow,
+  :deep(.thumb-arrow) {
+    display: none !important;
+  }
+
+  .thumbnails-track {
+    scrollbar-width : auto;
+    padding-bottom  : 8px;   
+  }
+
+  .thumbnails-track::-webkit-scrollbar {
+    display : block;
+    height  : 6px;
+  }
+
+  .thumbnails-track::-webkit-scrollbar-track {
+    background    : var(--gallery-timer-bg, rgba(255, 255, 255, 0.1));
+    border-radius : 4px;
+  }
+
+  .thumbnails-track::-webkit-scrollbar-thumb {
+    background    : var(--gallery-accent-color, #ff0000);
+    border-radius : 4px;
   }
 }
 </style>
