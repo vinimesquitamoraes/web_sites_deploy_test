@@ -4,21 +4,23 @@
 
       <ContentSection
         v-for="(section, index) in infoSections_1" 
-        :key          ="index"
-        :heading      ="section.title"
-        :text         ="section.text" 
-        :mediaSrc     ="section.image"
-        :mediaType    ="section.content_type"
-        :mediaPosition="index % 2 === 0 ? 'right' : 'left'"
-        :imageOpenable="section.imageOpenable ?? false"
-        :headingAlign ="section.headingAlign ?? 'left'"
-        :textPadding  ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 21px')"
-        :mediaFit     ="section.mediaFit ?? 'cover'"
-        :mediaBorder  ="section.mediaBorder ?? ''"
-        :border       ="section.border ?? 'transparent'"
-        :contentBg    ="section.contentBg"
-        :layout       ="section.layout"
-        :actionsAlign ="section.actionsAlign"
+        :key            ="index"
+        :heading        ="section.title"
+        :text           ="section.text" 
+        :mediaSrc       ="section.image"
+        :mediaType      ="section.content_type"
+        :mediaPosition  ="index % 2 === 0 ? 'right' : 'left'"
+        :imageOpenable  ="section.imageOpenable ?? false"
+        :headingAlign   ="section.headingAlign ?? 'left'"
+        :textPadding    ="section.textPadding ?? (index % 2 === 0 ? '0 0 0 21px' : '0 21px 0 21px')"
+        :mediaFit       ="section.mediaFit ?? 'cover'"
+        :mediaBorder    ="section.mediaBorder ?? ''"
+        :border         ="section.border ?? 'transparent'"
+        :contentBg      ="section.contentBg"
+        :layout         ="section.layout"
+        :actionsAlign   ="section.actionsAlign"
+        :staticMediaSrc ="section.staticMediaSrc"
+
         headerPosition="inside"
         mediaWidth    ="775px" 
         mediaHeight   ="450px"
@@ -62,11 +64,12 @@ import CustomButton   from '@/components/reusables/custom_button.vue'
 
 import musicNoteSvg from '@/assets/svg/music-note-4-svgrepo-com.svg'
 
-import combatMedia  from '@/assets/mp4/showreels/Combat.mp4'
-import fieldMedia   from '@/assets/mp4/showreels/Field Skills & Dungeons.mp4'
-import storyMedia   from '@/assets/mp4/showreels/Story.mp4'
-import visualMedia  from '@/assets/mp4/showreels/Panning.mp4'
-import musicMedia   from '@/assets/gif/showreels/Music.gif'
+import combatMedia        from '@/assets/mp4/showreels/Combat.mp4'
+import fieldMedia         from '@/assets/mp4/showreels/Field Skills & Dungeons.mp4'
+import storyMedia         from '@/assets/mp4/showreels/Story.mp4'
+import visualMedia        from '@/assets/mp4/showreels/Panning.mp4'
+import musicMedia         from '@/assets/gif/showreels/Music.gif'
+import staticMusicMedia   from '@/assets/img/showreels/music_static.png'
 
 import godotImage   from '@/assets/img/logos/logo_large_monochrome_light.png'
 const { t } = useI18n()
@@ -108,11 +111,12 @@ const infoSections_1 = computed(() => [
     content_type: "video"
   },
     {
-    title       : t('SITE_ABOUT_MUSIC_TITLE'),
-    text        : t('SITE_ABOUT_MUSIC_P1'),
-    content_type: "image",
-    image       : musicMedia,
-    actionsAlign: "center"
+    title           : t('SITE_ABOUT_MUSIC_TITLE'),
+    text            : t('SITE_ABOUT_MUSIC_P1'),
+    content_type    : "image",
+    image           : musicMedia,
+    actionsAlign    : "center",
+    staticMediaSrc  : staticMusicMedia
 
   },    
   {

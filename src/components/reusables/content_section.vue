@@ -88,12 +88,12 @@
             <slot name="media">
               <iframe 
                 v-if="mediaType === 'video' && mediaSrc && isEmbeddedVideo"
-                :src="mediaSrc" 
-                :title="mediaAlt || heading"
-                class="content-section-video-iframe"
-                :style="{ height: mediaHeight !== 'auto' ? mediaHeight : '322px' }"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                :src        ="mediaSrc" 
+                :title      ="mediaAlt || heading"
+                class       ="content-section-video-iframe"
+                :style      ="{ height: mediaHeight !== 'auto' ? mediaHeight : '322px' }"
+                frameborder ="0"
+                allow       ="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
               ></iframe>
 
@@ -135,21 +135,45 @@
                 />
               </div>
 
-              <img 
-                v-else-if="mediaType === 'image' && mediaSrc"
-                :src="mediaSrc" 
-                :alt="mediaAlt || heading"
-                class="content-section-media-img"
-                :draggable="allowDrag"
-                :style="{ 
-                  color: textColor, 
-                  height: mediaHeight !== 'auto' ? mediaHeight : 'auto',
-                  maxHeight: mediaHeight !== 'auto' ? mediaHeight : 'none',
-                  objectFit: mediaHeight !== 'auto' ? mediaFit : 'contain'
-                }"
-                @error="hasError = true"
-                @contextmenu="handleContextMenu"
-              />
+              <div 
+                v-else-if="mediaType === 'image' && mediaSrc" 
+                class="content-section-image-wrapper"
+                @mouseenter="handleImageMouseEnter"
+                @mouseleave="handleImageMouseLeave"
+              >
+                <img 
+                  :src      ="(!animationsEnabled && staticMediaSrc && !isGifPlaying) ? staticMediaSrc : mediaSrc" 
+                  :alt      ="mediaAlt || heading"
+                  class     ="content-section-media-img"
+                  :draggable="allowDrag"
+                  :style    ="{ 
+                    color     : textColor, 
+                    height    : mediaHeight !== 'auto' ? mediaHeight : 'auto',
+                    maxHeight : mediaHeight !== 'auto' ? mediaHeight : 'none',
+                    objectFit : mediaHeight !== 'auto' ? mediaFit : 'contain'
+                  }"
+                  @click      ="handleImageClick"
+                  @error      ="hasError = true"
+                  @contextmenu="handleContextMenu"
+                />
+
+                <CustomButton
+                  v-if="!animationsEnabled && staticMediaSrc && !isGifPlaying"
+                  class          ="content-section-video-control-btn content-section-gif-control-btn"
+                  :icon-src       ="playSvg"
+                  iconColor       ="var(--color-primary)"
+                  hoverIconColor  ="var(--back-to-top-button-icon-color-hover)"
+                  bg-color        ="var(--color-default-background)"
+                  hover-bg-color  ="var(--color-primary)"
+                  width           ="48px"
+                  height          ="48px"
+                  padding         ="0"
+                  icon-size       ="24px"
+                  press-animation="none"
+                  border          ="none"
+                  @click.stop     ="isGifPlaying = true"
+                />
+              </div>
             </slot>
           </div>
         </div>
@@ -183,7 +207,6 @@ import MediaModal from './media_modal.vue'
 import CustomButton from './custom_button.vue'
 
 import playSvg from '@/assets/svg/player-play.svg'
-import pauseSvg from '@/assets/svg/player-pause.svg'
 
 import { useAnimations } from '@/composables/reduced_motion_check'
 
@@ -453,6 +476,14 @@ const props = defineProps({
     type     : String,
     default  : 'pause',
     validator: (value) => ['pause', 'rewind'].includes(value)
+  },
+  /**
+  * Source URL for static fallback image for GIFs when reduced motion is enabled.
+  * @public
+  */
+  staticMediaSrc: {
+    type    : String,
+    default : ''
   }
 })
 
@@ -462,6 +493,7 @@ const videoRef = ref(null)
 const isModalOpen = ref(false)
 const hasError    = ref(false)
 const isPlaying   = ref(false)
+const isGifPlaying = ref(false)
 
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
 
@@ -486,6 +518,45 @@ const handleMouseLeave = () => {
       videoRef.value.currentTime = 0
     }
   }
+}
+
+/**
+  * Toggles static image to animated GIF source when mouse hovers over static media asset under reduced motion mode.
+  * @private
+*/
+const handleImageMouseEnter = () => {
+  if (!animationsEnabled.value && props.staticMediaSrc) {
+    isGifPlaying.value = true
+  }
+}
+
+/**
+  * Restores static fallback media source when mouse leaves media asset under reduced motion mode.
+  * @private
+*/
+const handleImageMouseLeave = () => {
+  if (!animationsEnabled.value && props.staticMediaSrc) {
+    isGifPlaying.value = false
+  }
+}
+
+/**
+  * Controls click behavior for GIF elements under mobile environments or triggers standard modal expansion.
+  * @param {MouseEvent} event - Event instance triggered by image click.
+  * @private
+*/
+const handleImageClick = (event) => {
+  const isMobile = window.innerWidth <= 1220
+
+  if (!animationsEnabled.value && props.staticMediaSrc) {
+    if (isMobile) {
+      isGifPlaying.value = !isGifPlaying.value
+      event.stopPropagation()
+      return
+    }
+  }
+
+  openImageModal()
 }
 
 /**
@@ -762,6 +833,7 @@ onUnmounted(() => {
   display               : block;
 }
 
+.content-section-image-wrapper,
 .content-section-video-wrapper {
   position              : relative;
   width                 : 100%;
@@ -852,7 +924,8 @@ onUnmounted(() => {
     object-fit          : contain !important;
   }
 
-  .content-section-video-control-btn {
+  .content-section-video-control-btn,
+  .content-section-gif-control-btn {
     display             : inline-flex !important;
   }
 }
