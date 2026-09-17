@@ -253,7 +253,7 @@ body.reduce-motion *::after {
 
   --music_player-font-h1                       : var(--font-h1);
   --music_player-font-p                        : var(--font-p);
-  --music_player-font-p-size                   : var(--font-p-size);
+  --music_player-font-p-size                   : 25px;
   --music_player-font-track-names-size         : 15px;
 
   --music-player-volume-controls-bg         : #1a1a1a;

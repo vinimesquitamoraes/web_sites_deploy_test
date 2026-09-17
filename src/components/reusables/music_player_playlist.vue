@@ -347,9 +347,11 @@ const containerStyles = computed(() => ({
   border-radius         : var(--pl-radius);
   padding               : 8px 12px;
   user-select           : none;
+
 }
 
 .playlist-title {
+  font-family           : var(--music_player-font-p);
   font-size             : 0.8rem;
   margin                : 0;
   font-weight           : 700;
@@ -447,9 +449,8 @@ const containerStyles = computed(() => ({
 }
 
 .track-number {
-  color                 : var(--pl-num);
   font                  : var(--music_player-font-p);
-  font-size             : var(--music_player-font-p-size);
+  font-size             : var(--music_player-font-track-names-size);
   flex-shrink           : 0;
 }
 
@@ -461,7 +462,7 @@ const containerStyles = computed(() => ({
   white-space           : nowrap;
   overflow              : hidden;
   text-overflow         : ellipsis;
-  font                  : var(--music_player-font-p);
+  font-family           : var(--music_player-font-p);
   font-size             : var(--music_player-font-track-names-size);
   flex                  : 1;
   min-width             : 0;

@@ -396,11 +396,9 @@ onUnmounted(() => {
 }
 
 .brand-name {
-  font-weight           : 900;
-  font-size             : 0.75rem;
   letter-spacing        : 2px;
   color                 : var(--wm-brand-color);
-  font                  : var(--music_player-font-h1);
+  font-family           : var(--music_player-font-h1); 
 }
 
 .tape-toggle-btn {
@@ -451,7 +449,7 @@ onUnmounted(() => {
 .cassette-label-header {
   display               : flex;
   justify-content       : space-between;
-  font                  : var(--music_player-font-p);
+  font-family           : var(--music_player-font-p);
   font-size             : 0.5rem;
   font-weight           : 700;
   color                 : var(--wm-label-color);
@@ -519,7 +517,7 @@ onUnmounted(() => {
 .lcd-top-row {
   display               : flex;
   justify-content       : space-between;
-  font                  : var(--music_player-font-p);
+  font-family                  : var(--music_player-font-p);
   font-size             : 0.7rem;
   font-weight           : 700;
 }

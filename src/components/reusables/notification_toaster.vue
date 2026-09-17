@@ -239,6 +239,7 @@ const transitionName = computed(() => {
 }
 
 .toaster-message {
+  font-family           : var(--font-default);
   margin                : 0;
   font-size             : var(--toaster-font-size);
   font-weight           : 600;
