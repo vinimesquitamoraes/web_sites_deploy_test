@@ -752,12 +752,12 @@ onUnmounted(() => {
   }
 
   .thumbnails-track::-webkit-scrollbar-track {
-    background    : var(--gallery-timer-bg, rgba(255, 255, 255, 0.1));
+    background    : var(--gallery-timer-bg);
     border-radius : 4px;
   }
 
   .thumbnails-track::-webkit-scrollbar-thumb {
-    background    : var(--gallery-accent-color, #ff0000);
+    background    : var(--gallery-accent-color);
     border-radius : 4px;
   }
 }

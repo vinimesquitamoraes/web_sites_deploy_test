@@ -9,9 +9,9 @@ const excelUrls = [
   creditsRolesTranslationsExcell
 ]
 
-const translations = ref({})
-const currentLang = ref('en')
-const isLoaded  = ref(false)
+const translations  = ref({})
+const currentLang   = ref('en')
+const isLoaded      = ref(false)
 
 const ignored_langs    = new Set(['es_ES'])
 const toggle_debug_log = false
@@ -20,6 +20,31 @@ const debugLog = (...args) => {
   if (toggle_debug_log) {
     console.log(...args)
   }
+}
+
+const detectBrowserLanguage = (supportedLanguages) => {
+  if (typeof window === 'undefined' || !navigator) return 'en'
+
+  const userLangs = navigator.languages || navigator.userLanguage
+  debugLog('User langs:', userLangs)
+
+  for (const [index, rawLang] of userLangs.entries()) {
+    if (!rawLang) continue
+    const lang = rawLang.replace('-', '_')
+    debugLog('Lang ${index + 1}:', lang)
+
+    const primaryCode = lang.split('_')[0]
+    debugLog('Primary Code ${index + 1}:', primaryCode)
+
+    if (supportedLanguages.includes(lang)) return lang
+
+    const match = supportedLanguages.find(
+      (supported) => supported === primaryCode || supported.startsWith(`${primaryCode}_`)
+    )
+    if (match) return match
+  }
+
+  return 'en'
 }
 
 export const setLanguage = (lang) => {
@@ -94,6 +119,12 @@ export function useI18n() {
 
       translations.value = languageMap
       isLoaded.value = true
+
+      const loadedLangs = Object.keys(languageMap)
+      if (loadedLangs.length > 0) {
+        const matchedLang = detectBrowserLanguage(loadedLangs)
+        setLanguage(matchedLang)
+      }
 
       debugLog('--- TRANSLATIONS FULLY INITIALIZED ---')
       debugLog('Loaded Languages:', Object.keys(translations.value))
