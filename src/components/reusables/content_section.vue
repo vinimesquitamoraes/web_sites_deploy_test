@@ -110,7 +110,7 @@
                 <video
                   ref="videoRef"
                   :src="mediaSrc"
-                  :autoplay="animationsEnabled"
+                  :autoplay="animationsEnabled && props.videoTriggerMode !== 'button'"
                   loop
                   muted
                   playsinline
@@ -119,7 +119,7 @@
                   @mouseenter="handleMouseEnter"
                   @mouseleave="handleMouseLeave"
                   @click="handleVideoClick"
-                  @play="isPlaying = true"
+                  @play="onPlay"
                   @pause="isPlaying = false"
                 ></video>
 
@@ -209,7 +209,7 @@
   * @displayName Content Section
 */
 
-import { ref, computed, watch, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, getCurrentInstance } from 'vue'
 
 import MediaModal from './media_modal.vue'
 import CustomButton from './custom_button.vue'
@@ -486,7 +486,7 @@ const props = defineProps({
     validator: (value) => ['pause', 'rewind'].includes(value)
   },
   /**
-  * Controls whether video or GIF playback is triggered via hover or an overlay button trigger.
+  * Controls whether video or GIF playback is triggered via hover or an overlay button trigger across desktop and mobile modes.
   * @values hover, button
   * @public
   */
@@ -505,7 +505,10 @@ const props = defineProps({
   }
 })
 
-const { animationsEnabled } = useAnimations()
+const instance = getCurrentInstance()
+const instanceId = instance ? instance.uid : Math.random()
+
+const { animationsEnabled, activeVideoId, setActiveVideo } = useAnimations()
 
 const videoRef = ref(null)
 const isModalOpen = ref(false)
@@ -545,6 +548,49 @@ const shouldShowGifButton = computed(() => {
 */
 const isControlBtnVisible = computed(() => {
   return isButtonTriggerActive.value
+})
+
+/**
+  * Programmatically synchronizes HTML5 video playback according to motion preferences and trigger configurations.
+  * @private
+*/
+const syncVideoPlayback = () => {
+  if (props.mediaType !== 'video' || !videoRef.value || isEmbeddedVideo.value) return
+
+  const shouldAutoplay = animationsEnabled.value
+
+  if (shouldAutoplay) {
+    videoRef.value.play().then(() => {
+      isPlaying.value = true
+    }).catch(() => {
+      isPlaying.value = false
+    })
+  } else {
+    videoRef.value.pause()
+    isPlaying.value = false
+  }
+}
+
+/**
+  * Handles play events to pause non-active videos during reduced motion mode.
+  * @private
+*/
+const onPlay = () => {
+  isPlaying.value = true
+  if (!animationsEnabled.value) {
+    setActiveVideo(instanceId)
+  }
+}
+
+/**
+  * Reactively pauses the current video instance when a different video becomes active in reduced motion mode.
+  * @private
+*/
+watch(activeVideoId, (newActiveId) => {
+  if (!animationsEnabled.value && newActiveId !== instanceId && videoRef.value && !videoRef.value.paused) {
+    videoRef.value.pause()
+    isPlaying.value = false
+  }
 })
 
 /**
@@ -612,9 +658,12 @@ const handleImageClick = (event) => {
 const toggleVideoPlay = () => {
   if (!videoRef.value) return
   if (videoRef.value.paused) {
-    videoRef.value.play().catch(() => {})
+    videoRef.value.play().then(() => {
+      isPlaying.value = true
+    }).catch(() => {})
   } else {
     videoRef.value.pause()
+    isPlaying.value = false
   }
 }
 
@@ -677,18 +726,16 @@ watch(() => props.mediaSrc, () => {
 })
 
 /**
-  * Reactively synchronizes video playback state with changes in reduced motion preferences and video trigger mode.
+  * Reactively synchronizes video playback state with changes in reduced motion preferences, video trigger mode, and media sources.
   * @private
 */
-watch([animationsEnabled, () => props.videoTriggerMode], ([enabled, mode]) => {
-  if (props.mediaType === 'video' && videoRef.value) {
-    if (mode === 'button' || !enabled) {
-      videoRef.value.pause()
-    } else {
-      videoRef.value.play().catch(() => {})
-    }
-  }
-}, { immediate: true })
+watch([animationsEnabled, () => props.videoTriggerMode, () => props.mediaSrc], () => {
+  syncVideoPlayback()
+})
+
+onMounted(() => {
+  syncVideoPlayback()
+})
 
 /**
   * Intercepts clicks to trigger and display the image expansion modal when valid.
