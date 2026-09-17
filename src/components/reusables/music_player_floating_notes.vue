@@ -189,7 +189,14 @@ const computedSpeed = computed(() => {
 
 .note-3 {
   left                 : 75%;
-  animation-delay      : 1.2s;
+  animation-delay      : 1s;
+  -webkit-mask-image   : url('@/assets/svg/quaver-musical-note.svg');
+  mask-image           : url('@/assets/svg/quaver-musical-note.svg');
+}
+
+.note-4 {
+  left                 : 40%;
+  animation-delay      : 2s;
   -webkit-mask-image   : url('@/assets/svg/quaver-musical-note.svg');
   mask-image           : url('@/assets/svg/quaver-musical-note.svg');
 }
@@ -200,7 +207,8 @@ const computedSpeed = computed(() => {
   }
 
   .note-1 { left: 1%; }
-  .note-2 { left: 5%; }
+  .note-2 { left: 0%; }
   .note-3 { left: 10%; }
+  
 }
 </style>
