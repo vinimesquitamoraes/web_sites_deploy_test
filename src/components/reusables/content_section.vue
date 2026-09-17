@@ -58,6 +58,9 @@
             marginTop: '50px'
           }"
         >
+          <!-- 
+            @slot Slot for custom action buttons or interactive elements displayed underneath the body text.
+          -->
           <slot name="actions"></slot>
         </div>
       </div>
@@ -85,6 +88,9 @@
               borderRadius: mediaBorderRadius
             }"
           >
+            <!-- 
+              @slot Slot to override standard media render logic (image, video player, iframe) with custom elements.
+            -->
             <slot name="media">
               <iframe 
                 v-if="mediaType === 'video' && mediaSrc && isEmbeddedVideo"
@@ -118,8 +124,9 @@
                 ></video>
 
                 <CustomButton
-                  v-if="!animationsEnabled && !isPlaying"
+                  v-if="shouldShowPlayButton"
                   class          ="content-section-video-control-btn"
+                  :class         ="{ 'show-control-btn': isControlBtnVisible }"
                   :icon-src       ="playSvg"
                   iconColor       ="var(--color-primary)"
                   hoverIconColor  ="var(--back-to-top-button-icon-color-hover)"
@@ -158,8 +165,9 @@
                 />
 
                 <CustomButton
-                  v-if="!animationsEnabled && staticMediaSrc && !isGifPlaying"
+                  v-if="shouldShowGifButton"
                   class          ="content-section-video-control-btn content-section-gif-control-btn"
+                  :class         ="{ 'show-control-btn': isControlBtnVisible }"
                   :icon-src       ="playSvg"
                   iconColor       ="var(--color-primary)"
                   hoverIconColor  ="var(--back-to-top-button-icon-color-hover)"
@@ -478,6 +486,16 @@ const props = defineProps({
     validator: (value) => ['pause', 'rewind'].includes(value)
   },
   /**
+  * Controls whether video or GIF playback is triggered via hover or an overlay button trigger.
+  * @values hover, button
+  * @public
+  */
+  videoTriggerMode: {
+    type     : String,
+    default  : 'button',
+    validator: (value) => ['hover', 'button'].includes(value)
+  },
+  /**
   * Source URL for static fallback image for GIFs when reduced motion is enabled.
   * @public
   */
@@ -498,21 +516,53 @@ const isGifPlaying = ref(false)
 const userSelectValue = computed(() => (props.disableSelect ? 'none' : 'auto'))
 
 /**
-  * Plays video element when hovered if motion/animations are disabled.
+  * Determines whether button trigger mode behavior is currently active based on explicit prop config or reduced motion accessibility preferences.
+  * @private
+*/
+const isButtonTriggerActive = computed(() => {
+  return props.videoTriggerMode === 'button' || !animationsEnabled.value
+})
+
+/**
+  * Evaluates whether the play control button should display for videos.
+  * @private
+*/
+const shouldShowPlayButton = computed(() => {
+  return isButtonTriggerActive.value && !isPlaying.value
+})
+
+/**
+  * Evaluates whether the play control button should display for GIF assets.
+  * @private
+*/
+const shouldShowGifButton = computed(() => {
+  return isButtonTriggerActive.value && props.staticMediaSrc && !isGifPlaying.value
+})
+
+/**
+  * Toggles visible styling class on control buttons across viewports.
+  * @private
+*/
+const isControlBtnVisible = computed(() => {
+  return isButtonTriggerActive.value
+})
+
+/**
+  * Plays video element when hovered if hover mode is configured and motion/animations are disabled.
   * @private
 */
 const handleMouseEnter = () => {
-  if (!animationsEnabled.value && videoRef.value) {
+  if (props.videoTriggerMode === 'hover' && !animationsEnabled.value && videoRef.value) {
     videoRef.value.play().catch(() => {})
   }
 }
 
 /**
-  * Handles video leave state based on `videoPauseMode` prop when motion/animations are disabled.
+  * Handles video leave state based on `videoPauseMode` prop when hover mode is configured and motion/animations are disabled.
   * @private
 */
 const handleMouseLeave = () => {
-  if (!animationsEnabled.value && videoRef.value) {
+  if (props.videoTriggerMode === 'hover' && !animationsEnabled.value && videoRef.value) {
     videoRef.value.pause()
     if (props.videoPauseMode === 'rewind') {
       videoRef.value.currentTime = 0
@@ -521,39 +571,35 @@ const handleMouseLeave = () => {
 }
 
 /**
-  * Toggles static image to animated GIF source when mouse hovers over static media asset under reduced motion mode.
+  * Toggles static image to animated GIF source when mouse hovers over static media asset under hover mode.
   * @private
 */
 const handleImageMouseEnter = () => {
-  if (!animationsEnabled.value && props.staticMediaSrc) {
+  if (props.videoTriggerMode === 'hover' && !animationsEnabled.value && props.staticMediaSrc) {
     isGifPlaying.value = true
   }
 }
 
 /**
-  * Restores static fallback media source when mouse leaves media asset under reduced motion mode.
+  * Restores static fallback media source when mouse leaves media asset under hover mode.
   * @private
 */
 const handleImageMouseLeave = () => {
-  if (!animationsEnabled.value && props.staticMediaSrc) {
+  if (props.videoTriggerMode === 'hover' && !animationsEnabled.value && props.staticMediaSrc) {
     isGifPlaying.value = false
   }
 }
 
 /**
-  * Controls click behavior for GIF elements under mobile environments or triggers standard modal expansion.
+  * Controls click behavior for GIF elements or triggers standard modal expansion.
   * @param {MouseEvent} event - Event instance triggered by image click.
   * @private
 */
 const handleImageClick = (event) => {
-  const isMobile = window.innerWidth <= 1220
-
-  if (!animationsEnabled.value && props.staticMediaSrc) {
-    if (isMobile) {
-      isGifPlaying.value = !isGifPlaying.value
-      event.stopPropagation()
-      return
-    }
+  if (isButtonTriggerActive.value && props.staticMediaSrc) {
+    isGifPlaying.value = !isGifPlaying.value
+    event.stopPropagation()
+    return
   }
 
   openImageModal()
@@ -573,12 +619,11 @@ const toggleVideoPlay = () => {
 }
 
 /**
-  * Toggles video playback when clicked on mobile devices under reduced motion preferences.
+  * Toggles video playback when clicked under button trigger mode or reduced motion preferences.
   * @private
 */
 const handleVideoClick = () => {
-  const isMobile = window.innerWidth <= 1220
-  if (isMobile && !animationsEnabled.value) {
+  if (isButtonTriggerActive.value) {
     toggleVideoPlay()
   }
 }
@@ -632,18 +677,18 @@ watch(() => props.mediaSrc, () => {
 })
 
 /**
-  * Reactively synchronizes video playback state with changes in reduced motion preferences.
+  * Reactively synchronizes video playback state with changes in reduced motion preferences and video trigger mode.
   * @private
 */
-watch(animationsEnabled, (enabled) => {
+watch([animationsEnabled, () => props.videoTriggerMode], ([enabled, mode]) => {
   if (props.mediaType === 'video' && videoRef.value) {
-    if (enabled) {
-      videoRef.value.play().catch(() => {})
-    } else {
+    if (mode === 'button' || !enabled) {
       videoRef.value.pause()
+    } else {
+      videoRef.value.play().catch(() => {})
     }
   }
-})
+}, { immediate: true })
 
 /**
   * Intercepts clicks to trigger and display the image expansion modal when valid.
@@ -854,6 +899,7 @@ onUnmounted(() => {
   height              : auto;
   display             : block;
   object-fit          : cover;
+  cursor              : pointer;
 }
 
 .content-section-video-element::-webkit-media-controls {
@@ -879,6 +925,11 @@ onUnmounted(() => {
   border-radius       : 50% !important;
   z-index             : 2;
   transform           : none !important;
+  cursor              : pointer;
+}
+
+.content-section-video-control-btn.show-control-btn {
+  display             : inline-flex !important;
 }
 
 @media (max-width: 1220px) {
@@ -922,11 +973,6 @@ onUnmounted(() => {
     height              : auto !important;
     max-height          : none !important;
     object-fit          : contain !important;
-  }
-
-  .content-section-video-control-btn,
-  .content-section-gif-control-btn {
-    display             : inline-flex !important;
   }
 }
 

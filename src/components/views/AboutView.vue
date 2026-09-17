@@ -66,10 +66,9 @@ import musicNoteSvg from '@/assets/svg/music-note-4-svgrepo-com.svg'
 
 import combatMedia        from '@/assets/mp4/showreels/Combat.mp4'
 import fieldMedia         from '@/assets/mp4/showreels/Field Skills & Dungeons.mp4'
-import storyMedia         from '@/assets/mp4/showreels/Story.mp4'
+import storyMedia         from '@/assets/mp4/showreels/Story.mp4' 
 import visualMedia        from '@/assets/mp4/showreels/Panning.mp4'
-import musicMedia         from '@/assets/gif/showreels/Music.gif'
-import staticMusicMedia   from '@/assets/img/showreels/music_static.png'
+import musicMedia         from '@/assets/mp4/showreels/Music.mp4'
 
 import godotImage   from '@/assets/img/logos/logo_large_monochrome_light.png'
 const { t } = useI18n()
@@ -113,10 +112,9 @@ const infoSections_1 = computed(() => [
     {
     title           : t('SITE_ABOUT_MUSIC_TITLE'),
     text            : t('SITE_ABOUT_MUSIC_P1'),
-    content_type    : "image",
+    content_type    : "video",
     image           : musicMedia,
     actionsAlign    : "center",
-    staticMediaSrc  : staticMusicMedia
 
   },    
   {

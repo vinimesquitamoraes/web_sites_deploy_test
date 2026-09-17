@@ -31,6 +31,9 @@
       </div>
 
       <div class="hero-content center">
+        <!-- 
+          @slot Teh default content of the banner.
+        -->
         <slot name="content">
           <transition :name="animationsEnabled ? 'slide-down' : ''" :appear="animationsEnabled">
             <div 
