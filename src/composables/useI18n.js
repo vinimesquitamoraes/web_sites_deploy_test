@@ -1,12 +1,12 @@
 import { ref, computed } from 'vue'
 import * as XLSX from 'xlsx'
 
-import siteTextTranslationsExcell     from '@/assets/xlsx/translations.xlsx?url'
-import creditsRolesTranslationsExcell from '@/assets/xlsx/credits_roles.xlsx?url'
+import siteTextTranslationsExcell           from '@/assets/xlsx/translations.xlsx?url'
+import creditsRolesLabelsTranslationsExcell from '@/assets/xlsx/credits_roles_labels.xlsx?url'
 
 const excelUrls = [
   siteTextTranslationsExcell,
-  creditsRolesTranslationsExcell
+  creditsRolesLabelsTranslationsExcell
 ]
 
 const translations  = ref({})
