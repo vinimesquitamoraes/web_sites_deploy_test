@@ -6,7 +6,7 @@
       :imageSrc     ="cursedPippi" 
       :duration     ="5" 
       :chance       ="10" 
-      :frequency    ="500" 
+      :frequency    ="5000" 
     />
 
     <Banner
