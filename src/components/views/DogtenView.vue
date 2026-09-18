@@ -1,5 +1,14 @@
 <template>
   <div class="main-content">
+
+		<Jumpescare 
+      v-model       ="showOverlay" 
+      :imageSrc     ="cursedPippi" 
+      :duration     ="5" 
+      :chance       ="10" 
+      :frequency    ="500" 
+    />
+
     <Banner
       sessionKey                  ="replace_banner_for_map_renders"
       :alternativeImages          ="mapRenderImagesArray"
@@ -56,6 +65,10 @@ import MediaGallery    from '@/components/reusables/mansory_gallery.vue'
 import MediaModal      from '@/components/reusables/media_modal.vue'
 import CustomButton    from '@/components/reusables/custom_button.vue'
 import OptionsModal    from '@/components/reusables/options_modal.vue'
+
+import Jumpescare from '@/components/reusables/jumpescare.vue'
+
+import cursedPippi from '@/assets/img/funny/cursed_pippi.png'
 
 const { t } = useI18n()
 
@@ -258,6 +271,7 @@ const handleModalChange = ({ key, value }) => {
 onMounted(() => {
   if (sessionStorage.getItem('unlocked_dogten') === null) {
     sessionStorage.setItem('unlocked_dogten', 'false')
+    sessionStorage.setItem('visited_dogten', 'true')
   }
 })
 </script>

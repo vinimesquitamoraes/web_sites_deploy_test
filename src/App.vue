@@ -46,7 +46,7 @@
     * @file        App.vue
     * @brief       Main application root component
   */
-  import { onMounted } from 'vue'
+  import { onMounted, ref} from 'vue'
   import { useRoute } from 'vue-router'
   import { useI18n } from '@/composables/useI18n'
   import { useAnimations } from '@/composables/reduced_motion_check'
@@ -57,6 +57,8 @@
   import MusicPlayer  from '@/components/reusables/music_player.vue'
   import ToggleButton from '@/components/reusables/toggle_button.vue'
   
+ 
+
   const route = useRoute()
   const { loadTranslations, isLoaded, t } = useI18n()
   const { animationsEnabled, setAnimationsEnabled } = useAnimations()

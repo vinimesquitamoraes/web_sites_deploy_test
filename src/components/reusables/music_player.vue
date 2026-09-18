@@ -172,8 +172,10 @@ import musicNoteSvg         from '@/assets/svg/music-note-4-svgrepo-com.svg'
 import triangleLeftSvg      from '@/assets/svg/triangle-left-12-filled.svg'
 import triangleUpSvg        from '@/assets/svg/triangle-up-12-filled.svg'
 import nintenBoppinIcon     from '@/assets/img/characters/Ninten_Boppin.gif'
-import ninten67Icon         from '@/assets/img/funny/Ninten_67.gif'
 import ferris_special_tape  from '@/assets/img/funny/ferris_special_mixtape.png'
+
+import ninten67Icon         from '@/assets/img/funny/Ninten_67.gif'
+import pippi67Icon          from '@/assets/img/funny/Pippi_67.gif'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -539,7 +541,7 @@ const handleRecClick = () => {
     recClickCount.value = 0
     toastMessage.value  = '67'
     showToast.value     = true
-    toastIcon.value     = ninten67Icon
+    toastIcon.value     = Math.random() < 0.5 ? ninten67Icon : pippi67Icon;
     sessionStorage.setItem('unlocked_dogten', 'true')
     setTimeout(() => router.push('/dogten'), 1500)
   }
