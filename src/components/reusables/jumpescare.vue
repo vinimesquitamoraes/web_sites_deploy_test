@@ -71,7 +71,6 @@ let checkIntervalId = null
     * @private
 */
 const triggerFlash = () => {
-	// Block jumpscare if reduced motion is enabled or visited_dogten is false/missing
 	const visitedDogten = sessionStorage.getItem('visited_dogten') === 'true'
 	if (!animationsEnabled.value || !visitedDogten) return
 
@@ -98,7 +97,6 @@ watch(() => props.modelValue, (newValue) => {
 onMounted(() => {
 	if (props.frequency > 0) {
 		checkIntervalId = setInterval(() => {
-			// Do nothing on tick if reduced motion is enabled or visited_dogten is false/missing
 			const visitedDogten = sessionStorage.getItem('visited_dogten') === 'true'
 			if (!animationsEnabled.value || !visitedDogten) return
 
