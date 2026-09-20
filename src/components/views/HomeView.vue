@@ -12,6 +12,7 @@
     />
 
     <div class="main-content">
+
       <ContentSection 
         :heading    ="t('SITE_HOME_HEADLINE')"
         :text       ="[t('SITE_HOME_INTRO_1'), t('SITE_HOME_INTRO_2'), t('SITE_HOME_INTRO_3')]" 

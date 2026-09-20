@@ -22,13 +22,13 @@
         >
           <CharacterCard 
             v-if="characters[activeIndex]"
-            :key="activeIndex"
-            :name="characters[activeIndex].name"
-            :description="characters[activeIndex].description"
-            :image="characters[activeIndex].image"
-            :imageShape="characters[activeIndex].imageShape || 'circle'"
-            :imageBgColor="characters[activeIndex].imageBgColor || 'transparent'"
-            :isReversed="activeIndex % 2 !== 0" 
+            :key            ="activeIndex"
+            :name           ="characters[activeIndex].name"
+            :description    ="characters[activeIndex].description"
+            :image          ="characters[activeIndex].image"
+            :imageShape     ="characters[activeIndex].imageShape || 'circle'"
+            :imageBgColor   ="characters[activeIndex].imageBgColor || 'transparent'"
+            :isReversed     ="activeIndex % 2 !== 0" 
           />
         </Transition>
       </div>

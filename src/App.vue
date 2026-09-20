@@ -57,8 +57,6 @@
   import MusicPlayer  from '@/components/reusables/music_player.vue'
   import ToggleButton from '@/components/reusables/toggle_button.vue'
   
- 
-
   const route = useRoute()
   const { loadTranslations, isLoaded, t } = useI18n()
   const { animationsEnabled, setAnimationsEnabled } = useAnimations()
@@ -90,6 +88,7 @@ body.reduce-motion *::after {
 }
 :root {
   --color-primary             : #E50012;
+  --color-primary-darker      : #92000c;
   --color-secondary           : #fdd268;
   --color-tertiary            : #b425e1;
   --color-black               : #000000;
@@ -126,7 +125,8 @@ body.reduce-motion *::after {
   --font-h3-size              : 28px;
   --font-h4-size              : 24px;
   --font-p-size               : 20px;
-  --font-body-size            : 16px;
+  --font-pp-size              : 16px;
+  --font-ppp-size             : 10px;
 
   --font-dropdown-size        : 20px;
   --font-reduce-motion-size   : 15px;

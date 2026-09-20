@@ -7,6 +7,7 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 ## Imported Components
 
 - [MediaModal](media_modal.md)
+- [CustomButton](custom_button.md)
 
 ## Imported Composables
 
@@ -14,7 +15,7 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 
 ## Imported Assets
 
-- *None specified*
+- [playSvg](../../../src/assets/svg/player-play.svg)
 
 ## Props
 
@@ -36,7 +37,7 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 | `textAlign` | string | `'center'` | left, center, right, justify | Text alignment for paragraphs (left, center, right, justify). |
 | `sectionPadding` | string | `'0px'` | - | Inner padding spacing applied to the section container wrapper. |
 | `textPadding` | string | `'0px'` | - | Inner padding spacing applied to the text content container block. |
-| `mediaSrc` | string | `''` | - | Source URL for the media asset (image or video iframe). |
+| `mediaSrc` | string | `''` | - | Source URL or local file path for the media asset (image, video iframe, or local video file). |
 | `mediaAlt` | string | `''` | - | Alternative description text for the media asset. |
 | `mediaCaption` | string | `''` | - | Caption text displayed underneath the media wrapper. |
 | `mediaWidth` | string | `'535px'` | - | Custom CSS width for the media wrapper element. |
@@ -49,18 +50,37 @@ Content section component supporting headings, dynamic body text paragraphs, emb
 | `allowDrag` | boolean | `true` | - | Toggles image drag functionality. |
 | `allowSaveAs` | boolean | `false` | - | Controls whether the right-click context menu ("Save image as...") is allowed. |
 | `disableSelect` | boolean | `true` | - | Disables text selection across elements. |
+| `actionsAlign` | string | `'left'` | left, center, right | Alignment for actions slot content (left, center, right). |
+| `videoPauseMode` | string | `'pause'` | pause, rewind | Controls how video stops when unhovered in reduced motion mode ('pause' or 'rewind'). |
+| `videoTriggerMode` | string | `'button'` | hover, button | Controls whether video or GIF playback is triggered via hover or an overlay button trigger across desktop and mobile modes. |
+| `staticMediaSrc` | string | `''` | - | Source URL for static fallback image for GIFs when reduced motion is enabled. |
 
 ## Computed Properties & Methods
 
+- `isButtonTriggerActive`: Determines whether button trigger mode behavior is currently active based on explicit prop config or reduced motion accessibility preferences.
+- `shouldShowPlayButton`: Evaluates whether the play control button should display for videos.
+- `shouldShowGifButton`: Evaluates whether the play control button should display for GIF assets.
+- `isControlBtnVisible`: Toggles visible styling class on control buttons across viewports.
+- `isEmbeddedVideo`: Evaluates whether the media source points to an external iframe embed provider.
 - `textParagraphs`: Filters and formats raw input text into a valid array of paragraph string blocks.
 - `shouldShowHeader`: Evaluates whether the header title should render based on availability of text and heading properties.
 
 ## Slots
 
-- `media`: Custom media content slot
+- `actions`: Slot for custom action buttons or interactive elements displayed underneath the body text.
+- `media`: Slot to override standard media render logic (image, video player, iframe) with custom elements.
 
 ## Internal Methods
 
+- `syncVideoPlayback`: Programmatically synchronizes HTML5 video playback according to motion preferences and trigger configurations.
+- `onPlay`: Handles play events to pause non-active videos during reduced motion mode.
+- `handleMouseEnter`: Plays video element when hovered if hover mode is configured and motion/animations are disabled.
+- `handleMouseLeave`: Handles video leave state based on `videoPauseMode` prop when hover mode is configured and motion/animations are disabled.
+- `handleImageMouseEnter`: Toggles static image to animated GIF source when mouse hovers over static media asset under hover mode.
+- `handleImageMouseLeave`: Restores static fallback media source when mouse leaves media asset under hover mode.
+- `handleImageClick`: Controls click behavior for GIF elements or triggers standard modal expansion.
+- `toggleVideoPlay`: Toggles video playback manually when triggered via control overlay.
+- `handleVideoClick`: Toggles video playback when clicked under button trigger mode or reduced motion preferences.
 - `handleContextMenu`: Handles right-click events according to the `allowSaveAs` property configuration.
 - `openImageModal`: Intercepts clicks to trigger and display the image expansion modal when valid.
 - `closeImageModal`: Closes the image modal view.

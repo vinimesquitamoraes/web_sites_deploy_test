@@ -12,10 +12,8 @@
   "knownTags": {
     "️": 1,
     "__pure__": 2,
-    "-comments": 3,
     "papaparse": 4,
-    "typescript": 5,
-    "vue_component": 6
+    "typescript": 5
   },
   "tagColors": {},
   "_version": 4

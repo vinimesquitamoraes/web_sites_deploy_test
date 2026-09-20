@@ -38,6 +38,8 @@
         {{ t('SITE_NAV_DOWNLOAD') }}
       </router-link>
 
+      
+
       <CustomLanguageDropdown v-if="showLanguageDropdown" />
     </nav>
   </div>

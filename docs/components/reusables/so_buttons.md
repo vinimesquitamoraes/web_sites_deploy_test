@@ -30,6 +30,8 @@ An operating system platform link/icon button component supporting custom maskin
 ## Computed Properties & Methods
 
 - `isClickable`: Determines if the platform link is active/clickable.
+- `activeKey`: Normalizes platform input string.
+- `platformInfo`: Resolves platform metadata dictionary.
 - `resolvedUrl`: Resolves final target URL based on props and defaults.
 - `iconSize`: Formats size value into pixel string if numeric.
 - `iconMask`: Computes the SVG icon URL for CSS masking.

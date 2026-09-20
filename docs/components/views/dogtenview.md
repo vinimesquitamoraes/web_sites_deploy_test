@@ -11,6 +11,7 @@ Gallery view component displaying the worst of Encore
 - [MediaModal](../reusables/media_modal.md)
 - [CustomButton](../reusables/custom_button.md)
 - [OptionsModal](../reusables/options_modal.md)
+- [Jumpescare](../reusables/jumpescare.md)
 
 ## Imported Composables
 
@@ -18,7 +19,7 @@ Gallery view component displaying the worst of Encore
 
 ## Imported Assets
 
-- *None specified*
+- [cursedPippi](../../../src/assets/img/funny/cursed_pippi.png)
 
 ## Props
 

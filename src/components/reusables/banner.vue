@@ -31,9 +31,6 @@
       </div>
 
       <div class="hero-content center">
-        <!-- 
-          @slot Teh default content of the banner.
-        -->
         <slot name="content">
           <transition :name="animationsEnabled ? 'slide-down' : ''" :appear="animationsEnabled">
             <div 
@@ -55,29 +52,39 @@
             <p class="hero-subtitle" v-if="subtitle && subtitle.trim() !== ''">{{ subtitle }}</p>
           </transition>
 
-          <transition :name="animationsEnabled ? 'pop-in' : ''" :appear="animationsEnabled">
-            <CustomButton
-              class         = "cta_button"
-              v-if="showCtaButton"
-              :text         ="ctaText || t('SITE_NAV_DOWNLOAD')" 
-              :to           ="ctaLink" 
-              @click        ="$emit('cta-click')" 
-              :icon-src     ="dowload_icon"
-              border        ="var(--color-banner-button-border )"
-              bgColor       ="var(--color-banner-button-bg)"
-              hover-bg-color="var(--color-banner-button-hover-bg)"
-              icon-color    ="var(--color-banner-button-icon)"
-              text-color    ="var(--color-banner-button-text)"
-              icon-size     ="40px"
-              icon-position ="left"
-              icon-margin   ="0   -5px 0 0"
-              text-margin   ="4px 10px 0 0"
-              fontSize      ="var(--font-h2-size)" 
-              width         ="200px"
-              height        ="60px"
-              :autoAdaptSize = true
-            />
-          </transition>
+          <div class="cta-buttons-wrapper">
+            <template v-for="(btn, index) in resolvedButtons" :key="index">
+              <transition :name="animationsEnabled ? (index === 0 ? 'pop-in' : 'pop-in-delayed') : ''" :appear="animationsEnabled">
+                <CustomButton
+                  class             = "cta_button"
+                  :class            = "{ 'has-external-url': btn.externalUrl }"
+                  v-if              = "showCtaButton"
+                  :text             = "btn.text" 
+                  :to               = "btn.to" 
+                  :externalUrl      = "btn.externalUrl"
+                  @click            = "$emit(btn.emit || 'cta-click', btn)" 
+                  :icon-src         = "btn.iconSrc"
+                  :icon-size        = "btn.iconSrc ? (btn.iconSize || '32px') : undefined"
+                  :border           = "btn.border || 'var(--color-banner-button-border)'"
+                  :bgColor          = "btn.bgColor || 'var(--color-banner-button-bg)'"
+                  :hover-bg-color   = "btn.hoverBgColor || 'var(--color-banner-button-hover-bg)'"
+                  :icon-color       = "btn.iconColor || 'var(--color-banner-button-icon)'"
+                  :hover-icon-color = "btn.iconColor || 'var(--color-banner-button-icon)'"
+                  :text-color       = "btn.textColor || 'var(--color-banner-button-text)'"
+                  :hover-text-color = "btn.hoverTextColor || 'var(--color-banner-button-text)'"
+                  icon-position     = "left"
+                  icon-margin       = "0 -5px 0 0"
+                  text-margin       = "2px 8px 0 0"
+                  :fontSize         = "btn.fontSize || 'var(--font-h2-size)'"
+                  :style            = "{ 
+                    width           : btn.width       || '200px', 
+                    fontWeight      : btn.fontWeight  || 'normal',
+                  }"
+                  :autoAdaptSize    = true
+                />
+              </transition>
+            </template>
+          </div>
         </slot>
       </div>
 
@@ -95,7 +102,7 @@
 <script setup>
 /**
   * @file banner.vue
-  * @brief Hero banner component featuring background image, logo display, call to action button and a secret directional scrolling animation defined via session variable.
+  * @brief Hero banner component featuring background image, logo display, dynamically rendered call-to-action buttons via array props, and a secret directional scrolling animation defined via session variable.
   * @displayName Hero Banner
 */
 
@@ -107,7 +114,7 @@ import CustomButton from '@/components/reusables/custom_button.vue'
 
 import img_gameLogo       from '@/assets/img/logos/Encore_Logo.png'
 import img_defaultBanner  from '@/assets/img/art/web_site_banner.png'
-import charactersImage    from '@/assets/img/art/ninten_and_lloyd.jpg'
+import charactersImage    from '@/assets/img/art/ninten_and_lloyd.png'
 
 import dowload_icon       from '@/assets/svg/download.svg'
 
@@ -122,6 +129,36 @@ const VIGNETTE_STYLES = {
   style_3: 'radial-gradient(circle    , rgba(0,0,0,0  ) 40%, rgba(0,0,0,0.85) 100%)',
   style_4: 'linear-gradient(90deg     , rgba(0,0,0,0.7) 0% , rgba(0,0,0,0.1 ) 50%   , rgba(0,0,0,0.7) 100%)'
 }
+
+const resolvedButtons = computed(() => {
+  if (props.buttons && props.buttons.length > 0) {
+    return props.buttons
+  }
+  return [
+    {
+      text          : t('SITE_NAV_DOWNLOAD'),
+      to            : '/download',
+      iconSrc       : dowload_icon,
+      emit          : 'cta-click',
+      bgColor       : 'var(--color-primary)',
+      iconColor     : 'var(--color-secondary)', 
+      textColor     : 'var(--color-default-text-color)',
+      hoverTextColor: 'var(--color-default-text-color)',
+      hoverBgColor  : 'var(--color-primary-darker)',
+      fontWeight    : 'bold'
+    },
+    {
+      text          : t('SITE_BANNER_DEVLOG_NEWS'),
+      externalUrl   : 'https://mother-encore.itch.io/mother-encore/devlog',
+      emit          : 'news-click',
+      fontSize      : 'var(--font-pp-size)',
+      bgColor       : 'var(--color-black)',
+      hoverBgColor  : 'var(--color-black)',
+      textColor     : 'var(--color-default-text-color)',
+      hoverTextColor: 'var(--color-secondary)',      
+    }
+  ]
+})
 
 const props = defineProps({
   /** Default background image source URL. 
@@ -209,7 +246,7 @@ const props = defineProps({
     required: false,
     default : true
   },
-  /** Controls whether the call-to-action button element is visible.
+  /** Controls whether the call-to-action button elements are visible.
     * @public
   */
   showCtaButton: {
@@ -217,21 +254,13 @@ const props = defineProps({
     required: false,
     default : true
   },
-  /** Custom text label override string for the call-to-action button. 
+  /** Array of button configuration objects for dynamic rendering.
     * @public
   */
-  ctaText: {
-    type    : String,
+  buttons: {
+    type    : Array,
     required: false,
-    default : ''
-  },
-  /** Target routing link destination path for the call-to-action button.
-    * @public
-  */
-  ctaLink: {
-    type    : String,
-    required: false,
-    default : '/download'
+    default : () => []
   },
   /** 
     * Predefined vignette style key or custom CSS background value.
@@ -268,6 +297,8 @@ const props = defineProps({
     default : true
   }
 })
+
+
 
 /**
   * Selects a random alternative background image from the configured array.
@@ -455,7 +486,7 @@ const resolvedVignette = computed(() => {
 */
 const cssVignetteBackground = computed(() => resolvedVignette.value)
 
-defineEmits(['cta-click'])
+defineEmits(['cta-click', 'news-click'])
 </script>
 
 <style scoped>
@@ -509,6 +540,23 @@ defineEmits(['cta-click'])
 .pop-in-enter-from {
   opacity: 0;
   transform: scale(0.8) translateY(20px);
+}
+
+.pop-in-delayed-enter-active {
+  transition      : transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease-out;
+  transition-delay: 0.75s;
+}
+.pop-in-delayed-enter-from {
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
+}
+
+.cta-buttons-wrapper {
+  display         : flex;
+  flex-direction  : column;
+  align-items     : center;
+  gap             : 0.75rem;
+  width           : 100%;
 }
 
 .hero-banner {
@@ -574,6 +622,10 @@ defineEmits(['cta-click'])
   background-position : 0 0;
   background-repeat   : repeat; 
   animation           : scroll-both 30s linear infinite;
+}
+
+.cta_button.has-external-url:hover :deep(.button-text) {
+  text-decoration: underline;
 }
 
 @keyframes scroll-horizontal {
@@ -648,7 +700,7 @@ defineEmits(['cta-click'])
 }
 
 .hero-logo-wrapper {
-  margin-bottom       : 1.5rem;
+  margin-bottom       : 1rem;
   display             : flex;
   justify-content     : center;
   width               : 100%;
@@ -676,7 +728,7 @@ defineEmits(['cta-click'])
   margin-right        : auto !important;
   max-width           : min(100%, 800px);
   width               : 100%;
-  margin-bottom       : 2rem;
+  margin-bottom       : 1.25rem;
   opacity             : 0.95;
   box-sizing          : border-box;
   display             : block !important;
@@ -720,26 +772,37 @@ defineEmits(['cta-click'])
 
 @media (max-width: 768px) {
   .hero-banner {
-    height            : 300px;
+    min-height        : 500px;
+    padding           : 1rem 0;
   }
 
   .hero-content {
-    padding           : 0 1rem;
+    padding           : 1rem 1rem;
+    height            : 100%;
+    justify-content   : space-between;
+    align-items       : center;
   }
 
-  .hero-logo-image {
-    visibility      : hidden;
+  .hero-logo-wrapper {
+    display           : none;
   }
   
   .hero-subtitle {
     font-family       : var(--font-mobile-h2) !important;
-    font-size         : clamp(1.1rem, 4.5vw, var(--font-mobile-h2-size)) !important;
+    font-size         : var(--font-mobile-h2-size) !important;
     padding           : 0 0.5rem;
-    margin-bottom     : 0.5rem !important; 
+    margin-top        : 2.5rem;
+    margin-bottom     : 0 !important; 
+    order             : 1;
+  }
+
+  .cta-buttons-wrapper {
+    margin-top        : 3rem;
+    order             : 2;
   }
 
   .hero-bottom-right-image {
-    height            : clamp(220px, 50vh, 280px);
+    height            : clamp(340px, 48vh, 520px);
     bottom            : 0px;
     left              : 50%;
     right             : auto;

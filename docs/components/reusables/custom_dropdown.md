@@ -21,7 +21,7 @@ A customizable dropdown component supporting v-model selection, click-outside cl
 | Prop Name | Type | Default | Possible Values | Description |
 | :-------- | :--- | :------ | :-------------- | :---------- |
 | `modelValue` | string\|number | `''` | - | Current selected value bound via v-model. |
-| `options` | array | `[]` | - | List of selectable options containing id and label properties. |
+| `options` | array | `''` | - | List of selectable options containing id and label properties. |
 
 ## Computed Properties & Methods
 

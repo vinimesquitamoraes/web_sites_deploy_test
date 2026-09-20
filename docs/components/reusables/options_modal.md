@@ -6,7 +6,7 @@ A modal dialog component that manages and persists toggleable options via sessio
 
 ## Imported Components
 
-- [ToggleButtom](toggle_button.md)
+- [ToggleButton](toggle_button.md)
 - [CustomButton](custom_button.md)
 
 ## Imported Composables

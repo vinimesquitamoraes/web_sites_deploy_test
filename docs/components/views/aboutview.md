@@ -7,7 +7,7 @@ About page view component displaying structured informational content sections w
 ## Imported Components
 
 - [ContentSection](../reusables/content_section.md)
-- [SocialMediaButton](../reusables/social_media_button.md)
+- [CustomButton](../reusables/custom_button.md)
 
 ## Imported Composables
 
@@ -15,12 +15,13 @@ About page view component displaying structured informational content sections w
 
 ## Imported Assets
 
-- [combatImage](../../../src/assets/img/screenshots/sc4.png)
-- [fieldImage](../../../src/assets/img/screenshots/sc1.png)
-- [storyImage](../../../src/assets/img/screenshots/sc2.png)
-- [visualImage](../../../src/assets/img/screenshots/sc3.png)
-- [musicImage](../../../src/assets/img/screenshots/sc5.png)
-- [imgGodotLogo](../../../src/assets/img/logos/logo_large_monochrome_light.png)
+- [musicNoteSvg](../../../src/assets/svg/music-note-4-svgrepo-com.svg)
+- [combatMedia](../../../src/assets/mp4/showreels/Combat.mp4)
+- [fieldMedia](../../../src/assets/mp4/showreels/Field Skills & Dungeons.mp4)
+- [storyMedia](../../../src/assets/mp4/showreels/Story.mp4)
+- [visualMedia](../../../src/assets/mp4/showreels/Panning.mp4)
+- [musicMedia](../../../src/assets/mp4/showreels/Music.mp4)
+- [godotImage](../../../src/assets/img/logos/logo_large_monochrome_light.png)
 
 ## Props
 
@@ -30,7 +31,7 @@ About page view component displaying structured informational content sections w
 
 ## Computed Properties & Methods
 
-- `infoSections`: Computes the list of information sections displayed sequentially across the about page.
+- `infoSections_1`: Computes the list of information sections displayed sequentially across the about page.
 
 ## Slots
 
@@ -38,4 +39,4 @@ About page view component displaying structured informational content sections w
 
 ## Internal Methods
 
-- *None specified*
+- `openMusicPlayer`: Open/Close the music player when clicked

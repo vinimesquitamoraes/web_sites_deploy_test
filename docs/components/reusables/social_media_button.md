@@ -30,6 +30,8 @@ Reusable social media link button component featuring dynamic SVG icons and a ho
 
 ## Computed Properties & Methods
 
+- `activeKey`: Normalized reactive platform key.
+- `platformInfo`: Resolved platform dataset object fallback configuration.
 - `computedTooltipText`: Computed text string rendered inside the tooltip component.
 - `cssSize`: Resolved CSS unit size string computed from props.size.
 - `cssMask`: Resolved SVG mask URL path computed from platform key.
@@ -42,11 +44,9 @@ Reusable social media link button component featuring dynamic SVG icons and a ho
 ## Internal Methods
 
 - `linkRef`: Reference object bound to the interactive link element.
-- `key`: Normalized platform string key.
 - `platforms`: Registry collection mapping platform names to target URLs and display labels.
-- `platformInfo`: Resolved platform dataset object fallback configuration.
 - `socialIcons`: Eager glob import map resolving SVG asset files.
 - `internalShow`: Internal reactive visibility state toggle flag.
 - `tooltipTimer`: Identifier reference for active asynchronous tooltip display timers.
-- `handleMouseEnter`: Event handler triggered upon mouse entering the button container area.
-- `handleMouseLeave`: Event handler triggered upon mouse leaving the button container area.
+- `handleShowTooltip`: Event handler triggered upon mouse entering or focusing the button container area.
+- `handleHideTooltip`: Event handler triggered upon mouse leaving or blurring the button container area.

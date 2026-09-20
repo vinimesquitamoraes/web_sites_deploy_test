@@ -24,8 +24,9 @@ Main music player component handling YouTube playback, state management, layouts
 - [triangleLeftSvg](../../../src/assets/svg/triangle-left-12-filled.svg)
 - [triangleUpSvg](../../../src/assets/svg/triangle-up-12-filled.svg)
 - [nintenBoppinIcon](../../../src/assets/img/characters/Ninten_Boppin.gif)
-- [ninten67Icon](../../../src/assets/img/funny/Ninten_67.gif)
 - [ferris_special_tape](../../../src/assets/img/funny/ferris_special_mixtape.png)
+- [ninten67Icon](../../../src/assets/img/funny/Ninten_67.gif)
+- [pippi67Icon](../../../src/assets/img/funny/Pippi_67.gif)
 
 ## Props
 
@@ -33,7 +34,6 @@ Main music player component handling YouTube playback, state management, layouts
 | :-------- | :--- | :------ | :-------------- | :---------- |
 | `playlistId` | string | `''` | - | The YouTube playlist ID or full playlist URL. |
 | `pageSize` | number | `7` | - | The number of tracks to display per page in the playlist view. |
-| `footerBehavior` | string | `'center'` | - | Determines how the player reacts when overlapping the page footer. |
 | `volumeLayout` | string | `'wheel'` | - | The layout style used for the volume control component. |
 | `minimizedBehavior` | string | `'default'` | - | Defines the behavior style when the player is minimized. |
 | `orientation` | string | `'horizontal'` | - | Sets the outer layout orientation of the player. |
@@ -48,9 +48,9 @@ Main music player component handling YouTube playback, state management, layouts
 
 ## Internal Methods
 
+- `getGlobalIndex`: Calculates global track index from relative page position.
 - `formatTime`: Formats track duration seconds into a human-readable mm:ss string.
 - `extractPlaylistId`: Extracts a clean YouTube playlist identifier or URL string.
-- `updateFooterPosition`: Calculates footer overlap and updates player positioning dynamically on scroll.
 - `initPlayer`: Injects the YouTube iframe API script into the document IF missing.
 - `createPlayer`: Instantiates the YouTube player object and registers event handlers.
 - `syncState`: Syncs the player state and asynchronously fetches track metadata titles in batches.
@@ -66,5 +66,7 @@ Main music player component handling YouTube playback, state management, layouts
 - `toggleMute`: Toggles audio muting state and retains previous active volume levels.
 - `toggleTapeStyle`: Toggles tape image display state and special style palette.
 - `handleRecClick`: Handles recording button interactions and triggers secret easter eggs upon threshold hits.
-- `handleSpecialTapeUpdate`: Handles real-time updates when the special tape option changes.
+- `checkTapeAccess`: Checks session storage for special tape access permissions.
+- `handleSpecialTapeUpdate`: Handles special tape access updates triggered by custom events.
+- `onToastClose`: Resets toast icon to default state when notification closes.
 - `onCompactLeave`: Resets inline element transition styles when closing the compact player button.

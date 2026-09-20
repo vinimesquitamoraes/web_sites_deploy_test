@@ -6,6 +6,7 @@
       {
         "id": "7f3904e2304359fe",
         "type": "tabs",
+        "dimension": 35.088832487309645,
         "children": [
           {
             "id": "7dab8fbae4ce442d",
@@ -50,16 +51,62 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/components/reusables/app_header.md",
+                "file": "docs/components/reusables/content_section.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "app_header"
-            }
+              "title": "content_section"
+            },
+            "group": "0beba592f29c6b3d"
           }
         ],
         "currentTab": 1
+      },
+      {
+        "id": "7683cc6e20a25b59",
+        "type": "tabs",
+        "dimension": 64.91116751269035,
+        "children": [
+          {
+            "id": "f14c51cab4461a20",
+            "type": "leaf",
+            "state": {
+              "type": "localgraph",
+              "state": {
+                "file": "docs/components/reusables/content_section.md",
+                "options": {
+                  "collapse-filter": true,
+                  "search": "",
+                  "localJumps": 1,
+                  "localBacklinks": true,
+                  "localForelinks": true,
+                  "localInterlinks": false,
+                  "showTags": false,
+                  "showAttachments": false,
+                  "hideUnresolved": false,
+                  "collapse-color-groups": true,
+                  "colorGroups": [],
+                  "collapse-display": true,
+                  "showArrow": false,
+                  "textFadeMultiplier": 0,
+                  "nodeSizeMultiplier": 1,
+                  "lineSizeMultiplier": 1,
+                  "collapse-forces": true,
+                  "centerStrength": 0.518713248970312,
+                  "repelStrength": 10,
+                  "linkStrength": 1,
+                  "linkDistance": 250,
+                  "scale": 1,
+                  "close": true
+                }
+              },
+              "icon": "lucide-git-fork",
+              "title": "Gráfico de content_section"
+            },
+            "group": "0beba592f29c6b3d"
+          }
+        ]
       }
     ],
     "direction": "vertical"
@@ -227,9 +274,11 @@
       "bases:Criar nova base": false
     }
   },
-  "active": "893469e2c86ec5b5",
+  "active": "f14c51cab4461a20",
   "lastOpenFiles": [
+    "docs/components/reusables/custom_button.md",
     "docs/components/index.md",
+    "docs/components/reusables/app_header.md",
     "docs/components/reusables/app_footer.md",
     "docs/components/reusables/credits_all.md",
     "docs/components/reusables/music_player.md",
@@ -254,8 +303,6 @@
     "docs/components/reusables/galery_carousel.md",
     "docs/components/reusables/foldable_section.md",
     "docs/components/reusables/custom_lang_dropdown.md",
-    "docs/components/reusables/custom_dropdown.md",
-    "docs/components/reusables/custom_button.md",
     "src/assets/img/logos/Encore_Logo.png"
   ]
 }

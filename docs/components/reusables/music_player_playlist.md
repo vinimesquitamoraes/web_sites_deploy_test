@@ -50,7 +50,7 @@ Music player playlist component displaying paginated track listings, current tra
 
 ## Computed Properties & Methods
 
-- *None specified*
+- `containerStyles`: Consolidated style object mapping props to CSS variables without style injector overhead.
 
 ## Slots
 

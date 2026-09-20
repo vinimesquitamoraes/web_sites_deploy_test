@@ -35,5 +35,5 @@ The master credits container component that parses CSV files for roles and links
 
 ## Internal Methods
 
-- `debugLog`: Logs debug messages to the console if debugging is toggle_debug_log is true.
+- `splitCSVLine`: Robust RFC-4180 safe CSV line splitter.
 - `parseCSV`: Parses raw CSV text into structured JavaScript objects.

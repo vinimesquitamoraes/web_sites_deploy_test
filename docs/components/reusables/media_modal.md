@@ -36,4 +36,6 @@ Media modal component for displaying enlarged images or videos with custom navig
 
 ## Internal Methods
 
-- *None specified*
+- `cleanupVideo`: Stops video playback, detaches media stream, and clears memory buffer.
+- `handleClose`: Wrapper function to clean active video instance before firing close event.
+- `handleKeyDown`: Keydown handler for keyboard modal controls (Esc, Left, Right).

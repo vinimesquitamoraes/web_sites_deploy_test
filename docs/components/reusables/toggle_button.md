@@ -46,6 +46,7 @@ A customizable switch toggle component supporting active/inactive icons, masked 
 - `rawIcon`: Computed raw icon string depending on active/inactive states.
 - `processedIcon`: Processes raw SVG strings into data URIs or passes through image paths.
 - `cssMaskImage`: Computed CSS mask URL for SVG icons.
+- `computedStyles`: Consolidates dynamic dynamic CSS variables into a single computed property.
 
 ## Slots
 

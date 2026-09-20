@@ -33,7 +33,6 @@ Displays a showcase list or tabbed view of characters with portrait navigation a
 
 ## Computed Properties & Methods
 
-- `computedTransition`: Computes the active transition effect name.
 - `triangleUrl`: Formats the triangle SVG path for CSS mask usage.
 - `characters`: Reactive collection of game characters with localized text and assets.
 

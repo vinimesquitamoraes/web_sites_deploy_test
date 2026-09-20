@@ -45,6 +45,7 @@ Music player volume control component supporting horizontal/vertical layouts, th
 ## Computed Properties & Methods
 
 - `isCurrentHorizontal`: Evaluates whether the current orientation includes a horizontal format.
+- `computedStyles`: Consolidates component styling props into CSS custom properties.
 
 ## Slots
 

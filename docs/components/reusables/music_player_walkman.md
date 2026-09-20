@@ -1,6 +1,6 @@
 ## Overview
 
-Walkman-style music player component featuring an LCD screen, track progress scrubber, custom cassette display toggle with an SVG icon, and animated tape reels.
+Walkman-style music player component featuring an LCD screen, track progress, custom cassette display toggle with an SVG icon, and animated tape reels.
 
 **Source File:** [music_player_walkman.vue](../../../src/components/reusables/music_player_walkman.vue)
 
@@ -51,7 +51,7 @@ Walkman-style music player component featuring an LCD screen, track progress scr
 
 ## Computed Properties & Methods
 
-- *None specified*
+- `containerStyles`: Consolidated style object mapping props to CSS variables.
 
 ## Slots
 
