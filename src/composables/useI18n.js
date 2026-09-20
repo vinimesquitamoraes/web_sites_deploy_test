@@ -13,7 +13,7 @@ const translations  = ref({})
 const currentLang   = ref('en')
 const isLoaded      = ref(false)
 
-const ignored_langs    = new Set(['es_ES'])
+const ignored_langs    = new Set(['es_ES','uk'])
 const toggle_debug_log = false
 
 const debugLog = (...args) => {
