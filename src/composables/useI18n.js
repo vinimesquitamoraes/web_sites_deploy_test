@@ -14,7 +14,7 @@ const currentLang   = ref('en')
 const isLoaded      = ref(false)
 
 const ignored_langs    = new Set(['es_ES','uk'])
-const toggle_debug_log = false
+const toggle_debug_log = true
 
 const debugLog = (...args) => {
   if (toggle_debug_log) {

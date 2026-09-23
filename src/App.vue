@@ -46,7 +46,7 @@
     * @file        App.vue
     * @brief       Main application root component
   */
-  import { onMounted, ref} from 'vue'
+  import { onMounted, watch, ref} from 'vue'
   import { useRoute } from 'vue-router'
   import { useI18n } from '@/composables/useI18n'
   import { useAnimations } from '@/composables/reduced_motion_check'
@@ -58,8 +58,18 @@
   import ToggleButton from '@/components/reusables/toggle_button.vue'
   
   const route = useRoute()
-  const { loadTranslations, isLoaded, t } = useI18n()
+  const { loadTranslations, isLoaded, t, currentLang } = useI18n()
   const { animationsEnabled, setAnimationsEnabled } = useAnimations()
+
+  watch(currentLang, (newLang) => {
+    if (typeof document !== 'undefined') {
+      if (newLang === 'ru') {
+        document.documentElement.classList.add('lang-ru')
+      } else {
+        document.documentElement.classList.remove('lang-ru')
+      }
+    }
+  }, { immediate: true })
 
   onMounted(() => {
     loadTranslations()
@@ -74,6 +84,8 @@
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap');
+
 body.reduce-motion *,
 body.reduce-motion *::before,
 body.reduce-motion *::after {
@@ -86,6 +98,11 @@ body.reduce-motion *::after {
   font-family: "Motherish";
   src: url('/src/assets/fonts/Motherish/Motherish-Regular.otf');
 }
+
+:root.lang-ru {
+  --font-default: 'PT Sans Narrow', sans-serif;
+}
+
 :root {
   --color-primary             : #E50012;
   --color-primary-darker      : #92000c;
