@@ -1,5 +1,5 @@
 <template>
-  <div class="lang-selector-container" ref="dropdownRef">
+  <div class="lang-selector-container" :class="getFontClass(currentLang)" ref="dropdownRef">
     <CustomButton
       class          = "lang-button"
       :text          = "currentLang.toUpperCase()"
@@ -16,7 +16,6 @@
       border         = "var(--color-lang-dropdown-border)"
       iconPosition   = "right"
       @click         = "toggleDropdown"
-
     />
 
     <div v-if="isOpen" class="dropdown-options-list">
@@ -25,7 +24,7 @@
         :key="code" 
         @click="selectLanguage(code)"
         class="dropdown-option"
-        :class="{ active: currentLang === code }"
+        :class="[{ active: currentLang === code }, getFontClass(code)]"
       >
         <span class="option-arrow"></span>
         {{ label }}
@@ -41,12 +40,29 @@
   * @displayName Custom Language Dropdown
 */
 
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, unref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from '@/composables/useI18n'
 import CustomButton from '@/components/reusables/custom_button.vue'
 import img_triangle_down from '@/assets/svg/triangle-down-filled.svg'
 
 const { currentLang, setLanguage, availableLanguages } = useI18n()
+
+/**
+  * Configuration mapping specific language codes to alternative font classes.
+  * @private
+*/
+const languageFontMap = {
+  ru: 'font-alt-russian',
+}
+
+/**
+  * Computed property to dynamically resolve the font class based on currentLang.
+  * @private
+*/
+const getFontClass = (code) => {
+  const langCode = unref(code)
+  return languageFontMap[langCode] || 'font-default'
+}
 
 /**
   * Tracks whether the language options menu is open.
@@ -94,8 +110,15 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
 </script>
 
 <style scoped>
-.lang-selector-container {
+.font-default {
   font-family       : var(--font-navbar);
+}
+
+.font-alt-russian {
+  font-family       : 'PT Sans Narrow', sans-serif;
+}
+
+.lang-selector-container {
   font-size         : var(--font-navbar-size);
   color             : var(--color-default-text-color);
   display           : inline-flex;
@@ -109,7 +132,6 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   padding           : 4px 8px;
   border-radius     : var(--default-border-radius);
   cursor            : pointer;
-  font-family       : var(--font-navbar);
   font-size         : var(--font-navbar-size);
   display           : inline-flex;
   align-items       : center;
@@ -132,7 +154,7 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
 }
 
 .dropdown-option {
-  background-color:    var(--color-lang-dropdown-list-bg);
+  background-color    : var(--color-lang-dropdown-list-bg);
   padding             : 0.6rem 1rem 0.6rem 2.4rem;
   color               : var(--color-lang-dropdown-option-text);
   cursor              : pointer;
@@ -140,7 +162,6 @@ onUnmounted(() => document.removeEventListener('click', closeOnClickOutside))
   position            : relative;
   transition          : background-color 0.15s ease;
   white-space         : nowrap;
-  font-family         : var(--font-navbar);
   font-size           : var(--font-navbar-size);
 }
 
